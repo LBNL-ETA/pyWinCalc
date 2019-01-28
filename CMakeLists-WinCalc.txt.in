@@ -1,0 +1,19 @@
+cmake_minimum_required( VERSION 2.8.7 )
+
+include(ExternalProject)
+
+ExternalProject_Add(Windows-CalcEngine
+    GIT_REPOSITORY https://bitbucket.org/StephenCzarnecki/wincalc.git
+    GIT_TAG "master"
+    
+    UPDATE_COMMAND ""
+    PATCH_COMMAND ""
+  	    
+    SOURCE_DIR "${CMAKE_BINARY_DIR}/WinCalc-src"
+    BINARY_DIR "${CMAKE_BINARY_DIR}/WinCalc-build"
+  	
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    TEST_COMMAND ""
+    INSTALL_COMMAND ""
+)
