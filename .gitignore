@@ -1,0 +1,41 @@
+*.a
+*.d
+*.dll
+*.exe
+*.gcda
+*.ilk
+*.lib
+*.log
+*.map
+*.o
+*.o-*
+*.obj
+*.orig
+*.pdb
+*.rc
+*.res
+*.so
+*.so.*
+*~
+.directory
+.DS_Store
+
+# ignore python
+*.pyc
+
+# build folder, if the dev chooses to put it there
+#  could also do a wildcard for build-* if we suggest that naming approach
+#  which could be useful for: build-eclipse, build-vs2013, build, etc.
+build
+builds
+Build
+Builds
+
+# App-specific project files, for example, for Geany IDE:
+*.geany
+.project
+.cproject
+.idea
+.se
+/.vs
+/bin
