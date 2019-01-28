@@ -19,9 +19,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${GLOBAL_OUTPUT_PATH})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${GLOBAL_OUTPUT_PATH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${GLOBAL_OUTPUT_PATH})
 
-include(CMakeLists-Windows-CalcEngine.txt)
+include(CMakeLists-WinCalc.txt)
 
-add_subdirectory(MultiLayerOpticsCMD)
+add_subdirectory(WinCalc)
 
 
 if(MSVC)
