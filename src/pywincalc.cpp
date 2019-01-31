@@ -1,6 +1,6 @@
 #include <pybind11/pybind11.h>
 
-#include <wincalc/calc_from_disk.h>
+#include <calc_from_disk.h>
 
 namespace py = pybind11;
 
@@ -12,7 +12,7 @@ PYBIND11_MODULE(pywincalc, m)
 	
 	py::class_<Gap_Data>(m, "Gap_Data")
 		.def_readwrite("name", &Gap_Data::name)
-		.def_readwrite("thickness", Gap_Data::thickness);
+		.def_readwrite("thickness", &Gap_Data::thickness);
 	
 	m.def("calc_u", &calc_u, "Calculate U-value");
 	m.def("calc_shgc", &calc_shgc, "Calculate SHGC");
