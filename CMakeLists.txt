@@ -1,30 +1,14 @@
-cmake_minimum_required( VERSION 2.8.7 )
-
 cmake_minimum_required(VERSION 2.8.12)
-project(cmake_example)
 
-add_subdirectory(pybind11)
-pybind11_add_module(cmake_example src/pywincalc.cpp)
-
-set( target_name WCEMultiOptics )
-
-set(CMAKE_CXX_STANDARD 11)
-
+set( target_name pywincalc )
 project( ${target_name} )
-
-set(GLOBAL_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-
-# Sets global output directory for single configuration
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${GLOBAL_OUTPUT_PATH})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${GLOBAL_OUTPUT_PATH})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${GLOBAL_OUTPUT_PATH})
 
 include(CMakeLists-WinCalc.txt)
 
-add_subdirectory(WinCalc)
+#add_library(Sample_Lib SHARED IMPORTED)
 
+add_subdirectory(pybind11)
+pybind11_add_module(${target_name} src/pywincalc.cpp)
 
-if(MSVC)
-	#This sets MT and MTd flags for Debug and Release modes for Windows-CalcEngine library
-	target_compile_options(Windows-CalcEngine PRIVATE "/MD$<$<CONFIG:Debug>:d>")
-endif()
+target_link_libraries( ${target_name} PRIVATE WinCalc)
+

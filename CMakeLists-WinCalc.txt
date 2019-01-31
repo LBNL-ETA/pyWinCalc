@@ -1,8 +1,5 @@
 cmake_minimum_required( VERSION 2.8.7 )
 
-# Create include directories that will connect to library itself. This must be created before downloading 
-# Windows-Standards library or otherwise connections will not be created
-
 set(WinCalc_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/WinCalc-src/include")
 
 include_directories(${WinCalc_INCLUDE_DIRS})
