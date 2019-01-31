@@ -12,6 +12,7 @@ PYBIND11_MODULE(pywincalc, m)
 	m.doc() = "Python bindings for WinCalc";
 	
 	py::class_<Gap_Data>(m, "Gap_Data")
+		.def(py::init<std::string const&, double>())
 		.def_readwrite("name", &Gap_Data::name)
 		.def_readwrite("thickness", &Gap_Data::thickness);
 	
