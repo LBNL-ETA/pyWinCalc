@@ -2,9 +2,16 @@
 
 This module provides a simplified method for calculating various thermal and optical properties of glazing systems.
 
+
+### Requirements
+[Git](https://git-scm.com/)
+
+#### Windows Requirements
+[Cmake](https://cmake.org/) should be handled by the setup script.  However there still seem be errors with this.  Installing cmake first and selecting the "Add cmake to path" option during install should work.
+
 ## Install
 
-This can be installed with pip by doing
+Once the requirementes have been installed this can be installed with pip by doing
 
 ` pip install git+https://bitbucket.org/StephenCzarnecki/pywincalc.git `
 
