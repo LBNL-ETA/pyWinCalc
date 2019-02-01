@@ -42,16 +42,16 @@ u = pywincalc.calc_u(products, gaps, standard, width, height) # calculate U-valu
 shgc = pywincalc.calc_shgc(products, gaps, standard, width, height) # calculate U-value according to ISO15099
 ```
 
-For systems with more than one layer there must be a gap defined between each layer. Here is an example of how to calculate values for a tripple layer system.  In this example the first and third layers are CLEAR\_6 (NFRC 103) while the second layer is CLEAR\_3 (NFRC 102).  And where the first and second layers are separated by a 1.27cm air gap while the second and third layers are separated by a 2cm argon gap.
+For systems with more than one solid layer there must be a gap defined between each solid layer. Here is an example of how to calculate values for a tripple layer system.  In this example the first and third solid layers are CLEAR\_6 (NFRC 103) while the second solid layer is CLEAR\_3 (NFRC 102).  The first and second solid layers are separated by a 1.27cm air gap layer and the second and third layers are separated by a 2cm argon gap layer.
 
 ```
 import pywincalc
 
 standard = "standards/W5_NFRC_2003.std" # path to the standard file.  All other files referenced by the standard file must be in the same directory
 
-solid_layer_1  = "products/CLEAR_3.DAT"
-solid_layer_2  = "products/CLEAR_6.DAT"
-solid_layer_3  = "products/CLEAR_3.DAT"
+solid_layer_1  = "products/CLEAR_6.DAT"
+solid_layer_2  = "products/CLEAR_3.DAT"
+solid_layer_3  = "products/CLEAR_6.DAT"
 
 solid_layers = [solid_layer_1, solid_layer_2, solid_layer_3]
 
