@@ -9,10 +9,13 @@ This can be installed with pip by doing
 ` pip install git+https://bitbucket.org/StephenCzarnecki/pywincalc.git `
 
 ## Use
-Calculations can be performed with either a single solid layer or multiple solid layers separated by gaps.  And calculations can be perfromed using predefined standards in the form that is expected by [WINDOW](https://windows.lbl.gov/software/window).
+Calculations can be performed with either a single solid layer or multiple solid layers separated by gaps.  
+
+### Standards
+calculations can be perfromed using predefined standards in the form that is expected by [WINDOW](https://windows.lbl.gov/software/window).  The path to the base standard files is all that needs to be passed.  Any other files referenced by the standard file must be in the same directory (or specified as a relative directory from within the standard file).
 
 ### Solid layers
-Solid layers can be passed by filename to measured data files as exported by [Optics](https://windows.lbl.gov/software/optics)
+Solid layers can be passed by paths to measured data files as exported by [Optics](https://windows.lbl.gov/software/optics)
 
 ### Gaps
 For systems with more than one solid layer each solid layer must be separated by a gap.  Currently a selection of predefined gases are supported.  Gas mixtures are not yet supported in the Python interface.
