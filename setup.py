@@ -62,5 +62,4 @@ setup(
     ext_modules=[CMakeExtension('pywincalc')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
-    install_requires=["cmake>=3.1.0"],
 )
