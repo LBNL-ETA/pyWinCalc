@@ -38,11 +38,11 @@ import pywincalc
 
 standard = "standards/W5_NFRC_2003.std" # path to the standard file.  All other files referenced by the standard file must be in the same directory
 
-solid_layers = ["products/CLEAR_3.DAT]
-gaps = [] # single layer does not have any gaps
-
 width = 1.0 # width of the glazing system in meters
 height = 1.0 # height of the glazing system in meters
+
+solid_layers = ["products/CLEAR_3.DAT"]
+gaps = [] # single layer does not have any gaps
 
 u = pywincalc.calc_u(products, gaps, standard, width, height) # calculate U-value according to ISO15099
 
@@ -56,6 +56,9 @@ import pywincalc
 
 standard = "standards/W5_NFRC_2003.std" # path to the standard file.  All other files referenced by the standard file must be in the same directory
 
+width = 1.0 # width of the glazing system in meters
+height = 1.0 # height of the glazing system in meters
+
 solid_layer_1  = "products/CLEAR_6.DAT"
 solid_layer_2  = "products/CLEAR_3.DAT"
 solid_layer_3  = "products/CLEAR_6.DAT"
@@ -67,8 +70,6 @@ gap_2 = pywincalc.Gap_Data("Argon", .02) # .02 is gap thickness in meters
 
 gaps = [gap_1, gap_2] 
 
-width = 1.0 # width of the glazing system in meters
-height = 1.0 # height of the glazing system in meters
 
 u = pywincalc.calc_u(products, gaps, standard, width, height) # calculate U-value according to ISO15099
 
