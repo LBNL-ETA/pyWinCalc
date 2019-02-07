@@ -5,18 +5,30 @@ This module provides a simplified method for calculating various thermal and opt
 
 ### Requirements
 [Git](https://git-scm.com/)
-
-#### Windows Requirements
-[Cmake](https://cmake.org/) should be handled by the setup script.  However there still seem be errors with this.  Installing cmake first and selecting the "Add cmake to path" option during install should work.
+[CMake](https://cmake.org/) - Not required for installing from wheel files on Windows.
 
 ## Install
 
+### Linux
 Once the requirementes have been installed this can be installed with pip by doing
 
 ` pip install git+https://bitbucket.org/StephenCzarnecki/pywincalc.git `
 
+### Windows
+Wheels have been provided for 32 and 64 bit versions of Python 2.7 and 3.7.  To insall
+
+```
+git clone https://bitbucket.org/StephenCzarnecki/pywincalc.git
+cd pywincalc\wheels
+pip install pywincalc-0.0.1-your-version-of-python.whl
+```
+
+For other versions of Python the correct C++ compiler first needs to be installed as well as CMake.  Once that has been installed pyWinCalc can be built following the Linux build steps.
+
 ## Use
-Calculations can be performed with either a single solid layer or multiple solid layers separated by gaps.  
+Calculations can be performed with either a single solid layer or multiple solid layers separated by gaps.
+
+A folder with example calculation script, products and standards is provided under the example directory.
 
 ### Standards
 calculations can be perfromed using predefined standards in the form that is expected by [WINDOW](https://windows.lbl.gov/software/window).  The path to the base standard files is all that needs to be passed.  Any other files referenced by the standard file must be in the same directory (or specified as a relative directory from within the standard file).
