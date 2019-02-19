@@ -5,10 +5,8 @@ project( ${target_name} )
 
 include(CMakeLists-WinCalc.txt)
 
-#add_library(Sample_Lib SHARED IMPORTED)
-
 add_subdirectory(pybind11)
 pybind11_add_module(${target_name} src/pywincalc.cpp)
 
-target_link_libraries( ${target_name} PRIVATE WinCalc)
+target_link_libraries( ${target_name} PRIVATE wincalc)
 

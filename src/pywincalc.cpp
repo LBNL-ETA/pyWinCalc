@@ -1,7 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include <calc_from_disk.h>
+#include <wincalc/wincalc.h>
 
 namespace py = pybind11;
 

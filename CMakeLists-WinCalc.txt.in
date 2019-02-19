@@ -2,7 +2,7 @@ cmake_minimum_required( VERSION 2.8.7 )
 
 include(ExternalProject)
 
-ExternalProject_Add(WinCalc
+ExternalProject_Add(wincalc
     GIT_REPOSITORY https://bitbucket.org/StephenCzarnecki/wincalc.git
     GIT_TAG "master"
     

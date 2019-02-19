@@ -1,8 +1,10 @@
-cmake_minimum_required( VERSION 2.8.7 )
+cmake_minimum_required( VERSION 3.5 )
 
 set(WinCalc_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/WinCalc-src/include")
-
 include_directories(${WinCalc_INCLUDE_DIRS})
+
+#set(WindowStandards_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/Windows-Standards-src/include")
+#include_directories(${WindowStandards_INCLUDE_DIRS})
 
 # Download and create Windows Calculation Engine library
 configure_file(CMakeLists-WinCalc.txt.in WinCalc-download/CMakeLists.txt)
