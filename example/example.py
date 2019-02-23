@@ -13,7 +13,7 @@ print("Single Layer U-value: {u}".format(u=u_results.result))
 print("Single Layer u t_sol: {t}".format(t=u_results.t_sol))
 print("Single Layer u solar absorptances per layer: {a}".format(a=u_results.layer_solar_absorptances))
 
-shgc_results = pywincalc.calc_shgc(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
+shgc_results = pywincalc.calc_shgc(solid_layers, gaps, standard, width, height) # calculate SHGC according to ISO15099
 print("Single Layer SHGC: {shgc}".format(shgc=shgc_results.result))
 print("Single Layer SHGC t_sol: {t}".format(t=shgc_results.t_sol))
 print("Single Layer SHGC solar absorptances per layer: {a}".format(a=shgc_results.layer_solar_absorptances))
@@ -36,7 +36,7 @@ print("Triple Layer u t_sol: {t}".format(t=u_results.t_sol))
 print("Triple Layer u solar absorptances per layer: {a}".format(a=u_results.layer_solar_absorptances))
 
 
-shgc_results = pywincalc.calc_shgc(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
+shgc_results = pywincalc.calc_shgc(solid_layers, gaps, standard, width, height) # calculate SHGC according to ISO15099
 print("Triple Layer SHGC: {shgc}".format(shgc=shgc_results.result))
 print("Triple Layer SHGC t_sol: {t}".format(t=shgc_results.t_sol))
 print("Triple Layer SHGC solar absorptances per layer: {a}".format(a=shgc_results.layer_solar_absorptances))
