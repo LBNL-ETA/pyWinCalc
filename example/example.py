@@ -8,11 +8,16 @@ height = 1.0 # height of the glazing system in meters
 solid_layers = ["products/CLEAR_3.DAT"]
 gaps = [] # single layer does not have any gaps
 
-u = pywincalc.calc_u(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
-print("Single Layer U-value: {u}".format(u=u))
+u_results = pywincalc.calc_u(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
+print("Single Layer U-value: {u}".format(u=u_results.result))
+print("Single Layer u t_sol: {t}".format(t=u_results.t_sol))
+print("Single Layer u solar absorptances per layer: {a}".format(a=u_results.layer_solar_absorptances))
 
-shgc = pywincalc.calc_shgc(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
-print("Single Layer SHGC: {shgc}".format(shgc=shgc))
+shgc_results = pywincalc.calc_shgc(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
+print("Single Layer SHGC: {shgc}".format(shgc=shgc_results.result))
+print("Single Layer SHGC t_sol: {t}".format(t=shgc_results.t_sol))
+print("Single Layer SHGC solar absorptances per layer: {a}".format(a=shgc_results.layer_solar_absorptances))
+
 
 solid_layer_1  = "products/CLEAR_6.DAT"
 solid_layer_2  = "products/CLEAR_3.DAT"
@@ -25,8 +30,13 @@ gap_2 = pywincalc.Gap_Data("Argon", .02) # .02 is gap thickness in meters
 
 gaps = [gap_1, gap_2] 
 
-u = pywincalc.calc_u(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
-print("Double Layer U-value: {u}".format(u=u))
+u_results = pywincalc.calc_u(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
+print("Triple Layer U-value: {u}".format(u=u_results.result))
+print("Triple Layer u t_sol: {t}".format(t=u_results.t_sol))
+print("Triple Layer u solar absorptances per layer: {a}".format(a=u_results.layer_solar_absorptances))
 
-shgc = pywincalc.calc_shgc(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
-print("Double Layer SHGC: {shgc}".format(shgc=shgc))
+
+shgc_results = pywincalc.calc_shgc(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
+print("Triple Layer SHGC: {shgc}".format(shgc=shgc_results.result))
+print("Triple Layer SHGC t_sol: {t}".format(t=shgc_results.t_sol))
+print("Triple Layer SHGC solar absorptances per layer: {a}".format(a=shgc_results.layer_solar_absorptances))
