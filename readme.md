@@ -12,6 +12,7 @@ This module provides a simplified method for calculating various thermal and opt
 
 ### Requirements
 [Git](https://git-scm.com/)
+
 [CMake](https://cmake.org/) - Not required for installing from wheel files on Windows.
 
 ## Install
