@@ -21,6 +21,11 @@ Once the requirementes have been installed this can be installed with pip by doi
 
 ` pip install git+https://github.com/LBNL-ETA/pyWinCalc.git `
 
+### Mac
+Once the requirementes have been installed this can be installed with pip by doing
+
+` pip install git+https://github.com/LBNL-ETA/pyWinCalc.git `
+
 ### Windows
 Wheels have been provided for 32 and 64 bit versions of Python 2.7 and 3.7.  To insall
 
@@ -51,27 +56,27 @@ Supported gases:  Air, Argon, Krypton, Xeon
 ### Example use case
 Assume that the measured data files are in a ./products folder and that the standards are in a ./standards directory
 
-To calculate a system for a single layer CLEAR\_3.DAT (NFRC 102) system using the NFRC 2003 standard as used in WINDOW
+To calculate a system for a single layer CLEAR_3.DAT (NFRC 102) system using the NFRC 2003 standard as used in WINDOW
 ```
 import pywincalc
 
-standard = "standards/W5\_NFRC\_2003.std" # path to the standard file.  All other files referenced by the standard file must be in the same directory
+standard = "standards/W5_NFRC_2003.std" # path to the standard file.  All other files referenced by the standard file must be in the same directory
 
 width = 1.0 # width of the glazing system in meters
 height = 1.0 # height of the glazing system in meters
 
-solid\_layers = ["products/CLEAR\_3.DAT"]
+solid_layers = ["products/CLEAR_3.DAT"]
 gaps = [] # single layer does not have any gaps
 
-u\_results = pywincalc.calc\_u(solid\_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
-print("Single Layer U-value: {u}".format(u=u\_results.result))
-print("Single Layer u t\_sol: {t}".format(t=u\_results.t\_sol))
-print("Single Layer u solar absorptances per layer: {a}".format(a=u\_results.layer\_solar\_absorptances))
+u_results = pywincalc.calc_u(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
+print("Single Layer U-value: {u}".format(u=u_results.result))
+print("Single Layer u t_sol: {t}".format(t=u_results.t_sol))
+print("Single Layer u solar absorptances per layer: {a}".format(a=u_results.layer_solar_absorptances))
 
-shgc\_results = pywincalc.calc\_shgc(solid\_layers, gaps, standard, width, height) # calculate SHGC according to ISO15099
-print("Single Layer SHGC: {shgc}".format(shgc=shgc\_results.result))
-print("Single Layer SHGC t\_sol: {t}".format(t=shgc\_results.t\_sol))
-print("Single Layer SHGC solar absorptances per layer: {a}".format(a=shgc\_results.layer\_solar\_absorptances))
+shgc_results = pywincalc.calc_shgc(solid_layers, gaps, standard, width, height) # calculate SHGC according to ISO15099
+print("Single Layer SHGC: {shgc}".format(shgc=shgc_results.result))
+print("Single Layer SHGC t_sol: {t}".format(t=shgc_results.t_sol))
+print("Single Layer SHGC solar absorptances per layer: {a}".format(a=shgc_results.layer_solar_absorptances))
 ```
 
 For systems with more than one solid layer there must be a gap defined between each solid layer. Here is an example of how to calculate values for a tripple layer system.  In this example the first and third solid layers are CLEAR\_6 (NFRC 103) while the second solid layer is CLEAR\_3 (NFRC 102).  The first and second solid layers are separated by a 1.27cm air gap layer and the second and third layers are separated by a 2cm argon gap layer.
@@ -79,30 +84,30 @@ For systems with more than one solid layer there must be a gap defined between e
 ```
 import pywincalc
 
-standard = "standards/W5\_NFRC\_2003.std" # path to the standard file.  All other files referenced by the standard file must be in the same directory
+standard = "standards/W5_NFRC_2003.std" # path to the standard file.  All other files referenced by the standard file must be in the same directory
 
 width = 1.0 # width of the glazing system in meters
 height = 1.0 # height of the glazing system in meters
 
-solid\_layer\_1  = "products/CLEAR\_6.DAT"
-solid\_layer\_2  = "products/CLEAR\_3.DAT"
-solid\_layer\_3  = "products/CLEAR\_6.DAT"
+solid_layer_1  = "products/CLEAR_6.DAT"
+solid_layer_2  = "products/CLEAR_3.DAT"
+solid_layer_3  = "products/CLEAR_6.DAT"
 
-solid\_layers = [solid\_layer\_1, solid\_layer\_2, solid\_layer\_3]
+solid_layers = [solid_layer_1, solid_layer_2, solid_layer_3]
 
-gap\_1 = pywincalc.Gap\_Data(pywincalc.Gas\_Type.AIR, .0127) # .0127 is gap thickness in meters
-gap\_2 = pywincalc.Gap\_Data(pywincalc.Gas\_Type.ARGON, .02) # .02 is gap thickness in meters
+gap_1 = pywincalc.Gap_Data(pywincalc.Gas_Type.AIR, .0127) # .0127 is gap thickness in meters
+gap_2 = pywincalc.Gap_Data(pywincalc.Gas_Type.ARGON, .02) # .02 is gap thickness in meters
 
-gaps = [gap\_1, gap\_2] 
+gaps = [gap_1, gap_2] 
 
-u\_results = pywincalc.calc\_u(solid\_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
-print("Triple Layer U-value: {u}".format(u=u\_results.result))
-print("Triple Layer u t\_sol: {t}".format(t=u\_results.t\_sol))
-print("Triple Layer u solar absorptances per layer: {a}".format(a=u\_results.layer\_solar\_absorptances))
+u_results = pywincalc.calc_u(solid_layers, gaps, standard, width, height) # calculate U-value according to ISO15099
+print("Triple Layer U-value: {u}".format(u=u_results.result))
+print("Triple Layer u t_sol: {t}".format(t=u_results.t_sol))
+print("Triple Layer u solar absorptances per layer: {a}".format(a=u_results.layer_solar_absorptances))
 
 
-shgc\_results = pywincalc.calc\_shgc(solid\_layers, gaps, standard, width, height) # calculate SHGC according to ISO15099
-print("Triple Layer SHGC: {shgc}".format(shgc=shgc\_results.result))
-print("Triple Layer SHGC t\_sol: {t}".format(t=shgc\_results.t\_sol))
-print("Triple Layer SHGC solar absorptances per layer: {a}".format(a=shgc\_results.layer\_solar\_absorptances))
+shgc_results = pywincalc.calc_shgc(solid_layers, gaps, standard, width, height) # calculate SHGC according to ISO15099
+print("Triple Layer SHGC: {shgc}".format(shgc=shgc_results.result))
+print("Triple Layer SHGC t_sol: {t}".format(t=shgc_results.t_sol))
+print("Triple Layer SHGC solar absorptances per layer: {a}".format(a=shgc_results.layer_solar_absorptances))
 ```
