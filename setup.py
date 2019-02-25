@@ -58,7 +58,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='pywincalc',
-    version='0.0.1',
+    version='0.0.2',
     ext_modules=[CMakeExtension('pywincalc')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
