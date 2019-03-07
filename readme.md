@@ -31,7 +31,7 @@ Once the requirementes have been installed this can be installed with pip by doi
 Wheels have been provided for 32 and 64 bit versions of Python 2.7 and 3.7.  To insall
 
 ```
-git clone https://bitbucket.org/StephenCzarnecki/pywincalc.git
+git clone https://github.com/LBNL-ETA/pyWinCalc.git
 cd pywincalc\wheels
 pip install pywincalc-0.0.1-your-version-of-python.whl
 ```
