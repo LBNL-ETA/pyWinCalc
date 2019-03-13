@@ -29,6 +29,8 @@ PYBIND11_MODULE(pywincalc, m)
 		.def_readwrite("layer_solar_absorptances", &Thermal_Result::layer_solar_absorptances);
 
 
-	m.def("calc_u", &calc_u, "Calculate U-value");
-	m.def("calc_shgc", &calc_shgc, "Calculate SHGC");
+	m.def("calc_u_optics_file", &calc_u_optics_file, "Calculate U-value using optics files for measured data");
+	m.def("calc_shgc_optics_file", &calc_shgc_optics_file, "Calculate SHGC using optics files for measured data");
+	m.def("calc_u_json_data", &calc_u_json_data, "Calculate U-value using json for measured data");
+	m.def("calc_shgc_json_data", &calc_shgc_json_data, "Calculate SHGC using json for measured data");
 }

@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8.12)
 set( target_name pywincalc )
 project( ${target_name} )
 
+set( JSON_BuildTests OFF CACHE BOOL "")
+
 include(CMakeLists-WinCalc.txt)
 
 add_subdirectory(pybind11)
