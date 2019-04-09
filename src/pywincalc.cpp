@@ -7,6 +7,25 @@ namespace py = pybind11;
 
 using namespace pybind11::literals;
 
+template<typename T>
+void declare_optical_results(py::module &m, std::string typestr) {
+    using Class = WCE_Optical_Result_Template<T>;
+    std::string pyclass_name = std::string("WCE_Optical_Result") + typestr;
+    py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(), py::dynamic_attr())
+		.def_readwrite("tf_direct_direct", &Class::tf_direct_direct )
+		.def_readwrite("tb_direct_direct", &Class::tb_direct_direct )
+		.def_readwrite("rf_direct_direct", &Class::rf_direct_direct )
+		.def_readwrite("rb_direct_direct", &Class::rb_direct_direct )
+		.def_readwrite("tf_direct_diffuse", &Class::tf_direct_diffuse )
+		.def_readwrite("tb_direct_diffuse", &Class::tb_direct_diffuse )
+		.def_readwrite("rf_direct_diffuse", &Class::rf_direct_diffuse )
+		.def_readwrite("rb_direct_diffuse", &Class::rb_direct_diffuse )
+		.def_readwrite("tf_diffuse_diffuse", &Class::tf_diffuse_diffuse )
+		.def_readwrite("tb_diffuse_diffuse", &Class::tb_diffuse_diffuse )
+		.def_readwrite("rf_diffuse_diffuse", &Class::rf_diffuse_diffuse )
+		.def_readwrite("rb_diffuse_diffuse", &Class::rb_diffuse_diffuse );	
+}
+
 PYBIND11_MODULE(pywincalc, m)
 {
 	m.doc() = "Python bindings for WinCalc";
@@ -121,12 +140,49 @@ PYBIND11_MODULE(pywincalc, m)
 		.def_readwrite("name", &Standard::name)
 		.def_readwrite("description", &Standard::description)
 		.def_readwrite("methods", &Standard::methods);
+		
+	py::class_<Trichromatic>(m, "Trichromatic")
+		.def_readwrite("X", &Trichromatic::X)
+		.def_readwrite("Y", &Trichromatic::Y)
+		.def_readwrite("Z", &Trichromatic::Z);
+		
+	py::class_<RGB>(m, "RGB")
+		.def_readwrite("R", &RGB::R)
+		.def_readwrite("G", &RGB::G)
+		.def_readwrite("B", &RGB::B);
+		
+	py::class_<Lab>(m, "Lab")
+		.def_readwrite("L", &Lab::L)
+		.def_readwrite("a", &Lab::a)
+		.def_readwrite("b", &Lab::b);
+		
+	py::class_<Color_Result>(m, "Color_Result")
+		.def_readwrite("trichromatic", &Color_Result::trichromatic)
+		.def_readwrite("rgb", &Color_Result::rgb)
+		.def_readwrite("lab", &Color_Result::lab);
+		
+	declare_optical_results<double>(m, "");
+	declare_optical_results<Color_Result>(m, "_Color");
+		
+	py::class_<Glazing_System>(m, "Glazing_System")
+		.def(py::init<std::vector<OpticsParser::ProductData>,
+                   std::vector<Gap_Data> const& ,
+                   Standard const&,
+                   double,
+                   double>())
+		.def_readwrite("solid_layers", &Glazing_System::solid_layers, "List of solid layers in the glazing system.")
+		.def_readwrite("gap_layers", &Glazing_System::gap_layers, "List of gap layers in the glazing system.")
+		.def_readwrite("standard", &Glazing_System::standard, "Standard that calculations will be performed with.")
+		.def_readwrite("width", &Glazing_System::width, "Width of the glazing system in meters.")
+		.def_readwrite("height", &Glazing_System::height, "Height of the glazing system in meters.")
+		.def("u", &Glazing_System::u, "Calculate the U-value of the glazing system.")
+		.def("shgc", &Glazing_System::shgc, "Calculate the SHGC of the glazing system.")
+		.def("all_method_values", &Glazing_System::all_method_values, "Calculate all optical properties for a method.  Do not use for color, call color() instead.")
+		.def("color", &Glazing_System::color, "Calculate all color properties for the glazing system.");
 	
 	m.def("load_standard", py::overload_cast<std::string const&>(&load_standard), "Load standard from .std.file");
 	m.def("parse_json", &OpticsParser::parseJSONString, "Load product data from json string");
 	m.def("parse_json_file", &OpticsParser::parseJSONFile, "Load product data from json file");
 	m.def("parse_optics_file", &OpticsParser::parseFile, "Load product data from optics file");
-	m.def("calc_u", &calc_u, "Calculate U-value using optics files for measured data");
-	m.def("calc_shgc", &calc_shgc, "Calculate SHGC using optics files for measured data");
 	
 }
