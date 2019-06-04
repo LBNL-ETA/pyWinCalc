@@ -5,8 +5,8 @@ set( CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON )
 set( target_name pywincalc )
 project( ${target_name} )
 
-set( JSON_BuildTests OFF CACHE BOOL "")
-set( BUILD_WCE_TESTING OFF CACHE BOOL "")
+set(JSON_BuildTests OFF CACHE BOOL "")
+set(BUILD_WinCalc_tests OFF CACHE BOOL "")
 
 include(CMakeLists-WinCalc.txt)
 
