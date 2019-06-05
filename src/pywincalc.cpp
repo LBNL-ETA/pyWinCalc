@@ -139,6 +139,7 @@ PYBIND11_MODULE(pywincalc, m) {
   py::class_<Standard>(m, "Standard")
       .def_readwrite("name", &Standard::name)
       .def_readwrite("description", &Standard::description)
+	  .def_readwrite("file", &Standard::file)
       .def_readwrite("methods", &Standard::methods);
 
   py::class_<Trichromatic>(m, "Trichromatic")
