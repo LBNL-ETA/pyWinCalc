@@ -131,3 +131,7 @@ print("Triple Layer SHGC solar absorptances per layer: {a}".format(a=shgc_result
 photopic_optical_results_tripple_layer = glazing_system_tripple_layer.all_method_values(pywincalc.Method_Type.PHOTOPIC)
 print("Tripple Layer Photopic optical results: {r}".format(r=photopic_optical_results_tripple_layer))
 ```
+### Tutorial Videos
+
+https://youtu.be/YQzCho-Vx-k
+https://youtu.be/_lfoyZ2ntkU
