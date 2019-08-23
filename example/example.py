@@ -27,7 +27,7 @@ print("Single Layer SHGC solar absorptances per layer: {a}".format(a=shgc_result
 
 thermal_ir_optical_results_single_layer = glazing_system_single_layer.all_method_values(pywincalc.Method_Type.SOLAR)
 print("Finished single layer tir calc")
-print("Single Layer Thermal IR optical transmittance front direct-direct: {r}".format(r=thermal_ir_optical_results_single_layer.tf_direct_direct))
+print("Single Layer Thermal IR optical transmittance front direct-direct: {r}".format(r=thermal_ir_optical_results_single_layer.direct_direct.tf))
 
 color_results_single_layer = glazing_system_single_layer.color()
 print("Single Layer color results: {r}".format(r=thermal_ir_optical_results_single_layer))
@@ -55,7 +55,8 @@ print("Triple Layer SHGC t_sol: {t}".format(t=shgc_results.t_sol))
 print("Triple Layer SHGC solar absorptances per layer: {a}".format(a=shgc_results.layer_solar_absorptances))
 
 photopic_optical_results_tripple_layer = glazing_system_tripple_layer.all_method_values(pywincalc.Method_Type.PHOTOPIC)
-print("Tripple Layer Photopic optical results: {r}".format(r=photopic_optical_results_tripple_layer))
+print("Tripple Layer Photopic optical results transmittance front direct-direct: {r}".format(r=photopic_optical_results_tripple_layer.direct_direct.tf))
 
 color_results_tripple_layer = glazing_system_tripple_layer.color()
-print("Tripple Layer color results: {r}".format(r=thermal_ir_optical_results_tripple_layer))
+tf_rgb_results_tripple_layer = color_results_tripple_layer.direct_direct.tf.rgb
+print("Tripple Layer color results transmittance front direct-direct RGB: ({r}, {g}, {b})".format(r=tf_rgb_results_tripple_layer.R, g=tf_rgb_results_tripple_layer.G, b=tf_rgb_results_tripple_layer.B))
