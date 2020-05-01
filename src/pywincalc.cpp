@@ -9,73 +9,142 @@ using namespace pybind11::literals;
 
 template <typename T>
 void declare_wce_optical_result_simple(py::module &m, std::string typestr) {
-  using Class = WCE_Optical_Result_Simple<T>;
-  declare_optical_result_by_transmittance<T>(m, typestr);
+  using Class = wincalc::WCE_Optical_Result_Simple<T>;
+  // declare_optical_result_by_transmittance<T>(m, typestr);
   std::string pyclass_name = std::string("WCE_Optical_Result_Simple") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
       .def_readwrite("direct_direct", &Class::direct_direct)
       .def_readwrite("direct_diffuse", &Class::direct_diffuse)
       .def_readwrite("diffuse_diffuse", &Class::diffuse_diffuse)
-      .def_readwrite("hemispherical", &Class::hemispherical);
-}
-
-template <>
-void declare_wce_optical_result_simple<Color_Result>(py::module &m,
-                                                     std::string typestr) {
-  using Class = WCE_Optical_Result_Simple<T>;
-  declare_optical_result_by_transmittance<T>(m, typestr);
-  std::string pyclass_name = std::string("WCE_Optical_Result_Simple") + typestr;
-  py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
-                    py::dynamic_attr())
-      .def_readwrite("direct_direct", &Class::direct_direct)
-      .def_readwrite("direct_diffuse", &Class::direct_diffuse)
-      .def_readwrite("diffuse_diffuse", &Class::diffuse_diffuse)
+      .def_readwrite("direct_hemispherical", &Class::direct_hemispherical);
 }
 
 template <typename T>
 void declare_wce_optical_result_absorptance(py::module &m,
                                             std::string typestr) {
-  using Class = WCE_Optical_Result_Absorptance<T>;
-  declare_optical_result_by_transmittance<T>(m, typestr);
+  using Class = wincalc::WCE_Optical_Result_Absorptance<T>;
+  // declare_optical_result_by_transmittance<T>(m, typestr);
   std::string pyclass_name =
       std::string("WCE_Optical_Result_Absorptance") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
       .def_readwrite("direct", &Class::direct)
-      .def_readwrite("diffuse", &Class::diffuse)
-      .def_readwrite("hemispherical", &Class::hemispherical);
+      .def_readwrite("diffuse", &Class::diffuse);
 }
 
 template <typename T>
-void declare_optical_result_by_side(py::module &m, std::string typestr) {
-  using Class = WCE_Optical_Result_By_Side<T>;
-  declare_wce_optical_result_simple<T>(m, typestr);
+void declare_wce_optical_result_layer(py::module &m, std::string typestr) {
+  using Class = wincalc::WCE_Optical_Result_Layer<T>;
   declare_wce_optical_result_absorptance<T>(m, typestr);
-  std::string pyclass_name = std::string("WCE_Optical_Result") + typestr;
+  std::string pyclass_name = std::string("WCE_Optical_Result_Layer") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
-      .def_readwrite("tf", &Class::tf)
-      .def_readwrite("tb", &Class::tb)
-      .def_readwrite("rf", &Class::rf)
-      .def_readwrite("rb", &Class::rb)
-      .def_readwrite("absorptances_front", &Class::absorptances_front)
-      .def_readwrite("absorptances_back", &Class::absorptances_back);
+      .def_readwrite("absorptance", &Class::absorptance);
+}
+
+template <typename T>
+void declare_wce_optical_transmission_result(py::module &m,
+                                             std::string typestr) {
+  using Class = wincalc::WCE_Optical_Transmission_Result<T>;
+  std::string pyclass_name =
+      std::string("WCE_Optical_Transmission_Result") + typestr;
+  py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
+                    py::dynamic_attr())
+      .def_readwrite("transmittance", &Class::transmittance)
+      .def_readwrite("reflectance", &Class::reflectance);
+}
+
+template <typename T>
+void declare_wce_optical_result_by_side(py::module &m, std::string typestr) {
+  using Class = wincalc::WCE_Optical_Result_By_Side<T>;
+  // declare_optical_result_by_transmittance<T>(m, typestr);
+  // declare_wce_optical_result_simple<T>(m, typestr);
+  // declare_wce_optical_result_absorptance<T>(m, typestr);
+  std::string pyclass_name =
+      std::string("WCE_Optical_Result_By_Side") + typestr;
+  py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
+                    py::dynamic_attr())
+      .def_readwrite("front", &Class::front)
+      .def_readwrite("back", &Class::back);
+}
+
+template <typename T>
+void declare_wce_optical_results_template(py::module &m, std::string typestr) {
+  using Class = wincalc::WCE_Optical_Results_Template<T>;
+  declare_wce_optical_result_simple<T>(m, typestr);
+  declare_wce_optical_transmission_result<
+      wincalc::WCE_Optical_Result_Simple<T>>(m, typestr);
+  declare_wce_optical_result_by_side<wincalc::WCE_Optical_Transmission_Result<
+      wincalc::WCE_Optical_Result_Simple<T>>>(m, typestr);
+  declare_wce_optical_result_layer<T>(m, typestr);
+  declare_wce_optical_result_by_side<wincalc::WCE_Optical_Result_Layer<T>>(
+      m, typestr);
+  std::string pyclass_name = std::string("WCE_Optical_Results") + typestr;
+  py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
+                    py::dynamic_attr())
+      .def_readwrite("system_results", &Class::system_results)
+      .def_readwrite("layer_results", &Class::layer_results);
 }
 
 template <>
-void declare_optical_result_by_side<Color_Result>(py::module &m,
-                                                  std::string typestr) {
-  using Class = WCE_Optical_Result_By_Side<T>;
-  declare_wce_optical_result_simple<Color_Result>(m, typestr);
-  std::string pyclass_name = std::string("WCE_Optical_Result");
+void declare_wce_optical_results_template<wincalc::Color_Result>(
+    py::module &m, std::string typestr) {
+  using Class = wincalc::WCE_Optical_Results_Template<wincalc::Color_Result>;
+  declare_wce_optical_result_simple<wincalc::Color_Result>(m, typestr);
+  declare_wce_optical_transmission_result<
+      wincalc::WCE_Optical_Result_Simple<wincalc::Color_Result>>(m, typestr);
+  declare_wce_optical_result_by_side<wincalc::WCE_Optical_Transmission_Result<
+      wincalc::WCE_Optical_Result_Simple<wincalc::Color_Result>>>(m, typestr);
+  std::string pyclass_name = std::string("WCE_Optical_Results") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
-      .def_readwrite("tf", &Class::tf)
-      .def_readwrite("tb", &Class::tb)
-      .def_readwrite("rf", &Class::rf)
-      .def_readwrite("rb", &Class::rb);
+      .def_readwrite("system_results", &Class::system_results);
 }
+
+//---------------------------------------------------------------------------------
+#if 0
+template <>
+void declare_wce_optical_result_simple<Color_Result>(py::module &m, std::string typestr) {
+	using Class = WCE_Optical_Result_Simple<T>;
+	declare_optical_result_by_transmittance<T>(m, typestr);
+	std::string pyclass_name = std::string("WCE_Optical_Result_Simple") + typestr;
+	py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
+		py::dynamic_attr())
+		.def_readwrite("direct_direct", &Class::direct_direct)
+		.def_readwrite("direct_diffuse", &Class::direct_diffuse)
+		.def_readwrite("diffuse_diffuse", &Class::diffuse_diffuse)
+}
+
+template <typename T>
+void declare_wce_optical_result_absorptance(py::module &m, std::string typestr) {
+	using Class = WCE_Optical_Result_Absorptance<T>;
+	declare_optical_result_by_transmittance<T>(m, typestr);
+	std::string pyclass_name = std::string("WCE_Optical_Result_Absorptance") + typestr;
+	py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
+		py::dynamic_attr())
+		.def_readwrite("direct", &Class::direct)
+		.def_readwrite("diffuse", &Class::diffuse)
+		.def_readwrite("hemispherical", &Class::hemispherical);
+}
+
+template <typename T>
+void declare_optical_result_by_side(py::module &m,
+	std::string typestr) {
+	using Class = WCE_Optical_Result_By_Side<T>;
+	declare_wce_optical_result_simple<T>(m, typestr);
+	declare_wce_optical_result_absorptance<T>(m, typestr);
+	std::string pyclass_name = std::string("WCE_Optical_Result") + typestr;
+	py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
+		py::dynamic_attr())
+		.def_readwrite("tf", &Class::tf)
+		.def_readwrite("tb", &Class::tb)
+		.def_readwrite("rf", &Class::rf)
+		.def_readwrite("rb", &Class::rb)
+		.def_readwrite("absorptances_front", &Class::absorptances_front)
+		.def_readwrite("absorptances_back", &Class::absorptances_back);
+}
+#endif
 
 PYBIND11_MODULE(pywincalc, m) {
   m.doc() = "Python bindings for WinCalc";
@@ -86,11 +155,12 @@ PYBIND11_MODULE(pywincalc, m) {
       .value("KRYPTON", Gases::GasDef::Krypton)
       .value("XENON", Gases::GasDef::Xenon);
 
-  py::class_<Predefined_Gas_Mixture_Component>(
+  py::class_<wincalc::Predefined_Gas_Mixture_Component>(
       m, "Predefined_Gas_Mixture_Component")
       .def(py::init<Gases::GasDef const &, double>())
-      .def_readwrite("gas", &Predefined_Gas_Mixture_Component::gas)
-      .def_readwrite("percent", &Predefined_Gas_Mixture_Component::percent);
+      .def_readwrite("gas", &wincalc::Predefined_Gas_Mixture_Component::gas)
+      .def_readwrite("percent",
+                     &wincalc::Predefined_Gas_Mixture_Component::percent);
 
   py::class_<Gases::CIntCoeff>(m, "Gas_Coefficients")
       .def(py::init<double const, double const, double const>());
@@ -100,28 +170,87 @@ PYBIND11_MODULE(pywincalc, m) {
                     Gases::CIntCoeff const &, Gases::CIntCoeff const &,
                     Gases::CIntCoeff const &>());
 
-  py::class_<Engine_Gas_Mixture_Component>(m, "Engine_Gas_Mixture_Component")
+  py::class_<wincalc::Engine_Gas_Mixture_Component>(
+      m, "Engine_Gas_Mixture_Component")
       .def(py::init<Gases::CGasData const &, double>())
-      .def_readwrite("gas", &Engine_Gas_Mixture_Component::gas)
-      .def_readwrite("percent", &Engine_Gas_Mixture_Component::percent);
+      .def_readwrite("gas", &wincalc::Engine_Gas_Mixture_Component::gas)
+      .def_readwrite("percent",
+                     &wincalc::Engine_Gas_Mixture_Component::percent);
 
-  py::class_<Engine_Gap_Info>(m, "Gap_Data")
+  py::class_<wincalc::Engine_Gap_Info>(m, "Gap_Data")
       .def(py::init<Gases::CGasData const &, double>())
-      .def(
-          py::init<std::vector<Engine_Gas_Mixture_Component> const &, double>())
-      .def(py::init<Gases::GasDef const &, double>())
-      .def(py::init<std::vector<Predefined_Gas_Mixture_Component> const &,
+      .def(py::init<std::vector<wincalc::Engine_Gas_Mixture_Component> const &,
                     double>())
-      .def_readwrite("gases", &Engine_Gas_Mixture_Component::gas)
-      .def_readwrite("thickness", &Gap_Data::thickness);
+      .def(py::init<Gases::GasDef const &, double>())
+      .def(py::init<
+           std::vector<wincalc::Predefined_Gas_Mixture_Component> const &,
+           double>())
+      .def_readwrite("gases", &wincalc::Engine_Gap_Info::gases)
+      .def_readwrite("thickness", &wincalc::Engine_Gap_Info::thickness);
+
+  py::class_<OpticsParser::MeasurementComponent>(
+      m, "Optical_Measurement_Component")
+      .def_readwrite("tf", &OpticsParser::MeasurementComponent::tf)
+      .def_readwrite("tb", &OpticsParser::MeasurementComponent::tb)
+      .def_readwrite("rf", &OpticsParser::MeasurementComponent::rf)
+      .def_readwrite("rb", &OpticsParser::MeasurementComponent::rb);
 
   py::class_<OpticsParser::WLData>(m, "Wavelength_Data")
+      .def(py::init<double, OpticsParser::MeasurementComponent,
+                    std::optional<OpticsParser::MeasurementComponent>>(),
+           py::arg("wavelength"), py::arg("direct_component"),
+           py::arg("diffuse_component") =
+               std::optional<OpticsParser::MeasurementComponent>())
+      .def(py::init<double, double, double, double>())
+      .def(py::init<double, double, double, double, double, double, double,
+                    double, double>())
       .def_readwrite("wavelength", &OpticsParser::WLData::wavelength)
-      .def_readwrite("t", &OpticsParser::WLData::T)
-      .def_readwrite("rf", &OpticsParser::WLData::frontR)
-      .def_readwrite("rb", &OpticsParser::WLData::backR);
+      .def_readwrite("direct_component", &OpticsParser::WLData::directComponent)
+      .def_readwrite("diffuse_component",
+                     &OpticsParser::WLData::diffuseComponent);
 
-  py::class_<OpticsParser::ProductData>(m, "Product_Data")
+  py::class_<OpticsParser::ProductGeometry>(m, "Product_Geometry");
+
+  py::class_<OpticsParser::VenetianGeometry, OpticsParser::ProductGeometry>(
+      m, "Venetian_Geometry")
+      .def(py::init<double, double, double, double, int>(),
+           py::arg("slat_width"), py::arg("slat_spacing"),
+           py::arg("slat_curvature"), py::arg("slat_tilt") = 0,
+           py::arg("number_segments") = 5)
+      .def_readwrite("slat_width", &OpticsParser::VenetianGeometry::slatWidth)
+      .def_readwrite("slat_spacing",
+                     &OpticsParser::VenetianGeometry::slatSpacing)
+      .def_readwrite("slat_curvature",
+                     &OpticsParser::VenetianGeometry::slatCurvature)
+      .def_readwrite("slat_tilt", &OpticsParser::VenetianGeometry::slatTilt)
+      .def_readwrite("number_segments",
+                     &OpticsParser::VenetianGeometry::numberSegments);
+
+  py::class_<OpticsParser::WovenGeometry, OpticsParser::ProductGeometry>(
+      m, "Woven_Geometry")
+      .def(py::init<double, double, double>())
+      .def_readwrite("thread_diameter",
+                     &OpticsParser::WovenGeometry::threadDiameter)
+      .def_readwrite("thread_spacing",
+                     &OpticsParser::WovenGeometry::threadSpacing)
+      .def_readwrite("shade_thickness",
+                     &OpticsParser::WovenGeometry::shadeThickness);
+
+  py::class_<OpticsParser::PerforatedGeometry, OpticsParser::ProductGeometry>(
+      m, "Perforated_Geometry")
+      .def(py::init<double, double, double, double, std::string>())
+      .def_readwrite("spacing_x", &OpticsParser::PerforatedGeometry::spacingX)
+      .def_readwrite("spacing_y", &OpticsParser::PerforatedGeometry::spacingY)
+      .def_readwrite("dimension_x",
+                     &OpticsParser::PerforatedGeometry::dimensionX)
+      .def_readwrite("dimension_y",
+                     &OpticsParser::PerforatedGeometry::dimensionY)
+      .def_readwrite("perforation_type",
+                     &OpticsParser::PerforatedGeometry::perforationType);
+
+  py::class_<OpticsParser::ProductData,
+             std::shared_ptr<OpticsParser::ProductData>>(m, "Product_Data")
+      .def("composed_product", &OpticsParser::ProductData::composedProduct)
       .def_readwrite("product_name", &OpticsParser::ProductData::productName)
       .def_readwrite("product_type", &OpticsParser::ProductData::productType)
       .def_readwrite("nfrc_id", &OpticsParser::ProductData::nfrcid)
@@ -131,6 +260,24 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("ef", &OpticsParser::ProductData::frontEmissivity)
       .def_readwrite("eb", &OpticsParser::ProductData::backEmissivity)
       .def_readwrite("measurements", &OpticsParser::ProductData::measurements);
+
+  py::class_<OpticsParser::CompositionInformation>(m,
+                                                   "Product_Composistion_Data")
+      .def_readwrite("material",
+                     &OpticsParser::CompositionInformation::material)
+      .def_readwrite("geometry",
+                     &OpticsParser::CompositionInformation::geometry);
+
+  py::class_<OpticsParser::ComposedProductData, OpticsParser::ProductData,
+             std::shared_ptr<OpticsParser::ComposedProductData>>(
+      m, "Composed_Product_Data")
+      .def(py::init<OpticsParser::ProductData const &,
+                    std::shared_ptr<OpticsParser::CompositionInformation>>())
+      .def("composed_product",
+           &OpticsParser::ComposedProductData::composedProduct)
+      .def_readwrite(
+          "composition_information",
+          &OpticsParser::ComposedProductData::compositionInformation);
 
   py::enum_<window_standards::Spectrum_Type>(m, "Spectrum_Type",
                                              py::arithmetic())
@@ -230,27 +377,27 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("methods", &window_standards::Optical_Standard::methods);
 
   py::class_<wincalc::Trichromatic>(m, "Trichromatic")
-      .def_readwrite("X", &Trichromatic::X)
-      .def_readwrite("Y", &Trichromatic::Y)
-      .def_readwrite("Z", &Trichromatic::Z);
+      .def_readwrite("X", &wincalc::Trichromatic::X)
+      .def_readwrite("Y", &wincalc::Trichromatic::Y)
+      .def_readwrite("Z", &wincalc::Trichromatic::Z);
 
-  py::class_<wincalc::Wincalc_RGB>(m, "RGB")
-      .def_readwrite("R", &RGB::R)
-      .def_readwrite("G", &RGB::G)
-      .def_readwrite("B", &RGB::B);
+  py::class_<wincalc::WinCalc_RGB>(m, "RGB")
+      .def_readwrite("R", &wincalc::WinCalc_RGB::R)
+      .def_readwrite("G", &wincalc::WinCalc_RGB::G)
+      .def_readwrite("B", &wincalc::WinCalc_RGB::B);
 
   py::class_<wincalc::Lab>(m, "Lab")
-      .def_readwrite("L", &Lab::L)
-      .def_readwrite("a", &Lab::a)
-      .def_readwrite("b", &Lab::b);
+      .def_readwrite("L", &wincalc::Lab::L)
+      .def_readwrite("a", &wincalc::Lab::a)
+      .def_readwrite("b", &wincalc::Lab::b);
 
   py::class_<wincalc::Color_Result>(m, "Color_Result")
       .def_readwrite("trichromatic", &wincalc::Color_Result::trichromatic)
       .def_readwrite("rgb", &wincalc::Color_Result::rgb)
       .def_readwrite("lab", &wincalc::Color_Result::lab);
 
-  declare_optical_result_by_side<double>(m, "");
-  declare_optical_result_by_side<wincalc::Color_Result>(m, "_Color");
+  declare_wce_optical_results_template<double>(m, "");
+  declare_wce_optical_results_template<wincalc::Color_Result>(m, "_Color");
 
   py::enum_<Tarcog::ISO15099::BoundaryConditionsCoeffModel>(
       m, "Boundary_Conditions_Coefficient_Model", py::arithmetic())
@@ -299,28 +446,49 @@ PYBIND11_MODULE(pywincalc, m) {
                      &wincalc::Flippable_Solid_Layer::thickness_meters)
       .def_readwrite("flipped", &wincalc::Flippable_Solid_Layer::flipped);
 
-  py::class_<wincalc::Product_Data_Thermal, wincalc::Flippable_Solid_Layer>(m, "Product_Data_Thermal")
-      .def(py::init<double, 
-					double, 
-					std::optional<double>, 
-					std::optional<double>, 
-					std::optional<double>, 
-					std::optional<double>, 
-					bool>()
-			py::arg("ir_transmittance_front") = std::optional<double>(), 
-			py::arg("ir_transmittance_back") = std::optional<double>(),
-			py::arg("emissivity_front") = std::optional<double>(),
-			py::arg("emissivity_back") = std::optional<double>(),
-			py::arg("flipped") = false())
-      .def_readwrite("conductivity", &wincalc::Product_Data_Thermal::conductivity)
-      .def_readwrite("ir_transmittance_front", &wincalc::Product_Data_Thermal::ir_transmittance_front)
-	  .def_readwrite("ir_transmittance_back", &wincalc::Product_Data_Thermal::ir_transmittance_back)
-	  .def_readwrite("emissivity_front", &wincalc::Product_Data_Thermal::emissivity_front)
-	  .def_readwrite("emissivity_back"), &wincalc::Product_Data_Thermal::emissivity_back);
+  //-------------------------------------------------------
 
-  py::class_<wincalc::Product_Data_Optical, wincalc::Flippable_Solid_Layer>(
+  py::class_<wincalc::Product_Data_Thermal, wincalc::Flippable_Solid_Layer>(
+      m, "Product_Data_Thermal")
+      .def(py::init<double, double, bool, double, double, double, double,
+                    double>(),
+           py::arg("conductivity"), py::arg("thickness_meters"),
+           py::arg("flipped") = false, py::arg("opening_top") = 0,
+           py::arg("opening_bottom") = 0, py::arg("opening_left") = 0,
+           py::arg("opening_right") = 0, py::arg("opening_front") = 0)
+      .def_readwrite("conductivity",
+                     &wincalc::Product_Data_Thermal::conductivity)
+      .def_readwrite("opening_top", &wincalc::Product_Data_Thermal::opening_top)
+      .def_readwrite("opening_bottom",
+                     &wincalc::Product_Data_Thermal::opening_bottom)
+      .def_readwrite("opening_left",
+                     &wincalc::Product_Data_Thermal::opening_left)
+      .def_readwrite("opening_right",
+                     &wincalc::Product_Data_Thermal::opening_right)
+      .def_readwrite("opening_front",
+                     &wincalc::Product_Data_Thermal::opening_front);
+
+  py::class_<wincalc::Product_Data_Optical, wincalc::Flippable_Solid_Layer,
+             std::shared_ptr<wincalc::Product_Data_Optical>>(
       m, "Product_Data_Optical")
-      .def(py::init<double, bool>(), py::arg("flipped") = false());
+      .def(py::init<double, std::optional<double>, std::optional<double>,
+                    std::optional<double>, std::optional<double>, bool>(),
+           py::arg("thickness_meters"),
+           py::arg("ir_transmittance_front") = std::optional<double>(),
+           py::arg("ir_transmittance_back") = std::optional<double>(),
+           py::arg("emissivity_front") = std::optional<double>(),
+           py::arg("emissivity_back") = std::optional<double>(),
+           py::arg("flipped") = false)
+      .def("effective_thermal_values",
+           &wincalc::Product_Data_Optical::effective_thermal_values)
+      .def_readwrite("ir_transmittance_front",
+                     &wincalc::Product_Data_Optical::ir_transmittance_front)
+      .def_readwrite("ir_transmittance_back",
+                     &wincalc::Product_Data_Optical::ir_transmittance_back)
+      .def_readwrite("emissivity_front",
+                     &wincalc::Product_Data_Optical::emissivity_front)
+      .def_readwrite("emissivity_back",
+                     &wincalc::Product_Data_Optical::emissivity_back);
 
   py::class_<wincalc::Wavelength_Data>(m, "Wavelength_Data")
       .def_readwrite("wavelength", &wincalc::Wavelength_Data::wavelength)
@@ -334,10 +502,20 @@ PYBIND11_MODULE(pywincalc, m) {
                      &wincalc::Wavelength_Data::reflectance_back);
 
   py::class_<wincalc::Product_Data_N_Band_Optical,
-             wincalc::Product_Data_Optical>(m, "Product_Data_N_Band_Optical")
+             wincalc::Product_Data_Optical,
+             std::shared_ptr<wincalc::Product_Data_N_Band_Optical>>(
+      m, "Product_Data_N_Band_Optical")
       .def(py::init<FenestrationCommon::MaterialType, double,
-                    std::vector<wincalc::Wavelength_Data>, bool>(),
-           py::arg("flipped") = false())
+                    std::vector<wincalc::Wavelength_Data>,
+                    std::optional<double>, std::optional<double>,
+                    std::optional<double>, std::optional<double>, bool>(),
+           py::arg("material_type"), py::arg("thickness_meters"),
+           py::arg("wavelength_data"),
+           py::arg("ir_transmittance_front") = std::optional<double>(),
+           py::arg("ir_transmittance_back") = std::optional<double>(),
+           py::arg("emissivity_front") = std::optional<double>(),
+           py::arg("emissivity_back") = std::optional<double>(),
+           py::arg("flipped") = false)
       .def_readwrite("material_type",
                      &wincalc::Product_Data_N_Band_Optical::material_type)
       .def_readwrite("wavelength_data",
@@ -350,6 +528,7 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("thermal_data",
                      &wincalc::Product_Data_Optical_Thermal::thermal_data);
 
+#if 0
   py::class_<wincalc::Glazing_System_Optical_Interface>(
       m, "Glazing_System_Optical_Interface")
       .def(py::init<window_standards::Optical_Standard>())
@@ -477,7 +656,11 @@ PYBIND11_MODULE(pywincalc, m) {
            "given system calculation type (U or SHGC) and given theta and phi.",
            py::arg("theta") = 0, py::arg("phi") = 0);
 
-  m.def("load_standard", py::overload_cast<std::string const &>(&load_standard),
+#endif
+
+  m.def("load_standard",
+        py::overload_cast<std::string const &>(
+            &window_standards::load_optical_standard),
         "Load standard from .std.file");
   m.def("parse_json", &OpticsParser::parseJSONString,
         "Load product data from json string");
