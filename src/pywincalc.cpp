@@ -528,135 +528,63 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("thermal_data",
                      &wincalc::Product_Data_Optical_Thermal::thermal_data);
 
-#if 0
-  py::class_<wincalc::Glazing_System_Optical_Interface>(
-      m, "Glazing_System_Optical_Interface")
-      .def(py::init<window_standards::Optical_Standard>())
-      .def("all_method_values",
-           &wincalc::Glazing_System_Optical_Interface::all_method_values,
-           "Returns all optical results for angles theta (default = 0) and phi "
-           "(default = 0) for a given optical standard calculation method.")
-      .def("color", &wincalc::Glazing_System_Optical_Interface::color,
-           "Returns all color results for angles theta (default = 0) and phi "
-           "(default = 0).")
-      .def("optical_standard",
-           py::overload_cast<void>(
-               &wincalc::Glazing_System_Optical_Interface::optical_standard),
-           "Get the optical standard.")
-      .def("optical_standard",
-           py::overload_cast<window_standards::Optical_Standard>(
-               &wincalc::Glazing_System_Optical_Interface::optical_standard),
-           "Set the optical standard.");
-
-  py::class_<wincalc::Glazing_System_Thermal_Interface>(
-      m, "Glazing_System_Thermal_Interface")
-      .def("u", &wincalc::Glazing_System_Thermal_Interface::u,
-           "Returns the U-value for the system")
-      .def("shgc", &wincalc::Glazing_System_Thermal_Interface::shgc,
-           "Returns the SHGC for the system at given absorptances and total "
-           "solar transmittance.")
-      .def("layer_temperatures",
-           &wincalc::Glazing_System_Thermal_Interface::layer_temperatures,
-           "Returns the temperatures of each layer in the system based on the "
-           "given system calculation type (U or SHGC) and front absorptances.")
-      .def("solid_layers_effective_conductivities",
-           &wincalc::Glazing_System_Thermal_Interface::
-               solid_layers_effective_conductivities,
-           "Returns the effective conductivity of each solid layer in the "
-           "system based on the given calculation type (U or SHGC).")
-      .def("gap_layers_effective_conductivities",
-           &wincalc::Glazing_System_Thermal_Interface::
-               gap_layers_effective_conductivities,
-           "Returns the effective conductivity of each gap layer in the system "
-           "based on the given calculation type (U or SHGC).")
-      .def("system_effective_conductivity",
-           &wincalc::Glazing_System_Thermal_Interface::
-               system_effective_conductivity,
-           "Returns the effective conductivity of the entire system system "
-           "based on the given calculation type (U or SHGC).")
-      .def("relative_heat_gain",
-           &wincalc::Glazing_System_Thermal_Interface::relative_heat_gain,
-           "Returns the the relative heat gain for the given solar "
-           "transmittance.");
-
-  py::class_<wincalc::Glazing_System_Optical,
-             wincalc::Glazing_System_Optical_Interface>(
-      m, "Glazing_System_Optical")
+  py::class_<wincalc::Glazing_System>(m, "Glazing_System")
+      .def(py::init<std::vector<wincalc::Product_Data_Optical_Thermal> const &,
+                    std::vector<wincalc::Engine_Gap_Info> const &,
+                    window_standards::Optical_Standard const &, double, double,
+                    wincalc::Environments const &,
+                    std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
+                    wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
+                    int>(),
+           py::arg("product_data"), py::arg("gap_data"),
+           py::arg("optical_standard"), py::arg("width_meters") = 1.0,
+           py::arg("height_meters") = 1.0,
+           py::arg("environment") = wincalc::nfrc_shgc_environments(),
+           py::arg("bsdf_hemisphere") =
+               std::optional<SingleLayerOptics::CBSDFHemisphere>(),
+           py::arg("spectral_data_wavelength_range_method") =
+               wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
+           py::arg("number_visible_bands") = 5,
+           py::arg("number_solar_bands") = 10)
       .def(py::init<
-           std::vector<std::shared_ptr<wincalc::Product_Data_Optical>> const &,
-           window_standards::Optical_Standard const &>())
-      .def("all_method_values",
-           &wincalc::Glazing_System_Optical_Interface::all_method_values,
-           "Returns all optical results for angles theta (default = 0) and phi "
-           "(default = 0) for a given optical standard calculation method.")
-      .def("color", &wincalc::Glazing_System_Optical_Interface::color,
-           "Returns all color results for angles theta (default = 0) and phi "
-           "(default = 0).");
-
-  py::class_<wincalc::Glazing_System_Thermal,
-             wincalc::Glazing_System_Thermal_Interface>(
-      m, "Glazing_System_Thermal")
-      .def(py::init<std::vector<
-                        std::shared_ptr<wincalc::Product_Data_Thermal>> const &,
-                    std::vector<wincalc::Engine_Gap_Info> const &, double,
-                    double, wincalc::Environments const &>(),
-           py::arg("width") = 1.0, py::arg("height") = 1.0,
-           py::arg("environment") = wincalc::nfrc_u_environments())
-      .def("u", &wincalc::Glazing_System_Thermal_Interface::u,
-           "Returns the U-value for the system")
-      .def("shgc", &wincalc::Glazing_System_Thermal_Interface::shgc,
-           "Returns the SHGC for the system at given absorptances and total "
-           "solar transmittance.")
-      .def("layer_temperatures",
-           &wincalc::Glazing_System_Thermal_Interface::layer_temperatures,
-           "Returns the temperatures of each layer in the system based on the "
-           "given system calculation type (U or SHGC) and front absorptances.")
+               std::vector<std::shared_ptr<OpticsParser::ProductData>> const &,
+               std::vector<wincalc::Engine_Gap_Info> const &,
+               window_standards::Optical_Standard const &, double, double,
+               wincalc::Environments const &,
+               std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
+               wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
+               int>(),
+           py::arg("product_data"), py::arg("gap_data"),
+           py::arg("optical_standard"), py::arg("width_meters") = 1.0,
+           py::arg("height_meters") = 1.0,
+           py::arg("environment") = wincalc::nfrc_shgc_environments(),
+           py::arg("bsdf_hemisphere") =
+               std::optional<SingleLayerOptics::CBSDFHemisphere>(),
+           py::arg("spectral_data_wavelength_range_method") =
+               wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
+           py::arg("number_visible_bands") = 5,
+           py::arg("number_solar_bands") = 10)
+      .def("u", &wincalc::Glazing_System::u, py::arg("theta") = 0,
+           py::arg("phi") = 0)
+      .def("shgc", &wincalc::Glazing_System::shgc, py::arg("theta") = 0,
+           py::arg("phi") = 0)
+      .def("layer_temperatures", &wincalc::Glazing_System::layer_temperatures,
+           py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
+      .def("all_method_values", &wincalc::Glazing_System::all_method_values,
+           py::arg("method_type"), py::arg("theta") = 0, py::arg("phi") = 0)
+      .def("color", &wincalc::Glazing_System::color, py::arg("theta") = 0,
+           py::arg("phi") = 0)
       .def("solid_layers_effective_conductivities",
-           &wincalc::Glazing_System_Thermal_Interface::
-               solid_layers_effective_conductivities,
-           "Returns the effective conductivity of each solid layer in the "
-           "system based on the given calculation type (U or SHGC).")
+           &wincalc::Glazing_System::solid_layers_effective_conductivities,
+           py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("gap_layers_effective_conductivities",
-           &wincalc::Glazing_System_Thermal_Interface::
-               gap_layers_effective_conductivities,
-           "Returns the effective conductivity of each gap layer in the system "
-           "based on the given calculation type (U or SHGC).")
+           &wincalc::Glazing_System::gap_layers_effective_conductivities,
+           py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("system_effective_conductivity",
-           &wincalc::Glazing_System_Thermal_Interface::
-               system_effective_conductivity,
-           "Returns the effective conductivity of the entire system system "
-           "based on the given calculation type (U or SHGC).")
-      .def("relative_heat_gain",
-           &wincalc::Glazing_System_Thermal_Interface::relative_heat_gain,
-           "Returns the the relative heat gain for the given solar "
-           "transmittance.");
-
-  py::class_<wincalc::Glazing_System_Thermal_And_Optical,
-             wincalc::Glazing_System_Optical, wincalc::Glazing_System_Thermal>(
-      m, "Glazing_System_Thermal_And_Optical")
-      .def(py::init<std::vector<
-                        std::shared_ptr<wincalc::Product_Data_Thermal>> const &,
-                    std::vector<wincalc::Engine_Gap_Info> const &,
-                    windows_standards::Optical_Standard double, double,
-                    wincalc::Environments const &>(),
-           py::arg("width") = 1.0, py::arg("height") = 1.0,
-           py::arg("environment") = wincalc::nfrc_u_environments())
-      .def(py::init<std::vector<OpticsParser::ProductData> const &,
-                    std::vector<wincalc::Engine_Gap_Info> const &,
-                    windows_standards::Optical_Standard double, double,
-                    wincalc::Environments const &>(),
-           py::arg("width") = 1.0, py::arg("height") = 1.0,
-           py::arg("environment") = wincalc::nfrc_u_environments())
-      .def("shgc", &wincalc::Glazing_System_Thermal_And_Optical::shgc,
-           "Calculate the SHGC of the glazing system at given theta and phi.",
-           py::arg("theta") = 0, py::arg("phi") = 0)
-      .def("layer_temperatures",
-           &wincalc::Glazing_System_Thermal_And_Optical::layer_temperatures,
-           "Returns the temperatures of each layer in the system based on the "
-           "given system calculation type (U or SHGC) and given theta and phi.",
+           &wincalc::Glazing_System::system_effective_conductivity,
+           py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
+      .def("relative_heat_gain", &wincalc::Glazing_System::relative_heat_gain,
            py::arg("theta") = 0, py::arg("phi") = 0);
-
-#endif
 
   m.def("load_standard",
         py::overload_cast<std::string const &>(
