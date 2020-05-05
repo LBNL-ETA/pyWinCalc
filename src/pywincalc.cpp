@@ -444,23 +444,12 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("emissivity_back",
                      &wincalc::Product_Data_Optical::emissivity_back);
 
-  py::class_<wincalc::Wavelength_Data>(m, "Wavelength_Data")
-      .def_readwrite("wavelength", &wincalc::Wavelength_Data::wavelength)
-      .def_readwrite("transmittance_front",
-                     &wincalc::Wavelength_Data::transmittance_front)
-      .def_readwrite("transmittance_back",
-                     &wincalc::Wavelength_Data::transmittance_back)
-      .def_readwrite("reflectance_front",
-                     &wincalc::Wavelength_Data::reflectance_front)
-      .def_readwrite("reflectance_back",
-                     &wincalc::Wavelength_Data::reflectance_back);
-
   py::class_<wincalc::Product_Data_N_Band_Optical,
              wincalc::Product_Data_Optical,
              std::shared_ptr<wincalc::Product_Data_N_Band_Optical>>(
       m, "Product_Data_N_Band_Optical")
       .def(py::init<FenestrationCommon::MaterialType, double,
-                    std::vector<wincalc::Wavelength_Data>,
+                    std::vector<OpticsParser::WLData>,
                     std::optional<double>, std::optional<double>,
                     std::optional<double>, std::optional<double>, bool>(),
            py::arg("material_type"), py::arg("thickness_meters"),
