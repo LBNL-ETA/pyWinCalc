@@ -79,7 +79,7 @@ void declare_wce_optical_results_template(py::module &m, std::string typestr) {
       wincalc::WCE_Optical_Result_Simple<T>>>(m, typestr);
   declare_wce_optical_result_layer<T>(m, typestr);
   declare_wce_optical_result_by_side<wincalc::WCE_Optical_Result_Layer<T>>(
-      m, typestr);
+      m, typestr + "_Layer");
   std::string pyclass_name = std::string("WCE_Optical_Results") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
