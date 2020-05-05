@@ -67,7 +67,7 @@ void declare_wce_optical_result_by_side(py::module &m, std::string typestr) {
 }
 
 template <typename T>
-void declare_wce_optical_results(py::module &m, std::string typestr) {
+void declare_wce_optical_results_template(py::module &m, std::string typestr) {
   using Class = wincalc::WCE_Optical_Results_Template<T>;
   declare_wce_optical_result_simple<T>(m, typestr);
   declare_wce_optical_transmission_result<
@@ -76,7 +76,7 @@ void declare_wce_optical_results(py::module &m, std::string typestr) {
       wincalc::WCE_Optical_Result_Simple<T>>>(m, typestr);
   declare_wce_optical_result_layer<T>(m, typestr);
   declare_wce_optical_result_by_side<wincalc::WCE_Optical_Result_Layer<T>>(
-      m, typestr + std::string("_Layer"));
+      m, typestr + "_Layer");
   std::string pyclass_name = std::string("WCE_Optical_Results") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
@@ -84,7 +84,8 @@ void declare_wce_optical_results(py::module &m, std::string typestr) {
       .def_readwrite("layer_results", &Class::layer_results);
 }
 
-void declare_wce_optical_color_results(
+template <>
+void declare_wce_optical_results_template<wincalc::Color_Result>(
     py::module &m, std::string typestr) {
   using Class = wincalc::WCE_Optical_Results_Template<wincalc::Color_Result>;
   declare_wce_optical_result_simple<wincalc::Color_Result>(m, typestr);
@@ -97,50 +98,6 @@ void declare_wce_optical_color_results(
                     py::dynamic_attr())
       .def_readwrite("system_results", &Class::system_results);
 }
-
-//---------------------------------------------------------------------------------
-#if 0
-template <>
-void declare_wce_optical_result_simple<Color_Result>(py::module &m, std::string typestr) {
-	using Class = WCE_Optical_Result_Simple<T>;
-	declare_optical_result_by_transmittance<T>(m, typestr);
-	std::string pyclass_name = std::string("WCE_Optical_Result_Simple") + typestr;
-	py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
-		py::dynamic_attr())
-		.def_readwrite("direct_direct", &Class::direct_direct)
-		.def_readwrite("direct_diffuse", &Class::direct_diffuse)
-		.def_readwrite("diffuse_diffuse", &Class::diffuse_diffuse)
-}
-
-template <typename T>
-void declare_wce_optical_result_absorptance(py::module &m, std::string typestr) {
-	using Class = WCE_Optical_Result_Absorptance<T>;
-	declare_optical_result_by_transmittance<T>(m, typestr);
-	std::string pyclass_name = std::string("WCE_Optical_Result_Absorptance") + typestr;
-	py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
-		py::dynamic_attr())
-		.def_readwrite("direct", &Class::direct)
-		.def_readwrite("diffuse", &Class::diffuse)
-		.def_readwrite("hemispherical", &Class::hemispherical);
-}
-
-template <typename T>
-void declare_optical_result_by_side(py::module &m,
-	std::string typestr) {
-	using Class = WCE_Optical_Result_By_Side<T>;
-	declare_wce_optical_result_simple<T>(m, typestr);
-	declare_wce_optical_result_absorptance<T>(m, typestr);
-	std::string pyclass_name = std::string("WCE_Optical_Result") + typestr;
-	py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
-		py::dynamic_attr())
-		.def_readwrite("tf", &Class::tf)
-		.def_readwrite("tb", &Class::tb)
-		.def_readwrite("rf", &Class::rf)
-		.def_readwrite("rb", &Class::rb)
-		.def_readwrite("absorptances_front", &Class::absorptances_front)
-		.def_readwrite("absorptances_back", &Class::absorptances_back);
-}
-#endif
 
 PYBIND11_MODULE(pywincalc, m) {
   m.doc() = "Python bindings for WinCalc";
@@ -392,8 +349,8 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("rgb", &wincalc::Color_Result::rgb)
       .def_readwrite("lab", &wincalc::Color_Result::lab);
 
-  declare_wce_optical_results<double>(m, "");
-  declare_wce_optical_color_results(m, "_Color");
+  declare_wce_optical_results_template<double>(m, "");
+  declare_wce_optical_results_template<wincalc::Color_Result>(m, "_Color");
 
   py::enum_<Tarcog::ISO15099::BoundaryConditionsCoeffModel>(
       m, "Boundary_Conditions_Coefficient_Model", py::arithmetic())
@@ -436,15 +393,16 @@ PYBIND11_MODULE(pywincalc, m) {
       "nfrc_shgc_environments", &wincalc::nfrc_shgc_environments,
       "Returns the default environments for running a NFRC SHGC calculation.");
 
-  py::class_<wincalc::Flippable_Solid_Layer>(m, "Flippable_Solid_Layer")
+  py::class_<wincalc::Flippable_Solid_Layer,
+             std::shared_ptr<wincalc::Flippable_Solid_Layer>>(
+      m, "Flippable_Solid_Layer")
       .def(py::init<double, bool>())
       .def_readwrite("thickness_meters",
                      &wincalc::Flippable_Solid_Layer::thickness_meters)
       .def_readwrite("flipped", &wincalc::Flippable_Solid_Layer::flipped);
 
-  //-------------------------------------------------------
-
-  py::class_<wincalc::Product_Data_Thermal, wincalc::Flippable_Solid_Layer>(
+  py::class_<wincalc::Product_Data_Thermal, wincalc::Flippable_Solid_Layer,
+             std::shared_ptr<wincalc::Product_Data_Thermal>>(
       m, "Product_Data_Thermal")
       .def(py::init<double, double, bool, double, double, double, double,
                     double>(),
