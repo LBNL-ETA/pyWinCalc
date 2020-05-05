@@ -481,6 +481,11 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_static("create", py::overload_cast<SingleLayerOptics::BSDFBasis>(&SingleLayerOptics::CBSDFHemisphere::create))
 	  .def("get_directions", &SingleLayerOptics::CBSDFHemisphere::getDirections);
 
+  py::enum_<wincalc::Spectal_Data_Wavelength_Range_Method>(m, "Spectal_Data_Wavelength_Range_Method", py::arithmetic())
+	  .value("Full", wincalc::Spectal_Data_Wavelength_Range_Method::FULL)
+	  .value("ISO_9050", wincalc::Spectal_Data_Wavelength_Range_Method::ISO_9050)
+	  .value("Condensed", wincalc::Spectal_Data_Wavelength_Range_Method::CONDENSED);
+
   py::class_<wincalc::Glazing_System>(m, "Glazing_System")
       .def(py::init<std::vector<wincalc::Product_Data_Optical_Thermal> const &,
                     std::vector<wincalc::Engine_Gap_Info> const &,
