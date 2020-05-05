@@ -152,7 +152,8 @@ PYBIND11_MODULE(pywincalc, m) {
       .def(py::init<double, OpticsParser::MeasurementComponent,
                     std::optional<OpticsParser::MeasurementComponent>>(),
            py::arg("wavelength"), py::arg("direct_component"),
-           py::arg("diffuse_component") = std::nullopt)
+           py::arg("diffuse_component") =
+               std::optional<OpticsParser::MeasurementComponent>())
       .def(py::init<double, double, double, double>())
       .def(py::init<double, double, double, double, double, double, double,
                     double, double>())
@@ -427,10 +428,10 @@ PYBIND11_MODULE(pywincalc, m) {
       .def(py::init<double, std::optional<double>, std::optional<double>,
                     std::optional<double>, std::optional<double>, bool>(),
            py::arg("thickness_meters"),
-           py::arg("ir_transmittance_front") = std::nullopt,
-           py::arg("ir_transmittance_back") = std::nullopt,
-           py::arg("emissivity_front") = std::nullopt,
-           py::arg("emissivity_back") = std::nullopt,
+           py::arg("ir_transmittance_front") = std::optional<double>(),
+           py::arg("ir_transmittance_back") = std::optional<double>(),
+           py::arg("emissivity_front") = std::optional<double>(),
+           py::arg("emissivity_back") = std::optional<double>(),
            py::arg("flipped") = false)
       .def("effective_thermal_values",
            &wincalc::Product_Data_Optical::effective_thermal_values)
@@ -453,10 +454,10 @@ PYBIND11_MODULE(pywincalc, m) {
                     std::optional<double>, bool>(),
            py::arg("material_type"), py::arg("thickness_meters"),
            py::arg("wavelength_data"),
-           py::arg("ir_transmittance_front") = std::nullopt,
-           py::arg("ir_transmittance_back") = std::nullopt,
-           py::arg("emissivity_front") = std::nullopt,
-           py::arg("emissivity_back") = std::nullopt,
+           py::arg("ir_transmittance_front") = std::optional<double>(),
+           py::arg("ir_transmittance_back") = std::optional<double>(),
+           py::arg("emissivity_front") = std::optional<double>(),
+           py::arg("emissivity_back") = std::optional<double>(),
            py::arg("flipped") = false)
       .def_readwrite("material_type",
                      &wincalc::Product_Data_N_Band_Optical::material_type)
@@ -470,6 +471,16 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("thermal_data",
                      &wincalc::Product_Data_Optical_Thermal::thermal_data);
 
+  py::enum_<SingleLayerOptics::BSDFBasis>(m, "BSDF_Basis", py::arithmetic())
+      .value("Small", SingleLayerOptics::BSDFBasis::Small)
+      .value("Quarter", SingleLayerOptics::BSDFBasis::Quarter)
+      .value("Half", SingleLayerOptics::BSDFBasis::Half)
+      .value("Full", SingleLayerOptics::BSDFBasis::Full);
+
+  py::class_<SingleLayerOptics::CBSDFHemisphere>(m, "BSDF_Hemisphere")
+      .def_static("create", py::overload_cast<SingleLayerOptics::BSDFBasis>(&SingleLayerOptics::CBSDFHemisphere::create))
+	  .def("get_directions", &SingleLayerOptics::CBSDFHemisphere::getDirections);
+
   py::class_<wincalc::Glazing_System>(m, "Glazing_System")
       .def(py::init<std::vector<wincalc::Product_Data_Optical_Thermal> const &,
                     std::vector<wincalc::Engine_Gap_Info> const &,
@@ -482,7 +493,8 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("optical_standard"), py::arg("width_meters") = 1.0,
            py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_shgc_environments(),
-           py::arg("bsdf_hemisphere") = std::nullopt,
+           py::arg("bsdf_hemisphere") =
+               std::optional<SingleLayerOptics::CBSDFHemisphere>(),
            py::arg("spectral_data_wavelength_range_method") =
                wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
            py::arg("number_visible_bands") = 5,
@@ -499,7 +511,8 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("optical_standard"), py::arg("width_meters") = 1.0,
            py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_shgc_environments(),
-           py::arg("bsdf_hemisphere") = std::nullopt,
+           py::arg("bsdf_hemisphere") =
+               std::optional<SingleLayerOptics::CBSDFHemisphere>(),
            py::arg("spectral_data_wavelength_range_method") =
                wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
            py::arg("number_visible_bands") = 5,
