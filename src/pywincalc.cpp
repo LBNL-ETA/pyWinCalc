@@ -58,9 +58,6 @@ void declare_wce_optical_transmission_result(py::module &m,
 template <typename T>
 void declare_wce_optical_result_by_side(py::module &m, std::string typestr) {
   using Class = wincalc::WCE_Optical_Result_By_Side<T>;
-  // declare_optical_result_by_transmittance<T>(m, typestr);
-  // declare_wce_optical_result_simple<T>(m, typestr);
-  // declare_wce_optical_result_absorptance<T>(m, typestr);
   std::string pyclass_name =
       std::string("WCE_Optical_Result_By_Side") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
@@ -70,7 +67,7 @@ void declare_wce_optical_result_by_side(py::module &m, std::string typestr) {
 }
 
 template <typename T>
-void declare_wce_optical_results_template(py::module &m, std::string typestr) {
+void declare_wce_optical_results(py::module &m, std::string typestr) {
   using Class = wincalc::WCE_Optical_Results_Template<T>;
   declare_wce_optical_result_simple<T>(m, typestr);
   declare_wce_optical_transmission_result<
@@ -79,7 +76,7 @@ void declare_wce_optical_results_template(py::module &m, std::string typestr) {
       wincalc::WCE_Optical_Result_Simple<T>>>(m, typestr);
   declare_wce_optical_result_layer<T>(m, typestr);
   declare_wce_optical_result_by_side<wincalc::WCE_Optical_Result_Layer<T>>(
-      m, typestr + "_Layer");
+      m, typestr + std::string("_Layer"));
   std::string pyclass_name = std::string("WCE_Optical_Results") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
@@ -87,8 +84,7 @@ void declare_wce_optical_results_template(py::module &m, std::string typestr) {
       .def_readwrite("layer_results", &Class::layer_results);
 }
 
-template <>
-void declare_wce_optical_results_template<wincalc::Color_Result>(
+void declare_wce_optical_color_results(
     py::module &m, std::string typestr) {
   using Class = wincalc::WCE_Optical_Results_Template<wincalc::Color_Result>;
   declare_wce_optical_result_simple<wincalc::Color_Result>(m, typestr);
@@ -396,8 +392,8 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("rgb", &wincalc::Color_Result::rgb)
       .def_readwrite("lab", &wincalc::Color_Result::lab);
 
-  declare_wce_optical_results_template<double>(m, "");
-  declare_wce_optical_results_template<wincalc::Color_Result>(m, "_Color");
+  declare_wce_optical_results<double>(m, "");
+  declare_wce_optical_color_results(m, "_Color");
 
   py::enum_<Tarcog::ISO15099::BoundaryConditionsCoeffModel>(
       m, "Boundary_Conditions_Coefficient_Model", py::arithmetic())
