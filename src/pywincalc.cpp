@@ -531,7 +531,7 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("phi") = 0)
       .def("layer_temperatures", &wincalc::Glazing_System::layer_temperatures,
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
-      .def("all_method_values", &wincalc::Glazing_System::all_method_values,
+      .def("optical_method_results", &wincalc::Glazing_System::optical_method_results,
            py::arg("method_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("color", &wincalc::Glazing_System::color, py::arg("theta") = 0,
            py::arg("phi") = 0)
