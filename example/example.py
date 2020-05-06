@@ -14,26 +14,29 @@ solid_layers = [clear_3]
 gaps = [] # single layer does not have any gaps
 
 # Glazing_System defaults to the NFRC U environments
-glazing_system_single_layer_u_env = pywincalc.Glazing_System(solid_layers, gaps, standard, width, height)
-u_value = glazing_system_single_layer_u_env.u() # calculate U-value according to ISO15099
+glazing_system_single_layer_u_environment = pywincalc.Glazing_System(solid_layers, gaps, standard, width, height)
+u_value = glazing_system_single_layer_u_environment.u() # calculate U-value according to ISO15099
 print("Single Layer U-value: {u}".format(u=u_value))
 
 # To calculate SHGC use the NFRC SHGC environments for the glazing system instead
-glazing_system_single_layer_shgc_env = pywincalc.Glazing_System(solid_layers, gaps, standard, width, height, pywincalc.nfrc_shgc_environments())
-shgc_result = glazing_system_single_layer_shgc_env.shgc() # calculate SHGC according to ISO15099
+glazing_system_single_layer_shgc_environment = pywincalc.Glazing_System(solid_layers, gaps, standard, width, height, pywincalc.nfrc_shgc_environments())
+shgc_result = glazing_system_single_layer_shgc_environment.shgc() # calculate SHGC according to ISO15099
 print("Single Layer SHGC: {shgc}".format(shgc=shgc_result))
 
 # It is possible to calculate U and SHGC for any environmental conditions.
 # E.G. The SHGC for the NFRC U environmental conditions is
-u_environment_shgc = glazing_system_single_layer_u_env.shgc()
+u_environment_shgc = glazing_system_single_layer_u_environment.shgc()
 print("SHGC for the NFRC U-value environmental conditions: {shgc}".format(shgc=u_environment_shgc))
 # And the u-value for the SHGC environment is
-shgc_environment_u = glazing_system_single_layer_shgc_env.u()
+shgc_environment_u = glazing_system_single_layer_shgc_environment.u()
 print("U for the NFRC SHGC environmental conditions: {u}".format(u=shgc_environment_u))
+
+# Other thermal results available:
+layer_temperateures = glazing_system_single_layer_u_environment.layer_temperatures(pywincalc.)
 
 # Optical results are calculated based on methods defined by the optical standard loaded above.
 # Get all solar results by
-solar_results = glazing_system_single_layer_u_env.optical_method_results(pywincalc.Optical_Method_Type.SOLAR)
+solar_results = glazing_system_single_layer_u_environment.optical_method_results(pywincalc.Optical_Method_Type.SOLAR)
 
 # Optical results have two parts, results that apply to the entire system and results for each layer.
 # System results and results for each layer are then divided by side (front, back).
@@ -54,14 +57,14 @@ print("Layer 1 back diffuse solar absorptance: {v}".format(v=solar_results_per_l
 # etc...
 
 # Similarly for visible results calculate using the Photopic method
-visible_results = glazing_system_single_layer_u_env.optical_method_results(pywincalc.Optical_Method_Type.PHOTOPIC)
+visible_results = glazing_system_single_layer_u_environment.optical_method_results(pywincalc.Optical_Method_Type.PHOTOPIC)
 print("Direct-direct front visible transmittance: {v}".format(v=visible_results.system_results.front.transmittance.direct_direct))
 print("Direct-hemispheric back visible reflectance: {v}".format(v=visible_results.system_results.back.reflectance.direct_hemispherical))
 print("Layer 1 front diffuse visible absorptance: {v}".format(v=visible_results.layer_results[0].front.absorptance.diffuse))
 # etc...
 
 # If the optical standard defines color methods those have a separate results set and function call
-color_results = glazing_system_single_layer_u_env.color()
+color_results = glazing_system_single_layer_u_environment.color()
 
 # Currently color results only have system results.  Individual layer results are not yet supported.
 # Color results follow the same layout as the other optical system results except each value is offered in
@@ -72,31 +75,61 @@ direct_hemispherical_back_reflectance_lab_color = color_results.system_results.b
 print("Direct-hemispheric back color reflectance in Lab: ({l}, {a}, {b})".format(l=direct_hemispherical_back_reflectance_lab_color.L, a=direct_hemispherical_back_reflectance_lab_color.a, b=direct_hemispherical_back_reflectance_lab_color.b))
 # etc...
 
+# Glazing systems can have any number of solid layers
+# Load a second glass to make things a little more interesting
 clear_6_path = "products/CLEAR_6.DAT"
 clear_6 = pywincalc.parse_optics_file(clear_6_path)
 
+# Create a list of solid layers in order from outside to inside
+# This is a triple glazing where the outside and inside are the glass
+# that was just loaded and the middle is the same glass as the single clear above
 solid_layers = [clear_6, clear_3, clear_6]
 
-gap_1 = pywincalc.Gap_Data(pywincalc.Gas_Type.AIR, .0127) # .0127 is gap thickness in meters
-gap_2 = pywincalc.Gap_Data(pywincalc.Gas_Type.ARGON, .02) # .02 is gap thickness in meters
+# Solid layers must be separated by gap layers
+# Currently there are four pre-defined gases available: Air, Argon, Krypton, and Xenon
+# Vacuum gaps are not yet supported
+# To create a gap with 100% of a predefined gas create a Gap_Data object with the gas type
+# and thickness in meters
+gap_1 = pywincalc.Gap_Data(pywincalc.Predefined_Gas_Type.AIR, .0127) # .0127 is gap thickness in meters
 
-gaps = [gap_1, gap_2] 
+# To create a mixture of predefined gases first create the components with the gas type and portion of the mixture
+# The following creates a gas that is 70% Krypton and 30% Xenon and 2cm thick
+gap_2_component_1 = pywincalc.Predefined_Gas_Mixture_Component(pywincalc.Predefined_Gas_Type.KRYPTON, .7)
+gap_2_component_2 = pywincalc.Predefined_Gas_Mixture_Component(pywincalc.Predefined_Gas_Type.XENON, .3)
+gap_2 = pywincalc.Gap_Data([gap_2_component_1, gap_2_component_2], .02) # .02 is gap thickness in meters
 
-glazing_system_tripple_layer = pywincalc.Glazing_System(solid_layers, gaps, standard, width, height)
+# Put all gaps into a list ordered from outside to inside
+# Note:  This is only specifying gaps between solid layers
+# Gases on the interior and exterior of the glazing system are more fixed and only subject to
+# change based on the properties in the environmental conditions
+gaps = [gap_1, gap_2]
 
-u_results = glazing_system_tripple_layer.u() # calculate U-value according to ISO15099
-print("Triple Layer U-value: {u}".format(u=u_results.result))
-print("Triple Layer u t_sol: {t}".format(t=u_results.t_sol))
-print("Triple Layer u solar absorptances per layer: {a}".format(a=u_results.layer_solar_absorptances))
+# Create a triple layer glazing system
+glazing_system_triple_layer_u_environment = pywincalc.Glazing_System(solid_layers, gaps, standard, width, height)
+# If SHGC results for the NFRC SHGC environment are needed create a glazing system with that environment
+glazing_system_triple_layer_shgc_environment = pywincalc.Glazing_System(solid_layers, gaps, standard, width, height, pywincalc.nfrc_shgc_environments())
 
-shgc_results = glazing_system_tripple_layer.shgc() # calculate SHGC according to ISO15099
-print("Triple Layer SHGC: {shgc}".format(shgc=shgc_results.result))
-print("Triple Layer SHGC t_sol: {t}".format(t=shgc_results.t_sol))
-print("Triple Layer SHGC solar absorptances per layer: {a}".format(a=shgc_results.layer_solar_absorptances))
+# Get the results the same way as with the single clear.
+u_value = glazing_system_triple_layer_u_environment.u()
+print("Triple Layer U-value: {u}".format(u=u_value))
+shgc_result = glazing_system_triple_layer_shgc_environment.shgc() # calculate SHGC according to ISO15099
+print("Triple Layer SHGC: {shgc}".format(shgc=shgc_result))
 
-photopic_optical_results_tripple_layer = glazing_system_tripple_layer.all_method_values(pywincalc.Method_Type.PHOTOPIC)
-print("Tripple Layer Photopic optical results transmittance front direct-direct: {r}".format(r=photopic_optical_results_tripple_layer.direct_direct.tf))
+solar_results = glazing_system_triple_layer_u_environment.optical_method_results(pywincalc.Optical_Method_Type.SOLAR)
+system_solar_results = solar_results.system_results
+print("Triple clear direct-hemispheric front solar transmittance: {v}".format(v=system_solar_results.front.transmittance.direct_hemispherical))
+print("Triple clear diffuse-diffuse front solar reflectance: {v}".format(v=system_solar_results.front.reflectance.diffuse_diffuse))
+print("Triple clear direct-direct back solar transmittance: {v}".format(v=system_solar_results.back.transmittance.direct_direct))
 
-color_results_tripple_layer = glazing_system_tripple_layer.color()
-tf_rgb_results_tripple_layer = color_results_tripple_layer.direct_direct.tf.rgb
-print("Tripple Layer color results transmittance front direct-direct RGB: ({r}, {g}, {b})".format(r=tf_rgb_results_tripple_layer.R, g=tf_rgb_results_tripple_layer.G, b=tf_rgb_results_tripple_layer.B))
+# In this case since there are multiple layers there are multiple layer results
+solar_results_per_layer = solar_results.layer_results
+print("Triple clear layer 1 front direct solar absorptance: {v}".format(v=solar_results_per_layer[0].front.absorptance.direct))
+print("Triple clear layer 1 back diffuse solar absorptance: {v}".format(v=solar_results_per_layer[0].back.absorptance.diffuse))
+print("Triple clear layer 2 front direct solar absorptance: {v}".format(v=solar_results_per_layer[1].front.absorptance.direct))
+print("Triple clear layer 2 back diffuse solar absorptance: {v}".format(v=solar_results_per_layer[1].back.absorptance.diffuse))
+print("Triple clear layer 3 front direct solar absorptance: {v}".format(v=solar_results_per_layer[2].front.absorptance.direct))
+print("Triple clear layer 3 back diffuse solar absorptance: {v}".format(v=solar_results_per_layer[2].back.absorptance.diffuse))
+# etc...
+
+# Custom gases are also available.  Mixing custom gases and predefined gases is not yet supported
+# TODO Create example using custom gases
