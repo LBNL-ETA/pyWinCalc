@@ -481,6 +481,10 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_static("create", py::overload_cast<SingleLayerOptics::BSDFBasis>(&SingleLayerOptics::CBSDFHemisphere::create))
 	  .def("get_directions", &SingleLayerOptics::CBSDFHemisphere::getDirections);
 
+  py::enum_<Tarcog::ISO15099::System>(m, "Tarcog_System_Type", py::arithmetic())
+	  .value("U", Tarcog::ISO15099::System::Uvalue)
+	  .value("SHGC", Tarcog::ISO15099::System::SHGC);
+
   py::enum_<wincalc::Spectal_Data_Wavelength_Range_Method>(m, "Spectal_Data_Wavelength_Range_Method", py::arithmetic())
 	  .value("Full", wincalc::Spectal_Data_Wavelength_Range_Method::FULL)
 	  .value("ISO_9050", wincalc::Spectal_Data_Wavelength_Range_Method::ISO_9050)
