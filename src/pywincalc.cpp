@@ -504,7 +504,7 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("product_data"), py::arg("gap_data"),
            py::arg("optical_standard"), py::arg("width_meters") = 1.0,
            py::arg("height_meters") = 1.0,
-           py::arg("environment") = wincalc::nfrc_shgc_environments(),
+           py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
                std::optional<SingleLayerOptics::CBSDFHemisphere>(),
            py::arg("spectral_data_wavelength_range_method") =
@@ -522,7 +522,7 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("product_data"), py::arg("gap_data"),
            py::arg("optical_standard"), py::arg("width_meters") = 1.0,
            py::arg("height_meters") = 1.0,
-           py::arg("environment") = wincalc::nfrc_shgc_environments(),
+           py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
                std::optional<SingleLayerOptics::CBSDFHemisphere>(),
            py::arg("spectral_data_wavelength_range_method") =
