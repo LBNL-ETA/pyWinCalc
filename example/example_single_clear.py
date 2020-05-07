@@ -43,16 +43,39 @@ print("U for the NFRC SHGC environmental conditions: {u}".format(u=shgc_environm
 
 # Other thermal results available:
 
-# Layer results can be calculated for two cases for each environment.  When U system is passed as a parameter
+# Most other thermal can be calculated for two cases for each environment.  When U system is passed as a parameter
 # the layer temperatures will be calculated for the given environments without taking solar radiation into account.
 # When SHGC system is passed as a parameter solar ration is taken into account
 shgc_layer_temperatures_with_solar_radiation = glazing_system_single_layer_shgc_environment.layer_temperatures(
     pywincalc.Tarcog_System_Type.SHGC)
+print("Layer 1 temperature in SHGC environment with solar radiation: {v}".format(v=shgc_layer_temperatures_with_solar_radiation))
 shgc_layer_temperatures_without_solar_radiation = glazing_system_single_layer_shgc_environment.layer_temperatures(
     pywincalc.Tarcog_System_Type.U)
+print("Layer 1 temperature in SHGC environment without solar radiation: {v}".format(v=shgc_layer_temperatures_without_solar_radiation))
+
+shgc_environment_solid_layer_effective_conductivities_with_solar_radiation = glazing_system_single_layer_shgc_environment.solid_layers_effective_conductivities((pywincalc.Tarcog_System_Type.SHGC))
+print("Layer 1 effective conductivity in SHGC environment with solar radiation: {v}".format(v=shgc_environment_solid_layer_effective_conductivities_with_solar_radiation))
+shgc_environment_solid_layer_effective_conductivities_without_solar_radiation = glazing_system_single_layer_shgc_environment.solid_layers_effective_conductivities((pywincalc.Tarcog_System_Type.U))
+print("Layer 1 effective conductivity in SHGC environment without solar radiation: {v}".format(v=shgc_environment_solid_layer_effective_conductivities_without_solar_radiation))
+
+# Single layer systems do not have gaps.  For glazing systems with gaps the effective conductivity of gaps is available
+# using glazing_system.gap_layers_effective_conductivities
+
+system_effective_conductivity_with_solar_radiation = glazing_system_single_layer_shgc_environment.system_effective_conductivity(pywincalc.Tarcog_System_Type.SHGC)
+print("System effective conductivity with solar radiation: {v}".format(v=system_effective_conductivity_with_solar_radiation))
+system_effective_conductivity_without_solar_radiation = glazing_system_single_layer_shgc_environment.system_effective_conductivity(pywincalc.Tarcog_System_Type.U)
+print("System effective conductivity without solar radiation: {v}".format(v=system_effective_conductivity_without_solar_radiation))
+
+# Relative heat gain does not take a system type as a parameter
+relative_heat_gain = glazing_system_single_layer_shgc_environment.relative_heat_gain()
+print("Relative heat gain: {v}".format(v=relative_heat_gain))
 
 # Optical results are calculated based on methods defined by the optical standard loaded above.
-# Get all solar results by
+# Methods available for calculation depend on the standard.  Not all methods may be implemented in every standard
+# Current non-color methods available for calculation (if implemented):
+# SOLAR, PHOTOPIC, THERMAL_IR, TUV, SPF, TDW, TKR)
+#
+# Calculate all optical results using the solar method:
 solar_results = glazing_system_single_layer_u_environment.optical_method_results(pywincalc.Optical_Method_Type.SOLAR)
 
 # Optical results have two parts, results that apply to the entire system and results for each layer.
@@ -137,7 +160,8 @@ print("Diffuse-diffuse front color reflectance in trichromatic: ({x}, {y}, {z})"
 # etc...
 
 
-# By default results are calculated at the normal angle of incidence but are avaialble for any given theta and phi
+# By default glazing system results are calculated at the normal angle of incidence
+# but all results are available for any theta and phi
 theta = 15
 phi = 270
 
