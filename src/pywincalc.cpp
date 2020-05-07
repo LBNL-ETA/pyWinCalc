@@ -162,9 +162,12 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("diffuse_component",
                      &OpticsParser::WLData::diffuseComponent);
 
-  py::class_<OpticsParser::ProductGeometry>(m, "Product_Geometry");
+  py::class_<OpticsParser::ProductGeometry,
+             std::shared_ptr<OpticsParser::ProductGeometry>>(
+      m, "Product_Geometry");
 
-  py::class_<OpticsParser::VenetianGeometry, OpticsParser::ProductGeometry>(
+  py::class_<OpticsParser::VenetianGeometry, OpticsParser::ProductGeometry,
+             std::shared_ptr<OpticsParser::VenetianGeometry>>(
       m, "Venetian_Geometry")
       .def(py::init<double, double, double, double, int>(),
            py::arg("slat_width"), py::arg("slat_spacing"),
@@ -179,8 +182,8 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("number_segments",
                      &OpticsParser::VenetianGeometry::numberSegments);
 
-  py::class_<OpticsParser::WovenGeometry, OpticsParser::ProductGeometry>(
-      m, "Woven_Geometry")
+  py::class_<OpticsParser::WovenGeometry, OpticsParser::ProductGeometry,
+             std::shared_ptr<OpticsParser::WovenGeometry>>(m, "Woven_Geometry")
       .def(py::init<double, double, double>())
       .def_readwrite("thread_diameter",
                      &OpticsParser::WovenGeometry::threadDiameter)
@@ -189,7 +192,8 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("shade_thickness",
                      &OpticsParser::WovenGeometry::shadeThickness);
 
-  py::class_<OpticsParser::PerforatedGeometry, OpticsParser::ProductGeometry>(
+  py::class_<OpticsParser::PerforatedGeometry, OpticsParser::ProductGeometry,
+             std::shared_ptr<OpticsParser::PerforatedGeometry>>(
       m, "Perforated_Geometry")
       .def(py::init<double, double, double, double, std::string>())
       .def_readwrite("spacing_x", &OpticsParser::PerforatedGeometry::spacingX)
@@ -214,8 +218,9 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("eb", &OpticsParser::ProductData::backEmissivity)
       .def_readwrite("measurements", &OpticsParser::ProductData::measurements);
 
-  py::class_<OpticsParser::CompositionInformation>(m,
-                                                   "Product_Composistion_Data")
+  py::class_<OpticsParser::CompositionInformation,
+             std::shared_ptr<OpticsParser::CompositionInformation>>(
+      m, "Product_Composistion_Data")
       .def_readwrite("material",
                      &OpticsParser::CompositionInformation::material)
       .def_readwrite("geometry",
@@ -478,17 +483,22 @@ PYBIND11_MODULE(pywincalc, m) {
       .value("Full", SingleLayerOptics::BSDFBasis::Full);
 
   py::class_<SingleLayerOptics::CBSDFHemisphere>(m, "BSDF_Hemisphere")
-      .def_static("create", py::overload_cast<SingleLayerOptics::BSDFBasis>(&SingleLayerOptics::CBSDFHemisphere::create))
-	  .def("get_directions", &SingleLayerOptics::CBSDFHemisphere::getDirections);
+      .def_static("create", py::overload_cast<SingleLayerOptics::BSDFBasis>(
+                                &SingleLayerOptics::CBSDFHemisphere::create))
+      .def("get_directions",
+           &SingleLayerOptics::CBSDFHemisphere::getDirections);
 
   py::enum_<Tarcog::ISO15099::System>(m, "Tarcog_System_Type", py::arithmetic())
-	  .value("U", Tarcog::ISO15099::System::Uvalue)
-	  .value("SHGC", Tarcog::ISO15099::System::SHGC);
+      .value("U", Tarcog::ISO15099::System::Uvalue)
+      .value("SHGC", Tarcog::ISO15099::System::SHGC);
 
-  py::enum_<wincalc::Spectal_Data_Wavelength_Range_Method>(m, "Spectal_Data_Wavelength_Range_Method", py::arithmetic())
-	  .value("Full", wincalc::Spectal_Data_Wavelength_Range_Method::FULL)
-	  .value("ISO_9050", wincalc::Spectal_Data_Wavelength_Range_Method::ISO_9050)
-	  .value("Condensed", wincalc::Spectal_Data_Wavelength_Range_Method::CONDENSED);
+  py::enum_<wincalc::Spectal_Data_Wavelength_Range_Method>(
+      m, "Spectal_Data_Wavelength_Range_Method", py::arithmetic())
+      .value("Full", wincalc::Spectal_Data_Wavelength_Range_Method::FULL)
+      .value("ISO_9050",
+             wincalc::Spectal_Data_Wavelength_Range_Method::ISO_9050)
+      .value("Condensed",
+             wincalc::Spectal_Data_Wavelength_Range_Method::CONDENSED);
 
   m.def("nfrc_u_environments", &wincalc::nfrc_u_environments);
   m.def("nfrc_shgc_environments", &wincalc::nfrc_shgc_environments);
@@ -535,7 +545,8 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("phi") = 0)
       .def("layer_temperatures", &wincalc::Glazing_System::layer_temperatures,
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
-      .def("optical_method_results", &wincalc::Glazing_System::optical_method_results,
+      .def("optical_method_results",
+           &wincalc::Glazing_System::optical_method_results,
            py::arg("method_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("color", &wincalc::Glazing_System::color, py::arg("theta") = 0,
            py::arg("phi") = 0)
