@@ -221,6 +221,8 @@ PYBIND11_MODULE(pywincalc, m) {
   py::class_<OpticsParser::CompositionInformation,
              std::shared_ptr<OpticsParser::CompositionInformation>>(
       m, "Product_Composistion_Data")
+      .def(py::init<std::shared_ptr<OpticsParser::ProductData>,
+                    std::shared_ptr<OpticsParser::ProductGeometry>>())
       .def_readwrite("material",
                      &OpticsParser::CompositionInformation::material)
       .def_readwrite("geometry",
