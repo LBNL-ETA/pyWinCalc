@@ -472,6 +472,81 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("wavelength_data",
                      &wincalc::Product_Data_N_Band_Optical::wavelength_data);
 
+  py::class_<wincalc::Product_Data_Optical_With_Material,
+             wincalc::Product_Data_Optical,
+             std::shared_ptr<wincalc::Product_Data_Optical_With_Material>>(
+      m, "Product_Data_Optical_With_Material")
+      .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &>())
+      .def("optical_data",
+           &wincalc::Product_Data_Optical_With_Material::optical_data)
+      .def_readwrite(
+          "material_optical_data",
+          &wincalc::Product_Data_Optical_With_Material::material_optical_data);
+
+  py::enum_<SingleLayerOptics::DistributionMethod>(m, "Distribution_Method",
+                                                   py::arithmetic())
+      .value("Uniform_Diffuse",
+             SingleLayerOptics::DistributionMethod::UniformDiffuse)
+      .value("Directional_Diffuse",
+             SingleLayerOptics::DistributionMethod::DirectionalDiffuse);
+
+  py::class_<wincalc::Product_Data_Optical_Venetian,
+             wincalc::Product_Data_Optical_With_Material,
+             std::shared_ptr<wincalc::Product_Data_Optical_Venetian>>(
+      m, "Product_Data_Optical_Venetian")
+      .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
+                    double, double, double, double, int,
+                    SingleLayerOptics::DistributionMethod>())
+      .def_readwrite("slat_tilt",
+                     &wincalc::Product_Data_Optical_Venetian::slat_tilt)
+      .def_readwrite("slat_width",
+                     &wincalc::Product_Data_Optical_Venetian::slat_width)
+      .def_readwrite("slat_spacing",
+                     &wincalc::Product_Data_Optical_Venetian::slat_spacing)
+      .def_readwrite("slat_curvature",
+                     &wincalc::Product_Data_Optical_Venetian::slat_curvature)
+      .def_readwrite("number_slats",
+                     &wincalc::Product_Data_Optical_Venetian::number_slats)
+      .def_readwrite(
+          "distribution_method",
+          &wincalc::Product_Data_Optical_Venetian::distribution_method);
+
+  py::class_<wincalc::Product_Data_Optical_Woven_Shade,
+	  wincalc::Product_Data_Optical_With_Material,
+	  std::shared_ptr<wincalc::Product_Data_Optical_Woven_Shade>>(
+		  m, "Product_Data_Optical_Woven_Shade")
+	  .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
+		  double, double, double>())
+	  .def_readwrite("thread_diameter",
+		  &wincalc::Product_Data_Optical_Woven_Shade::thread_diameter)
+	  .def_readwrite("thread_spacing",
+		  &wincalc::Product_Data_Optical_Woven_Shade::thread_spacing)
+	  .def_readwrite("shade_thickness",
+		  &wincalc::Product_Data_Optical_Woven_Shade::shade_thickness);
+
+  py::class_<wincalc::Product_Data_Optical_Perforated_Screen,
+	  wincalc::Product_Data_Optical_With_Material,
+	  std::shared_ptr<wincalc::Product_Data_Optical_Perforated_Screen>> product_data_optical_perforated_screen(
+		  m, "Product_Data_Optical_Perforated_Screen");
+
+  product_data_optical_perforated_screen.def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
+		  double, double, double, double, wincalc::Product_Data_Optical_Perforated_Screen::Type>())
+	  .def_readwrite("spacing_x",
+		  &wincalc::Product_Data_Optical_Perforated_Screen::spacing_x)
+	  .def_readwrite("spacing_y",
+		  &wincalc::Product_Data_Optical_Perforated_Screen::spacing_y)
+	  .def_readwrite("dimension_x",
+		  &wincalc::Product_Data_Optical_Perforated_Screen::dimension_x)
+	  .def_readwrite("dimension_y",
+		  &wincalc::Product_Data_Optical_Perforated_Screen::dimension_y)
+	  .def_readwrite("perforation_type",
+		  &wincalc::Product_Data_Optical_Perforated_Screen::perforation_type);
+
+  py::enum_<wincalc::Product_Data_Optical_Perforated_Screen::Type>(product_data_optical_perforated_screen, "Type")
+	  .value("Circular", wincalc::Product_Data_Optical_Perforated_Screen::Type::CIRCULAR)
+	  .value("Rectangular", wincalc::Product_Data_Optical_Perforated_Screen::Type::RECTANGULAR)
+	  .value("Square", wincalc::Product_Data_Optical_Perforated_Screen::Type::SQUARE);
+
   py::class_<wincalc::Product_Data_Optical_Thermal>(
       m, "Product_Data_Optical_Thermal")
       .def_readwrite("optical_data",
