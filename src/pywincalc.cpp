@@ -231,6 +231,7 @@ PYBIND11_MODULE(pywincalc, m) {
       m, "Composed_Product_Data")
       .def(py::init<OpticsParser::ProductData const &,
                     std::shared_ptr<OpticsParser::CompositionInformation>>())
+      .def(py::init<std::shared_ptr<OpticsParser::CompositionInformation>>())
       .def("composed_product",
            &OpticsParser::ComposedProductData::composedProduct)
       .def_readwrite(
