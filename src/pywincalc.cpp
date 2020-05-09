@@ -539,6 +539,25 @@ PYBIND11_MODULE(pywincalc, m) {
                wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
            py::arg("number_visible_bands") = 5,
            py::arg("number_solar_bands") = 10)
+      .def(py::init<std::vector<std::variant<
+                        std::shared_ptr<OpticsParser::ProductData>,
+                        wincalc::Product_Data_Optical_Thermal>> const &,
+                    std::vector<wincalc::Engine_Gap_Info> const &,
+                    window_standards::Optical_Standard const &, double, double,
+                    wincalc::Environments const &,
+                    std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
+                    wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
+                    int>(),
+           py::arg("product_data"), py::arg("gap_data"),
+           py::arg("optical_standard"), py::arg("width_meters") = 1.0,
+           py::arg("height_meters") = 1.0,
+           py::arg("environment") = wincalc::nfrc_u_environments(),
+           py::arg("bsdf_hemisphere") =
+               std::optional<SingleLayerOptics::CBSDFHemisphere>(),
+           py::arg("spectral_data_wavelength_range_method") =
+               wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
+           py::arg("number_visible_bands") = 5,
+           py::arg("number_solar_bands") = 10)
       .def("u", &wincalc::Glazing_System::u, py::arg("theta") = 0,
            py::arg("phi") = 0)
       .def("shgc", &wincalc::Glazing_System::shgc, py::arg("theta") = 0,
@@ -561,6 +580,14 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("relative_heat_gain", &wincalc::Glazing_System::relative_heat_gain,
            py::arg("theta") = 0, py::arg("phi") = 0);
+
+  m.def("convert_to_solid_layer", &wincalc::convert_to_solid_layer,
+        "Convert product data into a solid layer that can be used in glazing "
+        "systems.");
+
+  m.def("convert_to_solid_layers", &wincalc::convert_to_solid_layers,
+        "Convert a list of product data into a solid layer that can be used in "
+        "glazing systems.");
 
   m.def("load_standard",
         py::overload_cast<std::string const &>(
