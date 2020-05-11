@@ -143,6 +143,7 @@ PYBIND11_MODULE(pywincalc, m) {
 
   py::class_<OpticsParser::MeasurementComponent>(
       m, "Optical_Measurement_Component")
+	  .def(py::init<double, double, double, double>())
       .def_readwrite("tf", &OpticsParser::MeasurementComponent::tf)
       .def_readwrite("tb", &OpticsParser::MeasurementComponent::tb)
       .def_readwrite("rf", &OpticsParser::MeasurementComponent::rf)
@@ -451,6 +452,16 @@ PYBIND11_MODULE(pywincalc, m) {
                      &wincalc::Product_Data_Optical::emissivity_front)
       .def_readwrite("emissivity_back",
                      &wincalc::Product_Data_Optical::emissivity_back);
+
+  py::enum_<FenestrationCommon::MaterialType>(m, "Material_Type", py::arithmetic())
+	  .value("Applied_Film", FenestrationCommon::MaterialType::AppliedFilm)
+	  .value("Coated", FenestrationCommon::MaterialType::Coated)
+	  .value("Electrochromic", FenestrationCommon::MaterialType::Electrochromic)
+	  .value("Film", FenestrationCommon::MaterialType::Film)
+	  .value("Interlayer", FenestrationCommon::MaterialType::Interlayer)
+	  .value("Laminate", FenestrationCommon::MaterialType::Laminate)
+	  .value("Monolithic", FenestrationCommon::MaterialType::Monolithic)
+	  .value("Thermochromic", FenestrationCommon::MaterialType::Thermochromic);
 
   py::class_<wincalc::Product_Data_N_Band_Optical,
              wincalc::Product_Data_Optical,
