@@ -143,7 +143,7 @@ PYBIND11_MODULE(pywincalc, m) {
 
   py::class_<OpticsParser::MeasurementComponent>(
       m, "Optical_Measurement_Component")
-	  .def(py::init<double, double, double, double>())
+      .def(py::init<double, double, double, double>())
       .def_readwrite("tf", &OpticsParser::MeasurementComponent::tf)
       .def_readwrite("tb", &OpticsParser::MeasurementComponent::tb)
       .def_readwrite("rf", &OpticsParser::MeasurementComponent::rf)
@@ -453,15 +453,16 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("emissivity_back",
                      &wincalc::Product_Data_Optical::emissivity_back);
 
-  py::enum_<FenestrationCommon::MaterialType>(m, "Material_Type", py::arithmetic())
-	  .value("Applied_Film", FenestrationCommon::MaterialType::AppliedFilm)
-	  .value("Coated", FenestrationCommon::MaterialType::Coated)
-	  .value("Electrochromic", FenestrationCommon::MaterialType::Electrochromic)
-	  .value("Film", FenestrationCommon::MaterialType::Film)
-	  .value("Interlayer", FenestrationCommon::MaterialType::Interlayer)
-	  .value("Laminate", FenestrationCommon::MaterialType::Laminate)
-	  .value("Monolithic", FenestrationCommon::MaterialType::Monolithic)
-	  .value("Thermochromic", FenestrationCommon::MaterialType::Thermochromic);
+  py::enum_<FenestrationCommon::MaterialType>(m, "Material_Type",
+                                              py::arithmetic())
+      .value("Applied_Film", FenestrationCommon::MaterialType::AppliedFilm)
+      .value("Coated", FenestrationCommon::MaterialType::Coated)
+      .value("Electrochromic", FenestrationCommon::MaterialType::Electrochromic)
+      .value("Film", FenestrationCommon::MaterialType::Film)
+      .value("Interlayer", FenestrationCommon::MaterialType::Interlayer)
+      .value("Laminate", FenestrationCommon::MaterialType::Laminate)
+      .value("Monolithic", FenestrationCommon::MaterialType::Monolithic)
+      .value("Thermochromic", FenestrationCommon::MaterialType::Thermochromic);
 
   py::class_<wincalc::Product_Data_N_Band_Optical,
              wincalc::Product_Data_Optical,
@@ -523,43 +524,59 @@ PYBIND11_MODULE(pywincalc, m) {
           &wincalc::Product_Data_Optical_Venetian::distribution_method);
 
   py::class_<wincalc::Product_Data_Optical_Woven_Shade,
-	  wincalc::Product_Data_Optical_With_Material,
-	  std::shared_ptr<wincalc::Product_Data_Optical_Woven_Shade>>(
-		  m, "Product_Data_Optical_Woven_Shade")
-	  .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
-		  double, double, double>())
-	  .def_readwrite("thread_diameter",
-		  &wincalc::Product_Data_Optical_Woven_Shade::thread_diameter)
-	  .def_readwrite("thread_spacing",
-		  &wincalc::Product_Data_Optical_Woven_Shade::thread_spacing)
-	  .def_readwrite("shade_thickness",
-		  &wincalc::Product_Data_Optical_Woven_Shade::shade_thickness);
+             wincalc::Product_Data_Optical_With_Material,
+             std::shared_ptr<wincalc::Product_Data_Optical_Woven_Shade>>(
+      m, "Product_Data_Optical_Woven_Shade")
+      .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
+                    double, double, double>())
+      .def_readwrite(
+          "thread_diameter",
+          &wincalc::Product_Data_Optical_Woven_Shade::thread_diameter)
+      .def_readwrite("thread_spacing",
+                     &wincalc::Product_Data_Optical_Woven_Shade::thread_spacing)
+      .def_readwrite(
+          "shade_thickness",
+          &wincalc::Product_Data_Optical_Woven_Shade::shade_thickness);
 
   py::class_<wincalc::Product_Data_Optical_Perforated_Screen,
-	  wincalc::Product_Data_Optical_With_Material,
-	  std::shared_ptr<wincalc::Product_Data_Optical_Perforated_Screen>> product_data_optical_perforated_screen(
-		  m, "Product_Data_Optical_Perforated_Screen");
+             wincalc::Product_Data_Optical_With_Material,
+             std::shared_ptr<wincalc::Product_Data_Optical_Perforated_Screen>>
+      product_data_optical_perforated_screen(
+          m, "Product_Data_Optical_Perforated_Screen");
 
-  product_data_optical_perforated_screen.def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
-		  double, double, double, double, wincalc::Product_Data_Optical_Perforated_Screen::Type>())
-	  .def_readwrite("spacing_x",
-		  &wincalc::Product_Data_Optical_Perforated_Screen::spacing_x)
-	  .def_readwrite("spacing_y",
-		  &wincalc::Product_Data_Optical_Perforated_Screen::spacing_y)
-	  .def_readwrite("dimension_x",
-		  &wincalc::Product_Data_Optical_Perforated_Screen::dimension_x)
-	  .def_readwrite("dimension_y",
-		  &wincalc::Product_Data_Optical_Perforated_Screen::dimension_y)
-	  .def_readwrite("perforation_type",
-		  &wincalc::Product_Data_Optical_Perforated_Screen::perforation_type);
+  product_data_optical_perforated_screen
+      .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
+                    double, double, double, double,
+                    wincalc::Product_Data_Optical_Perforated_Screen::Type>())
+      .def_readwrite(
+          "spacing_x",
+          &wincalc::Product_Data_Optical_Perforated_Screen::spacing_x)
+      .def_readwrite(
+          "spacing_y",
+          &wincalc::Product_Data_Optical_Perforated_Screen::spacing_y)
+      .def_readwrite(
+          "dimension_x",
+          &wincalc::Product_Data_Optical_Perforated_Screen::dimension_x)
+      .def_readwrite(
+          "dimension_y",
+          &wincalc::Product_Data_Optical_Perforated_Screen::dimension_y)
+      .def_readwrite(
+          "perforation_type",
+          &wincalc::Product_Data_Optical_Perforated_Screen::perforation_type);
 
-  py::enum_<wincalc::Product_Data_Optical_Perforated_Screen::Type>(product_data_optical_perforated_screen, "Type")
-	  .value("Circular", wincalc::Product_Data_Optical_Perforated_Screen::Type::CIRCULAR)
-	  .value("Rectangular", wincalc::Product_Data_Optical_Perforated_Screen::Type::RECTANGULAR)
-	  .value("Square", wincalc::Product_Data_Optical_Perforated_Screen::Type::SQUARE);
+  py::enum_<wincalc::Product_Data_Optical_Perforated_Screen::Type>(
+      product_data_optical_perforated_screen, "Type")
+      .value("Circular",
+             wincalc::Product_Data_Optical_Perforated_Screen::Type::CIRCULAR)
+      .value("Rectangular",
+             wincalc::Product_Data_Optical_Perforated_Screen::Type::RECTANGULAR)
+      .value("Square",
+             wincalc::Product_Data_Optical_Perforated_Screen::Type::SQUARE);
 
   py::class_<wincalc::Product_Data_Optical_Thermal>(
       m, "Product_Data_Optical_Thermal")
+      .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical>,
+                    std::shared_ptr<wincalc::Product_Data_Thermal>>())
       .def_readwrite("optical_data",
                      &wincalc::Product_Data_Optical_Thermal::optical_data)
       .def_readwrite("thermal_data",
