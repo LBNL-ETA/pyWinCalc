@@ -1141,8 +1141,8 @@ def raw_shade_material_wavelength_data():
 
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
-# taken to use NFRC standards if thermal results are desired.  This is because for thermal calculations currently
-# only ISO 15099 is supported.  So while it is possible to use EN optical standards and create thermal results
+# taken to use NFRC standards if NFRC thermal results are desired.  This is because for thermal calculations currently
+# only ISO 15099 is supported.  While it is possible to use EN optical standards and create thermal results
 # those results will not be based on EN 673
 optical_standard_path = "standards/W5_NFRC_2003.std"
 optical_standard = pywincalc.load_standard(optical_standard_path)
@@ -1237,12 +1237,17 @@ perforated_screen_thermal = pywincalc.Product_Data_Thermal(shade_conductivity, s
 # Combine optical and thermal parts into one pywincalc.Product_Data_Optical_Thermal
 perforated_layer = pywincalc.Product_Data_Optical_Thermal(perforated_screen_optical, perforated_screen_thermal)
 
+# Create a glazing system using the NFRC U environment in order to get NFRC U results
+# U and SHGC can be caculated for any given environment but in order to get results
+# The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
+# defaults to using the NFRC U environments
 exterior_perforated_u_environment = pywincalc.Glazing_System([perforated_layer, glass_layer],
                                                              [gap_1],
                                                              optical_standard, glazing_system_width,
                                                              glazing_system_height,
                                                              pywincalc.nfrc_u_environments(), bsdf_hemisphere)
 
+# In order to get NFRC SHGC results the NFRC SHGC environment should be used when creating the glazing system
 exterior_perforated_shgc_environment = pywincalc.Glazing_System(
     [perforated_layer, glass_layer], [gap_1],
     optical_standard, glazing_system_width, glazing_system_height,
