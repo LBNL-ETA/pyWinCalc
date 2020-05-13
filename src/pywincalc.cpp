@@ -80,8 +80,11 @@ void declare_wce_optical_results_template(py::module &m, std::string typestr) {
   std::string pyclass_name = std::string("WCE_Optical_Results") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
-      .def_readwrite("system_results", &Class::system_results)
-      .def_readwrite("layer_results", &Class::layer_results);
+      .def_readwrite("system_results", &Class::system_results,
+                     "Results for the entire system.")
+      .def_readwrite("layer_results", &Class::layer_results,
+                     "A list of results where each item in the list contains "
+                     "the results for one layer in the system.");
 }
 
 template <>
@@ -96,7 +99,9 @@ void declare_wce_optical_results_template<wincalc::Color_Result>(
   std::string pyclass_name = std::string("WCE_Optical_Results") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
-      .def_readwrite("system_results", &Class::system_results);
+      .def_readwrite("system_results", &Class::system_results,
+                     "Results for the entire system.  Layer results for colors "
+                     "are not currently supported.");
 }
 
 PYBIND11_MODULE(pywincalc, m) {
@@ -110,40 +115,53 @@ PYBIND11_MODULE(pywincalc, m) {
 
   py::class_<wincalc::Predefined_Gas_Mixture_Component>(
       m, "Predefined_Gas_Mixture_Component")
-      .def(py::init<Gases::GasDef const &, double>())
+      .def(py::init<Gases::GasDef const &, double>(), py::arg("gas"),
+           py::arg("percent"))
       .def_readwrite("gas", &wincalc::Predefined_Gas_Mixture_Component::gas)
       .def_readwrite("percent",
                      &wincalc::Predefined_Gas_Mixture_Component::percent);
 
   py::class_<Gases::CIntCoeff>(m, "Gas_Coefficients")
-      .def(py::init<double const, double const, double const>());
+      .def(py::init<double const, double const, double const>(), py::arg("A"),
+           py::arg("B"), py::arg("C"));
 
   py::class_<Gases::CGasData>(m, "Custom_Gas_Data")
       .def(py::init<std::string const &, double const, double const,
                     Gases::CIntCoeff const &, Gases::CIntCoeff const &,
-                    Gases::CIntCoeff const &>());
+                    Gases::CIntCoeff const &>(),
+           py::arg("name"), py::arg("molecular_weight"),
+           py::arg("specific_heat_ratio"), py::arg("Cp"),
+           py::arg("thermal_conductivity"), py::arg("viscosity"));
 
   py::class_<wincalc::Engine_Gas_Mixture_Component>(
       m, "Engine_Gas_Mixture_Component")
-      .def(py::init<Gases::CGasData const &, double>())
+      .def(py::init<Gases::CGasData const &, double>(), py::arg("gas"),
+           py::arg("percent"))
       .def_readwrite("gas", &wincalc::Engine_Gas_Mixture_Component::gas)
       .def_readwrite("percent",
                      &wincalc::Engine_Gas_Mixture_Component::percent);
 
   py::class_<wincalc::Engine_Gap_Info>(m, "Gap_Data")
-      .def(py::init<Gases::CGasData const &, double>())
+      .def(py::init<Gases::CGasData const &, double>(),
+           py::arg("custom_gas_data"), py::arg("thickness_meters"))
       .def(py::init<std::vector<wincalc::Engine_Gas_Mixture_Component> const &,
-                    double>())
-      .def(py::init<Gases::GasDef const &, double>())
+                    double>(),
+           py::arg("engine_gas_mixture_component_list"),
+           py::arg("thickness_meters"))
+      .def(py::init<Gases::GasDef const &, double>(),
+           py::arg("predefined_gas_type"), py::arg("thickness_meters"))
       .def(py::init<
-           std::vector<wincalc::Predefined_Gas_Mixture_Component> const &,
-           double>())
+               std::vector<wincalc::Predefined_Gas_Mixture_Component> const &,
+               double>(),
+           py::arg("predefined_gas_type_list"), py::arg("thickness_meters"))
       .def_readwrite("gases", &wincalc::Engine_Gap_Info::gases)
       .def_readwrite("thickness", &wincalc::Engine_Gap_Info::thickness);
 
   py::class_<OpticsParser::MeasurementComponent>(
       m, "Optical_Measurement_Component")
-      .def(py::init<double, double, double, double>())
+      .def(py::init<double, double, double, double>(),
+           py::arg("transmittance_front"), py::arg("transmittance_back"),
+           py::arg("reflectance_front"), py::arg("reflectance_back"))
       .def_readwrite("tf", &OpticsParser::MeasurementComponent::tf)
       .def_readwrite("tb", &OpticsParser::MeasurementComponent::tb)
       .def_readwrite("rf", &OpticsParser::MeasurementComponent::rf)
@@ -152,12 +170,23 @@ PYBIND11_MODULE(pywincalc, m) {
   py::class_<OpticsParser::WLData>(m, "Wavelength_Data")
       .def(py::init<double, OpticsParser::MeasurementComponent,
                     std::optional<OpticsParser::MeasurementComponent>>(),
-           py::arg("wavelength"), py::arg("direct_component"),
+           py::arg("wavelength_microns"), py::arg("direct_component"),
            py::arg("diffuse_component") =
                std::optional<OpticsParser::MeasurementComponent>())
-      .def(py::init<double, double, double, double>())
+      .def(py::init<double, double, double, double>(),
+           py::arg("wavelength_microns"), py::arg("direct_transmittance"),
+           py::arg("direct_reflectance_front"),
+           py::arg("direct_reflectance_back"))
       .def(py::init<double, double, double, double, double, double, double,
-                    double, double>())
+                    double, double>(),
+           py::arg("wavelength_microns"), py::arg("direct_transmittance_front"),
+           py::arg("diffuse_transmittance_front"),
+           py::arg("direct_transmittance_back"),
+           py::arg("diffuse_transmittance_back"),
+           py::arg("direct_reflectance_front"),
+           py::arg("diffuse_reflectance_front"),
+           py::arg("direct_reflectance_back"),
+           py::arg("diffuse_reflectance_back"))
       .def_readwrite("wavelength", &OpticsParser::WLData::wavelength)
       .def_readwrite("direct_component", &OpticsParser::WLData::directComponent)
       .def_readwrite("diffuse_component",
@@ -196,7 +225,10 @@ PYBIND11_MODULE(pywincalc, m) {
   py::class_<OpticsParser::PerforatedGeometry, OpticsParser::ProductGeometry,
              std::shared_ptr<OpticsParser::PerforatedGeometry>>(
       m, "Perforated_Geometry")
-      .def(py::init<double, double, double, double, std::string>())
+      .def(py::init<double, double, double, double, std::string>(),
+           py::arg("spacing_x_meters"), py::arg("spacing_y_meters"),
+           py::arg("dimension_x_meters"), py::arg("dimension_y_meters"),
+           py::arg("perforation_type"))
       .def_readwrite("spacing_x", &OpticsParser::PerforatedGeometry::spacingX)
       .def_readwrite("spacing_y", &OpticsParser::PerforatedGeometry::spacingY)
       .def_readwrite("dimension_x",
@@ -223,7 +255,8 @@ PYBIND11_MODULE(pywincalc, m) {
              std::shared_ptr<OpticsParser::CompositionInformation>>(
       m, "Product_Composistion_Data")
       .def(py::init<std::shared_ptr<OpticsParser::ProductData>,
-                    std::shared_ptr<OpticsParser::ProductGeometry>>())
+                    std::shared_ptr<OpticsParser::ProductGeometry>>(),
+           py::arg("product_data"), py::arg("product_geometry"))
       .def_readwrite("material",
                      &OpticsParser::CompositionInformation::material)
       .def_readwrite("geometry",
@@ -233,8 +266,10 @@ PYBIND11_MODULE(pywincalc, m) {
              std::shared_ptr<OpticsParser::ComposedProductData>>(
       m, "Composed_Product_Data")
       .def(py::init<OpticsParser::ProductData const &,
-                    std::shared_ptr<OpticsParser::CompositionInformation>>())
-      .def(py::init<std::shared_ptr<OpticsParser::CompositionInformation>>())
+                    std::shared_ptr<OpticsParser::CompositionInformation>>(),
+           py::arg("product_data"), py::arg("product_composition_data"))
+      .def(py::init<std::shared_ptr<OpticsParser::CompositionInformation>>(),
+           py::arg("product_composition_data"))
       .def("composed_product",
            &OpticsParser::ComposedProductData::composedProduct)
       .def_readwrite(
@@ -405,7 +440,8 @@ PYBIND11_MODULE(pywincalc, m) {
   py::class_<wincalc::Flippable_Solid_Layer,
              std::shared_ptr<wincalc::Flippable_Solid_Layer>>(
       m, "Flippable_Solid_Layer")
-      .def(py::init<double, bool>())
+      .def(py::init<double, bool>(), py::arg("thickness_meters"),
+           py::arg("flipped") = false)
       .def_readwrite("thickness_meters",
                      &wincalc::Flippable_Solid_Layer::thickness_meters)
       .def_readwrite("flipped", &wincalc::Flippable_Solid_Layer::flipped);
@@ -488,7 +524,8 @@ PYBIND11_MODULE(pywincalc, m) {
              wincalc::Product_Data_Optical,
              std::shared_ptr<wincalc::Product_Data_Optical_With_Material>>(
       m, "Product_Data_Optical_With_Material")
-      .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &>())
+      .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &>(),
+           py::arg("product_data_optical"))
       .def("optical_data",
            &wincalc::Product_Data_Optical_With_Material::optical_data)
       .def_readwrite(
@@ -508,7 +545,12 @@ PYBIND11_MODULE(pywincalc, m) {
       m, "Product_Data_Optical_Venetian")
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
                     double, double, double, double, int,
-                    SingleLayerOptics::DistributionMethod>())
+                    SingleLayerOptics::DistributionMethod>(),
+           py::arg("product_data_optical"), py::arg("slat_tilt_meters"),
+           py::arg("slat_width_meters"), py::arg("slat_spacing_meters"),
+           py::arg("slat_curvature_meters"), py::arg("numbers_slats"),
+           py::arg("distribution_method") =
+               SingleLayerOptics::DistributionMethod::DirectionalDiffuse)
       .def_readwrite("slat_tilt",
                      &wincalc::Product_Data_Optical_Venetian::slat_tilt)
       .def_readwrite("slat_width",
@@ -528,7 +570,9 @@ PYBIND11_MODULE(pywincalc, m) {
              std::shared_ptr<wincalc::Product_Data_Optical_Woven_Shade>>(
       m, "Product_Data_Optical_Woven_Shade")
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
-                    double, double, double>())
+                    double, double, double>(),
+           py::arg("material_product_data_optical"), py::arg("thread_diamater"),
+           py::arg("thread_spacing"), py::arg("shade_thickness"))
       .def_readwrite(
           "thread_diameter",
           &wincalc::Product_Data_Optical_Woven_Shade::thread_diameter)
@@ -547,7 +591,10 @@ PYBIND11_MODULE(pywincalc, m) {
   product_data_optical_perforated_screen
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
                     double, double, double, double,
-                    wincalc::Product_Data_Optical_Perforated_Screen::Type>())
+                    wincalc::Product_Data_Optical_Perforated_Screen::Type>(),
+           py::arg("material_product_data_optical"), py::arg("spacing_x"),
+           py::arg("spacing_y"), py::arg("dimension_x"), py::arg("dimension_y"),
+           py::arg("perforation_type"))
       .def_readwrite(
           "spacing_x",
           &wincalc::Product_Data_Optical_Perforated_Screen::spacing_x)
@@ -576,7 +623,8 @@ PYBIND11_MODULE(pywincalc, m) {
   py::class_<wincalc::Product_Data_Optical_Thermal>(
       m, "Product_Data_Optical_Thermal")
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical>,
-                    std::shared_ptr<wincalc::Product_Data_Thermal>>())
+                    std::shared_ptr<wincalc::Product_Data_Thermal>>(),
+           py::arg("prouct_data_optical"), py::arg("product_data_thermal"))
       .def_readwrite("optical_data",
                      &wincalc::Product_Data_Optical_Thermal::optical_data)
       .def_readwrite("thermal_data",
@@ -589,8 +637,10 @@ PYBIND11_MODULE(pywincalc, m) {
       .value("Full", SingleLayerOptics::BSDFBasis::Full);
 
   py::class_<SingleLayerOptics::CBSDFHemisphere>(m, "BSDF_Hemisphere")
-      .def_static("create", py::overload_cast<SingleLayerOptics::BSDFBasis>(
-                                &SingleLayerOptics::CBSDFHemisphere::create))
+      .def_static("create",
+                  py::overload_cast<SingleLayerOptics::BSDFBasis>(
+                      &SingleLayerOptics::CBSDFHemisphere::create),
+                  py::arg("bsdf_basis"))
       .def("get_directions",
            &SingleLayerOptics::CBSDFHemisphere::getDirections);
 
