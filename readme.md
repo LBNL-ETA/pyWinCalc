@@ -48,7 +48,7 @@ A folder with example calculation script, products and standards is provided und
 With the exception of wavelength values which are in microns all units are values are in SI base units.  However for documenentation some units are expressed as more common derived SI units when the values are equivalent.  For example:
 - wavelengths: microns (m<sup>-6</sup>)
 - conductivity: w⋅m<sup>-1</sup>⋅K<sup>-1</sup> because this is more common than m⋅kg⋅s<sup>−3</sup>⋅K<sup>−1</sup> and 1 w⋅m<sup>-1</sup>⋅K<sup>-1</sup> = 1 m⋅kg⋅s<sup>−3</sup>⋅K<sup>−1</sup>
-- temperature: Kelvin because because 0°C = 273.15°K
+- temperature: Kelvin
 - pressure:  pascals
 - thickness: meters
 - width/height: meters
