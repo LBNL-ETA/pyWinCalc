@@ -259,7 +259,7 @@ Methods defined here:<br>
 
 <hr>
 Static methods defined here:<br>
-<dl><dt><a name="BSDF_Hemisphere-create"><strong>create</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from builtins.PyCapsule</font></font></dt><dd><tt><a href="#BSDF_Hemisphere-create">create</a>(arg0:&nbsp;pywincalc.<a href="#BSDF_Basis">BSDF_Basis</a>)&nbsp;-&gt;&nbsp;pywincalc.<a href="#BSDF_Hemisphere">BSDF_Hemisphere</a></tt></dd></dl>
+<dl><dt><a name="BSDF_Hemisphere-create"><strong>create</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from builtins.PyCapsule</font></font></dt><dd><tt><a href="#BSDF_Hemisphere-create">create</a>(bsdf_basis:&nbsp;pywincalc.<a href="#BSDF_Basis">BSDF_Basis</a>)&nbsp;-&gt;&nbsp;pywincalc.<a href="#BSDF_Hemisphere">BSDF_Hemisphere</a></tt></dd></dl>
 
 <hr>
 Methods inherited from pybind11_builtins.pybind11_object:<br>
@@ -379,9 +379,9 @@ Methods defined here:<br>
 <dl><dt><a name="Composed_Product_Data-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Composed_Product_Data-__init__">__init__</a>(*args,&nbsp;**kwargs)<br>
 Overloaded&nbsp;function.<br>
 &nbsp;<br>
-1.&nbsp;<a href="#Composed_Product_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Composed_Product_Data">Composed_Product_Data</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Product_Data">Product_Data</a>,&nbsp;arg1:&nbsp;pywincalc.<a href="#Product_Composistion_Data">Product_Composistion_Data</a>)&nbsp;-&gt;&nbsp;None<br>
+1.&nbsp;<a href="#Composed_Product_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Composed_Product_Data">Composed_Product_Data</a>,&nbsp;product_data:&nbsp;pywincalc.<a href="#Product_Data">Product_Data</a>,&nbsp;product_composition_data:&nbsp;pywincalc.<a href="#Product_Composistion_Data">Product_Composistion_Data</a>)&nbsp;-&gt;&nbsp;None<br>
 &nbsp;<br>
-2.&nbsp;<a href="#Composed_Product_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Composed_Product_Data">Composed_Product_Data</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Product_Composistion_Data">Product_Composistion_Data</a>)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+2.&nbsp;<a href="#Composed_Product_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Composed_Product_Data">Composed_Product_Data</a>,&nbsp;product_composition_data:&nbsp;pywincalc.<a href="#Product_Composistion_Data">Product_Composistion_Data</a>)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <dl><dt><a name="Composed_Product_Data-composed_product"><strong>composed_product</strong></a>(...)</dt><dd><tt><a href="#Composed_Product_Data-composed_product">composed_product</a>(self:&nbsp;pywincalc.<a href="#Composed_Product_Data">Composed_Product_Data</a>)&nbsp;-&gt;&nbsp;pywincalc.<a href="#Product_Data">Product_Data</a></tt></dd></dl>
 
@@ -437,7 +437,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Custom_Gas_Data-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Custom_Gas_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Custom_Gas_Data">Custom_Gas_Data</a>,&nbsp;arg0:&nbsp;str,&nbsp;arg1:&nbsp;float,&nbsp;arg2:&nbsp;float,&nbsp;arg3:&nbsp;pywincalc.<a href="#Gas_Coefficients">Gas_Coefficients</a>,&nbsp;arg4:&nbsp;pywincalc.<a href="#Gas_Coefficients">Gas_Coefficients</a>,&nbsp;arg5:&nbsp;pywincalc.<a href="#Gas_Coefficients">Gas_Coefficients</a>)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Custom_Gas_Data-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Custom_Gas_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Custom_Gas_Data">Custom_Gas_Data</a>,&nbsp;name:&nbsp;str,&nbsp;molecular_weight:&nbsp;float,&nbsp;specific_heat_ratio:&nbsp;float,&nbsp;Cp:&nbsp;pywincalc.<a href="#Gas_Coefficients">Gas_Coefficients</a>,&nbsp;thermal_conductivity:&nbsp;pywincalc.<a href="#Gas_Coefficients">Gas_Coefficients</a>,&nbsp;viscosity:&nbsp;pywincalc.<a href="#Gas_Coefficients">Gas_Coefficients</a>)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Methods inherited from pybind11_builtins.pybind11_object:<br>
@@ -518,7 +518,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Engine_Gas_Mixture_Component-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Engine_Gas_Mixture_Component-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Engine_Gas_Mixture_Component">Engine_Gas_Mixture_Component</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Custom_Gas_Data">Custom_Gas_Data</a>,&nbsp;arg1:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Engine_Gas_Mixture_Component-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Engine_Gas_Mixture_Component-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Engine_Gas_Mixture_Component">Engine_Gas_Mixture_Component</a>,&nbsp;gas:&nbsp;pywincalc.<a href="#Custom_Gas_Data">Custom_Gas_Data</a>,&nbsp;percent:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -623,7 +623,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Flippable_Solid_Layer-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Flippable_Solid_Layer-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Flippable_Solid_Layer">Flippable_Solid_Layer</a>,&nbsp;arg0:&nbsp;float,&nbsp;arg1:&nbsp;bool)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Flippable_Solid_Layer-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Flippable_Solid_Layer-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Flippable_Solid_Layer">Flippable_Solid_Layer</a>,&nbsp;thickness_meters:&nbsp;float,&nbsp;flipped:&nbsp;bool&nbsp;=&nbsp;False)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -654,13 +654,13 @@ Methods defined here:<br>
 <dl><dt><a name="Gap_Data-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Gap_Data-__init__">__init__</a>(*args,&nbsp;**kwargs)<br>
 Overloaded&nbsp;function.<br>
 &nbsp;<br>
-1.&nbsp;<a href="#Gap_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Gap_Data">Gap_Data</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Custom_Gas_Data">Custom_Gas_Data</a>,&nbsp;arg1:&nbsp;float)&nbsp;-&gt;&nbsp;None<br>
+1.&nbsp;<a href="#Gap_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Gap_Data">Gap_Data</a>,&nbsp;custom_gas_data:&nbsp;pywincalc.<a href="#Custom_Gas_Data">Custom_Gas_Data</a>,&nbsp;thickness_meters:&nbsp;float)&nbsp;-&gt;&nbsp;None<br>
 &nbsp;<br>
-2.&nbsp;<a href="#Gap_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Gap_Data">Gap_Data</a>,&nbsp;arg0:&nbsp;List[pywincalc.<a href="#Engine_Gas_Mixture_Component">Engine_Gas_Mixture_Component</a>],&nbsp;arg1:&nbsp;float)&nbsp;-&gt;&nbsp;None<br>
+2.&nbsp;<a href="#Gap_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Gap_Data">Gap_Data</a>,&nbsp;engine_gas_mixture_component_list:&nbsp;List[pywincalc.<a href="#Engine_Gas_Mixture_Component">Engine_Gas_Mixture_Component</a>],&nbsp;thickness_meters:&nbsp;float)&nbsp;-&gt;&nbsp;None<br>
 &nbsp;<br>
-3.&nbsp;<a href="#Gap_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Gap_Data">Gap_Data</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Predefined_Gas_Type">Predefined_Gas_Type</a>,&nbsp;arg1:&nbsp;float)&nbsp;-&gt;&nbsp;None<br>
+3.&nbsp;<a href="#Gap_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Gap_Data">Gap_Data</a>,&nbsp;predefined_gas_type:&nbsp;pywincalc.<a href="#Predefined_Gas_Type">Predefined_Gas_Type</a>,&nbsp;thickness_meters:&nbsp;float)&nbsp;-&gt;&nbsp;None<br>
 &nbsp;<br>
-4.&nbsp;<a href="#Gap_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Gap_Data">Gap_Data</a>,&nbsp;arg0:&nbsp;List[pywincalc.<a href="#Predefined_Gas_Mixture_Component">Predefined_Gas_Mixture_Component</a>],&nbsp;arg1:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+4.&nbsp;<a href="#Gap_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Gap_Data">Gap_Data</a>,&nbsp;predefined_gas_type_list:&nbsp;List[pywincalc.<a href="#Predefined_Gas_Mixture_Component">Predefined_Gas_Mixture_Component</a>],&nbsp;thickness_meters:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -688,7 +688,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Gas_Coefficients-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Gas_Coefficients-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Gas_Coefficients">Gas_Coefficients</a>,&nbsp;arg0:&nbsp;float,&nbsp;arg1:&nbsp;float,&nbsp;arg2:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Gas_Coefficients-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Gas_Coefficients-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Gas_Coefficients">Gas_Coefficients</a>,&nbsp;A:&nbsp;float,&nbsp;B:&nbsp;float,&nbsp;C:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Methods inherited from pybind11_builtins.pybind11_object:<br>
@@ -711,11 +711,11 @@ Methods defined here:<br>
 <dl><dt><a name="Glazing_System-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Glazing_System-__init__">__init__</a>(*args,&nbsp;**kwargs)<br>
 Overloaded&nbsp;function.<br>
 &nbsp;<br>
-1.&nbsp;<a href="#Glazing_System-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Glazing_System">Glazing_System</a>,&nbsp;product_data:&nbsp;List[pywincalc.<a href="#Product_Data_Optical_Thermal">Product_Data_Optical_Thermal</a>],&nbsp;gap_data:&nbsp;List[pywincalc.<a href="#Gap_Data">Gap_Data</a>],&nbsp;optical_standard:&nbsp;pywincalc.<a href="#Optical_Standard">Optical_Standard</a>,&nbsp;width_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;height_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;environment:&nbsp;pywincalc.<a href="#Environments">Environments</a>&nbsp;=&nbsp;&lt;pywincalc.<a href="#Environments">Environments</a>&nbsp;object&nbsp;at&nbsp;0x7f749b1567a0&gt;,&nbsp;bsdf_hemisphere:&nbsp;Optional[pywincalc.<a href="#BSDF_Hemisphere">BSDF_Hemisphere</a>]&nbsp;=&nbsp;None,&nbsp;spectral_data_wavelength_range_method:&nbsp;pywincalc.<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>&nbsp;=&nbsp;<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>.Full,&nbsp;number_visible_bands:&nbsp;int&nbsp;=&nbsp;5,&nbsp;number_solar_bands:&nbsp;int&nbsp;=&nbsp;10)&nbsp;-&gt;&nbsp;None<br>
+1.&nbsp;<a href="#Glazing_System-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Glazing_System">Glazing_System</a>,&nbsp;product_data:&nbsp;List[pywincalc.<a href="#Product_Data_Optical_Thermal">Product_Data_Optical_Thermal</a>],&nbsp;gap_data:&nbsp;List[pywincalc.<a href="#Gap_Data">Gap_Data</a>],&nbsp;optical_standard:&nbsp;pywincalc.<a href="#Optical_Standard">Optical_Standard</a>,&nbsp;width_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;height_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;environment:&nbsp;pywincalc.<a href="#Environments">Environments</a>&nbsp;=&nbsp;&lt;pywincalc.<a href="#Environments">Environments</a>&nbsp;object&nbsp;at&nbsp;0x7f448de16ed8&gt;,&nbsp;bsdf_hemisphere:&nbsp;Optional[pywincalc.<a href="#BSDF_Hemisphere">BSDF_Hemisphere</a>]&nbsp;=&nbsp;None,&nbsp;spectral_data_wavelength_range_method:&nbsp;pywincalc.<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>&nbsp;=&nbsp;<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>.Full,&nbsp;number_visible_bands:&nbsp;int&nbsp;=&nbsp;5,&nbsp;number_solar_bands:&nbsp;int&nbsp;=&nbsp;10)&nbsp;-&gt;&nbsp;None<br>
 &nbsp;<br>
-2.&nbsp;<a href="#Glazing_System-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Glazing_System">Glazing_System</a>,&nbsp;product_data:&nbsp;List[pywincalc.<a href="#Product_Data">Product_Data</a>],&nbsp;gap_data:&nbsp;List[pywincalc.<a href="#Gap_Data">Gap_Data</a>],&nbsp;optical_standard:&nbsp;pywincalc.<a href="#Optical_Standard">Optical_Standard</a>,&nbsp;width_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;height_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;environment:&nbsp;pywincalc.<a href="#Environments">Environments</a>&nbsp;=&nbsp;&lt;pywincalc.<a href="#Environments">Environments</a>&nbsp;object&nbsp;at&nbsp;0x7f749b1568b8&gt;,&nbsp;bsdf_hemisphere:&nbsp;Optional[pywincalc.<a href="#BSDF_Hemisphere">BSDF_Hemisphere</a>]&nbsp;=&nbsp;None,&nbsp;spectral_data_wavelength_range_method:&nbsp;pywincalc.<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>&nbsp;=&nbsp;<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>.Full,&nbsp;number_visible_bands:&nbsp;int&nbsp;=&nbsp;5,&nbsp;number_solar_bands:&nbsp;int&nbsp;=&nbsp;10)&nbsp;-&gt;&nbsp;None<br>
+2.&nbsp;<a href="#Glazing_System-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Glazing_System">Glazing_System</a>,&nbsp;product_data:&nbsp;List[pywincalc.<a href="#Product_Data">Product_Data</a>],&nbsp;gap_data:&nbsp;List[pywincalc.<a href="#Gap_Data">Gap_Data</a>],&nbsp;optical_standard:&nbsp;pywincalc.<a href="#Optical_Standard">Optical_Standard</a>,&nbsp;width_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;height_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;environment:&nbsp;pywincalc.<a href="#Environments">Environments</a>&nbsp;=&nbsp;&lt;pywincalc.<a href="#Environments">Environments</a>&nbsp;object&nbsp;at&nbsp;0x7f448d390030&gt;,&nbsp;bsdf_hemisphere:&nbsp;Optional[pywincalc.<a href="#BSDF_Hemisphere">BSDF_Hemisphere</a>]&nbsp;=&nbsp;None,&nbsp;spectral_data_wavelength_range_method:&nbsp;pywincalc.<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>&nbsp;=&nbsp;<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>.Full,&nbsp;number_visible_bands:&nbsp;int&nbsp;=&nbsp;5,&nbsp;number_solar_bands:&nbsp;int&nbsp;=&nbsp;10)&nbsp;-&gt;&nbsp;None<br>
 &nbsp;<br>
-3.&nbsp;<a href="#Glazing_System-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Glazing_System">Glazing_System</a>,&nbsp;product_data:&nbsp;List[Union[pywincalc.<a href="#Product_Data">Product_Data</a>,&nbsp;pywincalc.<a href="#Product_Data_Optical_Thermal">Product_Data_Optical_Thermal</a>]],&nbsp;gap_data:&nbsp;List[pywincalc.<a href="#Gap_Data">Gap_Data</a>],&nbsp;optical_standard:&nbsp;pywincalc.<a href="#Optical_Standard">Optical_Standard</a>,&nbsp;width_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;height_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;environment:&nbsp;pywincalc.<a href="#Environments">Environments</a>&nbsp;=&nbsp;&lt;pywincalc.<a href="#Environments">Environments</a>&nbsp;object&nbsp;at&nbsp;0x7f749b156928&gt;,&nbsp;bsdf_hemisphere:&nbsp;Optional[pywincalc.<a href="#BSDF_Hemisphere">BSDF_Hemisphere</a>]&nbsp;=&nbsp;None,&nbsp;spectral_data_wavelength_range_method:&nbsp;pywincalc.<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>&nbsp;=&nbsp;<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>.Full,&nbsp;number_visible_bands:&nbsp;int&nbsp;=&nbsp;5,&nbsp;number_solar_bands:&nbsp;int&nbsp;=&nbsp;10)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+3.&nbsp;<a href="#Glazing_System-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Glazing_System">Glazing_System</a>,&nbsp;product_data:&nbsp;List[Union[pywincalc.<a href="#Product_Data">Product_Data</a>,&nbsp;pywincalc.<a href="#Product_Data_Optical_Thermal">Product_Data_Optical_Thermal</a>]],&nbsp;gap_data:&nbsp;List[pywincalc.<a href="#Gap_Data">Gap_Data</a>],&nbsp;optical_standard:&nbsp;pywincalc.<a href="#Optical_Standard">Optical_Standard</a>,&nbsp;width_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;height_meters:&nbsp;float&nbsp;=&nbsp;1.0,&nbsp;environment:&nbsp;pywincalc.<a href="#Environments">Environments</a>&nbsp;=&nbsp;&lt;pywincalc.<a href="#Environments">Environments</a>&nbsp;object&nbsp;at&nbsp;0x7f448d3900a0&gt;,&nbsp;bsdf_hemisphere:&nbsp;Optional[pywincalc.<a href="#BSDF_Hemisphere">BSDF_Hemisphere</a>]&nbsp;=&nbsp;None,&nbsp;spectral_data_wavelength_range_method:&nbsp;pywincalc.<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>&nbsp;=&nbsp;<a href="#Spectal_Data_Wavelength_Range_Method">Spectal_Data_Wavelength_Range_Method</a>.Full,&nbsp;number_visible_bands:&nbsp;int&nbsp;=&nbsp;5,&nbsp;number_solar_bands:&nbsp;int&nbsp;=&nbsp;10)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <dl><dt><a name="Glazing_System-color"><strong>color</strong></a>(...)</dt><dd><tt><a href="#Glazing_System-color">color</a>(self:&nbsp;pywincalc.<a href="#Glazing_System">Glazing_System</a>,&nbsp;theta:&nbsp;float&nbsp;=&nbsp;0,&nbsp;phi:&nbsp;float&nbsp;=&nbsp;0)&nbsp;-&gt;&nbsp;pywincalc.<a href="#WCE_Optical_Results_Color">WCE_Optical_Results_Color</a></tt></dd></dl>
 
@@ -962,7 +962,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Optical_Measurement_Component-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Optical_Measurement_Component-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Optical_Measurement_Component">Optical_Measurement_Component</a>,&nbsp;arg0:&nbsp;float,&nbsp;arg1:&nbsp;float,&nbsp;arg2:&nbsp;float,&nbsp;arg3:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Optical_Measurement_Component-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Optical_Measurement_Component-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Optical_Measurement_Component">Optical_Measurement_Component</a>,&nbsp;transmittance_front:&nbsp;float,&nbsp;transmittance_back:&nbsp;float,&nbsp;reflectance_front:&nbsp;float,&nbsp;reflectance_back:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -1170,7 +1170,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Perforated_Geometry-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Perforated_Geometry-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Perforated_Geometry">Perforated_Geometry</a>,&nbsp;arg0:&nbsp;float,&nbsp;arg1:&nbsp;float,&nbsp;arg2:&nbsp;float,&nbsp;arg3:&nbsp;float,&nbsp;arg4:&nbsp;str)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Perforated_Geometry-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Perforated_Geometry-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Perforated_Geometry">Perforated_Geometry</a>,&nbsp;spacing_x_meters:&nbsp;float,&nbsp;spacing_y_meters:&nbsp;float,&nbsp;dimension_x_meters:&nbsp;float,&nbsp;dimension_y_meters:&nbsp;float,&nbsp;perforation_type:&nbsp;str)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -1207,7 +1207,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Predefined_Gas_Mixture_Component-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Predefined_Gas_Mixture_Component-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Predefined_Gas_Mixture_Component">Predefined_Gas_Mixture_Component</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Predefined_Gas_Type">Predefined_Gas_Type</a>,&nbsp;arg1:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Predefined_Gas_Mixture_Component-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Predefined_Gas_Mixture_Component-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Predefined_Gas_Mixture_Component">Predefined_Gas_Mixture_Component</a>,&nbsp;gas:&nbsp;pywincalc.<a href="#Predefined_Gas_Type">Predefined_Gas_Type</a>,&nbsp;percent:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -1304,7 +1304,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Product_Composistion_Data-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Composistion_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Composistion_Data">Product_Composistion_Data</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Product_Data">Product_Data</a>,&nbsp;arg1:&nbsp;pywincalc.<a href="#Product_Geometry">Product_Geometry</a>)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Product_Composistion_Data-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Composistion_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Composistion_Data">Product_Composistion_Data</a>,&nbsp;product_data:&nbsp;pywincalc.<a href="#Product_Data">Product_Data</a>,&nbsp;product_geometry:&nbsp;pywincalc.<a href="#Product_Geometry">Product_Geometry</a>)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -1487,7 +1487,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Product_Data_Optical_Perforated_Screen-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Data_Optical_Perforated_Screen-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Data_Optical_Perforated_Screen">Product_Data_Optical_Perforated_Screen</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Product_Data_Optical">Product_Data_Optical</a>,&nbsp;arg1:&nbsp;float,&nbsp;arg2:&nbsp;float,&nbsp;arg3:&nbsp;float,&nbsp;arg4:&nbsp;float,&nbsp;arg5:&nbsp;wincalc::<a href="#Product_Data_Optical_Perforated_Screen">Product_Data_Optical_Perforated_Screen</a>::Type)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Product_Data_Optical_Perforated_Screen-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Data_Optical_Perforated_Screen-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Data_Optical_Perforated_Screen">Product_Data_Optical_Perforated_Screen</a>,&nbsp;material_product_data_optical:&nbsp;pywincalc.<a href="#Product_Data_Optical">Product_Data_Optical</a>,&nbsp;spacing_x:&nbsp;float,&nbsp;spacing_y:&nbsp;float,&nbsp;dimension_x:&nbsp;float,&nbsp;dimension_y:&nbsp;float,&nbsp;perforation_type:&nbsp;wincalc::<a href="#Product_Data_Optical_Perforated_Screen">Product_Data_Optical_Perforated_Screen</a>::Type)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -1569,7 +1569,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Product_Data_Optical_Thermal-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Data_Optical_Thermal-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Data_Optical_Thermal">Product_Data_Optical_Thermal</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Product_Data_Optical">Product_Data_Optical</a>,&nbsp;arg1:&nbsp;pywincalc.<a href="#Product_Data_Thermal">Product_Data_Thermal</a>)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Product_Data_Optical_Thermal-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Data_Optical_Thermal-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Data_Optical_Thermal">Product_Data_Optical_Thermal</a>,&nbsp;prouct_data_optical:&nbsp;pywincalc.<a href="#Product_Data_Optical">Product_Data_Optical</a>,&nbsp;product_data_thermal:&nbsp;pywincalc.<a href="#Product_Data_Thermal">Product_Data_Thermal</a>)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -1600,7 +1600,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Product_Data_Optical_Venetian-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Data_Optical_Venetian-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Data_Optical_Venetian">Product_Data_Optical_Venetian</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Product_Data_Optical">Product_Data_Optical</a>,&nbsp;arg1:&nbsp;float,&nbsp;arg2:&nbsp;float,&nbsp;arg3:&nbsp;float,&nbsp;arg4:&nbsp;float,&nbsp;arg5:&nbsp;int,&nbsp;arg6:&nbsp;pywincalc.<a href="#Distribution_Method">Distribution_Method</a>)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Product_Data_Optical_Venetian-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Data_Optical_Venetian-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Data_Optical_Venetian">Product_Data_Optical_Venetian</a>,&nbsp;product_data_optical:&nbsp;pywincalc.<a href="#Product_Data_Optical">Product_Data_Optical</a>,&nbsp;slat_tilt_meters:&nbsp;float,&nbsp;slat_width_meters:&nbsp;float,&nbsp;slat_spacing_meters:&nbsp;float,&nbsp;slat_curvature_meters:&nbsp;float,&nbsp;numbers_slats:&nbsp;int,&nbsp;distribution_method:&nbsp;pywincalc.<a href="#Distribution_Method">Distribution_Method</a>&nbsp;=&nbsp;<a href="#Distribution_Method">Distribution_Method</a>.Directional_Diffuse)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -1677,7 +1677,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Product_Data_Optical_With_Material-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Data_Optical_With_Material-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Data_Optical_With_Material">Product_Data_Optical_With_Material</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Product_Data_Optical">Product_Data_Optical</a>)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Product_Data_Optical_With_Material-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Data_Optical_With_Material-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Data_Optical_With_Material">Product_Data_Optical_With_Material</a>,&nbsp;product_data_optical:&nbsp;pywincalc.<a href="#Product_Data_Optical">Product_Data_Optical</a>)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <dl><dt><a name="Product_Data_Optical_With_Material-optical_data"><strong>optical_data</strong></a>(...)</dt><dd><tt><a href="#Product_Data_Optical_With_Material-optical_data">optical_data</a>(self:&nbsp;pywincalc.<a href="#Product_Data_Optical_With_Material">Product_Data_Optical_With_Material</a>)&nbsp;-&gt;&nbsp;pywincalc.<a href="#Product_Data_Optical">Product_Data_Optical</a></tt></dd></dl>
 
@@ -1733,7 +1733,7 @@ Methods inherited from pybind11_builtins.pybind11_object:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Product_Data_Optical_Woven_Shade-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Data_Optical_Woven_Shade-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Data_Optical_Woven_Shade">Product_Data_Optical_Woven_Shade</a>,&nbsp;arg0:&nbsp;pywincalc.<a href="#Product_Data_Optical">Product_Data_Optical</a>,&nbsp;arg1:&nbsp;float,&nbsp;arg2:&nbsp;float,&nbsp;arg3:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+<dl><dt><a name="Product_Data_Optical_Woven_Shade-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Product_Data_Optical_Woven_Shade-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Product_Data_Optical_Woven_Shade">Product_Data_Optical_Woven_Shade</a>,&nbsp;material_product_data_optical:&nbsp;pywincalc.<a href="#Product_Data_Optical">Product_Data_Optical</a>,&nbsp;thread_diamater:&nbsp;float,&nbsp;thread_spacing:&nbsp;float,&nbsp;shade_thickness:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -2433,10 +2433,10 @@ Data descriptors defined here:<br>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>
 <dl><dt><strong>layer_results</strong></dt>
-<dd><tt></tt></dd>
+<dd><tt>A&nbsp;list&nbsp;of&nbsp;results&nbsp;where&nbsp;each&nbsp;item&nbsp;in&nbsp;the&nbsp;list&nbsp;contains&nbsp;the&nbsp;results&nbsp;for&nbsp;one&nbsp;layer&nbsp;in&nbsp;the&nbsp;system.</tt></dd>
 </dl>
 <dl><dt><strong>system_results</strong></dt>
-<dd><tt></tt></dd>
+<dd><tt>Results&nbsp;for&nbsp;the&nbsp;entire&nbsp;system.</tt></dd>
 </dl>
 <hr>
 Methods inherited from pybind11_builtins.pybind11_object:<br>
@@ -2463,7 +2463,7 @@ Data descriptors defined here:<br>
 <dl><dt><strong>__dict__</strong></dt>
 </dl>
 <dl><dt><strong>system_results</strong></dt>
-<dd><tt></tt></dd>
+<dd><tt>Results&nbsp;for&nbsp;the&nbsp;entire&nbsp;system.&nbsp;&nbsp;Layer&nbsp;results&nbsp;for&nbsp;colors&nbsp;are&nbsp;not&nbsp;currently&nbsp;supported.</tt></dd>
 </dl>
 <hr>
 Methods inherited from pybind11_builtins.pybind11_object:<br>
@@ -2635,11 +2635,11 @@ Methods defined here:<br>
 <dl><dt><a name="Wavelength_Data-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt><a href="#Wavelength_Data-__init__">__init__</a>(*args,&nbsp;**kwargs)<br>
 Overloaded&nbsp;function.<br>
 &nbsp;<br>
-1.&nbsp;<a href="#Wavelength_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Wavelength_Data">Wavelength_Data</a>,&nbsp;wavelength:&nbsp;float,&nbsp;direct_component:&nbsp;pywincalc.<a href="#Optical_Measurement_Component">Optical_Measurement_Component</a>,&nbsp;diffuse_component:&nbsp;Optional[pywincalc.<a href="#Optical_Measurement_Component">Optical_Measurement_Component</a>]&nbsp;=&nbsp;None)&nbsp;-&gt;&nbsp;None<br>
+1.&nbsp;<a href="#Wavelength_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Wavelength_Data">Wavelength_Data</a>,&nbsp;wavelength_microns:&nbsp;float,&nbsp;direct_component:&nbsp;pywincalc.<a href="#Optical_Measurement_Component">Optical_Measurement_Component</a>,&nbsp;diffuse_component:&nbsp;Optional[pywincalc.<a href="#Optical_Measurement_Component">Optical_Measurement_Component</a>]&nbsp;=&nbsp;None)&nbsp;-&gt;&nbsp;None<br>
 &nbsp;<br>
-2.&nbsp;<a href="#Wavelength_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Wavelength_Data">Wavelength_Data</a>,&nbsp;arg0:&nbsp;float,&nbsp;arg1:&nbsp;float,&nbsp;arg2:&nbsp;float,&nbsp;arg3:&nbsp;float)&nbsp;-&gt;&nbsp;None<br>
+2.&nbsp;<a href="#Wavelength_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Wavelength_Data">Wavelength_Data</a>,&nbsp;wavelength_microns:&nbsp;float,&nbsp;direct_transmittance:&nbsp;float,&nbsp;direct_reflectance_front:&nbsp;float,&nbsp;direct_reflectance_back:&nbsp;float)&nbsp;-&gt;&nbsp;None<br>
 &nbsp;<br>
-3.&nbsp;<a href="#Wavelength_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Wavelength_Data">Wavelength_Data</a>,&nbsp;arg0:&nbsp;float,&nbsp;arg1:&nbsp;float,&nbsp;arg2:&nbsp;float,&nbsp;arg3:&nbsp;float,&nbsp;arg4:&nbsp;float,&nbsp;arg5:&nbsp;float,&nbsp;arg6:&nbsp;float,&nbsp;arg7:&nbsp;float,&nbsp;arg8:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
+3.&nbsp;<a href="#Wavelength_Data-__init__">__init__</a>(self:&nbsp;pywincalc.<a href="#Wavelength_Data">Wavelength_Data</a>,&nbsp;wavelength_microns:&nbsp;float,&nbsp;direct_transmittance_front:&nbsp;float,&nbsp;diffuse_transmittance_front:&nbsp;float,&nbsp;direct_transmittance_back:&nbsp;float,&nbsp;diffuse_transmittance_back:&nbsp;float,&nbsp;direct_reflectance_front:&nbsp;float,&nbsp;diffuse_reflectance_front:&nbsp;float,&nbsp;direct_reflectance_back:&nbsp;float,&nbsp;diffuse_reflectance_back:&nbsp;float)&nbsp;-&gt;&nbsp;None</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
