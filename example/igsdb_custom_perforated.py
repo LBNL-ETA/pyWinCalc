@@ -21,8 +21,8 @@ bsdf_hemisphere = pywincalc.BSDF_Hemisphere.create(pywincalc.BSDF_Basis.Quarter)
 # Download some product data from the IGSDB.  This example gets a generic single clear 3mm glazing (NFRC 102),
 # and a material to use as part of the woven shade.
 # For more information on getting data from the igsdb please see igsdb.lbl.gov/openapi
-igsdb_api_token = "8ae3205081608099fe0261178ea571ecc3b01fc2"
-url_single_product = "http://localhost:8000/api/v1/products/{id}"  # Template URL for single product
+igsdb_api_token = "INSERT_YOUR_TOKEN_HERE"
+url_single_product = "https://igsdb-development.herokuapp.com/api/v1/products/{id}"  # Template URL for single product
 
 headers = {"Authorization": "Token {token}".format(token=igsdb_api_token)}  # Token authorization headers
 
@@ -47,10 +47,10 @@ shade_material = pywincalc.parse_json(shade_material_igsdb_response.content)
 # For an example where the data is completely custom generated see custom_perforated.py
 # TODO Do we really want to have both rectangular and square?  Seems redundant
 perforation_type = "rectangular"
-spacing_x = 0.01 # 10mm horizontal spacing
-spacing_y = 0.02 # 20mm vertical spacing
-dimension_x = 0.002 # 2mm perforation in the horizontal direction
-dimension_y = 0.003 # 3mm perforation in the vertical direction
+spacing_x = 0.01  # 10mm horizontal spacing
+spacing_y = 0.02  # 20mm vertical spacing
+dimension_x = 0.002  # 2mm perforation in the horizontal direction
+dimension_y = 0.003  # 3mm perforation in the vertical direction
 geometry = pywincalc.Perforated_Geometry(spacing_x, spacing_y, dimension_x, dimension_y, perforation_type)
 
 # combine the shade_material and the geometry together into a Product_Composistion_Data
@@ -64,10 +64,10 @@ woven_shade_layer = pywincalc.Composed_Product_Data(composition_data)
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
 exterior_woven_u_environment = pywincalc.Glazing_System([woven_shade_layer, generic_clear_3mm_glass],
-                                                           [gap_1],
-                                                           optical_standard, glazing_system_width,
-                                                           glazing_system_height,
-                                                           pywincalc.nfrc_u_environments(), bsdf_hemisphere)
+                                                        [gap_1],
+                                                        optical_standard, glazing_system_width,
+                                                        glazing_system_height,
+                                                        pywincalc.nfrc_u_environments(), bsdf_hemisphere)
 
 exterior_woven_shgc_environment = pywincalc.Glazing_System(
     [woven_shade_layer, generic_clear_3mm_glass], [gap_1],
