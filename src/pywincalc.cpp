@@ -154,6 +154,11 @@ PYBIND11_MODULE(pywincalc, m) {
                std::vector<wincalc::Predefined_Gas_Mixture_Component> const &,
                double>(),
            py::arg("predefined_gas_type_list"), py::arg("thickness_meters"))
+      .def(py::init<std::vector<std::variant<
+                        wincalc::Predefined_Gas_Mixture_Component,
+                        wincalc::Engine_Gas_Mixture_Component>> const &,
+                    double>(),
+           py::arg("gas_list"), py::arg("thickness_meters"))
       .def_readwrite("gases", &wincalc::Engine_Gap_Info::gases)
       .def_readwrite("thickness", &wincalc::Engine_Gap_Info::thickness);
 
