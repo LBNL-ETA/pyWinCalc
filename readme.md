@@ -77,10 +77,12 @@ The following types of solid layers are currently supported:
 ### Gaps
 For systems with more than one solid layer each solid layer must be separated by a gap.  The methods for creating gaps currently supported are:
 
-- From a selection of predefined gases.  Current predefined gases are:  Air, Argon, Krypton, Xeon.  See gap_1 in [triple_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/triple_clear.py)
-- From a mixture of predefined gases.  See gap_2 in [triple_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/triple_clear.py)
-- From creating a custom gas by providing molecular weight, specific heat ratio, and coefficients for specific heat at constant pressure (Cp), thermal conductivity, and viscosity.  No example yet.
-- From a mixture of custom gases.  No example yet.
+- From a selection of predefined gases.  Current predefined gases are:  Air, Argon, Krypton, Xeon.
+- From a mixture of predefined gases.
+- From creating a custom gas by providing molecular weight, specific heat ratio, and coefficients for specific heat at constant pressure (Cp), thermal conductivity, and viscosity.
+- From a mixture of custom gases.
+
+For examples of each see [gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/gases.py) in the examples directory.
 
 ### BSDF Calculations
 
