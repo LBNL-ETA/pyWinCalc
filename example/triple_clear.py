@@ -30,13 +30,13 @@ solid_layers = [clear_6, clear_3, clear_6]
 # Vacuum gaps are not yet supported
 # To create a gap with 100% of a predefined gas create a Gap_Data object with the gas type
 # and thickness in meters
-gap_1 = pywincalc.Gap_Data(pywincalc.Predefined_Gas_Type.AIR, .0127)  # .0127 is gap thickness in meters
+gap_1 = pywincalc.Gap(pywincalc.PredefinedGasType.AIR, .0127)  # .0127 is gap thickness in meters
 
 # To create a mixture of predefined gases first create the components with the gas type and portion of the mixture
 # The following creates a gas that is 70% Krypton and 30% Xenon and 2cm thick
-gap_2_component_1 = pywincalc.Predefined_Gas_Mixture_Component(pywincalc.Predefined_Gas_Type.KRYPTON, .7)
-gap_2_component_2 = pywincalc.Predefined_Gas_Mixture_Component(pywincalc.Predefined_Gas_Type.XENON, .3)
-gap_2 = pywincalc.Gap_Data([gap_2_component_1, gap_2_component_2], .02)  # .02 is gap thickness in meters
+gap_2_component_1 = pywincalc.PredefinedGasMixtureComponent(pywincalc.PredefinedGasType.KRYPTON, .7)
+gap_2_component_2 = pywincalc.PredefinedGasMixtureComponent(pywincalc.PredefinedGasType.XENON, .3)
+gap_2 = pywincalc.Gap([gap_2_component_1, gap_2_component_2], .02)  # .02 is gap thickness in meters
 
 # Put all gaps into a list ordered from outside to inside
 # Note:  This is only specifying gaps between solid layers
@@ -48,19 +48,19 @@ gaps = [gap_1, gap_2]
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-glazing_system_triple_layer_u_environment = pywincalc.Glazing_System(solid_layers, gaps, optical_standard, width,
-                                                                     height)
+glazing_system_triple_layer_u_environment = pywincalc.GlazingSystem(solid_layers, gaps, optical_standard, width,
+                                                                    height)
 print("U-value: {u}".format(u=glazing_system_triple_layer_u_environment.u()))
 # If SHGC results for the NFRC SHGC environment are needed create a glazing system with that environment
-glazing_system_triple_layer_shgc_environment = pywincalc.Glazing_System(solid_layers, gaps, optical_standard, width,
-                                                                        height,
-                                                                        pywincalc.nfrc_shgc_environments())
+glazing_system_triple_layer_shgc_environment = pywincalc.GlazingSystem(solid_layers, gaps, optical_standard, width,
+                                                                       height,
+                                                                       pywincalc.nfrc_shgc_environments())
 print("SHGC: {shgc}".format(shgc=glazing_system_triple_layer_shgc_environment.shgc()))
 
 # Get the results the same way as in example_single_clear.py.
 # The only difference is in this case since there are multiple layers there are
 # multiple layer results for optical methods
-solar_results = glazing_system_triple_layer_u_environment.optical_method_results(pywincalc.Optical_Method_Type.SOLAR)
+solar_results = glazing_system_triple_layer_u_environment.optical_method_results(pywincalc.OpticalMethodType.SOLAR)
 # In this case since there are multiple layers there are multiple layer results
 solar_results_per_layer = solar_results.layer_results
 # Print some of the layer solar absorptances
@@ -76,7 +76,3 @@ print("Triple clear layer 3 front direct solar absorptance: {v}".format(
     v=solar_results_per_layer[2].front.absorptance.direct))
 print("Triple clear layer 3 back diffuse solar absorptance: {v}".format(
     v=solar_results_per_layer[2].back.absorptance.diffuse))
-# etc...
-
-# Custom gases are also available.  Mixing custom gases and predefined gases is not yet supported
-# TODO Create example using custom gases

@@ -13,20 +13,20 @@ glazing_system_width = 1.0  # width of the glazing system in meters
 glazing_system_height = 1.0  # height of the glazing system in meters
 
 # Define the gap between the shade and the glazing
-gap_1 = pywincalc.Gap_Data(pywincalc.Predefined_Gas_Type.AIR, .0127)  # .0127 is gap thickness in meters
+gap_1 = pywincalc.Gap(pywincalc.PredefinedGasType.AIR, .0127)  # .0127 is gap thickness in meters
 
 # Since these products use at least one layer that requires a BSDF model a BSDF hemisphere must be
 # used.  In this example a standard quarter basis is used.  Other predefined basis include Small, Half, and Full
 # Custom BSDF basis is not yet supported in Python.  Please contact us if your work requires calculations with
 # a custom BSDF basis.
-bsdf_hemisphere = pywincalc.BSDF_Hemisphere.create(pywincalc.BSDF_Basis.Quarter)
+bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTER)
 
 # Download some product data from the IGSDB.  This example gets a generic single clear 3mm glazing (NFRC 102),
 # a venetian blind manufactured by Pella (CGDB ID 3000) and a perforated screen manufacturerd by Solar Comfort
 # (CGDB ID 18000)
 # For more information on getting data from the igsdb please see igsdb.lbl.gov/openapi
 igsdb_api_token = "INSERT_YOUR_TOKEN_HERE"
-url_single_product = "https://igsdb-development.herokumapp.com/api/v1/products/{id}"  # Template URL for single product
+url_single_product = "https://igsdb-development.herokuapp.com/api/v1/products/{id}"  # Template URL for single product
 
 headers = {"Authorization": "Token {token}".format(token=igsdb_api_token)}  # Token authorization headers
 
@@ -53,23 +53,23 @@ solar_comfort_radiant_barrier_perforated_screen = pywincalc.parse_json(
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-exterior_venetian_u_environment = pywincalc.Glazing_System([slim_white_pella_venetian_blind, generic_clear_3mm_glass],
-                                                           [gap_1],
-                                                           optical_standard, glazing_system_width,
-                                                           glazing_system_height,
-                                                           pywincalc.nfrc_u_environments(), bsdf_hemisphere)
+exterior_venetian_u_environment = pywincalc.GlazingSystem([slim_white_pella_venetian_blind, generic_clear_3mm_glass],
+                                                          [gap_1],
+                                                          optical_standard, glazing_system_width,
+                                                          glazing_system_height,
+                                                          pywincalc.nfrc_u_environments(), bsdf_hemisphere)
 
-exterior_venetian_shgc_environment = pywincalc.Glazing_System(
+exterior_venetian_shgc_environment = pywincalc.GlazingSystem(
     [slim_white_pella_venetian_blind, generic_clear_3mm_glass], [gap_1],
     optical_standard, glazing_system_width, glazing_system_height,
     pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)
 
-exterior_perforated_u_environment = pywincalc.Glazing_System(
+exterior_perforated_u_environment = pywincalc.GlazingSystem(
     [solar_comfort_radiant_barrier_perforated_screen, generic_clear_3mm_glass], [gap_1],
     optical_standard, glazing_system_width, glazing_system_height,
     pywincalc.nfrc_u_environments(), bsdf_hemisphere)
 
-exterior_perforated_shgc_environment = pywincalc.Glazing_System(
+exterior_perforated_shgc_environment = pywincalc.GlazingSystem(
     [solar_comfort_radiant_barrier_perforated_screen, generic_clear_3mm_glass], [gap_1],
     optical_standard, glazing_system_width, glazing_system_height,
     pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)

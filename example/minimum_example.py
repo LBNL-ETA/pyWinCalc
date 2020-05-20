@@ -12,5 +12,5 @@ clear_3 = pywincalc.parse_optics_file(clear_3_path)
 solid_layers = [clear_3]
 gaps = []
 
-glazing_system = pywincalc.Glazing_System(solid_layers, gaps, optical_standard, width, height)
+glazing_system = pywincalc.GlazingSystem(solid_layers, gaps, optical_standard, width, height)
 print("Single Layer U-value: {u}".format(u=glazing_system.u()))

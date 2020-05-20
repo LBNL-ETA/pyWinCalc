@@ -18,12 +18,12 @@ This module provides a simplified method for calculating various thermal and opt
 ## Install
 
 ### Linux
-Once the requirementes have been installed this can be installed with pip by doing
+Once the requirements have been installed this can be installed with pip by doing
 
 ` pip install git+https://github.com/LBNL-ETA/pyWinCalc.git `
 
 ### Mac
-Once the requirementes have been installed this can be installed with pip by doing
+Once the requirements have been installed this can be installed with pip by doing
 
 ` pip install git+https://github.com/LBNL-ETA/pyWinCalc.git `
 
@@ -114,11 +114,14 @@ clear_3 = pywincalc.parse_optics_file(clear_3_path)
 solid_layers = [clear_3]
 gaps = []
 
-glazing_system = pywincalc.Glazing_System(solid_layers, gaps, optical_standard, width, height)
+glazing_system = pywincalc.GlazingSystem(solid_layers, gaps, optical_standard, width, height)
 print("Single Layer U-value: {u}".format(u=glazing_system.u()))
 ```
 
 Please see the following examples which contain more information.
+
+NOTE:  The igsdb examples require the python requests library and an API token for igsdb.lbl.gov.  An API token can be obtained by creating an account there.  See https://igsdb.lbl.gov/about/ for more information on creating an account.
+
 - [single_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/single_clear.py): Creates a single layer glazing system from a sample optics file.  Shows all thermal results, all optical results for a single optical method and some optical results from a second optical method.
 - [triple_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/triple_clear.py):  Creates a triple layer glazing system from sample optics files.  Creates two gaps, one with a single gas and one with a gas mixture.  Shows another example of optical results for each layer.
 - [igsdb_exterior_shade_on_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_exterior_shade_on_clear_glass.py):  Creates two double-layer glazing systems with exterior shading products (Venetian blind and perforated screen).  Uses shading layers and glass from the [IGSDB](http://igsdb.lbl.gov).  
@@ -126,6 +129,8 @@ Please see the following examples which contain more information.
 - [igsdb_custom_venetian.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_custom_venetian.py).  Creates a double layer glazing system with an exterior venetian blind.  The venetian blind uses a material from the [IGSDB](http://igsdb.lbl.gov) and a user-defined geometry describing the slats.  Also includes an example of how to change the distribution method used for calculating optical results for the shade.  The glass layer uses data from the [IGSDB](http://igsdb.lbl.gov)
 - [igsdb_custom_woven.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_custom_woven.py) Creates a double layer glazing system with an exterior woven shade.  The woven shade uses a material from the [IGSDB](http://igsdb.lbl.gov) and a user-defined geometry describing the thread layout.  The glass layer uses data from the [IGSDB](http://igsdb.lbl.gov)
 - [custom_perforated.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/custom_perforated.py) Creates a double layer glazing system with an exterior perforated screen.  Shows an example of getting measured data from somewhere other than either the [IGSDB](http://igsdb.lbl.gov) or optics file.
+- [gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/gases.py) Creates gases and gas mixtures from predefined gas types and custom gases created from gas properties.
+- [minimum_example.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/minumum_example.py) The minimum example shown above.  Calculates the U-value for a single piece of generic clear glass.
 
 If there is something you are trying to calculate that does not exist as an example yet please contact us.
 

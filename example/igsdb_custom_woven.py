@@ -13,10 +13,10 @@ glazing_system_width = 1.0  # width of the glazing system in meters
 glazing_system_height = 1.0  # height of the glazing system in meters
 
 # Define the gap between the shade and the glazing
-gap_1 = pywincalc.Gap_Data(pywincalc.Predefined_Gas_Type.AIR, .0127)  # .0127 is gap thickness in meters
+gap_1 = pywincalc.Gap(pywincalc.PredefinedGasType.AIR, .0127)  # .0127 is gap thickness in meters
 
 # A woven shade requires a BSDF hemisphere.  Create one based on a standard quarter basis for this test
-bsdf_hemisphere = pywincalc.BSDF_Hemisphere.create(pywincalc.BSDF_Basis.Quarter)
+bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTER)
 
 # Download some product data from the IGSDB.  This example gets a generic single clear 3mm glazing (NFRC 102),
 # and a material to use as part of the woven shade.
@@ -44,24 +44,24 @@ shade_material = pywincalc.parse_json(shade_material_igsdb_response.content)
 thread_diameter = 0.002  # 2mm diameter
 thread_spacing = 0.003  # 3mm spacing
 shade_thickness = 0.002  # 2mm shade thickness
-geometry = pywincalc.Woven_Geometry(thread_diameter, thread_spacing, shade_thickness)
+geometry = pywincalc.WovenGeometry(thread_diameter, thread_spacing, shade_thickness)
 
 # combine the shade_material and the geometry together into a Product_Composistion_Data
-composition_data = pywincalc.Product_Composistion_Data(shade_material, geometry)
+composition_data = pywincalc.ProductComposistionData(shade_material, geometry)
 
-woven_shade_layer = pywincalc.Composed_Product_Data(composition_data)
+woven_shade_layer = pywincalc.ComposedProductData(composition_data)
 
 # Create a glazing system using the NFRC U environment in order to get NFRC U results
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-exterior_woven_u_environment = pywincalc.Glazing_System([woven_shade_layer, generic_clear_3mm_glass],
-                                                        [gap_1],
-                                                        optical_standard, glazing_system_width,
-                                                        glazing_system_height,
-                                                        pywincalc.nfrc_u_environments(), bsdf_hemisphere)
+exterior_woven_u_environment = pywincalc.GlazingSystem([woven_shade_layer, generic_clear_3mm_glass],
+                                                       [gap_1],
+                                                       optical_standard, glazing_system_width,
+                                                       glazing_system_height,
+                                                       pywincalc.nfrc_u_environments(), bsdf_hemisphere)
 
-exterior_woven_shgc_environment = pywincalc.Glazing_System(
+exterior_woven_shgc_environment = pywincalc.GlazingSystem(
     [woven_shade_layer, generic_clear_3mm_glass], [gap_1],
     optical_standard, glazing_system_width, glazing_system_height,
     pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)

@@ -4,53 +4,53 @@ import pywincalc
 # Vacuum gaps are not yet supported
 # To create a gap with 100% of a predefined gas create a Gap_Data object with the gas type
 # and thickness in meters
-gap_1 = pywincalc.Gap_Data(pywincalc.Predefined_Gas_Type.AIR, .0127)  # .0127 is gap thickness in meters
+gap_1 = pywincalc.Gap(pywincalc.PredefinedGasType.AIR, .0127)  # .0127 is gap thickness in meters
 
 # Gaps may also contain a mixture of gases.  # To create a mixture of predefined gases first create the
 # components with the gas type and portion of the mixture.
 # The following creates a gas that is 70% Krypton and 30% Xenon and 2cm thick
-gap_2_component_1 = pywincalc.Predefined_Gas_Mixture_Component(pywincalc.Predefined_Gas_Type.KRYPTON, .7)
-gap_2_component_2 = pywincalc.Predefined_Gas_Mixture_Component(pywincalc.Predefined_Gas_Type.XENON, .3)
-gap_2 = pywincalc.Gap_Data([gap_2_component_1, gap_2_component_2], .02)  # .02 is gap thickness in meters
+gap_2_component_1 = pywincalc.PredefinedGasMixtureComponent(pywincalc.PredefinedGasType.KRYPTON, .7)
+gap_2_component_2 = pywincalc.PredefinedGasMixtureComponent(pywincalc.PredefinedGasType.XENON, .3)
+gap_2 = pywincalc.Gap([gap_2_component_1, gap_2_component_2], .02)  # .02 is gap thickness in meters
 
 # Custom gases can be created from properties.  The following creates sulfur hexafluoride as distributed with WINDOW 7
 sulfur_hexafluoride_conductivity_a = 0.0130000002682209
 sulfur_hexafluoride_conductivity_b = 0
 sulfur_hexafluoride_conductivity_c = 0
-sulfur_hexafluoride_conductivity_coefficients = pywincalc.Gas_Coefficients(sulfur_hexafluoride_conductivity_a,
-                                                                           sulfur_hexafluoride_conductivity_b,
-                                                                           sulfur_hexafluoride_conductivity_c)
+sulfur_hexafluoride_conductivity_coefficients = pywincalc.GasCoefficients(sulfur_hexafluoride_conductivity_a,
+                                                                          sulfur_hexafluoride_conductivity_b,
+                                                                          sulfur_hexafluoride_conductivity_c)
 sulfur_hexafluoride_viscosity_a = 7.21399999292771E-7
 sulfur_hexafluoride_viscosity_b = 4.92800005247318E-8
 sulfur_hexafluoride_viscosity_c = 0
-sulfur_hexafluoride_viscosity_coefficients = pywincalc.Gas_Coefficients(sulfur_hexafluoride_viscosity_a,
-                                                                        sulfur_hexafluoride_viscosity_b,
-                                                                        sulfur_hexafluoride_viscosity_c)
+sulfur_hexafluoride_viscosity_coefficients = pywincalc.GasCoefficients(sulfur_hexafluoride_viscosity_a,
+                                                                       sulfur_hexafluoride_viscosity_b,
+                                                                       sulfur_hexafluoride_viscosity_c)
 sulfur_hexafluoride_Cp_a = 418.600006103516
 sulfur_hexafluoride_Cp_b = 0
 sulfur_hexafluoride_Cp_c = 0
-sulfur_hexafluoride_Cp_coefficients = pywincalc.Gas_Coefficients(sulfur_hexafluoride_Cp_a,
-                                                                 sulfur_hexafluoride_Cp_b,
-                                                                 sulfur_hexafluoride_Cp_c)
+sulfur_hexafluoride_Cp_coefficients = pywincalc.GasCoefficients(sulfur_hexafluoride_Cp_a,
+                                                                sulfur_hexafluoride_Cp_b,
+                                                                sulfur_hexafluoride_Cp_c)
 sulfur_hexafluoride_molecular_weight = 146.100006103516
 sulfur_hexafluoride_specific_heat_ratio = 1
 
-sulfur_hexafluoride = pywincalc.Custom_Gas_Data("sulfur_hexafluoride",
-                                                molecular_weight=sulfur_hexafluoride_molecular_weight,
-                                                specific_heat_ratio=sulfur_hexafluoride_specific_heat_ratio,
-                                                Cp=sulfur_hexafluoride_Cp_coefficients,
-                                                thermal_conductivity=sulfur_hexafluoride_conductivity_coefficients,
-                                                viscosity=sulfur_hexafluoride_viscosity_coefficients)
+sulfur_hexafluoride = pywincalc.CustomGasData("sulfur_hexafluoride",
+                                              molecular_weight=sulfur_hexafluoride_molecular_weight,
+                                              specific_heat_ratio=sulfur_hexafluoride_specific_heat_ratio,
+                                              Cp=sulfur_hexafluoride_Cp_coefficients,
+                                              thermal_conductivity=sulfur_hexafluoride_conductivity_coefficients,
+                                              viscosity=sulfur_hexafluoride_viscosity_coefficients)
 
 # Once a custom gas is created it can either be used by itself to create a layer
-gap_3 = pywincalc.Gap_Data(sulfur_hexafluoride, .003) # 3mm thick gap filled with sulfur hexafluoride
+gap_3 = pywincalc.Gap(sulfur_hexafluoride, .003)  # 3mm thick gap filled with sulfur hexafluoride
 
 # Or it can be mixed with either other predefined or custom gases
 # The following creates a gas that is 80% sulfur hexafluoride, 15% Argonm and 5% Air
-gap_4_component_1 = pywincalc.Engine_Gas_Mixture_Component(sulfur_hexafluoride, 0.8)
-gap_4_component_2 = pywincalc.Predefined_Gas_Mixture_Component(pywincalc.Predefined_Gas_Type.ARGON, .15)
-gap_4_component_3 = pywincalc.Predefined_Gas_Mixture_Component(pywincalc.Predefined_Gas_Type.AIR, .05)
-gap_4 = pywincalc.Gap_Data([gap_4_component_1, gap_4_component_2, gap_4_component_3], .025) # 2.5mm thick gap
+gap_4_component_1 = pywincalc.CustomGasMixtureComponent(sulfur_hexafluoride, 0.8)
+gap_4_component_2 = pywincalc.PredefinedGasMixtureComponent(pywincalc.PredefinedGasType.ARGON, .15)
+gap_4_component_3 = pywincalc.PredefinedGasMixtureComponent(pywincalc.PredefinedGasType.AIR, .05)
+gap_4 = pywincalc.Gap([gap_4_component_1, gap_4_component_2, gap_4_component_3], .025)  # 2.5mm thick gap
 
 gaps = [gap_1, gap_2, gap_3, gap_4]
 
@@ -66,11 +66,9 @@ height = 1.0  # height of the glazing system in meters
 clear_3_path = "products/CLEAR_3.DAT"
 clear_3 = pywincalc.parse_optics_file(clear_3_path)
 solid_layers = [clear_3] * 5
-glazing_system_u_environment = pywincalc.Glazing_System(solid_layers, gaps, optical_standard, width,
-                                                                     height)
+glazing_system_u_environment = pywincalc.GlazingSystem(solid_layers, gaps, optical_standard, width, height)
 print("U-value: {u}".format(u=glazing_system_u_environment.u()))
 # If SHGC results for the NFRC SHGC environment are needed create a glazing system with that environment
-glazing_system_shgc_environment = pywincalc.Glazing_System(solid_layers, gaps, optical_standard, width,
-                                                                        height,
-                                                                        pywincalc.nfrc_shgc_environments())
+glazing_system_shgc_environment = pywincalc.GlazingSystem(solid_layers, gaps, optical_standard, width, height,
+                                                          pywincalc.nfrc_shgc_environments())
 print("SHGC: {shgc}".format(shgc=glazing_system_shgc_environment.shgc()))
