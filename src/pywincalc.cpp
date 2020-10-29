@@ -99,11 +99,11 @@ void declare_wce_optical_results_template<wincalc::Color_Result>(
                      "are not currently supported.");
 }
 
-class Py_Product_Data_Optical : public wincalc::Product_Data_Optical //_Base 
+class Py_Product_Data_Optical : public wincalc::Product_Data_Optical //_Base
 {
 public:
   using wincalc::Product_Data_Optical::Product_Data_Optical; // Inherit
-                                                              // constructors
+                                                             // constructors
   std::vector<double> wavelengths() const override {
     PYBIND11_OVERRIDE_PURE(std::vector<double>, wincalc::Product_Data_Optical,
                            wavelengths, );
@@ -574,6 +574,118 @@ PYBIND11_MODULE(pywincalc, m) {
                      &wincalc::Product_Data_N_Band_Optical::material_type)
       .def_readwrite("wavelength_data",
                      &wincalc::Product_Data_N_Band_Optical::wavelength_data);
+
+  py::class_<wincalc::Product_Data_Dual_Band_Optical,
+             wincalc::Product_Data_Optical,
+             std::shared_ptr<wincalc::Product_Data_Dual_Band_Optical>>(
+      m, "ProductDataOpticalDualBand")
+      .def(py::init<double, std::optional<double>, std::optional<double>,
+                    std::optional<double>, std::optional<double>, double,
+                    bool>(),
+           py::arg("thickness_meters"),
+           py::arg("ir_transmittance_front") = std::optional<double>(),
+           py::arg("ir_transmittance_back") = std::optional<double>(),
+           py::arg("emissivity_front") = std::optional<double>(),
+           py::arg("emissivity_back") = std::optional<double>(),
+           py::arg("permeability_factor") = 0.0, py::arg("flipped") = false)
+      .def("wavelengths",
+           &wincalc::Product_Data_Dual_Band_Optical::wavelengths);
+
+  py::class_<wincalc::Product_Data_Dual_Band_Optical_Specular,
+             wincalc::Product_Data_Dual_Band_Optical,
+             std::shared_ptr<wincalc::Product_Data_Dual_Band_Optical_Specular>>(
+      m, "ProductDataOpticalDualBandSpecular")
+      .def(py::init<double, double, double, double, double, double, double,
+                    double, double, std::optional<double>,
+                    std::optional<double>, std::optional<double>,
+                    std::optional<double>, double, bool>(),
+           py::arg("solar_transmittance_front"),
+           py::arg("solar_transmittance_back"),
+           py::arg("solar_reflectance_front"),
+           py::arg("solar_reflectance_back"),
+           py::arg("visible_transmittance_front"),
+           py::arg("visible_transmittance_back"),
+           py::arg("visible_reflectance_front"),
+           py::arg("visible_reflectance_back"), py::arg("thickness_meters"),
+           py::arg("ir_transmittance_front") = std::optional<double>(),
+           py::arg("ir_transmittance_back") = std::optional<double>(),
+           py::arg("emissivity_front") = std::optional<double>(),
+           py::arg("emissivity_back") = std::optional<double>(),
+           py::arg("permeability_factor") = 0.0, py::arg("flipped") = false)
+      .def_readwrite(
+          "solar_transmittance_front",
+          &wincalc::Product_Data_Dual_Band_Optical_Specular::tf_solar)
+      .def_readwrite(
+          "solar_transmittance_back",
+          &wincalc::Product_Data_Dual_Band_Optical_Specular::tb_solar)
+      .def_readwrite(
+          "solar_reflectance_front",
+          &wincalc::Product_Data_Dual_Band_Optical_Specular::rf_solar)
+      .def_readwrite(
+          "solar_reflectance_back",
+          &wincalc::Product_Data_Dual_Band_Optical_Specular::rb_solar)
+      .def_readwrite(
+          "visible_transmittance_front",
+          &wincalc::Product_Data_Dual_Band_Optical_Specular::tf_visible)
+      .def_readwrite(
+          "visible_transmittance_back",
+          &wincalc::Product_Data_Dual_Band_Optical_Specular::tb_visible)
+      .def_readwrite(
+          "visible_reflectance_front",
+          &wincalc::Product_Data_Dual_Band_Optical_Specular::rf_visible)
+      .def_readwrite(
+          "visible_reflectance_back",
+          &wincalc::Product_Data_Dual_Band_Optical_Specular::rb_visible);
+
+  py::class_<wincalc::Product_Data_Dual_Band_Optical_BSDF,
+             wincalc::Product_Data_Dual_Band_Optical,
+             std::shared_ptr<wincalc::Product_Data_Dual_Band_Optical_BSDF>>(
+      m, "ProductDataOpticalDualBandBSDF")
+      .def(py::init<std::vector<std::vector<double>> const &,
+                    std::vector<std::vector<double>> const &,
+                    std::vector<std::vector<double>> const &,
+                    std::vector<std::vector<double>> const &,
+                    std::vector<std::vector<double>> const &,
+                    std::vector<std::vector<double>> const &,
+                    std::vector<std::vector<double>> const &,
+                    std::vector<std::vector<double>> const &,
+                    SingleLayerOptics::CBSDFHemisphere const &, double,
+                    std::optional<double>, std::optional<double>,
+                    std::optional<double>, std::optional<double>, double,
+                    bool>(),
+           py::arg("solar_transmittance_front"),
+           py::arg("solar_transmittance_back"),
+           py::arg("solar_reflectance_front"),
+           py::arg("solar_reflectance_back"),
+           py::arg("visible_transmittance_front"),
+           py::arg("visible_transmittance_back"),
+           py::arg("visible_reflectance_front"),
+           py::arg("visible_reflectance_back"), py::arg("bsdf_hemisphere"),
+           py::arg("thickness_meters"),
+           py::arg("ir_transmittance_front") = std::optional<double>(),
+           py::arg("ir_transmittance_back") = std::optional<double>(),
+           py::arg("emissivity_front") = std::optional<double>(),
+           py::arg("emissivity_back") = std::optional<double>(),
+           py::arg("permeability_factor") = 0.0, py::arg("flipped") = false)
+      .def_readwrite("solar_transmittance_front",
+                     &wincalc::Product_Data_Dual_Band_Optical_BSDF::tf_solar)
+      .def_readwrite("solar_transmittance_back",
+                     &wincalc::Product_Data_Dual_Band_Optical_BSDF::tb_solar)
+      .def_readwrite("solar_reflectance_front",
+                     &wincalc::Product_Data_Dual_Band_Optical_BSDF::rf_solar)
+      .def_readwrite("solar_reflectance_back",
+                     &wincalc::Product_Data_Dual_Band_Optical_BSDF::rb_solar)
+      .def_readwrite("visible_transmittance_front",
+                     &wincalc::Product_Data_Dual_Band_Optical_BSDF::tf_visible)
+      .def_readwrite("visible_transmittance_back",
+                     &wincalc::Product_Data_Dual_Band_Optical_BSDF::tb_visible)
+      .def_readwrite("visible_reflectance_front",
+                     &wincalc::Product_Data_Dual_Band_Optical_BSDF::rf_visible)
+      .def_readwrite("visible_reflectance_back",
+                     &wincalc::Product_Data_Dual_Band_Optical_BSDF::rb_visible)
+      .def("effective_thermal_values",
+           &wincalc::Product_Data_Dual_Band_Optical_BSDF::
+               effective_thermal_values);
 
   py::class_<wincalc::Product_Data_Optical_With_Material,
              wincalc::Product_Data_Optical,
