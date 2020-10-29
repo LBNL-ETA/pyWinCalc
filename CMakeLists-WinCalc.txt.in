@@ -4,7 +4,7 @@ include(ExternalProject)
 
 ExternalProject_Add(wincalc
     GIT_REPOSITORY https://github.com/LBNL-ETA/WinCalc.git
-    GIT_TAG "shading_calcs"
+    GIT_TAG "bsdf_input"
     
     UPDATE_COMMAND ""
     PATCH_COMMAND ""
