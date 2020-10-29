@@ -924,4 +924,6 @@ PYBIND11_MODULE(pywincalc, m) {
         "Load product data from json file");
   m.def("parse_optics_file", &OpticsParser::parseFile,
         "Load product data from optics file");
+  m.def("parse_bsdf_xml_file", &OpticsParser::parseBSDFXMLFile,
+	  "Load product data from BSDF xml file");
 }
