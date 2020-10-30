@@ -851,7 +851,7 @@ PYBIND11_MODULE(pywincalc, m) {
                     std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
-           py::arg("product_data"), py::arg("gap_data"),
+           py::arg("product_data"), py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("optical_standard"), py::arg("width_meters") = 1.0,
            py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
@@ -869,7 +869,7 @@ PYBIND11_MODULE(pywincalc, m) {
                std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                int>(),
-           py::arg("product_data"), py::arg("gap_data"),
+           py::arg("product_data"), py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("optical_standard"), py::arg("width_meters") = 1.0,
            py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
@@ -888,7 +888,7 @@ PYBIND11_MODULE(pywincalc, m) {
                     std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
-           py::arg("product_data"), py::arg("gap_data"),
+           py::arg("product_data"), py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("optical_standard"), py::arg("width_meters") = 1.0,
            py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
@@ -941,4 +941,7 @@ PYBIND11_MODULE(pywincalc, m) {
         "Load product data from optics file");
   m.def("parse_bsdf_xml_file", &OpticsParser::parseBSDFXMLFile,
 	  "Load product data from BSDF xml file");
+  m.def("parse_bsdf_xml_string", &OpticsParser::parseBSDFXMLString,
+	  "Load product data from BSDF xml string");
+	  
 }
