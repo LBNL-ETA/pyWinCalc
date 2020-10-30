@@ -285,6 +285,21 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("perforation_type",
                      &OpticsParser::PerforatedGeometry::perforationType);
 
+  py::class_<OpticsParser::BSDF>(m, "BSDF")
+	  .def_readwrite("data", &OpticsParser::BSDF::data)
+	  .def_readwrite("row_angle_basis_name", &OpticsParser::BSDF::rowAngleBasisName)
+	  .def_readwrite("column_angle_basis_name", &OpticsParser::BSDF::columnAngleBasisName);
+
+  py::class_<OpticsParser::WavelengthBSDFs>(m, "WavelengthBSDFs")
+	  .def_readwrite("transmittance_front", &OpticsParser::WavelengthBSDFs::tf)
+	  .def_readwrite("transmittance_back", &OpticsParser::WavelengthBSDFs::tb)
+	  .def_readwrite("reflectance_front", &OpticsParser::WavelengthBSDFs::rf)
+	  .def_readwrite("reflectance_back", &OpticsParser::WavelengthBSDFs::rb);
+
+  py::class_<OpticsParser::DualBandBSDF>(m, "DualBandBSDF")
+	  .def_readwrite("solar", &OpticsParser::DualBandBSDF::solar)
+	  .def_readwrite("visible", &OpticsParser::DualBandBSDF::visible);
+
   py::class_<OpticsParser::ProductData,
              std::shared_ptr<OpticsParser::ProductData>>(m, "ProductData")
       .def("composed_product", &OpticsParser::ProductData::composedProduct)
@@ -922,7 +937,7 @@ PYBIND11_MODULE(pywincalc, m) {
         "Load product data from json string");
   m.def("parse_json_file", &OpticsParser::parseJSONFile,
         "Load product data from json file");
-  m.def("parse_optics_file", &OpticsParser::parseFile,
+  m.def("parse_optics_file", &OpticsParser::parseOpticsFile,
         "Load product data from optics file");
   m.def("parse_bsdf_xml_file", &OpticsParser::parseBSDFXMLFile,
 	  "Load product data from BSDF xml file");
