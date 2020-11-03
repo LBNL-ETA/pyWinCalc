@@ -25,8 +25,8 @@ bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTE
 # a venetian blind manufactured by Pella (CGDB ID 3000) and a perforated screen manufacturerd by Solar Comfort
 # (CGDB ID 18000)
 # For more information on getting data from the igsdb please see igsdb.lbl.gov/openapi
-igsdb_api_token = "INSERT_YOUR_TOKEN_HERE"
-url_single_product = "https://igsdb-development.herokuapp.com/api/v1/products/{id}"  # Template URL for single product
+igsdb_api_token = "2aad63e52070a0cc92568d6e2b4e2d86f996595b"
+url_single_product = "https://igsdb-staging.herokuapp.com/api/v1/products/{id}"  # Template URL for single product
 
 headers = {"Authorization": "Token {token}".format(token=igsdb_api_token)}  # Token authorization headers
 

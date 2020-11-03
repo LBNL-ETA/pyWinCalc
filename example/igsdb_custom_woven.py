@@ -21,15 +21,15 @@ bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTE
 # Download some product data from the IGSDB.  This example gets a generic single clear 3mm glazing (NFRC 102),
 # and a material to use as part of the woven shade.
 # For more information on getting data from the igsdb please see igsdb.lbl.gov/openapi
-igsdb_api_token = "INSERT_YOUR_TOKEN_HERE"
-url_single_product = "https://igsdb-development.herokuapp.com/api/v1/products/{id}"  # Template URL for single product
+igsdb_api_token = "2aad63e52070a0cc92568d6e2b4e2d86f996595b"
+url_single_product = "https://igsdb-staging.herokuapp.com/api/v1/products/{id}"  # Template URL for single product
 
 headers = {"Authorization": "Token {token}".format(token=igsdb_api_token)}  # Token authorization headers
 
 generic_clear_3mm_glass_igsdb_id = 363
 
 # This is the same material used in the venetian example but could be any material in the igsdb
-shade_material_igsdb_id = 12852
+shade_material_igsdb_id = 13199
 
 generic_clear_3mm_glass_igsdb_response = requests.get(url_single_product.format(id=generic_clear_3mm_glass_igsdb_id),
                                                       headers=headers)
