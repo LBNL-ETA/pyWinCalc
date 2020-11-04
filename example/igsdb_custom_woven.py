@@ -55,18 +55,16 @@ woven_shade_layer = pywincalc.ComposedProductData(composition_data)
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-exterior_woven_u_environment = pywincalc.GlazingSystem([woven_shade_layer, generic_clear_3mm_glass],
-                                                       [gap_1],
-                                                       optical_standard, glazing_system_width,
-                                                       glazing_system_height,
+exterior_woven_u_environment = pywincalc.GlazingSystem(optical_standard, [woven_shade_layer, generic_clear_3mm_glass],
+                                                       [gap_1], glazing_system_width, glazing_system_height,
                                                        pywincalc.nfrc_u_environments(), bsdf_hemisphere)
 
-exterior_woven_shgc_environment = pywincalc.GlazingSystem(
-    [woven_shade_layer, generic_clear_3mm_glass], [gap_1],
-    optical_standard, glazing_system_width, glazing_system_height,
-    pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)
+exterior_woven_shgc_environment = pywincalc.GlazingSystem(optical_standard,
+                                                          [woven_shade_layer, generic_clear_3mm_glass], [gap_1],
+                                                          glazing_system_width, glazing_system_height,
+                                                          pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)
 
 exterior_woven_u = exterior_woven_u_environment.u()
-print("Exterior venetian U: {v}".format(v=exterior_woven_u))
+print("Exterior woven U: {v}".format(v=exterior_woven_u))
 exterior_woven_shgc = exterior_woven_shgc_environment.shgc()
-print("Exterior venetian SHGC: {v}".format(v=exterior_woven_shgc))
+print("Exterior woven SHGC: {v}".format(v=exterior_woven_shgc))

@@ -53,26 +53,27 @@ solar_comfort_radiant_barrier_perforated_screen = pywincalc.parse_json(
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-exterior_venetian_u_environment = pywincalc.GlazingSystem([slim_white_pella_venetian_blind, generic_clear_3mm_glass],
-                                                          [gap_1],
-                                                          optical_standard, glazing_system_width,
-                                                          glazing_system_height,
+exterior_venetian_u_environment = pywincalc.GlazingSystem(optical_standard,
+                                                          [slim_white_pella_venetian_blind, generic_clear_3mm_glass],
+                                                          [gap_1], glazing_system_width, glazing_system_height,
                                                           pywincalc.nfrc_u_environments(), bsdf_hemisphere)
 
-exterior_venetian_shgc_environment = pywincalc.GlazingSystem(
-    [slim_white_pella_venetian_blind, generic_clear_3mm_glass], [gap_1],
-    optical_standard, glazing_system_width, glazing_system_height,
-    pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)
+exterior_venetian_shgc_environment = pywincalc.GlazingSystem(optical_standard,
+                                                             [slim_white_pella_venetian_blind, generic_clear_3mm_glass],
+                                                             [gap_1], glazing_system_width, glazing_system_height,
+                                                             pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)
 
-exterior_perforated_u_environment = pywincalc.GlazingSystem(
-    [solar_comfort_radiant_barrier_perforated_screen, generic_clear_3mm_glass], [gap_1],
-    optical_standard, glazing_system_width, glazing_system_height,
-    pywincalc.nfrc_u_environments(), bsdf_hemisphere)
+exterior_perforated_u_environment = pywincalc.GlazingSystem(optical_standard,
+                                                            [solar_comfort_radiant_barrier_perforated_screen,
+                                                             generic_clear_3mm_glass], [gap_1],
+                                                            glazing_system_width, glazing_system_height,
+                                                            pywincalc.nfrc_u_environments(), bsdf_hemisphere)
 
-exterior_perforated_shgc_environment = pywincalc.GlazingSystem(
-    [solar_comfort_radiant_barrier_perforated_screen, generic_clear_3mm_glass], [gap_1],
-    optical_standard, glazing_system_width, glazing_system_height,
-    pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)
+exterior_perforated_shgc_environment = pywincalc.GlazingSystem(optical_standard,
+                                                               [solar_comfort_radiant_barrier_perforated_screen,
+                                                                generic_clear_3mm_glass], [gap_1],
+                                                               glazing_system_width, glazing_system_height,
+                                                               pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)
 
 exterior_venetian_u = exterior_venetian_u_environment.u()
 print("Exterior venetian U: {v}".format(v=exterior_venetian_u))

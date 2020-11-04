@@ -31,16 +31,17 @@ bsdf_shade = pywincalc.parse_bsdf_xml_file(bsdf_path)
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-glazing_system_u_environment = pywincalc.GlazingSystem([clear_3, bsdf_shade],
+glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard,
+                                                       [clear_3, bsdf_shade],
                                                        [gap_1],
-                                                       optical_standard, glazing_system_width,
+                                                       glazing_system_width,
                                                        glazing_system_height,
                                                        pywincalc.nfrc_u_environments(), bsdf_hemisphere)
 
-glazing_system_shgc_environment = pywincalc.GlazingSystem(
-    [clear_3, bsdf_shade], [gap_1],
-    optical_standard, glazing_system_width, glazing_system_height,
-    pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)
+glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard,
+                                                          [clear_3, bsdf_shade], [gap_1],
+                                                          glazing_system_width, glazing_system_height,
+                                                          pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)
 
 u = glazing_system_u_environment.u()
 print("Exterior venetian U: {u}".format(u=u))

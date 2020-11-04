@@ -48,13 +48,11 @@ gaps = [gap_1, gap_2]
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-glazing_system_triple_layer_u_environment = pywincalc.GlazingSystem(solid_layers, gaps, optical_standard, width,
-                                                                    height)
+glazing_system_triple_layer_u_environment = pywincalc.GlazingSystem(optical_standard, solid_layers, gaps, width, height)
 print("U-value: {u}".format(u=glazing_system_triple_layer_u_environment.u()))
 # If SHGC results for the NFRC SHGC environment are needed create a glazing system with that environment
-glazing_system_triple_layer_shgc_environment = pywincalc.GlazingSystem(solid_layers, gaps, optical_standard, width,
-                                                                       height,
-                                                                       pywincalc.nfrc_shgc_environments())
+glazing_system_triple_layer_shgc_environment = pywincalc.GlazingSystem(optical_standard, solid_layers, gaps, width,
+                                                                       height, pywincalc.nfrc_shgc_environments())
 print("SHGC: {shgc}".format(shgc=glazing_system_triple_layer_shgc_environment.shgc()))
 
 # Get the results the same way as in example_single_clear.py.

@@ -18,21 +18,24 @@ clear_3_path = "products/CLEAR_3.DAT"
 clear_3 = pywincalc.parse_optics_file(clear_3_path)
 
 solid_layers = [clear_3]
-gaps = []  # single layer does not have any gaps
 
 # Create a glazing system using the NFRC U environment in order to get NFRC U results
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-glazing_system_single_layer_u_environment = pywincalc.GlazingSystem(solid_layers, gaps, optical_standard, width,
-                                                                    height)
+glazing_system_single_layer_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                                                    solid_layers=solid_layers,
+                                                                    width_meters=width,
+                                                                    height_meters=height)
 u_value = glazing_system_single_layer_u_environment.u()  # calculate U-value according to ISO15099
 print("Single Layer U-value: {u}".format(u=u_value))
 
 # To calculate SHGC use the NFRC SHGC environments for the glazing system instead
-glazing_system_single_layer_shgc_environment = pywincalc.GlazingSystem(solid_layers, gaps, optical_standard, width,
-                                                                       height,
-                                                                       pywincalc.nfrc_shgc_environments())
+glazing_system_single_layer_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                                                       solid_layers=solid_layers,
+                                                                       width_meters=width,
+                                                                       height_meters=height,
+                                                                       environment=pywincalc.nfrc_shgc_environments())
 shgc_result = glazing_system_single_layer_shgc_environment.shgc()  # calculate SHGC according to ISO15099
 print("Single Layer SHGC: {shgc}".format(shgc=shgc_result))
 
