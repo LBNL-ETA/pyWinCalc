@@ -108,22 +108,6 @@ public:
     PYBIND11_OVERRIDE_PURE(std::vector<double>, wincalc::Product_Data_Optical,
                            wavelengths, );
   }
-#if 0
-  std::shared_ptr<wincalc::Product_Data_Optical> optical_data() override {
-    PYBIND11_OVERRIDE(std::shared_ptr<wincalc::Product_Data_Optical>,
-                      Product_Data_Optical_Base, optical_data, );
-  }
-
-  std::unique_ptr<EffectiveLayers::EffectiveLayer>
-  effective_thermal_values(double width, double height, double gap_width_top,
-                           double gap_width_bottom, double gap_width_left,
-                           double gap_width_right) const override {
-    PYBIND11_OVERRIDE(std::unique_ptr<EffectiveLayers::EffectiveLayer>,
-                      Product_Data_Optical_Base, effective_thermal_values,
-                      width, height, gap_width_top, gap_width_bottom,
-                      gap_width_left, gap_width_right);
-  }
-#endif
 };
 
 #if 0
@@ -323,7 +307,7 @@ PYBIND11_MODULE(pywincalc, m) {
       m, "ProductComposistionData")
       .def(py::init<std::shared_ptr<OpticsParser::ProductData>,
                     std::shared_ptr<OpticsParser::ProductGeometry>>(),
-           py::arg("product_data"), py::arg("product_geometry"))
+           py::arg("solid_layers"), py::arg("product_geometry"))
       .def_readwrite("material",
                      &OpticsParser::CompositionInformation::material)
       .def_readwrite("geometry",
@@ -334,7 +318,7 @@ PYBIND11_MODULE(pywincalc, m) {
       m, "ComposedProductData")
       .def(py::init<OpticsParser::ProductData const &,
                     std::shared_ptr<OpticsParser::CompositionInformation>>(),
-           py::arg("product_data"), py::arg("product_composition_data"))
+           py::arg("solid_layers"), py::arg("product_composition_data"))
       .def(py::init<std::shared_ptr<OpticsParser::CompositionInformation>>(),
            py::arg("product_composition_data"))
       .def("composed_product",
@@ -853,7 +837,7 @@ PYBIND11_MODULE(pywincalc, m) {
                     std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
-           py::arg("optical_standard"), py::arg("product_data"),
+           py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
@@ -871,7 +855,7 @@ PYBIND11_MODULE(pywincalc, m) {
                std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                int>(),
-           py::arg("optical_standard"), py::arg("product_data"),
+           py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
@@ -890,7 +874,7 @@ PYBIND11_MODULE(pywincalc, m) {
                     std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
-           py::arg("optical_standard"), py::arg("product_data"),
+           py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
