@@ -838,7 +838,7 @@ PYBIND11_MODULE(pywincalc, m) {
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
-           py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
+           py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
@@ -856,7 +856,7 @@ PYBIND11_MODULE(pywincalc, m) {
                wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
-           py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
+           py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
@@ -875,7 +875,7 @@ PYBIND11_MODULE(pywincalc, m) {
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
-           py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
+           py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
