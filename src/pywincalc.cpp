@@ -286,19 +286,21 @@ PYBIND11_MODULE(pywincalc, m) {
                      &OpticsParser::PerforatedGeometry::perforationType);
 
   py::class_<OpticsParser::BSDF>(m, "BSDF")
-	  .def_readwrite("data", &OpticsParser::BSDF::data)
-	  .def_readwrite("row_angle_basis_name", &OpticsParser::BSDF::rowAngleBasisName)
-	  .def_readwrite("column_angle_basis_name", &OpticsParser::BSDF::columnAngleBasisName);
+      .def_readwrite("data", &OpticsParser::BSDF::data)
+      .def_readwrite("row_angle_basis_name",
+                     &OpticsParser::BSDF::rowAngleBasisName)
+      .def_readwrite("column_angle_basis_name",
+                     &OpticsParser::BSDF::columnAngleBasisName);
 
   py::class_<OpticsParser::WavelengthBSDFs>(m, "WavelengthBSDFs")
-	  .def_readwrite("transmittance_front", &OpticsParser::WavelengthBSDFs::tf)
-	  .def_readwrite("transmittance_back", &OpticsParser::WavelengthBSDFs::tb)
-	  .def_readwrite("reflectance_front", &OpticsParser::WavelengthBSDFs::rf)
-	  .def_readwrite("reflectance_back", &OpticsParser::WavelengthBSDFs::rb);
+      .def_readwrite("transmittance_front", &OpticsParser::WavelengthBSDFs::tf)
+      .def_readwrite("transmittance_back", &OpticsParser::WavelengthBSDFs::tb)
+      .def_readwrite("reflectance_front", &OpticsParser::WavelengthBSDFs::rf)
+      .def_readwrite("reflectance_back", &OpticsParser::WavelengthBSDFs::rb);
 
   py::class_<OpticsParser::DualBandBSDF>(m, "DualBandBSDF")
-	  .def_readwrite("solar", &OpticsParser::DualBandBSDF::solar)
-	  .def_readwrite("visible", &OpticsParser::DualBandBSDF::visible);
+      .def_readwrite("solar", &OpticsParser::DualBandBSDF::solar)
+      .def_readwrite("visible", &OpticsParser::DualBandBSDF::visible);
 
   py::class_<OpticsParser::ProductData,
              std::shared_ptr<OpticsParser::ProductData>>(m, "ProductData")
@@ -844,16 +846,16 @@ PYBIND11_MODULE(pywincalc, m) {
   m.def("nfrc_shgc_environments", &wincalc::nfrc_shgc_environments);
 
   py::class_<wincalc::Glazing_System>(m, "GlazingSystem")
-      .def(py::init<std::vector<wincalc::Product_Data_Optical_Thermal> const &,
-                    std::vector<wincalc::Engine_Gap_Info> const &,
-                    window_standards::Optical_Standard const &, double, double,
-                    wincalc::Environments const &,
+      .def(py::init<window_standards::Optical_Standard const &,
+                    std::vector<wincalc::Product_Data_Optical_Thermal> const &,
+                    std::vector<wincalc::Engine_Gap_Info> const &, double,
+                    double, wincalc::Environments const &,
                     std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
-           py::arg("product_data"), py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
-           py::arg("optical_standard"), py::arg("width_meters") = 1.0,
-           py::arg("height_meters") = 1.0,
+           py::arg("optical_standard"), py::arg("product_data"),
+           py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
+           py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
                std::optional<SingleLayerOptics::CBSDFHemisphere>(),
@@ -862,16 +864,16 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("number_visible_bands") = 5,
            py::arg("number_solar_bands") = 10)
       .def(py::init<
+               window_standards::Optical_Standard const &,
                std::vector<std::shared_ptr<OpticsParser::ProductData>> const &,
-               std::vector<wincalc::Engine_Gap_Info> const &,
-               window_standards::Optical_Standard const &, double, double,
+               std::vector<wincalc::Engine_Gap_Info> const &, double, double,
                wincalc::Environments const &,
                std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                int>(),
-           py::arg("product_data"), py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
-           py::arg("optical_standard"), py::arg("width_meters") = 1.0,
-           py::arg("height_meters") = 1.0,
+           py::arg("optical_standard"), py::arg("product_data"),
+           py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
+           py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
                std::optional<SingleLayerOptics::CBSDFHemisphere>(),
@@ -879,18 +881,18 @@ PYBIND11_MODULE(pywincalc, m) {
                wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
            py::arg("number_visible_bands") = 5,
            py::arg("number_solar_bands") = 10)
-      .def(py::init<std::vector<std::variant<
+      .def(py::init<window_standards::Optical_Standard const &,
+                    std::vector<std::variant<
                         std::shared_ptr<OpticsParser::ProductData>,
                         wincalc::Product_Data_Optical_Thermal>> const &,
-                    std::vector<wincalc::Engine_Gap_Info> const &,
-                    window_standards::Optical_Standard const &, double, double,
-                    wincalc::Environments const &,
+                    std::vector<wincalc::Engine_Gap_Info> const &, double,
+                    double, wincalc::Environments const &,
                     std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
-           py::arg("product_data"), py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
-           py::arg("optical_standard"), py::arg("width_meters") = 1.0,
-           py::arg("height_meters") = 1.0,
+           py::arg("optical_standard"), py::arg("product_data"),
+           py::arg("gap_data") = std::vector<wincalc::Engine_Gap_Info>(),
+           py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
                std::optional<SingleLayerOptics::CBSDFHemisphere>(),
@@ -940,8 +942,7 @@ PYBIND11_MODULE(pywincalc, m) {
   m.def("parse_optics_file", &OpticsParser::parseOpticsFile,
         "Load product data from optics file");
   m.def("parse_bsdf_xml_file", &OpticsParser::parseBSDFXMLFile,
-	  "Load product data from BSDF xml file");
+        "Load product data from BSDF xml file");
   m.def("parse_bsdf_xml_string", &OpticsParser::parseBSDFXMLString,
-	  "Load product data from BSDF xml string");
-	  
+        "Load product data from BSDF xml string");
 }
