@@ -25,7 +25,7 @@ print("Single Layer SHGC: {shgc}".format(shgc=shgc_results.result))
 print("Single Layer SHGC t_sol: {t}".format(t=shgc_results.t_sol))
 print("Single Layer SHGC solar absorptances per layer: {a}".format(a=shgc_results.layer_solar_absorptances))
 
-thermal_ir_optical_results_single_layer = glazing_system_single_layer.all_method_values(pywincalc.Method_Type.SOLAR)
+thermal_ir_optical_results_single_layer = glazing_system_single_layer.all_method_values(pywincalc.Method_Type.THERMAL_IR)
 print("Finished single layer tir calc")
 print("Single Layer Thermal IR optical transmittance front direct-direct: {r}".format(r=thermal_ir_optical_results_single_layer.direct_direct.tf))
 
