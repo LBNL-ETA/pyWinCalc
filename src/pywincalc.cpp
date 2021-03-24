@@ -16,7 +16,8 @@ void declare_wce_optical_result_simple(py::module &m, std::string typestr) {
       .def_readwrite("direct_direct", &Class::direct_direct)
       .def_readwrite("direct_diffuse", &Class::direct_diffuse)
       .def_readwrite("diffuse_diffuse", &Class::diffuse_diffuse)
-      .def_readwrite("direct_hemispherical", &Class::direct_hemispherical);
+      .def_readwrite("direct_hemispherical", &Class::direct_hemispherical)
+	  .def_readwrite("matrix", &Class::matrix);
 }
 
 template <typename T>
@@ -918,7 +919,7 @@ PYBIND11_MODULE(pywincalc, m) {
   m.def("load_standard",
         py::overload_cast<std::string const &>(
             &window_standards::load_optical_standard),
-        "Load standard from .std.file");
+        "Load standard from .std file");
   m.def("parse_json", &OpticsParser::parseJSONString,
         "Load product data from json string");
   m.def("parse_json_file", &OpticsParser::parseJSONFile,
@@ -929,4 +930,19 @@ PYBIND11_MODULE(pywincalc, m) {
         "Load product data from BSDF xml file");
   m.def("parse_bsdf_xml_string", &OpticsParser::parseBSDFXMLString,
         "Load product data from BSDF xml string");
+  m.def("parse_thmx_file", &thmxParser::parseFile, "Parse a THERM thmx file");
+  m.def("parse_thmx_string", &thmxParser::parseString, "Parse THERM thmx format from a string");
+  
+  m.def("get_spacer_keff", &wincalc::get_spacer_keff, "Calculate the effective conductivity of a spacer from a THERM thmx file.");
+  m.def("get_cma_window_single_vision", &wincalc::get_cma_window_single_vision, "Get the CMA template for a single vision window.");
+  m.def("get_cma_window_double_vision_vertical", &wincalc::get_cma_window_double_vision_vertical, "Get the CMA template for a double vision vertical window.");
+  m.def("get_cma_window_double_vision_horizontal", &wincalc::get_cma_window_double_vision_horizontal, "Get the CMA template for a double vision horizontal window.");
+  
+  py::class_<wincalc::CMAResult>(m, "CMAResult")
+	  .def_readwrite("u",&wincalc::CMAResult::u)
+	  .def_readwrite("shgc", &wincalc::CMAResult::shgc)
+	  .def_readwrite("vt", &wincalc::CMAResult::vt);
+
+  m.def("calc_cma", &wincalc::calc_cma, "Get CMA results.");
+
 }
