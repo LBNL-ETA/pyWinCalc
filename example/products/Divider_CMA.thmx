@@ -1,0 +1,550 @@
+<?xml version="1.0"?>
+<THERM-XML xmlns="http://windows.lbl.gov">
+<ThermVersion>Version 8.0.13.0</ThermVersion>
+<FileVersion>1</FileVersion>
+<SaveDate>2021-03-09T10:46:17</SaveDate>
+
+<Title></Title>
+<CreatedBy></CreatedBy>
+<Company></Company>
+<Client></Client>
+<CrossSectionType>Vertical Divider</CrossSectionType>
+<Notes></Notes>
+<Units>SI</Units>
+<MeshControl MeshLevel="6" ErrorCheckFlag="1" ErrorLimit="10.000000" MaxIterations="3" CMAflag="1" />
+<RadianceModeBC>
+	<RadianceModeInBCName>ShadeInE</RadianceModeInBCName>
+	<RadianceModeInBCTag>ShadeInETag</RadianceModeInBCTag>
+	<RadianceModeOutBCName>ShadeOutE</RadianceModeOutBCName>
+	<RadianceModeOutBCTag>ShadeOutETag</RadianceModeOutBCTag>
+</RadianceModeBC>
+<CMAGlazingSystemSettings>
+	<InteriorLayerConductivity>1.000000</InteriorLayerConductivity>
+	<InteriorLayerThickness>6.000000</InteriorLayerThickness>
+	<InteriorLayerEmissivity>0.840000</InteriorLayerEmissivity>
+	<ExteriorLayerConductivity>1.000000</ExteriorLayerConductivity>
+	<ExteriorLayerThickness>6.000000</ExteriorLayerThickness>
+	<ExteriorLayerEmissivity>0.840000</ExteriorLayerEmissivity>
+	<InteriorTemperature>21.000000</InteriorTemperature>
+	<ExteriorTemperature>-18.000000</ExteriorTemperature>
+	<BestWorstOptions>
+		<Case>Low</Case>
+		<InsideEffectiveFilmCoefficient>1.854252</InsideEffectiveFilmCoefficient>
+		<OutsideEffectiveFilmCoefficient>26.000000</OutsideEffectiveFilmCoefficient>
+		<GlazingGapConductance>0.498817</GlazingGapConductance>
+		<SpacerConductance>0.010000</SpacerConductance>
+	</BestWorstOptions>
+	<BestWorstOptions>
+		<Case>High</Case>
+		<InsideEffectiveFilmCoefficient>2.866122</InsideEffectiveFilmCoefficient>
+		<OutsideEffectiveFilmCoefficient>26.000000</OutsideEffectiveFilmCoefficient>
+		<GlazingGapConductance>5.880546</GlazingGapConductance>
+		<SpacerConductance>10.000000</SpacerConductance>
+	</BestWorstOptions>
+</CMAGlazingSystemSettings>
+<Materials>
+	<Material Name="CMAGlazing_Glass_0" Index="1" Type="0" Conductivity="1.000000" Tir="0.000000" EmissivityFront="0.900000" EmissivityBack="0.900000" RGBColor="0x00FFFF">
+		<Property Side="Front" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+	</Material>
+	<Material Name="CMAGlazing_Gap_0" Index="2" Type="0" Conductivity="0.078799" Tir="0.000000" EmissivityFront="0.900000" EmissivityBack="0.900000" RGBColor="0xC0C0C0">
+		<Property Side="Front" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+	</Material>
+	<Material Name="_CMASpacer_" Index="3" Type="0" Conductivity="0.010000" Tir="0.000000" EmissivityFront="0.900000" EmissivityBack="0.900000" RGBColor="0xA2A2A2">
+		<Property Side="Front" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+	</Material>
+	<Material Name="CMAGlazing_Glass_1" Index="4" Type="0" Conductivity="1.000000" Tir="0.000000" EmissivityFront="0.900000" EmissivityBack="0.900000" RGBColor="0x00FFFF">
+		<Property Side="Front" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+	</Material>
+	<Material Name="CMAGlazing_Glass_2" Index="5" Type="0" Conductivity="1.000000" Tir="0.000000" EmissivityFront="0.900000" EmissivityBack="0.900000" RGBColor="0x00FFFF">
+		<Property Side="Front" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+	</Material>
+	<Material Name="CMAGlazing_Gap_1" Index="6" Type="0" Conductivity="0.078799" Tir="0.000000" EmissivityFront="0.900000" EmissivityBack="0.900000" RGBColor="0xC0C0C0">
+		<Property Side="Front" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+	</Material>
+	<Material Name="CMAGlazing_Glass_3" Index="7" Type="0" Conductivity="1.000000" Tir="0.000000" EmissivityFront="0.900000" EmissivityBack="0.900000" RGBColor="0x00FFFF">
+		<Property Side="Front" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+	</Material>
+</Materials>
+<BoundaryConditions>
+	<BoundaryCondition Name="Adiabatic" Type="0" H="0.000000" HeatFLux="0.000000" Temperature="0.000000" RGBColor="0x000000" 
+		Tr="0.000000" Hr="0.000000" Ei="1.000000" Viewfactor="1.000000" RadiationModel="0"
+		ConvectionFlag="0" FluxFlag="1" RadiationFlag="0" ConstantTemperatureFlag="0" EmisModifier="1.000000" />
+	<BoundaryCondition Name="Divider_CMA:CMAGlazing (ID:0) U-factor Inside Film" Type="1" H="1.854252" HeatFLux="0.000000" Temperature="21.000000" RGBColor="0xFF0000" 
+		Tr="21.000000" Hr="4.650000" Ei="1.000000" Viewfactor="1.000000" RadiationModel="3"
+		ConvectionFlag="1" FluxFlag="0" RadiationFlag="1" ConstantTemperatureFlag="0" EmisModifier="1.000000" />
+	<BoundaryCondition Name="NFRC 100-2010 Exterior" Type="1" H="26.000000" HeatFLux="0.000000" Temperature="-18.000000" RGBColor="0x0080C0" 
+		Tr="-18.000000" Hr="-431602080.000000" Ei="1.000000" Viewfactor="1.000000" RadiationModel="1"
+		ConvectionFlag="1" FluxFlag="0" RadiationFlag="1" ConstantTemperatureFlag="0" EmisModifier="1.000000" />
+</BoundaryConditions>
+<GlazingSystems>
+<GlazingSystem index="1" nlayers="2" width="25.400000" units="mm"/>
+<GlazingSystem index="2" nlayers="2" width="25.400000" units="mm"/>
+</GlazingSystems>
+<Polygons>
+	<Polygon ID="26" Material="CMAGlazing_Glass_0" NSides="6" Type="11" units="mm">
+		<Point index="0" x="250.000000" y="-250.000000" />
+		<Point index="1" x="253.000000" y="-250.000000" />
+		<Point index="2" x="256.000000" y="-250.000000" />
+		<Point index="3" x="256.000000" y="-238.888000" />
+		<Point index="4" x="256.000000" y="-88.888000" />
+		<Point index="5" x="250.000000" y="-88.888000" />
+	</Polygon>
+	<Polygon ID="32" Material="CMAGlazing_Gap_0" NSides="4" Type="5" units="mm">
+		<Point index="0" x="256.000000" y="-238.888000" />
+		<Point index="1" x="269.399994" y="-238.888000" />
+		<Point index="2" x="269.399994" y="-88.888000" />
+		<Point index="3" x="256.000000" y="-88.888000" />
+	</Polygon>
+	<Polygon ID="46" Material="_CMASpacer_" NSides="4" Type="7" units="mm">
+		<Point index="0" x="256.000000" y="-250.000000" />
+		<Point index="1" x="269.399994" y="-250.000000" />
+		<Point index="2" x="269.399994" y="-238.888000" />
+		<Point index="3" x="256.000000" y="-238.888000" />
+	</Polygon>
+	<Polygon ID="47" Material="CMAGlazing_Glass_1" NSides="8" Type="9" units="mm">
+		<Point index="0" x="269.399994" y="-250.000000" />
+		<Point index="1" x="272.455994" y="-250.000000" />
+		<Point index="2" x="275.399994" y="-250.000000" />
+		<Point index="3" x="275.399994" y="-238.888000" />
+		<Point index="4" x="275.399994" y="-175.388000" />
+		<Point index="5" x="275.399994" y="-88.888000" />
+		<Point index="6" x="269.399994" y="-88.888000" />
+		<Point index="7" x="269.399994" y="-238.888000" />
+	</Polygon>
+	<Polygon ID="51" Material="CMAGlazing_Glass_2" NSides="6" Type="11" units="mm">
+		<Point index="0" x="250.000000" y="-250.000000" />
+		<Point index="1" x="250.000000" y="-411.112000" />
+		<Point index="2" x="256.000000" y="-411.112000" />
+		<Point index="3" x="256.000000" y="-261.112000" />
+		<Point index="4" x="256.000000" y="-250.000000" />
+		<Point index="5" x="253.000000" y="-250.000000" />
+	</Polygon>
+	<Polygon ID="52" Material="CMAGlazing_Gap_1" NSides="6" Type="5" units="mm">
+		<Point index="0" x="256.000000" y="-250.000000" />
+		<Point index="1" x="256.000000" y="-261.112000" />
+		<Point index="2" x="256.000000" y="-411.112000" />
+		<Point index="3" x="269.399994" y="-411.112000" />
+		<Point index="4" x="269.399994" y="-261.112000" />
+		<Point index="5" x="269.399994" y="-250.000000" />
+	</Polygon>
+	<Polygon ID="53" Material="CMAGlazing_Glass_3" NSides="8" Type="9" units="mm">
+		<Point index="0" x="269.399994" y="-250.000000" />
+		<Point index="1" x="269.399994" y="-261.112000" />
+		<Point index="2" x="269.399994" y="-411.112000" />
+		<Point index="3" x="275.399994" y="-411.112000" />
+		<Point index="4" x="275.399994" y="-324.612000" />
+		<Point index="5" x="275.399994" y="-261.112000" />
+		<Point index="6" x="275.399994" y="-250.000000" />
+		<Point index="7" x="272.455994" y="-250.000000" />
+	</Polygon>
+</Polygons>
+<Boundaries>
+	<BCPolygon ID="56" BC="Adiabatic" units="mm" MaterialName="CMAGlazing" PolygonID="51" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="250.000000" y="-411.112000" />
+		<Point index="1" x="256.000000" y="-411.112000" />
+	</BCPolygon>
+	<BCPolygon ID="1" BC="Adiabatic" units="mm" MaterialName="CMAGlazing" PolygonID="52" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="256.000000" y="-411.112000" />
+		<Point index="1" x="269.399994" y="-411.112000" />
+	</BCPolygon>
+	<BCPolygon ID="4" BC="Adiabatic" units="mm" MaterialName="CMAGlazing" PolygonID="53" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="269.399994" y="-411.112000" />
+		<Point index="1" x="275.399994" y="-411.112000" />
+	</BCPolygon>
+	<BCPolygon ID="5" BC="Divider_CMA:CMAGlazing (ID:0) U-factor Inside Film" units="mm" MaterialName="CMAGlazing" PolygonID="53" EnclosureID="0" UFactorTag="" Emissivity="0.840000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="275.399994" y="-411.112000" />
+		<Point index="1" x="275.399994" y="-324.612000" />
+	</BCPolygon>
+	<BCPolygon ID="6" BC="Divider_CMA:CMAGlazing (ID:0) U-factor Inside Film" units="mm" MaterialName="CMAGlazing" PolygonID="53" EnclosureID="0" UFactorTag="Edge" Emissivity="0.840000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="275.399994" y="-324.612000" />
+		<Point index="1" x="275.399994" y="-261.112000" />
+	</BCPolygon>
+	<BCPolygon ID="7" BC="Divider_CMA:CMAGlazing (ID:0) U-factor Inside Film" units="mm" MaterialName="CMAGlazing" PolygonID="53" EnclosureID="0" UFactorTag="Frame" Emissivity="0.840000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="275.399994" y="-261.112000" />
+		<Point index="1" x="275.399994" y="-250.000000" />
+	</BCPolygon>
+	<BCPolygon ID="8" BC="Divider_CMA:CMAGlazing (ID:0) U-factor Inside Film" units="mm" MaterialName="CMAGlazing" PolygonID="47" EnclosureID="0" UFactorTag="Frame" Emissivity="0.840000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="275.399994" y="-250.000000" />
+		<Point index="1" x="275.399994" y="-238.888000" />
+	</BCPolygon>
+	<BCPolygon ID="9" BC="Divider_CMA:CMAGlazing (ID:0) U-factor Inside Film" units="mm" MaterialName="CMAGlazing" PolygonID="47" EnclosureID="0" UFactorTag="Edge" Emissivity="0.840000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="275.399994" y="-238.888000" />
+		<Point index="1" x="275.399994" y="-175.388000" />
+	</BCPolygon>
+	<BCPolygon ID="10" BC="Divider_CMA:CMAGlazing (ID:0) U-factor Inside Film" units="mm" MaterialName="CMAGlazing" PolygonID="47" EnclosureID="0" UFactorTag="" Emissivity="0.840000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="275.399994" y="-175.388000" />
+		<Point index="1" x="275.399994" y="-88.888000" />
+	</BCPolygon>
+	<BCPolygon ID="11" BC="Adiabatic" units="mm" MaterialName="CMAGlazing" PolygonID="47" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="275.399994" y="-88.888000" />
+		<Point index="1" x="269.399994" y="-88.888000" />
+	</BCPolygon>
+	<BCPolygon ID="12" BC="Adiabatic" units="mm" MaterialName="CMAGlazing" PolygonID="32" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="269.399994" y="-88.888000" />
+		<Point index="1" x="256.000000" y="-88.888000" />
+	</BCPolygon>
+	<BCPolygon ID="13" BC="Adiabatic" units="mm" MaterialName="CMAGlazing" PolygonID="26" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="256.000000" y="-88.888000" />
+		<Point index="1" x="250.000000" y="-88.888000" />
+	</BCPolygon>
+	<BCPolygon ID="14" BC="NFRC 100-2010 Exterior" units="mm" MaterialName="CMAGlazing" PolygonID="26" EnclosureID="0" UFactorTag="" Emissivity="0.840000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="250.000000" y="-88.888000" />
+		<Point index="1" x="250.000000" y="-250.000000" />
+	</BCPolygon>
+	<BCPolygon ID="15" BC="NFRC 100-2010 Exterior" units="mm" MaterialName="CMAGlazing" PolygonID="51" EnclosureID="0" UFactorTag="" Emissivity="0.840000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="250.000000" y="-250.000000" />
+		<Point index="1" x="250.000000" y="-411.112000" />
+	</BCPolygon>
+</Boundaries>
+<Results>
+	<Case>
+		<ModelType>CMA</ModelType>
+		<GlazingCase>Low</GlazingCase>
+		<SpacerCase>Low</SpacerCase>
+		<U-factors>
+			<Tag>Frame</Tag>
+			<DeltaT units="C" value="39.000000" />
+			<Projection>
+				<Length-type>Total length</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="0.483948" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected X</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected Y</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="0.483948" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom length</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected in glass plane</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="0.483948" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom rotation</Length-type>
+				<Length units="mm" value="0.000000" />
+				<ProjectionAngle>1.570796</ProjectionAngle>
+				<U-factor value="NA" />
+			</Projection>
+		</U-factors>
+		<U-factors>
+			<Tag>Edge</Tag>
+			<DeltaT units="C" value="39.000000" />
+			<Projection>
+				<Length-type>Total length</Length-type>
+				<Length units="mm" value="127.000000" />
+				<U-factor units="W/m2-K" value="0.465352" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected X</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected Y</Length-type>
+				<Length units="mm" value="127.000000" />
+				<U-factor units="W/m2-K" value="0.465352" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom length</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected in glass plane</Length-type>
+				<Length units="mm" value="126.999985" />
+				<U-factor units="W/m2-K" value="0.465352" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom rotation</Length-type>
+				<Length units="mm" value="0.000031" />
+				<ProjectionAngle>1.570796</ProjectionAngle>
+				<U-factor units="W/m2-K" value="1936580.500000" />
+			</Projection>
+		</U-factors>
+	</Case>
+	<Case>
+		<ModelType>CMA</ModelType>
+		<GlazingCase>Low</GlazingCase>
+		<SpacerCase>High</SpacerCase>
+		<U-factors>
+			<Tag>Frame</Tag>
+			<DeltaT units="C" value="39.000000" />
+			<Projection>
+				<Length-type>Total length</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="3.463200" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected X</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected Y</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="3.463200" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom length</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected in glass plane</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="3.463200" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom rotation</Length-type>
+				<Length units="mm" value="0.000000" />
+				<ProjectionAngle>1.570796</ProjectionAngle>
+				<U-factor value="NA" />
+			</Projection>
+		</U-factors>
+		<U-factors>
+			<Tag>Edge</Tag>
+			<DeltaT units="C" value="39.000000" />
+			<Projection>
+				<Length-type>Total length</Length-type>
+				<Length units="mm" value="127.000000" />
+				<U-factor units="W/m2-K" value="1.632364" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected X</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected Y</Length-type>
+				<Length units="mm" value="127.000000" />
+				<U-factor units="W/m2-K" value="1.632364" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom length</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected in glass plane</Length-type>
+				<Length units="mm" value="126.999985" />
+				<U-factor units="W/m2-K" value="1.632365" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom rotation</Length-type>
+				<Length units="mm" value="0.000031" />
+				<ProjectionAngle>1.570796</ProjectionAngle>
+				<U-factor units="W/m2-K" value="6793142.500000" />
+			</Projection>
+		</U-factors>
+	</Case>
+	<Case>
+		<ModelType>CMA</ModelType>
+		<GlazingCase>High</GlazingCase>
+		<SpacerCase>Low</SpacerCase>
+		<U-factors>
+			<Tag>Frame</Tag>
+			<DeltaT units="C" value="39.000000" />
+			<Projection>
+				<Length-type>Total length</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="2.594573" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected X</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected Y</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="2.594573" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom length</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected in glass plane</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="2.594573" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom rotation</Length-type>
+				<Length units="mm" value="0.000000" />
+				<ProjectionAngle>1.570796</ProjectionAngle>
+				<U-factor value="NA" />
+			</Projection>
+		</U-factors>
+		<U-factors>
+			<Tag>Edge</Tag>
+			<DeltaT units="C" value="39.000000" />
+			<Projection>
+				<Length-type>Total length</Length-type>
+				<Length units="mm" value="127.000000" />
+				<U-factor units="W/m2-K" value="2.767959" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected X</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected Y</Length-type>
+				<Length units="mm" value="127.000000" />
+				<U-factor units="W/m2-K" value="2.767959" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom length</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected in glass plane</Length-type>
+				<Length units="mm" value="126.999985" />
+				<U-factor units="W/m2-K" value="2.767959" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom rotation</Length-type>
+				<Length units="mm" value="0.000031" />
+				<ProjectionAngle>1.570796</ProjectionAngle>
+				<U-factor units="W/m2-K" value="11518960.000000" />
+			</Projection>
+		</U-factors>
+	</Case>
+	<Case>
+		<ModelType>CMA</ModelType>
+		<GlazingCase>High</GlazingCase>
+		<SpacerCase>High</SpacerCase>
+		<U-factors>
+			<Tag>Frame</Tag>
+			<DeltaT units="C" value="39.000000" />
+			<Projection>
+				<Length-type>Total length</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="4.443176" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected X</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected Y</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="4.443176" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom length</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected in glass plane</Length-type>
+				<Length units="mm" value="22.223999" />
+				<U-factor units="W/m2-K" value="4.443176" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom rotation</Length-type>
+				<Length units="mm" value="0.000000" />
+				<ProjectionAngle>1.570796</ProjectionAngle>
+				<U-factor value="NA" />
+			</Projection>
+		</U-factors>
+		<U-factors>
+			<Tag>Edge</Tag>
+			<DeltaT units="C" value="39.000000" />
+			<Projection>
+				<Length-type>Total length</Length-type>
+				<Length units="mm" value="127.000000" />
+				<U-factor units="W/m2-K" value="3.322088" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected X</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected Y</Length-type>
+				<Length units="mm" value="127.000000" />
+				<U-factor units="W/m2-K" value="3.322088" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom length</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected in glass plane</Length-type>
+				<Length units="mm" value="126.999985" />
+				<U-factor units="W/m2-K" value="3.322088" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom rotation</Length-type>
+				<Length units="mm" value="0.000031" />
+				<ProjectionAngle>1.570796</ProjectionAngle>
+				<U-factor units="W/m2-K" value="13824988.000000" />
+			</Projection>
+		</U-factors>
+	</Case>
+</Results>
+</THERM-XML>

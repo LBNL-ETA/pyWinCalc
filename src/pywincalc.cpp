@@ -17,7 +17,7 @@ void declare_wce_optical_result_simple(py::module &m, std::string typestr) {
       .def_readwrite("direct_diffuse", &Class::direct_diffuse)
       .def_readwrite("diffuse_diffuse", &Class::diffuse_diffuse)
       .def_readwrite("direct_hemispherical", &Class::direct_hemispherical)
-	  .def_readwrite("matrix", &Class::matrix);
+      .def_readwrite("matrix", &Class::matrix);
 }
 
 template <typename T>
@@ -931,18 +931,249 @@ PYBIND11_MODULE(pywincalc, m) {
   m.def("parse_bsdf_xml_string", &OpticsParser::parseBSDFXMLString,
         "Load product data from BSDF xml string");
   m.def("parse_thmx_file", &thmxParser::parseFile, "Parse a THERM thmx file");
-  m.def("parse_thmx_string", &thmxParser::parseString, "Parse THERM thmx format from a string");
-  
-  m.def("get_spacer_keff", &wincalc::get_spacer_keff, "Calculate the effective conductivity of a spacer from a THERM thmx file.");
-  m.def("get_cma_window_single_vision", &wincalc::get_cma_window_single_vision, "Get the CMA template for a single vision window.");
-  m.def("get_cma_window_double_vision_vertical", &wincalc::get_cma_window_double_vision_vertical, "Get the CMA template for a double vision vertical window.");
-  m.def("get_cma_window_double_vision_horizontal", &wincalc::get_cma_window_double_vision_horizontal, "Get the CMA template for a double vision horizontal window.");
-  
+  m.def("parse_thmx_string", &thmxParser::parseString,
+        "Parse THERM thmx format from a string");
+
+  py::class_<thmxParser::MeshParameters>(m, "ThmxMeshParameters")
+      .def_readwrite("quad_tree_mesh_level",
+                     &thmxParser::MeshParameters::quadTreeMeshLevel)
+      .def_readwrite("error_check_flag",
+                     &thmxParser::MeshParameters::errorCheckFlag)
+      .def_readwrite("error_limit", &thmxParser::MeshParameters::errorLimit)
+      .def_readwrite("max_iterations",
+                     &thmxParser::MeshParameters::maxIterations)
+      .def_readwrite("cma_flag", &thmxParser::MeshParameters::cmaFlag);
+
+  py::class_<thmxParser::ColorRGB>(m, "ThmxRGB")
+      .def_readwrite("r", &thmxParser::ColorRGB::r)
+      .def_readwrite("g", &thmxParser::ColorRGB::g)
+      .def_readwrite("b", &thmxParser::ColorRGB::b);
+
+  py::class_<thmxParser::Material>(m, "ThmxMaterial")
+      .def_readwrite("name", &thmxParser::Material::name)
+      .def_readwrite("type", &thmxParser::Material::type)
+      .def_readwrite("conductivity", &thmxParser::Material::conductivity)
+      .def_readwrite("emissivity_front", &thmxParser::Material::emissivityFront)
+      .def_readwrite("emissivity_back", &thmxParser::Material::emissivityBack)
+      .def_readwrite("tir", &thmxParser::Material::tir)
+      .def_readwrite("color", &thmxParser::Material::color)
+      .def_readwrite("cavity_model", &thmxParser::Material::cavityModel)
+      .def_readwrite("transmittances", &thmxParser::Material::transmittances)
+      .def_readwrite("reflectances", &thmxParser::Material::reflectances);
+
+  py::class_<thmxParser::BoundaryCondition>(m, "ThmxBoundaryCondition")
+      .def_readwrite("name", &thmxParser::BoundaryCondition::name)
+      .def_readwrite("type", &thmxParser::BoundaryCondition::type)
+      .def_readwrite("H", &thmxParser::BoundaryCondition::H)
+      .def_readwrite("heat_flux", &thmxParser::BoundaryCondition::heatFlux)
+      .def_readwrite("temperature", &thmxParser::BoundaryCondition::temperature)
+      .def_readwrite("color", &thmxParser::BoundaryCondition::color)
+      .def_readwrite("Tr", &thmxParser::BoundaryCondition::Tr)
+      .def_readwrite("Hr", &thmxParser::BoundaryCondition::Hr)
+      .def_readwrite("Ei", &thmxParser::BoundaryCondition::Ei)
+      .def_readwrite("view_factor", &thmxParser::BoundaryCondition::viewFactor)
+      .def_readwrite("radiation_model",
+                     &thmxParser::BoundaryCondition::radiationModel)
+      .def_readwrite("convection_flag",
+                     &thmxParser::BoundaryCondition::convectionFlag)
+      .def_readwrite("flux_flag", &thmxParser::BoundaryCondition::fluxFlag)
+      .def_readwrite("radiation_flag",
+                     &thmxParser::BoundaryCondition::radiationFlag)
+      .def_readwrite("constant_temperature_flag",
+                     &thmxParser::BoundaryCondition::constantTemperatureFlag)
+      .def_readwrite("emissivity_modifier",
+                     &thmxParser::BoundaryCondition::emissivityModifier);
+
+  py::class_<thmxParser::PolygonPoint>(m, "ThmxPolygonPoint")
+      .def_readwrite("index", &thmxParser::PolygonPoint::index)
+      .def_readwrite("x", &thmxParser::PolygonPoint::x)
+      .def_readwrite("y", &thmxParser::PolygonPoint::y);
+
+  py::class_<thmxParser::Polygon>(m, "ThmxPolygon")
+      .def_readwrite("id", &thmxParser::Polygon::id)
+      .def_readwrite("material", &thmxParser::Polygon::material)
+      .def_readwrite("points", &thmxParser::Polygon::points);
+
+  py::class_<thmxParser::BoundaryConditionPolygon>(
+      m, "ThmxBoundaryConditionPolygon")
+      .def_readwrite("id", &thmxParser::BoundaryConditionPolygon::id)
+      .def_readwrite("name", &thmxParser::BoundaryConditionPolygon::name)
+      .def_readwrite("polygon_id",
+                     &thmxParser::BoundaryConditionPolygon::polygonId)
+      .def_readwrite("enclosure_id",
+                     &thmxParser::BoundaryConditionPolygon::enclosureId)
+      .def_readwrite("ufactor_tag",
+                     &thmxParser::BoundaryConditionPolygon::ufactorTag)
+      .def_readwrite("ratation_model",
+                     &thmxParser::BoundaryConditionPolygon::ratationModel)
+      .def_readwrite("emissivity",
+                     &thmxParser::BoundaryConditionPolygon::emissivity)
+      .def_readwrite("surfaceSide",
+                     &thmxParser::BoundaryConditionPolygon::surfaceSide)
+      .def_readwrite("illuminated_surface",
+                     &thmxParser::BoundaryConditionPolygon::illuminatedSurface)
+      .def_readwrite("points", &thmxParser::BoundaryConditionPolygon::points);
+
+  py::class_<thmxParser::CMABestWorstOption>(m, "ThmxCMABestWorstOption")
+      .def_readwrite("option", &thmxParser::CMABestWorstOption::option)
+      .def_readwrite(
+          "inside_convective_film_coefficient",
+          &thmxParser::CMABestWorstOption::insideConvectiveFilmCoefficient)
+      .def_readwrite(
+          "outside_convective_film_coefficient",
+          &thmxParser::CMABestWorstOption::outsideConvectiveFilmCoefficient)
+      .def_readwrite("glazing_gap_conductance",
+                     &thmxParser::CMABestWorstOption::glazingGapConductance)
+      .def_readwrite("spacer_conductance",
+                     &thmxParser::CMABestWorstOption::spacerConductance);
+
+  py::class_<thmxParser::CMAOptions>(m, "ThmxCMAOptions")
+      .def_readwrite("interior_layer_conductivity",
+                     &thmxParser::CMAOptions::interiorLayerConductivity)
+      .def_readwrite("interior_layer_thickness",
+                     &thmxParser::CMAOptions::interiorLayerThickness)
+      .def_readwrite("interior_layer_emissivity",
+                     &thmxParser::CMAOptions::interiorLayerEmissivity)
+      .def_readwrite("exterior_layer_conductivity",
+                     &thmxParser::CMAOptions::exteriorLayerConductivity)
+      .def_readwrite("exterior_layer_thickness",
+                     &thmxParser::CMAOptions::exteriorLayerThickness)
+      .def_readwrite("exterior_layer_emissivity",
+                     &thmxParser::CMAOptions::exteriorLayerEmissivity)
+      .def_readwrite("interior_temperature",
+                     &thmxParser::CMAOptions::interiorTemperature)
+      .def_readwrite("exterior_temperature",
+                     &thmxParser::CMAOptions::exteriorTemperature)
+      .def_readwrite("best_worst_options",
+                     &thmxParser::CMAOptions::bestWorstOptions);
+
+  py::class_<thmxParser::UFactorProjectionResult>(m,
+                                                  "ThmxUFactorProjectionResult")
+      .def_readwrite("length_type",
+                     &thmxParser::UFactorProjectionResult::lengthType)
+      .def_readwrite("length_units",
+                     &thmxParser::UFactorProjectionResult::lengthUnits)
+      .def_readwrite("length", &thmxParser::UFactorProjectionResult::length)
+      .def_readwrite("ufactor_units",
+                     &thmxParser::UFactorProjectionResult::ufactorUnits)
+      .def_readwrite("ufactor", &thmxParser::UFactorProjectionResult::ufactor);
+
+  py::class_<thmxParser::UFactorResults>(m, "ThmxUFactorResults")
+      .def_readwrite("tag", &thmxParser::UFactorResults::tag)
+      .def_readwrite("delta_t_units", &thmxParser::UFactorResults::deltaTUnits)
+      .def_readwrite("delta_t", &thmxParser::UFactorResults::deltaT)
+      .def_readwrite("projection_results",
+                     &thmxParser::UFactorResults::projectionResults);
+
+  py::class_<thmxParser::Result>(m, "ThmxResult")
+      .def_readwrite("model_type", &thmxParser::Result::modelType)
+      .def_readwrite("glazing_case", &thmxParser::Result::glazingCase)
+      .def_readwrite("spacer_case", &thmxParser::Result::spacerCase)
+      .def_readwrite("ufactor_results", &thmxParser::Result::ufactorResults);
+
+  py::class_<thmxParser::ThmxFileContents>(m, "ThmxFileContents")
+      .def_readwrite("file_version", &thmxParser::ThmxFileContents::fileVersion)
+      .def_readwrite("mesh_parameters",
+                     &thmxParser::ThmxFileContents::meshParameters)
+      .def_readwrite("materials", &thmxParser::ThmxFileContents::materials)
+      .def_readwrite("boundary_conditions",
+                     &thmxParser::ThmxFileContents::boundaryConditions)
+      .def_readwrite("polygons", &thmxParser::ThmxFileContents::polygons)
+      .def_readwrite("boundary_condition_polygons",
+                     &thmxParser::ThmxFileContents::boundaryConditionPolygons)
+      .def_readwrite("cma_options", &thmxParser::ThmxFileContents::cmaOptions)
+      .def_readwrite("results", &thmxParser::ThmxFileContents::results);
+
+  py::class_<CMA::ICMAWindow, std::shared_ptr<CMA::ICMAWindow>>(m, "ICMAWindow")
+      .def("u", &CMA::ICMAWindow::uValue)
+      .def("shgc", &CMA::ICMAWindow::shgc)
+      .def("vt", &CMA::ICMAWindow::vt);
+
+  py::class_<CMA::CMABestWorstUFactors, std::shared_ptr<CMA::CMABestWorstUFactors>>(m, "CMABestWorstUFactors")
+	  .def(py::init<>())
+	  .def(py::init<double, double, double >())
+	  .def(py::init<double, double, double, double, double, double, double, double, double, double, double >())
+	  .def("u", &CMA::CMABestWorstUFactors::uValue)
+	  .def("hc_out", &CMA::CMABestWorstUFactors::hcout);
+
+  m.def("create_best_worst_u_factor_option", &CMA::CreateBestWorstUFactorOption);
+
+  py::class_<CMA::CMAWindowSingleVision, CMA::ICMAWindow,
+             std::shared_ptr<CMA::CMAWindowSingleVision>>(
+      m, "CMAWindowSingleVision")
+      .def(py::init<double, double, double, double, CMA::CMABestWorstUFactors,
+                    CMA::CMABestWorstUFactors>(),
+           py::arg("width"), py::arg("height"),
+           py::arg("spacer_best_keff") = 0.01,
+           py::arg("spacer_worst_keff") = 10.0,
+           py::arg("best_u_factor_options") =
+               CMA::CreateBestWorstUFactorOption(CMA::Option::Best),
+           py::arg("worst_u_factor_options") =
+               CMA::CreateBestWorstUFactorOption(CMA::Option::Worst))
+	  .def("set_frame_top", &CMA::CMAWindowSingleVision::setFrameTop)
+	  .def("set_frame_bottom", &CMA::CMAWindowSingleVision::setFrameBottom)
+	  .def("set_frame_left", &CMA::CMAWindowSingleVision::setFrameLeft)
+	  .def("set_frame_right", &CMA::CMAWindowSingleVision::setFrameRight)
+	  .def("set_dividers", &CMA::CMAWindowSingleVision::setDividers);
+
+  py::class_<CMA::CMAWindowDualVisionHorizontal, CMA::ICMAWindow,
+	  std::shared_ptr<CMA::CMAWindowDualVisionHorizontal>>(
+		  m, "CMAWindowDualVisionHorizontal")
+	  .def(py::init<double, double, double, double, CMA::CMABestWorstUFactors,
+		  CMA::CMABestWorstUFactors>(),
+		  py::arg("width"), py::arg("height"),
+		  py::arg("spacer_best_keff") = 0.01,
+		  py::arg("spacer_worst_keff") = 10.0,
+		  py::arg("best_u_factor_options") =
+		  CMA::CreateBestWorstUFactorOption(CMA::Option::Best),
+		  py::arg("worst_u_factor_options") =
+		  CMA::CreateBestWorstUFactorOption(CMA::Option::Worst))
+	  .def("set_frame_top_left", &CMA::CMAWindowDualVisionHorizontal::setFrameTopLeft)
+	  .def("set_frame_top_right", &CMA::CMAWindowDualVisionHorizontal::setFrameTopRight)
+	  .def("set_frame_bottom_left", &CMA::CMAWindowDualVisionHorizontal::setFrameBottomLeft)
+	  .def("set_frame_bottom_right", &CMA::CMAWindowDualVisionHorizontal::setFrameBottomRight)
+	  .def("set_frame_left", &CMA::CMAWindowDualVisionHorizontal::setFrameLeft)
+	  .def("set_frame_right", &CMA::CMAWindowDualVisionHorizontal::setFrameRight)
+	  .def("set_frame_meeting_rail", &CMA::CMAWindowDualVisionHorizontal::setFrameMeetingRail)
+	  .def("set_dividers", &CMA::CMAWindowDualVisionHorizontal::setDividers);
+
+  py::class_<CMA::CMAWindowDualVisionVertical, CMA::ICMAWindow,
+	  std::shared_ptr<CMA::CMAWindowDualVisionVertical>>(
+		  m, "CMAWindowDualVisionVertical")
+	  .def(py::init<double, double, double, double, CMA::CMABestWorstUFactors,
+		  CMA::CMABestWorstUFactors>(),
+		  py::arg("width"), py::arg("height"),
+		  py::arg("spacer_best_keff") = 0.01,
+		  py::arg("spacer_worst_keff") = 10.0,
+		  py::arg("best_u_factor_options") =
+		  CMA::CreateBestWorstUFactorOption(CMA::Option::Best),
+		  py::arg("worst_u_factor_options") =
+		  CMA::CreateBestWorstUFactorOption(CMA::Option::Worst))
+	  .def("set_frame_top", &CMA::CMAWindowDualVisionVertical::setFrameTop)	  
+	  .def("set_frame_bottom", &CMA::CMAWindowDualVisionVertical::setFrameBottom)	  
+	  .def("set_frame_top_left", &CMA::CMAWindowDualVisionVertical::setFrameTopLeft)
+	  .def("set_frame_top_right", &CMA::CMAWindowDualVisionVertical::setFrameTopRight)
+	  .def("set_frame_bottom_left", &CMA::CMAWindowDualVisionVertical::setFrameBottomLeft)
+	  .def("set_frame_bottom_right", &CMA::CMAWindowDualVisionVertical::setFrameBottomRight)
+	  .def("set_frame_meeting_rail", &CMA::CMAWindowDualVisionVertical::setFrameMeetingRail)
+	  .def("set_dividers", &CMA::CMAWindowDualVisionVertical::setDividers);
+
+  m.def("get_spacer_keff", &wincalc::get_spacer_keff,
+        "Calculate the effective conductivity of a spacer from a THERM thmx "
+        "file.");
+  m.def("get_cma_window_single_vision", &wincalc::get_cma_window_single_vision,
+        "Get the CMA template for a single vision window.");
+  m.def("get_cma_window_double_vision_vertical",
+        &wincalc::get_cma_window_double_vision_vertical,
+        "Get the CMA template for a double vision vertical window.");
+  m.def("get_cma_window_double_vision_horizontal",
+        &wincalc::get_cma_window_double_vision_horizontal,
+        "Get the CMA template for a double vision horizontal window.");
+
   py::class_<wincalc::CMAResult>(m, "CMAResult")
-	  .def_readwrite("u",&wincalc::CMAResult::u)
-	  .def_readwrite("shgc", &wincalc::CMAResult::shgc)
-	  .def_readwrite("vt", &wincalc::CMAResult::vt);
+      .def_readwrite("u", &wincalc::CMAResult::u)
+      .def_readwrite("shgc", &wincalc::CMAResult::shgc)
+      .def_readwrite("vt", &wincalc::CMAResult::vt);
 
   m.def("calc_cma", &wincalc::calc_cma, "Get CMA results.");
-
 }

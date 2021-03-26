@@ -1,0 +1,309 @@
+<?xml version="1.0"?>
+<THERM-XML xmlns="http://windows.lbl.gov">
+<ThermVersion>Version 8.0.13.0</ThermVersion>
+<FileVersion>1</FileVersion>
+<SaveDate>2021-03-10T10:05:03</SaveDate>
+
+<Title></Title>
+<CreatedBy></CreatedBy>
+<Company></Company>
+<Client></Client>
+<CrossSectionType>Sill</CrossSectionType>
+<Notes></Notes>
+<Units>SI</Units>
+<MeshControl MeshLevel="6" ErrorCheckFlag="0" ErrorLimit="5.000000" MaxIterations="10" CMAflag="0" />
+<RadianceModeBC>
+	<RadianceModeInBCName>ShadeInE</RadianceModeInBCName>
+	<RadianceModeInBCTag>ShadeInETag</RadianceModeInBCTag>
+	<RadianceModeOutBCName>ShadeOutE</RadianceModeOutBCName>
+	<RadianceModeOutBCTag>ShadeOutETag</RadianceModeOutBCTag>
+</RadianceModeBC>
+<Materials>
+	<Material Name="Silica Gel (Desiccant) - Loose Fill" Index="1" Type="0" Conductivity="0.030000" Tir="0.000000" EmissivityFront="0.900000" EmissivityBack="0.900000" RGBColor="0xC600C6">
+		<Property Side="Front" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+	</Material>
+	<Material Name="Butyl rubber, (Isobutene), Solid / Hot Melt" Index="2" Type="0" Conductivity="0.240000" Tir="0.000000" EmissivityFront="0.900000" EmissivityBack="0.900000" RGBColor="0x6B6B6B">
+		<Property Side="Front" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+	</Material>
+	<Material Name="Steel - Stainless (Oxidized)" Index="3" Type="0" Conductivity="17.000000" Tir="0.000000" EmissivityFront="0.800000" EmissivityBack="0.900000" RGBColor="0xA4D8FF">
+		<Property Side="Front" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+	</Material>
+	<Material Name="Polyvinylchloride (PVC) Flexible,with 40% Softener" Index="4" Type="0" Conductivity="0.140000" Tir="0.000000" EmissivityFront="0.900000" EmissivityBack="0.900000" RGBColor="0x00B75B">
+		<Property Side="Front" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Front" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Solar" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Direct" T="0.000000" R="0.000000"/>
+		<Property Side="Back" Range="Visible" Specularity="Diffuse" T="0.000000" R="0.000000"/>
+	</Material>
+</Materials>
+<BoundaryConditions>
+	<BoundaryCondition Name="Adiabatic" Type="0" H="0.000000" HeatFLux="0.000000" Temperature="0.000000" RGBColor="0x000000" 
+		Tr="0.000000" Hr="0.000000" Ei="1.000000" Viewfactor="1.000000" RadiationModel="0"
+		ConvectionFlag="0" FluxFlag="1" RadiationFlag="0" ConstantTemperatureFlag="0" EmisModifier="1.000000" />
+	<BoundaryCondition Name="Spacer Indoor" Type="0" H="9999.000000" HeatFLux="0.000000" Temperature="21.000000" RGBColor="0x00FF00" 
+		Tr="21.110001" Hr="0.000000" Ei="1.000000" Viewfactor="1.000000" RadiationModel="0"
+		ConvectionFlag="1" FluxFlag="0" RadiationFlag="0" ConstantTemperatureFlag="0" EmisModifier="1.000000" />
+	<BoundaryCondition Name="Spacer Outdoor" Type="0" H="9999.000000" HeatFLux="0.000000" Temperature="-18.000000" RGBColor="0x00FF00" 
+		Tr="21.110001" Hr="0.000000" Ei="1.000000" Viewfactor="1.000000" RadiationModel="0"
+		ConvectionFlag="1" FluxFlag="0" RadiationFlag="0" ConstantTemperatureFlag="0" EmisModifier="1.000000" />
+</BoundaryConditions>
+<Polygons>
+	<Polygon ID="1" Material="Silica Gel (Desiccant) - Loose Fill" NSides="12" Type="1" units="mm">
+		<Point index="0" x="240.716156" y="-301.521545" />
+		<Point index="1" x="242.046738" y="-302.852112" />
+		<Point index="2" x="254.600189" y="-302.852112" />
+		<Point index="3" x="255.930756" y="-301.521545" />
+		<Point index="4" x="255.930756" y="-300.864563" />
+		<Point index="5" x="255.592438" y="-299.369781" />
+		<Point index="6" x="255.930756" y="-297.875000" />
+		<Point index="7" x="255.930756" y="-297.411438" />
+		<Point index="8" x="240.716156" y="-297.411438" />
+		<Point index="9" x="240.716156" y="-297.875000" />
+		<Point index="10" x="241.054489" y="-299.369781" />
+		<Point index="11" x="240.716156" y="-300.864563" />
+	</Polygon>
+	<Polygon ID="2" Material="Butyl rubber, (Isobutene), Solid / Hot Melt" NSides="7" Type="1" units="mm">
+		<Point index="0" x="240.068451" y="-297.081238" />
+		<Point index="1" x="240.068451" y="-301.658325" />
+		<Point index="2" x="240.385956" y="-301.658325" />
+		<Point index="3" x="240.385956" y="-300.864563" />
+		<Point index="4" x="240.724289" y="-299.369781" />
+		<Point index="5" x="240.385956" y="-297.875000" />
+		<Point index="6" x="240.385956" y="-297.081238" />
+	</Polygon>
+	<Polygon ID="3" Material="Butyl rubber, (Isobutene), Solid / Hot Melt" NSides="7" Type="1" units="mm">
+		<Point index="0" x="256.260956" y="-297.081238" />
+		<Point index="1" x="256.260956" y="-297.875000" />
+		<Point index="2" x="255.922638" y="-299.369781" />
+		<Point index="3" x="256.260956" y="-300.864563" />
+		<Point index="4" x="256.260956" y="-301.658325" />
+		<Point index="5" x="256.578461" y="-301.658325" />
+		<Point index="6" x="256.578461" y="-297.081238" />
+	</Polygon>
+	<Polygon ID="4" Material="Steel - Stainless (Oxidized)" NSides="4" Type="1" units="mm">
+		<Point index="0" x="240.385956" y="-297.081238" />
+		<Point index="1" x="240.716156" y="-297.411438" />
+		<Point index="2" x="255.930756" y="-297.411438" />
+		<Point index="3" x="256.260956" y="-297.081238" />
+	</Polygon>
+	<Polygon ID="5" Material="Polyvinylchloride (PVC) Flexible,with 40% Softener" NSides="18" Type="1" units="mm">
+		<Point index="0" x="240.068451" y="-301.658325" />
+		<Point index="1" x="240.068451" y="-308.193726" />
+		<Point index="2" x="240.525665" y="-308.193726" />
+		<Point index="3" x="240.525665" y="-307.863556" />
+		<Point index="4" x="241.033661" y="-307.355530" />
+		<Point index="5" x="242.303665" y="-307.355530" />
+		<Point index="6" x="244.030853" y="-305.501343" />
+		<Point index="7" x="252.616058" y="-305.501343" />
+		<Point index="8" x="254.343262" y="-307.355530" />
+		<Point index="9" x="255.655472" y="-307.397766" />
+		<Point index="10" x="256.121246" y="-307.863556" />
+		<Point index="11" x="256.121246" y="-308.193726" />
+		<Point index="12" x="256.578461" y="-308.193726" />
+		<Point index="13" x="256.578461" y="-301.658325" />
+		<Point index="14" x="256.260956" y="-301.658325" />
+		<Point index="15" x="254.736954" y="-303.182312" />
+		<Point index="16" x="241.909958" y="-303.182312" />
+		<Point index="17" x="240.385956" y="-301.658325" />
+	</Polygon>
+	<Polygon ID="6" Material="Steel - Stainless (Oxidized)" NSides="24" Type="1" units="mm">
+		<Point index="0" x="254.600189" y="-302.852112" />
+		<Point index="1" x="242.046738" y="-302.852112" />
+		<Point index="2" x="240.716156" y="-301.521545" />
+		<Point index="3" x="240.716156" y="-300.864563" />
+		<Point index="4" x="241.054489" y="-299.369781" />
+		<Point index="5" x="240.716156" y="-297.875000" />
+		<Point index="6" x="240.716156" y="-297.411438" />
+		<Point index="7" x="240.385956" y="-297.081238" />
+		<Point index="8" x="240.385956" y="-297.875000" />
+		<Point index="9" x="240.724289" y="-299.369781" />
+		<Point index="10" x="240.385956" y="-300.864563" />
+		<Point index="11" x="240.385956" y="-301.658325" />
+		<Point index="12" x="241.909958" y="-303.182312" />
+		<Point index="13" x="254.736954" y="-303.182312" />
+		<Point index="14" x="256.260956" y="-301.658325" />
+		<Point index="15" x="256.260956" y="-300.864563" />
+		<Point index="16" x="255.922638" y="-299.369781" />
+		<Point index="17" x="256.260956" y="-297.875000" />
+		<Point index="18" x="256.260956" y="-297.081238" />
+		<Point index="19" x="255.930756" y="-297.411438" />
+		<Point index="20" x="255.930756" y="-297.875000" />
+		<Point index="21" x="255.592438" y="-299.369781" />
+		<Point index="22" x="255.930756" y="-300.864563" />
+		<Point index="23" x="255.930756" y="-301.521545" />
+	</Polygon>
+</Polygons>
+<Boundaries>
+	<BCPolygon ID="7" BC="Adiabatic" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="240.068451" y="-308.193726" />
+		<Point index="1" x="240.525665" y="-308.193726" />
+	</BCPolygon>
+	<BCPolygon ID="8" BC="Adiabatic" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="240.525665" y="-308.193726" />
+		<Point index="1" x="240.525665" y="-307.863556" />
+	</BCPolygon>
+	<BCPolygon ID="9" BC="Adiabatic" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="240.525665" y="-307.863556" />
+		<Point index="1" x="241.033661" y="-307.355530" />
+	</BCPolygon>
+	<BCPolygon ID="10" BC="Adiabatic" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="241.033661" y="-307.355530" />
+		<Point index="1" x="242.303665" y="-307.355530" />
+	</BCPolygon>
+	<BCPolygon ID="11" BC="Adiabatic" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="242.303665" y="-307.355530" />
+		<Point index="1" x="244.030853" y="-305.501343" />
+	</BCPolygon>
+	<BCPolygon ID="12" BC="Adiabatic" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="244.030853" y="-305.501343" />
+		<Point index="1" x="252.616058" y="-305.501343" />
+	</BCPolygon>
+	<BCPolygon ID="13" BC="Adiabatic" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="252.616058" y="-305.501343" />
+		<Point index="1" x="254.343262" y="-307.355530" />
+	</BCPolygon>
+	<BCPolygon ID="14" BC="Adiabatic" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="254.343262" y="-307.355530" />
+		<Point index="1" x="255.655472" y="-307.397766" />
+	</BCPolygon>
+	<BCPolygon ID="15" BC="Adiabatic" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="255.655472" y="-307.397766" />
+		<Point index="1" x="256.121246" y="-307.863556" />
+	</BCPolygon>
+	<BCPolygon ID="16" BC="Adiabatic" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="256.121246" y="-307.863556" />
+		<Point index="1" x="256.121246" y="-308.193726" />
+	</BCPolygon>
+	<BCPolygon ID="17" BC="Adiabatic" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="256.121246" y="-308.193726" />
+		<Point index="1" x="256.578461" y="-308.193726" />
+	</BCPolygon>
+	<BCPolygon ID="18" BC="Spacer Indoor" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="SpacerInteriorTag" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="256.578461" y="-308.193726" />
+		<Point index="1" x="256.578461" y="-301.658325" />
+	</BCPolygon>
+	<BCPolygon ID="19" BC="Spacer Indoor" units="mm" MaterialName="Butyl rubber, (Isobutene), Solid / Hot Melt" PolygonID="3" EnclosureID="0" UFactorTag="SpacerInteriorTag" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="256.578461" y="-301.658325" />
+		<Point index="1" x="256.578461" y="-297.081238" />
+	</BCPolygon>
+	<BCPolygon ID="20" BC="Adiabatic" units="mm" MaterialName="Butyl rubber, (Isobutene), Solid / Hot Melt" PolygonID="3" EnclosureID="0" UFactorTag="SpacerWidth" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="256.578461" y="-297.081238" />
+		<Point index="1" x="256.260956" y="-297.081238" />
+	</BCPolygon>
+	<BCPolygon ID="21" BC="Adiabatic" units="mm" MaterialName="Steel - Stainless (Oxidized)" PolygonID="4" EnclosureID="0" UFactorTag="SpacerWidth" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="256.260956" y="-297.081238" />
+		<Point index="1" x="240.385956" y="-297.081238" />
+	</BCPolygon>
+	<BCPolygon ID="22" BC="Adiabatic" units="mm" MaterialName="Butyl rubber, (Isobutene), Solid / Hot Melt" PolygonID="2" EnclosureID="0" UFactorTag="SpacerWidth" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="240.385956" y="-297.081238" />
+		<Point index="1" x="240.068451" y="-297.081238" />
+	</BCPolygon>
+	<BCPolygon ID="23" BC="Spacer Outdoor" units="mm" MaterialName="Butyl rubber, (Isobutene), Solid / Hot Melt" PolygonID="2" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="240.068451" y="-297.081238" />
+		<Point index="1" x="240.068451" y="-301.658325" />
+	</BCPolygon>
+	<BCPolygon ID="24" BC="Spacer Outdoor" units="mm" MaterialName="Polyvinylchloride (PVC) Flexible,with 40% Softener" PolygonID="5" EnclosureID="0" UFactorTag="" Emissivity="-1.000000" MaterialSide="Front" IlluminatedSurface="FALSE">
+		<Point index="0" x="240.068451" y="-301.658325" />
+		<Point index="1" x="240.068451" y="-308.193726" />
+	</BCPolygon>
+</Boundaries>
+<Results>
+	<Case>
+		<ModelType>U-factor</ModelType>
+		<U-factors>
+			<Tag>SpacerWidth</Tag>
+			<DeltaT units="C" value="39.000000" />
+			<Projection>
+				<Length-type>Total length</Length-type>
+				<Length units="mm" value="16.510010" />
+				<U-factor units="W/m2-K" value="0.000000" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected X</Length-type>
+				<Length units="mm" value="16.510010" />
+				<U-factor units="W/m2-K" value="0.000000" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected Y</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom length</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected in glass plane</Length-type>
+				<Length units="mm" value="16.509995" />
+				<U-factor units="W/m2-K" value="0.000000" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom rotation</Length-type>
+				<Length units="mm" value="16.509995" />
+				<ProjectionAngle>0.000000</ProjectionAngle>
+				<U-factor units="W/m2-K" value="0.000000" />
+			</Projection>
+		</U-factors>
+		<U-factors>
+			<Tag>SpacerInteriorTag</Tag>
+			<DeltaT units="C" value="39.000000" />
+			<Projection>
+				<Length-type>Total length</Length-type>
+				<Length units="mm" value="11.112488" />
+				<U-factor units="W/m2-K" value="45.044960" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected X</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected Y</Length-type>
+				<Length units="mm" value="11.112488" />
+				<U-factor units="W/m2-K" value="45.044960" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom length</Length-type>
+				<Length units="mm" value="0.000000" />
+				<U-factor value="NA" />
+			</Projection>
+			<Projection>
+				<Length-type>Projected in glass plane</Length-type>
+				<Length units="mm" value="0.000031" />
+				<U-factor units="W/m2-K" value="16402401.000000" />
+			</Projection>
+			<Projection>
+				<Length-type>Custom rotation</Length-type>
+				<Length units="mm" value="0.000031" />
+				<ProjectionAngle>0.000000</ProjectionAngle>
+				<U-factor units="W/m2-K" value="16402401.000000" />
+			</Projection>
+		</U-factors>
+	</Case>
+</Results>
+</THERM-XML>
