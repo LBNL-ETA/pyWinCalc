@@ -1,6 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-
+#include <pybind11/iostream.h>
 #include <wincalc/wincalc.h>
 
 namespace py = pybind11;
@@ -1176,4 +1176,5 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("vt", &wincalc::CMAResult::vt);
 
   m.def("calc_cma", &wincalc::calc_cma, "Get CMA results.");
+
 }
