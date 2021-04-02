@@ -248,7 +248,7 @@ See [gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/
 
 ### Context and Background
 
-See this paper for context and background about the CMA modeling process: [Component Modeling Methodology for Predicting Thermal Performance of Non-Residential Fenestration Systems](https://github.com/LBNL-ETA/pyWinCalc/blob/CMA/docs/Component _Modeling_Methodology.pdf)
+See this paper for context and background about the CMA modeling process: [Component Modeling Methodology for Predicting Thermal Performance of Non-Residential Fenestration Systems](https://github.com/LBNL-ETA/pyWinCalc/blob/CMA/docs/Component_Modeling_Methodology.pdf)
 
 ### THERM
 
