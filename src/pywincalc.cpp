@@ -1,6 +1,6 @@
+#include <pybind11/iostream.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pybind11/iostream.h>
 #include <wincalc/wincalc.h>
 
 namespace py = pybind11;
@@ -906,7 +906,14 @@ PYBIND11_MODULE(pywincalc, m) {
            &wincalc::Glazing_System::system_effective_conductivity,
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("relative_heat_gain", &wincalc::Glazing_System::relative_heat_gain,
-           py::arg("theta") = 0, py::arg("phi") = 0);
+           py::arg("theta") = 0, py::arg("phi") = 0)
+      .def("environments",
+           py::overload_cast<wincalc::Environments const &>(
+               &wincalc::Glazing_System::environments),
+           py::arg("environments"))
+      .def("environments",
+           py::overload_cast<void>(&wincalc::Glazing_System::environments,
+                                   py::const_));
 
   m.def("convert_to_solid_layer", &wincalc::convert_to_solid_layer,
         "Convert product data into a solid layer that can be used in glazing "
@@ -1084,19 +1091,28 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("cma_options", &thmxParser::ThmxFileContents::cmaOptions)
       .def_readwrite("results", &thmxParser::ThmxFileContents::results);
 
-  py::class_<CMA::ICMAWindow, std::shared_ptr<CMA::ICMAWindow>>(m, "ICMAWindow")
+  py::class_<Tarcog::IGUDimensions>(m, "GlazingSystemDimensions")
+      .def_readwrite("width", &Tarcog::IGUDimensions::width)
+      .def_readwrite("height", &Tarcog::IGUDimensions::height);
+
+  py::class_<CMA::ICMAWindow, std::shared_ptr<CMA::ICMAWindow>>(m, "CMAWindow")
       .def("u", &CMA::ICMAWindow::uValue)
       .def("shgc", &CMA::ICMAWindow::shgc)
-      .def("vt", &CMA::ICMAWindow::vt);
+      .def("vt", &CMA::ICMAWindow::vt)
+      .def("glazing_system_dimensions", &CMA::ICMAWindow::getIGUDimensions);
 
-  py::class_<CMA::CMABestWorstUFactors, std::shared_ptr<CMA::CMABestWorstUFactors>>(m, "CMABestWorstUFactors")
-	  .def(py::init<>())
-	  .def(py::init<double, double, double >())
-	  .def(py::init<double, double, double, double, double, double, double, double, double, double, double >())
-	  .def("u", &CMA::CMABestWorstUFactors::uValue)
-	  .def("hc_out", &CMA::CMABestWorstUFactors::hcout);
+  py::class_<CMA::CMABestWorstUFactors,
+             std::shared_ptr<CMA::CMABestWorstUFactors>>(m,
+                                                         "CMABestWorstUFactors")
+      .def(py::init<>())
+      .def(py::init<double, double, double>())
+      .def(py::init<double, double, double, double, double, double, double,
+                    double, double, double, double>())
+      .def("u", &CMA::CMABestWorstUFactors::uValue)
+      .def("hc_out", &CMA::CMABestWorstUFactors::hcout);
 
-  m.def("create_best_worst_u_factor_option", &CMA::CreateBestWorstUFactorOption);
+  m.def("create_best_worst_u_factor_option",
+        &CMA::CreateBestWorstUFactorOption);
 
   py::class_<CMA::CMAWindowSingleVision, CMA::ICMAWindow,
              std::shared_ptr<CMA::CMAWindowSingleVision>>(
@@ -1110,53 +1126,65 @@ PYBIND11_MODULE(pywincalc, m) {
                CMA::CreateBestWorstUFactorOption(CMA::Option::Best),
            py::arg("worst_u_factor_options") =
                CMA::CreateBestWorstUFactorOption(CMA::Option::Worst))
-	  .def("set_frame_top", &CMA::CMAWindowSingleVision::setFrameTop)
-	  .def("set_frame_bottom", &CMA::CMAWindowSingleVision::setFrameBottom)
-	  .def("set_frame_left", &CMA::CMAWindowSingleVision::setFrameLeft)
-	  .def("set_frame_right", &CMA::CMAWindowSingleVision::setFrameRight)
-	  .def("set_dividers", &CMA::CMAWindowSingleVision::setDividers);
+      .def("set_frame_top", &CMA::CMAWindowSingleVision::setFrameTop)
+      .def("set_frame_bottom", &CMA::CMAWindowSingleVision::setFrameBottom)
+      .def("set_frame_left", &CMA::CMAWindowSingleVision::setFrameLeft)
+      .def("set_frame_right", &CMA::CMAWindowSingleVision::setFrameRight)
+      .def("set_dividers", &CMA::CMAWindowSingleVision::setDividers);
 
   py::class_<CMA::CMAWindowDualVisionHorizontal, CMA::ICMAWindow,
-	  std::shared_ptr<CMA::CMAWindowDualVisionHorizontal>>(
-		  m, "CMAWindowDualVisionHorizontal")
-	  .def(py::init<double, double, double, double, CMA::CMABestWorstUFactors,
-		  CMA::CMABestWorstUFactors>(),
-		  py::arg("width"), py::arg("height"),
-		  py::arg("spacer_best_keff") = 0.01,
-		  py::arg("spacer_worst_keff") = 10.0,
-		  py::arg("best_u_factor_options") =
-		  CMA::CreateBestWorstUFactorOption(CMA::Option::Best),
-		  py::arg("worst_u_factor_options") =
-		  CMA::CreateBestWorstUFactorOption(CMA::Option::Worst))
-	  .def("set_frame_top_left", &CMA::CMAWindowDualVisionHorizontal::setFrameTopLeft)
-	  .def("set_frame_top_right", &CMA::CMAWindowDualVisionHorizontal::setFrameTopRight)
-	  .def("set_frame_bottom_left", &CMA::CMAWindowDualVisionHorizontal::setFrameBottomLeft)
-	  .def("set_frame_bottom_right", &CMA::CMAWindowDualVisionHorizontal::setFrameBottomRight)
-	  .def("set_frame_left", &CMA::CMAWindowDualVisionHorizontal::setFrameLeft)
-	  .def("set_frame_right", &CMA::CMAWindowDualVisionHorizontal::setFrameRight)
-	  .def("set_frame_meeting_rail", &CMA::CMAWindowDualVisionHorizontal::setFrameMeetingRail)
-	  .def("set_dividers", &CMA::CMAWindowDualVisionHorizontal::setDividers);
+             std::shared_ptr<CMA::CMAWindowDualVisionHorizontal>>(
+      m, "CMAWindowDualVisionHorizontal")
+      .def(py::init<double, double, double, double, CMA::CMABestWorstUFactors,
+                    CMA::CMABestWorstUFactors>(),
+           py::arg("width"), py::arg("height"),
+           py::arg("spacer_best_keff") = 0.01,
+           py::arg("spacer_worst_keff") = 10.0,
+           py::arg("best_u_factor_options") =
+               CMA::CreateBestWorstUFactorOption(CMA::Option::Best),
+           py::arg("worst_u_factor_options") =
+               CMA::CreateBestWorstUFactorOption(CMA::Option::Worst))
+      .def("set_frame_top_left",
+           &CMA::CMAWindowDualVisionHorizontal::setFrameTopLeft)
+      .def("set_frame_top_right",
+           &CMA::CMAWindowDualVisionHorizontal::setFrameTopRight)
+      .def("set_frame_bottom_left",
+           &CMA::CMAWindowDualVisionHorizontal::setFrameBottomLeft)
+      .def("set_frame_bottom_right",
+           &CMA::CMAWindowDualVisionHorizontal::setFrameBottomRight)
+      .def("set_frame_left", &CMA::CMAWindowDualVisionHorizontal::setFrameLeft)
+      .def("set_frame_right",
+           &CMA::CMAWindowDualVisionHorizontal::setFrameRight)
+      .def("set_frame_meeting_rail",
+           &CMA::CMAWindowDualVisionHorizontal::setFrameMeetingRail)
+      .def("set_dividers", &CMA::CMAWindowDualVisionHorizontal::setDividers);
 
   py::class_<CMA::CMAWindowDualVisionVertical, CMA::ICMAWindow,
-	  std::shared_ptr<CMA::CMAWindowDualVisionVertical>>(
-		  m, "CMAWindowDualVisionVertical")
-	  .def(py::init<double, double, double, double, CMA::CMABestWorstUFactors,
-		  CMA::CMABestWorstUFactors>(),
-		  py::arg("width"), py::arg("height"),
-		  py::arg("spacer_best_keff") = 0.01,
-		  py::arg("spacer_worst_keff") = 10.0,
-		  py::arg("best_u_factor_options") =
-		  CMA::CreateBestWorstUFactorOption(CMA::Option::Best),
-		  py::arg("worst_u_factor_options") =
-		  CMA::CreateBestWorstUFactorOption(CMA::Option::Worst))
-	  .def("set_frame_top", &CMA::CMAWindowDualVisionVertical::setFrameTop)	  
-	  .def("set_frame_bottom", &CMA::CMAWindowDualVisionVertical::setFrameBottom)	  
-	  .def("set_frame_top_left", &CMA::CMAWindowDualVisionVertical::setFrameTopLeft)
-	  .def("set_frame_top_right", &CMA::CMAWindowDualVisionVertical::setFrameTopRight)
-	  .def("set_frame_bottom_left", &CMA::CMAWindowDualVisionVertical::setFrameBottomLeft)
-	  .def("set_frame_bottom_right", &CMA::CMAWindowDualVisionVertical::setFrameBottomRight)
-	  .def("set_frame_meeting_rail", &CMA::CMAWindowDualVisionVertical::setFrameMeetingRail)
-	  .def("set_dividers", &CMA::CMAWindowDualVisionVertical::setDividers);
+             std::shared_ptr<CMA::CMAWindowDualVisionVertical>>(
+      m, "CMAWindowDualVisionVertical")
+      .def(py::init<double, double, double, double, CMA::CMABestWorstUFactors,
+                    CMA::CMABestWorstUFactors>(),
+           py::arg("width"), py::arg("height"),
+           py::arg("spacer_best_keff") = 0.01,
+           py::arg("spacer_worst_keff") = 10.0,
+           py::arg("best_u_factor_options") =
+               CMA::CreateBestWorstUFactorOption(CMA::Option::Best),
+           py::arg("worst_u_factor_options") =
+               CMA::CreateBestWorstUFactorOption(CMA::Option::Worst))
+      .def("set_frame_top", &CMA::CMAWindowDualVisionVertical::setFrameTop)
+      .def("set_frame_bottom",
+           &CMA::CMAWindowDualVisionVertical::setFrameBottom)
+      .def("set_frame_top_left",
+           &CMA::CMAWindowDualVisionVertical::setFrameTopLeft)
+      .def("set_frame_top_right",
+           &CMA::CMAWindowDualVisionVertical::setFrameTopRight)
+      .def("set_frame_bottom_left",
+           &CMA::CMAWindowDualVisionVertical::setFrameBottomLeft)
+      .def("set_frame_bottom_right",
+           &CMA::CMAWindowDualVisionVertical::setFrameBottomRight)
+      .def("set_frame_meeting_rail",
+           &CMA::CMAWindowDualVisionVertical::setFrameMeetingRail)
+      .def("set_dividers", &CMA::CMAWindowDualVisionVertical::setDividers);
 
   m.def("get_spacer_keff", &wincalc::get_spacer_keff,
         "Calculate the effective conductivity of a spacer from a THERM thmx "
@@ -1176,5 +1204,4 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("vt", &wincalc::CMAResult::vt);
 
   m.def("calc_cma", &wincalc::calc_cma, "Get CMA results.");
-
 }

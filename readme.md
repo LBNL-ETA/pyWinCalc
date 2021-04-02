@@ -244,8 +244,34 @@ gap_4 = pywincalc.Gap([gap_4_component_1, gap_4_component_2, gap_4_component_3],
 
 See [gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/gases.py) for more on creating gas mixtures.
 
+## CMA
 
-### Migrating to 2.0
+### Context and Background
+
+See this paper for context and background about the CMA modeling process: [Component Modeling Methodology for Predicting Thermal Performance of Non-Residential Fenestration Systems](https://github.com/LBNL-ETA/pyWinCalc/blob/CMA/docs/Component _Modeling_Methodology.pdf)
+
+### THERM
+
+TODO: INSERT TEXT FOR THERM HERE
+
+### CMA Calculations
+
+The CMA calculation process can be summarized with the following steps:
+1. Create frames and spacer thmx CMA files in THERM.  See previous section for the correct way to do this.
+2. Parse the thmx files using pywincalc.parse_thmx_file
+3. Get the effective conductivity for the spacer using pywincalc.get_spacer_keff
+4. Create a CMA window.  Currently three configurations are supported: pywincalc.get_cma_window_single_vision, pywincalc.get_cma_window_double_vision_vertical, and pywincalc.get_cma_window_double_vision_horizontal.
+5. Get CMA results by calling pywincalc.calc_cma with the CMA window from step 4, the glazing system U, SHGC, and visibile transmittance, and the spacer keff from step 3.  Note:  The glazing system values can be calculated using a pywincalc.GlazingSystem (see glazing system examples above) or from other sources.  However the dimensions of the glazing system used calculate those results should match the dimensions that will be used in the CMA window.  pywincalc.CMAWindow provides a glazing_system_dimensions function that will return the appropriate glazing system size.  See the cma_single_vision_igsdb_parametric.py example.
+
+### CMA Examples
+The examples folder has the following examples:
+
+- [cma_single_vision.py](https://github.com/LBNL-ETA/pyWinCalc/blob/CMA/example/cma_single_vision.py): Perform a CMA calculation for a single vision window using sample THERM frames and spacer thmx files and precalculated glazing system results.
+- [cma_double_vision_vertical.py](https://github.com/LBNL-ETA/pyWinCalc/blob/CMA/example/cma_double_vision_vertical.py): Perform a CMA calculation for a double vision vertical window using sample THERM frames and spacer thmx files and precalculated glazing system results.
+- [cma_double_vision_horizontal.py](https://github.com/LBNL-ETA/pyWinCalc/blob/CMA/example/cma_double_vision_horizontal.py): Perform a CMA calculation for a double vision horizontal using sample THERM frames and spacer thmx files and precalculated glazing system results.
+- [cma_single_vision_igsdb_parametric.py](https://github.com/LBNL-ETA/pyWinCalc/blob/CMA/example/cma_double_vision_horizontal.py): An example of how a parametric calculation might be performed.  Makes all possible double layer glazing systems from IGSDB glazing records with the inner layer set to generic clear 3mm glass.  Runs CMA calculations on them using sample frames and spacers.  Reports the systems with the highest and lowest U, SHGC, and visible transmittance.
+
+## Migrating from version 1
 
 There were several interface changes that resulted from the new functionality.  These changes are mostly contained in two places:  The GlazingSystem constructor and the results structures.  Each section will start with a guide on how to convert existing code and will follow with some rational and explination.  This conversion will convert the code in the v1 example.py file to code that will work in v2.
 
@@ -364,9 +390,3 @@ GlazingSystem.u() and GlazingSystem.shgc() now return single values
 Both u() and shgc() take optional theta and phi values for angular calculations.  Both theta and phi default to zero so if neither are provided the result will be for normal incidence angle.
 
 
-
-### Tutorial Videos
-
-https://youtu.be/YQzCho-Vx-k
-
-https://youtu.be/_lfoyZ2ntkU
