@@ -912,7 +912,7 @@ PYBIND11_MODULE(pywincalc, m) {
                &wincalc::Glazing_System::environments),
            py::arg("environments"))
       .def("environments",
-           py::overload_cast<void>(&wincalc::Glazing_System::environments,
+           py::overload_cast<>(&wincalc::Glazing_System::environments,
                                    py::const_));
 
   m.def("convert_to_solid_layer", &wincalc::convert_to_solid_layer,
