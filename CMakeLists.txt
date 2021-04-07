@@ -9,8 +9,8 @@ set(JSON_BuildTests OFF CACHE BOOL "")
 set(BUILD_WinCalc_tests OFF CACHE BOOL "")
 
 include(CMakeLists-WinCalc.txt)
+include(CMakeLists-pybind11.txt)
 
-add_subdirectory(pybind11)
 pybind11_add_module(${target_name} src/pywincalc.cpp)
 
 target_compile_features(${target_name} PUBLIC cxx_std_17)

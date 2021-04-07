@@ -1,0 +1,14 @@
+cmake_minimum_required( VERSION 3.5 )
+
+set(pybind11_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/pybind11-src/include")
+include_directories(${pybind11_INCLUDE_DIRS})
+
+# Download and create Windows Calculation Engine library
+configure_file(CMakeLists-pybind11.txt.in pybind11-download/CMakeLists.txt)
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/pybind11-download)
+execute_process(COMMAND ${CMAKE_COMMAND} --build .
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/pybind11-download)
+ 
+add_subdirectory(${CMAKE_BINARY_DIR}/pybind11-src)
+set(pybind11_LIB "${CMAKE_SHARED_LIBRARY_PREFIX}pybind11${CMAKE_SHARED_LIBRARY_SUFFIX}")
