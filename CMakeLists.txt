@@ -11,7 +11,12 @@ set(BUILD_WinCalc_tests OFF CACHE BOOL "")
 include(CMakeLists-WinCalc.txt)
 include(CMakeLists-pybind11.txt)
 
-pybind11_add_module(${target_name} src/pywincalc.cpp)
+# Set source directory
+set(SOURCE_DIR "src/pywincalc")
+# Tell CMake that headers are also in SOURCE_DIR
+include_directories(${SOURCE_DIR})
+
+pybind11_add_module(${target_name} src/_pywincalc.cpp)
 
 target_compile_features(${target_name} PUBLIC cxx_std_17)
 target_link_libraries( ${target_name} PRIVATE wincalc)
