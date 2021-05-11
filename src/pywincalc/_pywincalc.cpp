@@ -127,7 +127,7 @@ public:
 };
 #endif
 
-PYBIND11_MODULE(pywincalc, m) {
+PYBIND11_MODULE(_pywincalc, m) {
   m.doc() = "Python bindings for WinCalc";
 
   py::enum_<Gases::GasDef>(m, "PredefinedGasType", py::arithmetic())

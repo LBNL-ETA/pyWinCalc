@@ -59,15 +59,15 @@ class CMakeBuild(build_ext):
 
 setup(
     name='pywincalc',
-    version='2.1.0',
+    version='2.1.1',
     long_description='',
     # tell setuptools to look for any packages under 'src'
-    packages=find_packages('src'),
+    packages=find_packages(where='src'),
     # tell setuptools that all packages will be under the 'src' directory
     # and nowhere else
     package_dir={'': 'src'},
     ext_modules=[CMakeExtension('pywincalc/pywincalc')],
-    extras_require={"test": "pytest"},
+    test_suite='tests',
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
 )
