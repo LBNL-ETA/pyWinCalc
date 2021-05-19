@@ -54,30 +54,30 @@ class OpticalStandardMethodResults:
 
 @dataclass
 class TrichromaticResult:
-    X: float = None
-    Y: float = None
-    Z: float = None
+    x: float = None
+    y: float = None
+    z: float = None
 
 
 @dataclass
 class LabResult:
-    L: float = None
+    l: float = None
     a: float = None
     b: float = None
 
 
 @dataclass
 class RGBResult:
-    R: float = None
-    G: float = None
-    B: float = None
+    r: float = None
+    g: float = None
+    b: float = None
 
 
 @dataclass
 class OpticalColorResult:
     trichromatic: TrichromaticResult = None
-    Lab: LabResult = None
-    RGB: RGBResult = None
+    lab: LabResult = None
+    rgb: RGBResult = None
 
 @dataclass
 class OpticalColorFluxResults:

@@ -91,15 +91,15 @@ def calc_optical(glazing_system, method, result_setter_f):
 
 
 def convert_trichromatic_result(trichromatic):
-    return pywincalc.optical.TrichromaticResult(X=trichromatic.X, Y=trichromatic.Y, Z=trichromatic.Z)
+    return pywincalc.optical.TrichromaticResult(x=trichromatic.X, y=trichromatic.Y, z=trichromatic.Z)
 
 
 def convert_lab_result(lab):
-    return pywincalc.optical.LabResult(L=lab.L, a=lab.a, b=lab.b)
+    return pywincalc.optical.LabResult(l=lab.L, a=lab.a, b=lab.b)
 
 
 def convert_rgb_result(rgb):
-    return pywincalc.optical.RGBResult(R=rgb.R, G=rgb.G, B=rgb.B)
+    return pywincalc.optical.RGBResult(r=rgb.R, g=rgb.G, b=rgb.B)
 
 
 def calc_color(glazing_system, results_setter_f):
@@ -132,20 +132,20 @@ def calc_color(glazing_system, results_setter_f):
         translated_results.transmittance_front = pywincalc.optical.OpticalColorFluxResults(
             direct_direct=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_direct_front_transmittance_trichromatic,
-                Lab=direct_direct_front_transmittance_lab,
-                RGB=direct_direct_front_transmittance_rgb),
+                lab=direct_direct_front_transmittance_lab,
+                rgb=direct_direct_front_transmittance_rgb),
             direct_diffuse=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_diffuse_front_transmittance_trichromatic,
-                Lab=direct_diffuse_front_transmittance_lab,
-                RGB=direct_diffuse_front_transmittance_rgb),
+                lab=direct_diffuse_front_transmittance_lab,
+                rgb=direct_diffuse_front_transmittance_rgb),
             direct_hemispherical=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_hemispherical_front_transmittance_trichromatic,
-                Lab=direct_hemispherical_front_transmittance_lab,
-                RGB=direct_hemispherical_front_transmittance_rgb),
+                lab=direct_hemispherical_front_transmittance_lab,
+                rgb=direct_hemispherical_front_transmittance_rgb),
             diffuse_diffuse=pywincalc.optical.OpticalColorResult(
                 trichromatic=diffuse_diffuse_front_transmittance_trichromatic,
-                Lab=diffuse_diffuse_front_transmittance_lab,
-                RGB=diffuse_diffuse_front_transmittance_rgb))
+                lab=diffuse_diffuse_front_transmittance_lab,
+                rgb=diffuse_diffuse_front_transmittance_rgb))
 
         direct_direct_front_reflectance_trichromatic = convert_trichromatic_result(
             results.front.reflectance.direct_direct.trichromatic)
@@ -172,20 +172,20 @@ def calc_color(glazing_system, results_setter_f):
         translated_results.reflectance_front = pywincalc.optical.OpticalColorFluxResults(
             direct_direct=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_direct_front_reflectance_trichromatic,
-                Lab=direct_direct_front_reflectance_lab,
-                RGB=direct_direct_front_reflectance_rgb),
+                lab=direct_direct_front_reflectance_lab,
+                rgb=direct_direct_front_reflectance_rgb),
             direct_diffuse=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_diffuse_front_reflectance_trichromatic,
-                Lab=direct_diffuse_front_reflectance_lab,
-                RGB=direct_diffuse_front_reflectance_rgb),
+                lab=direct_diffuse_front_reflectance_lab,
+                rgb=direct_diffuse_front_reflectance_rgb),
             direct_hemispherical=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_hemispherical_front_reflectance_trichromatic,
-                Lab=direct_hemispherical_front_reflectance_lab,
-                RGB=direct_hemispherical_front_reflectance_rgb),
+                lab=direct_hemispherical_front_reflectance_lab,
+                rgb=direct_hemispherical_front_reflectance_rgb),
             diffuse_diffuse=pywincalc.optical.OpticalColorResult(
                 trichromatic=diffuse_diffuse_front_reflectance_trichromatic,
-                Lab=diffuse_diffuse_front_reflectance_lab,
-                RGB=diffuse_diffuse_front_reflectance_rgb))
+                lab=diffuse_diffuse_front_reflectance_lab,
+                rgb=diffuse_diffuse_front_reflectance_rgb))
 
         direct_direct_back_transmittance_trichromatic = convert_trichromatic_result(
             results.back.transmittance.direct_direct.trichromatic)
@@ -212,20 +212,20 @@ def calc_color(glazing_system, results_setter_f):
         translated_results.transmittance_back = pywincalc.optical.OpticalColorFluxResults(
             direct_direct=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_direct_back_transmittance_trichromatic,
-                Lab=direct_direct_back_transmittance_lab,
-                RGB=direct_direct_back_transmittance_rgb),
+                lab=direct_direct_back_transmittance_lab,
+                rgb=direct_direct_back_transmittance_rgb),
             direct_diffuse=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_diffuse_back_transmittance_trichromatic,
-                Lab=direct_diffuse_back_transmittance_lab,
-                RGB=direct_diffuse_back_transmittance_rgb),
+                lab=direct_diffuse_back_transmittance_lab,
+                rgb=direct_diffuse_back_transmittance_rgb),
             direct_hemispherical=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_hemispherical_back_transmittance_trichromatic,
-                Lab=direct_hemispherical_back_transmittance_lab,
-                RGB=direct_hemispherical_back_transmittance_rgb),
+                lab=direct_hemispherical_back_transmittance_lab,
+                rgb=direct_hemispherical_back_transmittance_rgb),
             diffuse_diffuse=pywincalc.optical.OpticalColorResult(
                 trichromatic=diffuse_diffuse_back_transmittance_trichromatic,
-                Lab=diffuse_diffuse_back_transmittance_lab,
-                RGB=diffuse_diffuse_back_transmittance_rgb))
+                lab=diffuse_diffuse_back_transmittance_lab,
+                rgb=diffuse_diffuse_back_transmittance_rgb))
 
         direct_direct_back_reflectance_trichromatic = convert_trichromatic_result(
             results.back.reflectance.direct_direct.trichromatic)
@@ -252,20 +252,20 @@ def calc_color(glazing_system, results_setter_f):
         translated_results.reflectance_back = pywincalc.optical.OpticalColorFluxResults(
             direct_direct=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_direct_back_reflectance_trichromatic,
-                Lab=direct_direct_back_reflectance_lab,
-                RGB=direct_direct_back_reflectance_rgb),
+                lab=direct_direct_back_reflectance_lab,
+                rgb=direct_direct_back_reflectance_rgb),
             direct_diffuse=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_diffuse_back_reflectance_trichromatic,
-                Lab=direct_diffuse_back_reflectance_lab,
-                RGB=direct_diffuse_back_reflectance_rgb),
+                lab=direct_diffuse_back_reflectance_lab,
+                rgb=direct_diffuse_back_reflectance_rgb),
             direct_hemispherical=pywincalc.optical.OpticalColorResult(
                 trichromatic=direct_hemispherical_back_reflectance_trichromatic,
-                Lab=direct_hemispherical_back_reflectance_lab,
-                RGB=direct_hemispherical_back_reflectance_rgb),
+                lab=direct_hemispherical_back_reflectance_lab,
+                rgb=direct_hemispherical_back_reflectance_rgb),
             diffuse_diffuse=pywincalc.optical.OpticalColorResult(
                 trichromatic=diffuse_diffuse_back_reflectance_trichromatic,
-                Lab=diffuse_diffuse_back_reflectance_lab,
-                RGB=diffuse_diffuse_back_reflectance_rgb))
+                lab=diffuse_diffuse_back_reflectance_lab,
+                rgb=diffuse_diffuse_back_reflectance_rgb))
 
     except Exception as e:
         translated_results.error = e
