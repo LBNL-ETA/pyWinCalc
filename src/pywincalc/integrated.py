@@ -57,33 +57,38 @@ def calc_optical(glazing_system, method, result_setter_f):
     translated_results = pywincalc.optical.OpticalStandardMethodResults()
     try:
         results = glazing_system.optical_method_results(method)
-        results = results.system_results
-        translated_results.transmittance_front = pywincalc.optical.OpticalStandardMethodFluxResults(
-            direct_direct=results.front.transmittance.direct_direct,
-            direct_diffuse=results.front.transmittance.direct_diffuse,
-            direct_hemispherical=results.front.transmittance.direct_hemispherical,
-            diffuse_diffuse=results.front.transmittance.diffuse_diffuse,
-            matrix=results.front.transmittance.matrix)
-        translated_results.transmittance_back = pywincalc.optical.OpticalStandardMethodFluxResults(
-            direct_direct=results.back.transmittance.direct_direct,
-            direct_diffuse=results.back.transmittance.direct_diffuse,
-            direct_hemispherical=results.back.transmittance.direct_hemispherical,
-            diffuse_diffuse=results.back.transmittance.diffuse_diffuse,
-            matrix=results.back.transmittance.matrix)
+        system_results = results.system_results
+        translated_results.transmittance_front = pywincalc.optical.OpticalStandardMethodFluxsystem_results(
+            direct_direct=system_results.front.transmittance.direct_direct,
+            direct_diffuse=system_results.front.transmittance.direct_diffuse,
+            direct_hemispherical=system_results.front.transmittance.direct_hemispherical,
+            diffuse_diffuse=system_results.front.transmittance.diffuse_diffuse,
+            matrix=system_results.front.transmittance.matrix)
+        translated_results.transmittance_back = pywincalc.optical.OpticalStandardMethodFluxsystem_results(
+            direct_direct=system_results.back.transmittance.direct_direct,
+            direct_diffuse=system_results.back.transmittance.direct_diffuse,
+            direct_hemispherical=system_results.back.transmittance.direct_hemispherical,
+            diffuse_diffuse=system_results.back.transmittance.diffuse_diffuse,
+            matrix=system_results.back.transmittance.matrix)
 
-        translated_results.reflectance_front = pywincalc.optical.OpticalStandardMethodFluxResults(
-            direct_direct=results.front.reflectance.direct_direct,
-            direct_diffuse=results.front.reflectance.direct_diffuse,
-            direct_hemispherical=results.front.reflectance.direct_hemispherical,
-            diffuse_diffuse=results.front.reflectance.diffuse_diffuse,
-            matrix=results.front.reflectance.matrix)
+        translated_results.reflectance_front = pywincalc.optical.OpticalStandardMethodFluxsystem_results(
+            direct_direct=system_results.front.reflectance.direct_direct,
+            direct_diffuse=system_results.front.reflectance.direct_diffuse,
+            direct_hemispherical=system_results.front.reflectance.direct_hemispherical,
+            diffuse_diffuse=system_results.front.reflectance.diffuse_diffuse,
+            matrix=system_results.front.reflectance.matrix)
 
-        translated_results.reflectance_back = pywincalc.optical.OpticalStandardMethodFluxResults(
-            direct_direct=results.back.reflectance.direct_direct,
-            direct_diffuse=results.back.reflectance.direct_diffuse,
-            direct_hemispherical=results.back.reflectance.direct_hemispherical,
-            diffuse_diffuse=results.back.reflectance.diffuse_diffuse,
-            matrix=results.back.reflectance.matrix)
+        translated_results.reflectance_back = pywincalc.optical.OpticalStandardMethodFluxsystem_results(
+            direct_direct=system_results.back.reflectance.direct_direct,
+            direct_diffuse=system_results.back.reflectance.direct_diffuse,
+            direct_hemispherical=system_results.back.reflectance.direct_hemispherical,
+            diffuse_diffuse=system_results.back.reflectance.diffuse_diffuse,
+            matrix=system_results.back.reflectance.matrix)
+			
+        tranlated_results.absorptance_front = results.layer_results[0].front.absorptance.diffuse
+        tranlated_results.absorptance_back = results.layer_results[0].back.absorptance.diffuse
+			
+		
     except Exception as e:
         translated_results.error = e
 
@@ -297,13 +302,12 @@ def generate_integrated_spectral_averages_summary(product: Product,
     results: pywincalc.optical.IntegratedSpectralAveragesSummary = pywincalc.optical.IntegratedSpectralAveragesSummary()
 
     method_to_result_setter = {
-        pywincalc.OpticalMethodType.SOLAR: partial(setattr, results, "solar"),
-        pywincalc.OpticalMethodType.PHOTOPIC: partial(setattr, results, "photopic"),
-        pywincalc.OpticalMethodType.THERMAL_IR: partial(setattr, results, "thermal_ir"),
-        pywincalc.OpticalMethodType.TUV: partial(setattr, results, "tuv"),
-        pywincalc.OpticalMethodType.SPF: partial(setattr, results, "spf"),
-        pywincalc.OpticalMethodType.TDW: partial(setattr, results, "tdw"),
-        pywincalc.OpticalMethodType.TKR: partial(setattr, results, "tkr")}
+        "SOLAR": partial(setattr, results, "solar"),
+        "PHOTOPIC": partial(setattr, results, "photopic"),
+        "TUV": partial(setattr, results, "tuv"),
+        "SPF": partial(setattr, results, "spf"),
+        "TDW": partial(setattr, results, "tdw"),
+        "TKR": partial(setattr, results, "tkr")}
 
     pywincalc_layer = convert_product(product)
     glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard, solid_layers=[pywincalc_layer])
@@ -313,4 +317,11 @@ def generate_integrated_spectral_averages_summary(product: Product,
             calc_optical(glazing_system, method, f)
 
     calc_color(glazing_system, partial(setattr, results, "color"))
+    thermal_results = calc_thermal_ir(optical_standard, pywincalc_layer)
+    results.thermal_ir.transmittance_front.direct_direct = thermal_results.transmittance_front_direct_direct
+    results.thermal_ir.transmittance_back.direct_direct = thermal_results.transmittance_back_direct_direct
+    results.thermal_ir.reflectance_front.direct_direct = thermal_results.reflectance_front_direct_direct
+    results.thermal_ir.reflectance_back.direct_direct = thermal_results.reflectance_back_direct_direct
+    results.thermal_ir.absorptance_front.direct_direct = thermal_results.hemispheric_emissivity_front
+    results.thermal_ir.absorptance_back.direct_direct = thermal_results.hemispheric_emissivity_front
     return results

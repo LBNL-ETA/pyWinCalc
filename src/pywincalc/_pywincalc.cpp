@@ -378,27 +378,9 @@ PYBIND11_MODULE(_pywincalc, m) {
       .def_readwrite("type", &window_standards::Integration_Rule::type)
       .def_readwrite("k", &window_standards::Integration_Rule::k);
 
-  py::enum_<window_standards::Optical_Standard_Method_Type>(
-      m, "OpticalMethodType", py::arithmetic())
-      .value("SOLAR", window_standards::Optical_Standard_Method_Type::SOLAR)
-      .value("PHOTOPIC",
-             window_standards::Optical_Standard_Method_Type::PHOTOPIC)
-      .value("COLOR_TRISTIMX",
-             window_standards::Optical_Standard_Method_Type::COLOR_TRISTIMX)
-      .value("COLOR_TRISTIMY",
-             window_standards::Optical_Standard_Method_Type::COLOR_TRISTIMY)
-      .value("COLOR_TRISTIMZ",
-             window_standards::Optical_Standard_Method_Type::COLOR_TRISTIMZ)
-      .value("THERMAL_IR",
-             window_standards::Optical_Standard_Method_Type::THERMAL_IR)
-      .value("TUV", window_standards::Optical_Standard_Method_Type::TUV)
-      .value("SPF", window_standards::Optical_Standard_Method_Type::SPF)
-      .value("TDW", window_standards::Optical_Standard_Method_Type::TDW)
-      .value("TKR", window_standards::Optical_Standard_Method_Type::TKR);
-
   py::class_<window_standards::Optical_Standard_Method>(m,
                                                         "OpticalStandardMethod")
-      .def_readwrite("type", &window_standards::Optical_Standard_Method::type)
+      .def_readwrite("name", &window_standards::Optical_Standard_Method::name)
       .def_readwrite("description",
                      &window_standards::Optical_Standard_Method::description)
       .def_readwrite(
@@ -893,7 +875,7 @@ PYBIND11_MODULE(_pywincalc, m) {
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("optical_method_results",
            &wincalc::Glazing_System::optical_method_results,
-           py::arg("method_type"), py::arg("theta") = 0, py::arg("phi") = 0)
+           py::arg("method_name"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("color", &wincalc::Glazing_System::color, py::arg("theta") = 0,
            py::arg("phi") = 0)
       .def("solid_layers_effective_conductivities",
@@ -1185,7 +1167,25 @@ PYBIND11_MODULE(_pywincalc, m) {
       .def("set_frame_meeting_rail",
            &CMA::CMAWindowDualVisionVertical::setFrameMeetingRail)
       .def("set_dividers", &CMA::CMAWindowDualVisionVertical::setDividers);
+	  
+  py::class_<wincalc::ThermalIRResults>(m, "ThermalIRResults")
+      .def_readwrite("transmittance_front_direct_direct", &wincalc::ThermalIRResults::transmittance_front_direct_direct)
+      .def_readwrite("transmittance_back_direct_direct", &wincalc::ThermalIRResults::transmittance_back_direct_direct)
+	  .def_readwrite("reflectance_front_direct_direct", &wincalc::ThermalIRResults::reflectance_front_direct_direct)
+      .def_readwrite("reflectance_back_direct_direct", &wincalc::ThermalIRResults::reflectance_back_direct_direct)
+	  .def_readwrite("hemispheric_emissivity_front", &wincalc::ThermalIRResults::hemispheric_emissivity_front)
+      .def_readwrite("hemispheric_emissivity_back", &wincalc::ThermalIRResults::hemispheric_emissivity_back);
 
+  m.def("calc_thermal_ir", py::overload_cast<window_standards::Optical_Standard const&, wincalc::Product_Data_Optical_Thermal const&,
+		wincalc::Spectal_Data_Wavelength_Range_Method const&,int,int>(&wincalc::calc_thermal_ir), py::arg("optical_standard"), py::arg("product_data"), 
+		py::arg("wavelength_range_method") = wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
+		py::arg("number_visible_bands") = 5, py::arg("number_solar_bands") = 10);
+		
+  m.def("calc_thermal_ir", py::overload_cast<window_standards::Optical_Standard const&, std::shared_ptr<OpticsParser::ProductData> const&,
+		wincalc::Spectal_Data_Wavelength_Range_Method const&,int,int>(&wincalc::calc_thermal_ir), py::arg("optical_standard"), py::arg("product_data"), 
+		py::arg("wavelength_range_method") = wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
+		py::arg("number_visible_bands") = 5, py::arg("number_solar_bands") = 10);
+	  
   m.def("get_spacer_keff", &wincalc::get_spacer_keff,
         "Calculate the effective conductivity of a spacer from a THERM thmx "
         "file.");

@@ -50,6 +50,8 @@ class OpticalStandardMethodResults:
     transmittance_back: OpticalStandardMethodFluxResults = None
     reflectance_front: OpticalStandardMethodFluxResults = None
     reflectance_back: OpticalStandardMethodFluxResults = None
+    absorptance_front: float = None
+    absorptance_back: float = None
     error = None
 
 @dataclass
