@@ -1171,8 +1171,6 @@ PYBIND11_MODULE(_pywincalc, m) {
   py::class_<wincalc::ThermalIRResults>(m, "ThermalIRResults")
       .def_readwrite("transmittance_front_direct_direct", &wincalc::ThermalIRResults::transmittance_front_direct_direct)
       .def_readwrite("transmittance_back_direct_direct", &wincalc::ThermalIRResults::transmittance_back_direct_direct)
-	  .def_readwrite("reflectance_front_direct_direct", &wincalc::ThermalIRResults::reflectance_front_direct_direct)
-      .def_readwrite("reflectance_back_direct_direct", &wincalc::ThermalIRResults::reflectance_back_direct_direct)
 	  .def_readwrite("hemispheric_emissivity_front", &wincalc::ThermalIRResults::hemispheric_emissivity_front)
       .def_readwrite("hemispheric_emissivity_back", &wincalc::ThermalIRResults::hemispheric_emissivity_back);
 
