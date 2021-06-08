@@ -50,9 +50,37 @@ class OpticalStandardMethodResults:
     transmittance_back: OpticalStandardMethodFluxResults = None
     reflectance_front: OpticalStandardMethodFluxResults = None
     reflectance_back: OpticalStandardMethodFluxResults = None
-    hemispheric_absorptance_front: float = None
-    hemispheric_absorptance_back: float = None
+    absorptance_front_direct: float = None
+    absorptance_back_direct: float = None
+	absorptance_front_hemispheric: float = None
+    absorptance_back_hemispheric: float = None
     error = None
+	
+@dataclass
+class ThermalIRResults:
+    transmittance_front_direct_direct: float = None
+    transmittance_back_direct_direct: float = None
+	absorptance_front_direct: float = None
+    absorptance_back_direct: float = None
+    absorptance_front_hemispheric: float = None
+    absorptance_back_hemispheric: float = None
+    error = None
+    
+    @property
+    def emissivity_front_hemispheric(self):
+        return self.absorptance_front_hemispheric
+		
+    @property
+    def emissivity_back_hemispheric(self):
+        return self.absorptance_back_hemispheric
+		
+    @property
+    def emissivity_front_direct(self):
+        return self.absorptance_front_direct
+		
+    @property
+    def emissivity_back_direct(self):
+        return self.absorptance_back_direct
 
 @dataclass
 class TrichromaticResult:
@@ -100,7 +128,7 @@ class OpticalColorResults:
 class IntegratedSpectralAveragesSummary:
     solar: OpticalStandardMethodResults = None
     photopic: OpticalStandardMethodResults = None
-    thermal_ir: OpticalStandardMethodResults = None
+    thermal_ir: ThermalIRResults = None
     tuv: OpticalStandardMethodResults = None
     spf: OpticalStandardMethodResults = None
     tdw: OpticalStandardMethodResults = None

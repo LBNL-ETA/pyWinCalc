@@ -86,8 +86,10 @@ def calc_optical(glazing_system, method, result_setter_f):
             diffuse_diffuse=system_results.back.reflectance.diffuse_diffuse,
             matrix=system_results.back.reflectance.matrix)
             
-        translated_results.absorptance_front = results.layer_results[0].front.absorptance.diffuse
-        translated_results.absorptance_back = results.layer_results[0].back.absorptance.diffuse
+        translated_results.absorptance_front_direct = results.layer_results[0].front.absorptance.direct
+        translated_results.absorptance_back_direct = results.layer_results[0].back.absorptance.direct
+        translated_results.absorptance_front_hemispheric = results.layer_results[0].front.absorptance.diffuse
+        translated_results.absorptance_back_hemispheric = results.layer_results[0].back.absorptance.diffuse
             
         
     except Exception as e:
@@ -281,12 +283,10 @@ def calc_color(glazing_system, results_setter_f):
 def generate_thermal_ir_results(pywincalc_layer, optical_standard, result_setter_f):
     converted_results = pywincalc.optical.OpticalStandardMethodResults()
     thermal_results = pywincalc.calc_thermal_ir(optical_standard, pywincalc_layer)
-    converted_results.transmittance_front = pywincalc.optical.OpticalStandardMethodFluxResults()
-    converted_results.transmittance_back = pywincalc.optical.OpticalStandardMethodFluxResults()
-    converted_results.transmittance_front.direct_direct = thermal_results.transmittance_front_direct_direct
-    converted_results.transmittance_back.direct_direct = thermal_results.transmittance_back_direct_direct
-    converted_results.hemispheric_absorptance_front = thermal_results.hemispheric_emissivity_front
-    converted_results.hemispheric_absorptance_back = thermal_results.hemispheric_emissivity_back
+    converted_results.transmittance_front_direct_direct = thermal_results.transmittance_front_direct_direct
+    converted_results.transmittance_back_direct_direct = thermal_results.transmittance_back_direct_direct
+    converted_results.absorptance_front_hemispheric = thermal_results.hemispheric_emissivity_front
+    converted_results.absorptance_back_hemispheric = thermal_results.hemispheric_emissivity_back
     result_setter_f(converted_results)
 
 
