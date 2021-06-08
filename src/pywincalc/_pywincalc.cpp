@@ -1171,8 +1171,10 @@ PYBIND11_MODULE(_pywincalc, m) {
   py::class_<wincalc::ThermalIRResults>(m, "ThermalIRResults")
       .def_readwrite("transmittance_front_direct_direct", &wincalc::ThermalIRResults::transmittance_front_direct_direct)
       .def_readwrite("transmittance_back_direct_direct", &wincalc::ThermalIRResults::transmittance_back_direct_direct)
-	  .def_readwrite("hemispheric_emissivity_front", &wincalc::ThermalIRResults::hemispheric_emissivity_front)
-      .def_readwrite("hemispheric_emissivity_back", &wincalc::ThermalIRResults::hemispheric_emissivity_back);
+	  .def_readwrite("emissivity_front_direct", &wincalc::ThermalIRResults::emissivity_front_direct)
+      .def_readwrite("emissivity_back_direct", &wincalc::ThermalIRResults::emissivity_back_direct)
+	  .def_readwrite("emissivity_front_hemispheric", &wincalc::ThermalIRResults::emissivity_front_hemispheric)
+      .def_readwrite("emissivity_back_hemispheric", &wincalc::ThermalIRResults::emissivity_back_hemispheric);
 
   m.def("calc_thermal_ir", &wincalc::calc_thermal_ir, py::arg("optical_standard"), py::arg("product_data"), 
 		py::arg("wavelength_range_method") = wincalc::Spectal_Data_Wavelength_Range_Method::FULL,

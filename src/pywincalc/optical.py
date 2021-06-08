@@ -52,15 +52,15 @@ class OpticalStandardMethodResults:
     reflectance_back: OpticalStandardMethodFluxResults = None
     absorptance_front_direct: float = None
     absorptance_back_direct: float = None
-	absorptance_front_hemispheric: float = None
+    absorptance_front_hemispheric: float = None
     absorptance_back_hemispheric: float = None
     error = None
-	
+    
 @dataclass
 class ThermalIRResults:
     transmittance_front_direct_direct: float = None
     transmittance_back_direct_direct: float = None
-	absorptance_front_direct: float = None
+    absorptance_front_direct: float = None
     absorptance_back_direct: float = None
     absorptance_front_hemispheric: float = None
     absorptance_back_hemispheric: float = None
@@ -69,15 +69,15 @@ class ThermalIRResults:
     @property
     def emissivity_front_hemispheric(self):
         return self.absorptance_front_hemispheric
-		
+        
     @property
     def emissivity_back_hemispheric(self):
         return self.absorptance_back_hemispheric
-		
+        
     @property
     def emissivity_front_direct(self):
         return self.absorptance_front_direct
-		
+        
     @property
     def emissivity_back_direct(self):
         return self.absorptance_back_direct
