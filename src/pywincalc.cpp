@@ -836,13 +836,14 @@ PYBIND11_MODULE(pywincalc, m) {
       .def(py::init<window_standards::Optical_Standard const &,
                     std::vector<wincalc::Product_Data_Optical_Thermal> const &,
                     std::vector<wincalc::Engine_Gap_Info> const &, double,
-                    double, wincalc::Environments const &,
+                    double, double, wincalc::Environments const &,
                     std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
+           py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
                std::optional<SingleLayerOptics::CBSDFHemisphere>(),
@@ -854,13 +855,14 @@ PYBIND11_MODULE(pywincalc, m) {
                window_standards::Optical_Standard const &,
                std::vector<std::shared_ptr<OpticsParser::ProductData>> const &,
                std::vector<wincalc::Engine_Gap_Info> const &, double, double,
-               wincalc::Environments const &,
+               double, wincalc::Environments const &,
                std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
+           py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
                std::optional<SingleLayerOptics::CBSDFHemisphere>(),
@@ -873,13 +875,14 @@ PYBIND11_MODULE(pywincalc, m) {
                         std::shared_ptr<OpticsParser::ProductData>,
                         wincalc::Product_Data_Optical_Thermal>> const &,
                     std::vector<wincalc::Engine_Gap_Info> const &, double,
-                    double, wincalc::Environments const &,
+                    double, double, wincalc::Environments const &,
                     std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
+           py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
                std::optional<SingleLayerOptics::CBSDFHemisphere>(),
@@ -926,8 +929,8 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("temperature_initial"), py::arg("pressure_initial"))
       .def("deflection_max", &wincalc::Glazing_System::deflection_max,
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
-	  .def("deflection_mean", &wincalc::Glazing_System::deflection_mean,
-		  py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0);
+      .def("deflection_mean", &wincalc::Glazing_System::deflection_mean,
+           py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0);
   ;
 
   m.def("convert_to_solid_layer", &wincalc::convert_to_solid_layer,
