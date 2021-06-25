@@ -378,6 +378,7 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("type", &window_standards::Integration_Rule::type)
       .def_readwrite("k", &window_standards::Integration_Rule::k);
 
+#if 0
   py::enum_<window_standards::Optical_Standard_Method_Type>(
       m, "OpticalMethodType", py::arithmetic())
       .value("SOLAR", window_standards::Optical_Standard_Method_Type::SOLAR)
@@ -395,10 +396,11 @@ PYBIND11_MODULE(pywincalc, m) {
       .value("SPF", window_standards::Optical_Standard_Method_Type::SPF)
       .value("TDW", window_standards::Optical_Standard_Method_Type::TDW)
       .value("TKR", window_standards::Optical_Standard_Method_Type::TKR);
+#endif
 
   py::class_<window_standards::Optical_Standard_Method>(m,
                                                         "OpticalStandardMethod")
-      .def_readwrite("type", &window_standards::Optical_Standard_Method::type)
+      .def_readwrite("name", &window_standards::Optical_Standard_Method::name)
       .def_readwrite("description",
                      &window_standards::Optical_Standard_Method::description)
       .def_readwrite(
@@ -895,7 +897,10 @@ PYBIND11_MODULE(pywincalc, m) {
            &wincalc::Glazing_System::optical_method_results,
            py::arg("method_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("color", &wincalc::Glazing_System::color, py::arg("theta") = 0,
-           py::arg("phi") = 0)
+           py::arg("phi") = 0,
+           py::arg("tristimulus_x_method") = "COLOR_TRISTIMX",
+           py::arg("tristimulus_y_method") = "COLOR_TRISTIMY",
+           py::arg("tristimulus_z_method") = "COLOR_TRISTIMZ")
       .def("solid_layers_effective_conductivities",
            &wincalc::Glazing_System::solid_layers_effective_conductivities,
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
@@ -913,7 +918,17 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("environments"))
       .def("environments",
            py::overload_cast<>(&wincalc::Glazing_System::environments,
-                                   py::const_));
+                               py::const_))
+      .def("enable_deflection", &wincalc::Glazing_System::enable_deflection,
+           py::arg("enable"))
+      .def("set_deflection_properties",
+           &wincalc::Glazing_System::set_deflection_properties,
+           py::arg("temperature_initial"), py::arg("pressure_initial"))
+      .def("deflection_max", &wincalc::Glazing_System::deflection_max,
+           py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
+	  .def("deflection_mean", &wincalc::Glazing_System::deflection_mean,
+		  py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0);
+  ;
 
   m.def("convert_to_solid_layer", &wincalc::convert_to_solid_layer,
         "Convert product data into a solid layer that can be used in glazing "
