@@ -378,26 +378,6 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("type", &window_standards::Integration_Rule::type)
       .def_readwrite("k", &window_standards::Integration_Rule::k);
 
-#if 0
-  py::enum_<window_standards::Optical_Standard_Method_Type>(
-      m, "OpticalMethodType", py::arithmetic())
-      .value("SOLAR", window_standards::Optical_Standard_Method_Type::SOLAR)
-      .value("PHOTOPIC",
-             window_standards::Optical_Standard_Method_Type::PHOTOPIC)
-      .value("COLOR_TRISTIMX",
-             window_standards::Optical_Standard_Method_Type::COLOR_TRISTIMX)
-      .value("COLOR_TRISTIMY",
-             window_standards::Optical_Standard_Method_Type::COLOR_TRISTIMY)
-      .value("COLOR_TRISTIMZ",
-             window_standards::Optical_Standard_Method_Type::COLOR_TRISTIMZ)
-      .value("THERMAL_IR",
-             window_standards::Optical_Standard_Method_Type::THERMAL_IR)
-      .value("TUV", window_standards::Optical_Standard_Method_Type::TUV)
-      .value("SPF", window_standards::Optical_Standard_Method_Type::SPF)
-      .value("TDW", window_standards::Optical_Standard_Method_Type::TDW)
-      .value("TKR", window_standards::Optical_Standard_Method_Type::TKR);
-#endif
-
   py::class_<window_standards::Optical_Standard_Method>(m,
                                                         "OpticalStandardMethod")
       .def_readwrite("name", &window_standards::Optical_Standard_Method::name)
@@ -519,7 +499,10 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("opening_right",
                      &wincalc::Product_Data_Thermal::opening_right)
       .def_readwrite("opening_front",
-                     &wincalc::Product_Data_Thermal::opening_front);
+                     &wincalc::Product_Data_Thermal::opening_front)
+      .def_readwrite("youngs_modulus",
+                     &wincalc::Product_Data_Thermal::youngs_modulus)
+      .def_readwrite("density", &wincalc::Product_Data_Thermal::density);
 
   py::class_<wincalc::Product_Data_Optical, Py_Product_Data_Optical,
              std::shared_ptr<wincalc::Product_Data_Optical>>(
@@ -832,6 +815,14 @@ PYBIND11_MODULE(pywincalc, m) {
   m.def("nfrc_u_environments", &wincalc::nfrc_u_environments);
   m.def("nfrc_shgc_environments", &wincalc::nfrc_shgc_environments);
 
+  py::class_<wincalc::Deflection_Results>(m, "DeflectionResults")
+      .def_readwrite("deflection_max",
+                     &wincalc::Deflection_Results::deflection_max)
+      .def_readwrite("deflection_mean",
+                     &wincalc::Deflection_Results::deflection_mean)
+      .def_readwrite("pressure_difference",
+                     &wincalc::Deflection_Results::pressure_difference);
+
   py::class_<wincalc::Glazing_System>(m, "GlazingSystem")
       .def(py::init<window_standards::Optical_Standard const &,
                     std::vector<wincalc::Product_Data_Optical_Thermal> const &,
@@ -927,11 +918,9 @@ PYBIND11_MODULE(pywincalc, m) {
       .def("set_deflection_properties",
            &wincalc::Glazing_System::set_deflection_properties,
            py::arg("temperature_initial"), py::arg("pressure_initial"))
-      .def("deflection_max", &wincalc::Glazing_System::deflection_max,
-           py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
-      .def("deflection_mean", &wincalc::Glazing_System::deflection_mean,
+      .def("calc_deflection_properties",
+           &wincalc::Glazing_System::calc_deflection_properties,
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0);
-  ;
 
   m.def("convert_to_solid_layer", &wincalc::convert_to_solid_layer,
         "Convert product data into a solid layer that can be used in glazing "
