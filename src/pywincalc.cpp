@@ -922,7 +922,13 @@ PYBIND11_MODULE(pywincalc, m) {
            &wincalc::Glazing_System::calc_deflection_properties,
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("set_applied_loads", &wincalc::Glazing_System::set_applied_loads,
-           py::arg("loads"));
+           py::arg("loads"))
+      .def("set_height", &wincalc::Glazing_System::set_height,
+           py::arg("height_meters"))
+      .def("set_width", &wincalc::Glazing_System::set_width,
+           py::arg("width_meters"))
+      .def("set_tilt", &wincalc::Glazing_System::set_tilt,
+           py::arg("tilt_degrees"));
 
   m.def("convert_to_solid_layer", &wincalc::convert_to_solid_layer,
         "Convert product data into a solid layer that can be used in glazing "

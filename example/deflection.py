@@ -53,3 +53,10 @@ deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogS
 print("deflection max: {val}".format(val=deflection_results.deflection_max))
 print("deflection mean: {val}".format(val=deflection_results.deflection_mean))
 print("pressure difference: {val}".format(val=deflection_results.pressure_difference))
+
+glazing_system.set_tilt(50)
+deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
+
+print("50 degree tilt deflection max: {val}".format(val=deflection_results.deflection_max))
+print("50 degree tilt deflection mean: {val}".format(val=deflection_results.deflection_mean))
+print("50 degree tilt pressure difference: {val}".format(val=deflection_results.pressure_difference))
