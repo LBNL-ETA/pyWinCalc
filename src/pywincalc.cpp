@@ -301,7 +301,12 @@ PYBIND11_MODULE(pywincalc, m) {
                      &OpticsParser::ProductData::frontEmissivity)
       .def_readwrite("emissivity_back",
                      &OpticsParser::ProductData::backEmissivity)
-      .def_readwrite("measurements", &OpticsParser::ProductData::measurements);
+      .def_readwrite("measurements", &OpticsParser::ProductData::measurements)
+      .def_readwrite("permeability_factor",
+                     &OpticsParser::ProductData::permeabilityFactor)
+      .def_readwrite("density", &OpticsParser::ProductData::density)
+      .def_readwrite("youngs_modulus",
+                     &OpticsParser::ProductData::youngsModulus);
 
   py::class_<OpticsParser::CompositionInformation,
              std::shared_ptr<OpticsParser::CompositionInformation>>(
@@ -446,6 +451,17 @@ PYBIND11_MODULE(pywincalc, m) {
       .value("WINDWARD", Tarcog::ISO15099::AirHorizontalDirection::Windward);
 
   py::class_<wincalc::Environment>(m, "Environment")
+      .def(py::init<double, double, double,
+                    Tarcog::ISO15099::BoundaryConditionsCoeffModel, double,
+                    double, double, Tarcog::ISO15099::AirHorizontalDirection,
+                    double>(),
+           py::arg("air_temperature"), py::arg("pressure"),
+           py::arg("convection_coefficient"), py::arg("coefficient_model"),
+           py::arg("radiation_temperature"), py::arg("emissivity"),
+           py::arg("air_speed") = 0,
+           py::arg("air_direction") =
+               Tarcog::ISO15099::AirHorizontalDirection::None,
+           py::arg("direct_solar_radiation") = 0)
       .def_readwrite("air_temperature", &wincalc::Environment::air_temperature)
       .def_readwrite("pressure", &wincalc::Environment::pressure)
       .def_readwrite("convection_coefficient",
@@ -461,6 +477,8 @@ PYBIND11_MODULE(pywincalc, m) {
                      &wincalc::Environment::direct_solar_radiation);
 
   py::class_<wincalc::Environments>(m, "Environments")
+      .def(py::init<wincalc::Environment, wincalc::Environment>(),
+           py::arg("outside"), py::arg("inside"))
       .def_readwrite("outside", &wincalc::Environments::outside)
       .def_readwrite("inside", &wincalc::Environments::inside);
 
@@ -820,8 +838,7 @@ PYBIND11_MODULE(pywincalc, m) {
                      &wincalc::Deflection_Results::deflection_max)
       .def_readwrite("deflection_mean",
                      &wincalc::Deflection_Results::deflection_mean)
-      .def_readwrite("pressure_difference",
-                     &wincalc::Deflection_Results::pressure_difference);
+      .def_readwrite("panes_load", &wincalc::Deflection_Results::panes_load);
 
   py::class_<wincalc::Glazing_System>(m, "GlazingSystem")
       .def(py::init<window_standards::Optical_Standard const &,
