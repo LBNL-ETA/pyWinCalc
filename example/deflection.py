@@ -57,26 +57,46 @@ glazing_system.set_deflection_properties(temperature_initial=273, pressure_initi
 # Density can be calculated using either U or SHGC TARCOG system types.  Just using SHGC for this
 # example for simplicity.
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
+print("Initial results")
+print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
+print("\tdeflection mean: {val}".format(val=deflection_results.deflection_mean))
+print("\tpanes load: {val}".format(val=deflection_results.panes_load))
+print("\tU: {val}".format(val=glazing_system.u()))
+print("\tSHGC: {val}".format(val=glazing_system.shgc()))
+print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
+print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+visible_results = glazing_system.optical_method_results("PHOTOPIC")
+print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 
-print("deflection max: {val}".format(val=deflection_results.deflection_max))
-print("deflection mean: {val}".format(val=deflection_results.deflection_mean))
-print("panes load: {val}".format(val=deflection_results.panes_load))
 
 # Change initial temperature and pressure.  Values just chosen for example purposes
 glazing_system.set_deflection_properties(temperature_initial=290, pressure_initial=1014500)
 print("")
-print("different initial conditions deflection max: {val}".format(val=deflection_results.deflection_max))
-print("different initial conditions deflection mean: {val}".format(val=deflection_results.deflection_mean))
-print("different initial conditions panes load: {val}".format(val=deflection_results.panes_load))
-
+print("Changed initial temperature and pressure")
+print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
+print("\tdeflection mean: {val}".format(val=deflection_results.deflection_mean))
+print("\tpanes load: {val}".format(val=deflection_results.panes_load))
+print("\tU: {val}".format(val=glazing_system.u()))
+print("\tSHGC: {val}".format(val=glazing_system.shgc()))
+print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
+print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+visible_results = glazing_system.optical_method_results("PHOTOPIC")
+print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 # Change tilt
 glazing_system.set_tilt(50)
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
-print("50 degree tilt deflection max: {val}".format(val=deflection_results.deflection_max))
-print("50 degree tilt deflection mean: {val}".format(val=deflection_results.deflection_mean))
-print("50 degree tilt panes load: {val}".format(val=deflection_results.panes_load))
+print("Set tilt")
+print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
+print("\tdeflection mean: {val}".format(val=deflection_results.deflection_mean))
+print("\tpanes load: {val}".format(val=deflection_results.panes_load))
+print("\tU: {val}".format(val=glazing_system.u()))
+print("\tSHGC: {val}".format(val=glazing_system.shgc()))
+print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
+print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+visible_results = glazing_system.optical_method_results("PHOTOPIC")
+print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 
 # Set pane loads.  Note:  These numbers are just randomly chosen for example purposes
 pane_loads = [25, 5, 50]
@@ -84,9 +104,16 @@ glazing_system.set_applied_loads(pane_loads)
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
-print("50 degree tilt with applied loads deflection max: {val}".format(val=deflection_results.deflection_max))
-print("50 degree tilt with applied loads deflection mean: {val}".format(val=deflection_results.deflection_mean))
-print("50 degree tilt with applied loads panes load: {val}".format(val=deflection_results.panes_load))
+print("Set applied loads")
+print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
+print("\tdeflection mean: {val}".format(val=deflection_results.deflection_mean))
+print("\tpanes load: {val}".format(val=deflection_results.panes_load))
+print("\tU: {val}".format(val=glazing_system.u()))
+print("\tSHGC: {val}".format(val=glazing_system.shgc()))
+print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
+print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+visible_results = glazing_system.optical_method_results("PHOTOPIC")
+print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 
 # create and use custom environmental conditions
 # This creates environmental conditions that are the same as the NFRC SHCG environment
@@ -147,9 +174,16 @@ glazing_system.set_deflection_properties(temperature_initial=273, pressure_initi
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
-print("custom environment 1 deflection max: {val}".format(val=deflection_results.deflection_max))
-print("custom environment 1 deflection mean: {val}".format(val=deflection_results.deflection_mean))
-print("custom environment 1 panes load: {val}".format(val=deflection_results.panes_load))
+print("Set custom environmental conditions 1")
+print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
+print("\tdeflection mean: {val}".format(val=deflection_results.deflection_mean))
+print("\tpanes load: {val}".format(val=deflection_results.panes_load))
+print("\tU: {val}".format(val=glazing_system.u()))
+print("\tSHGC: {val}".format(val=glazing_system.shgc()))
+print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
+print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+visible_results = glazing_system.optical_method_results("PHOTOPIC")
+print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 
 # Rather than setting all the parameters for a custom environment it may be easier to start with
 # an existing environment and only change what is needed
@@ -169,9 +203,16 @@ glazing_system.set_deflection_properties(temperature_initial=273, pressure_initi
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
-print("custom environment 2 deflection max: {val}".format(val=deflection_results.deflection_max))
-print("custom environment 2 deflection mean: {val}".format(val=deflection_results.deflection_mean))
-print("custom environment 2 panes load: {val}".format(val=deflection_results.panes_load))
+print("Set custom environmental conditions 2")
+print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
+print("\tdeflection mean: {val}".format(val=deflection_results.deflection_mean))
+print("\tpanes load: {val}".format(val=deflection_results.panes_load))
+print("\tU: {val}".format(val=glazing_system.u()))
+print("\tSHGC: {val}".format(val=glazing_system.shgc()))
+print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
+print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+visible_results = glazing_system.optical_method_results("PHOTOPIC")
+print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 
 # Density and Young's Modulus are set on the solid layers.  Changing them also involves re-creating the
 # glazing system.  Again let us know if you would like a mechanism for being able to change them
@@ -192,6 +233,13 @@ glazing_system.set_deflection_properties(temperature_initial=273, pressure_initi
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
-print("different density and youngs modulus deflection max: {val}".format(val=deflection_results.deflection_max))
-print("different density and youngs modulus deflection mean: {val}".format(val=deflection_results.deflection_mean))
-print("different density and youngs modulus panes load: {val}".format(val=deflection_results.panes_load))
+print("Set density and youngs modulus")
+print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
+print("\tdeflection mean: {val}".format(val=deflection_results.deflection_mean))
+print("\tpanes load: {val}".format(val=deflection_results.panes_load))
+print("\tU: {val}".format(val=glazing_system.u()))
+print("\tSHGC: {val}".format(val=glazing_system.shgc()))
+print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
+print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+visible_results = glazing_system.optical_method_results("PHOTOPIC")
+print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
