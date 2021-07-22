@@ -559,16 +559,24 @@ PYBIND11_MODULE(pywincalc, m) {
       .value("MONOLITHIC", FenestrationCommon::MaterialType::Monolithic)
       .value("THERMOCHROMIC", FenestrationCommon::MaterialType::Thermochromic);
 
+  py::enum_<wincalc::CoatedSide>(m, "CoatedSide", py::arithmetic())
+      .value("FRONT", wincalc::CoatedSide::FRONT)
+      .value("BACK", wincalc::CoatedSide::BACK)
+      .value("BOTH", wincalc::CoatedSide::BOTH)
+      .value("NEITHER", wincalc::CoatedSide::NEITHER);
+
   py::class_<wincalc::Product_Data_N_Band_Optical,
              wincalc::Product_Data_Optical,
              std::shared_ptr<wincalc::Product_Data_N_Band_Optical>>(
       m, "ProductDataOpticalNBand")
       .def(py::init<FenestrationCommon::MaterialType, double,
-                    std::vector<OpticsParser::WLData>, std::optional<double>,
+                    std::vector<OpticsParser::WLData>,
+                    std::optional<wincalc::CoatedSide>, std::optional<double>,
                     std::optional<double>, std::optional<double>,
                     std::optional<double>, double, bool>(),
            py::arg("material_type"), py::arg("thickness_meters"),
            py::arg("wavelength_data"),
+           py::arg("coated_side") = std::optional<wincalc::CoatedSide>(),
            py::arg("ir_transmittance_front") = std::optional<double>(),
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
