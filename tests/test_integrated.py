@@ -6,6 +6,7 @@ from pywincalc.standard import CalculationStandardName
 import pywincalc
 import pywincalc.optical
 import os
+from math import isclose
 
 OPTICAL_STANDARD_PATH_NFRC = os.path.join(os.path.dirname(__file__), "../example/standards/W5_NFRC_2003.std")
 
@@ -27,9 +28,10 @@ def test_generate_integrated_spectral_averages_summary():
     values: pywincalc.optical.IntegratedSpectralAveragesSummary = generate_integrated_spectral_averages_summary(
         product=product,
         optical_standard=optical_standard)        
-    assert values.solar.transmittance_front.direct_hemispherical == 0.847468218237298
-    assert values.thermal_ir.absorptance_front_hemispheric == 0.839999974
-    assert values.thermal_ir.absorptance_back_hemispheric == 0.839999974
+    
+    assert isclose(values.solar.transmittance_front.direct_hemispherical, 0.847468218237298, abs_tol=1e-6)
+    assert isclose(values.thermal_ir.absorptance_front_hemispheric, 0.839999974, abs_tol=1e-8)
+    assert isclose(values.thermal_ir.absorptance_back_hemispheric, 0.839999974, abs_tol=1e-8)
     assert values.thermal_ir.emissivity_front_hemispheric == values.thermal_ir.absorptance_front_hemispheric
     assert values.thermal_ir.emissivity_back_hemispheric == values.thermal_ir.absorptance_back_hemispheric
     assert values.thermal_ir.transmittance_front_diffuse_diffuse == 0
@@ -53,8 +55,8 @@ def test_calculate_emissivity_from_wavelengths():
     values: pywincalc.optical.IntegratedSpectralAveragesSummary = generate_integrated_spectral_averages_summary(
         product=product,
         optical_standard=optical_standard)        
-    assert values.thermal_ir.absorptance_front_hemispheric == 0.8402627824166977
-    assert values.thermal_ir.absorptance_back_hemispheric == 0.0077240385089490824
+    assert isclose(values.thermal_ir.absorptance_front_hemispheric, 0.8402627824166977, abs_tol=1e-8)
+    assert isclose(values.thermal_ir.absorptance_back_hemispheric, 0.0077240385089490824, abs_tol=1e-8)
     assert values.thermal_ir.emissivity_front_hemispheric == values.thermal_ir.absorptance_front_hemispheric
     assert values.thermal_ir.emissivity_back_hemispheric == values.thermal_ir.absorptance_back_hemispheric
     assert values.thermal_ir.transmittance_front_diffuse_diffuse == 0
@@ -65,3 +67,4 @@ def test_calculate_emissivity_from_wavelengths():
 if __name__ == "__main__":
     test_generate_integrated_spectral_averages_summary()
     test_calculate_emissivity_from_wavelengths()
+
