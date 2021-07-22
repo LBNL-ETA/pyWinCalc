@@ -59,6 +59,7 @@
     }
   },
   "coating_id": null,
+  "coated_side": "neither",
   "created_at": null,
   "updated_at": null
 }

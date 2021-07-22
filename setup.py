@@ -59,7 +59,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='pywincalc',
-    version='2.1.1',
+    version='2.2.2',
     long_description='',
     # tell setuptools to look for any packages under 'src'
     packages=find_packages(where='src'),

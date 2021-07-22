@@ -32,6 +32,8 @@ def test_generate_integrated_spectral_averages_summary():
     assert values.thermal_ir.absorptance_back_hemispheric == 0.839999974
     assert values.thermal_ir.emissivity_front_hemispheric == values.thermal_ir.absorptance_front_hemispheric
     assert values.thermal_ir.emissivity_back_hemispheric == values.thermal_ir.absorptance_back_hemispheric
+    assert values.thermal_ir.transmittance_front_diffuse_diffuse == 0
+    assert values.thermal_ir.transmittance_back_diffuse_diffuse == 0
     
 
 def test_calculate_emissivity_from_wavelengths():
@@ -55,6 +57,8 @@ def test_calculate_emissivity_from_wavelengths():
     assert values.thermal_ir.absorptance_back_hemispheric == 0.0077240385089490824
     assert values.thermal_ir.emissivity_front_hemispheric == values.thermal_ir.absorptance_front_hemispheric
     assert values.thermal_ir.emissivity_back_hemispheric == values.thermal_ir.absorptance_back_hemispheric
+    assert values.thermal_ir.transmittance_front_diffuse_diffuse == 0
+    assert values.thermal_ir.transmittance_back_diffuse_diffuse == 0
     
 
 

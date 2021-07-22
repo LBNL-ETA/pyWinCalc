@@ -301,7 +301,12 @@ PYBIND11_MODULE(_pywincalc, m) {
                      &OpticsParser::ProductData::frontEmissivity)
       .def_readwrite("emissivity_back",
                      &OpticsParser::ProductData::backEmissivity)
-      .def_readwrite("measurements", &OpticsParser::ProductData::measurements);
+      .def_readwrite("measurements", &OpticsParser::ProductData::measurements)
+      .def_readwrite("permeability_factor",
+                     &OpticsParser::ProductData::permeabilityFactor)
+      .def_readwrite("density", &OpticsParser::ProductData::density)
+      .def_readwrite("youngs_modulus",
+                     &OpticsParser::ProductData::youngsModulus);
 
   py::class_<OpticsParser::CompositionInformation,
              std::shared_ptr<OpticsParser::CompositionInformation>>(
@@ -446,6 +451,17 @@ PYBIND11_MODULE(_pywincalc, m) {
       .value("WINDWARD", Tarcog::ISO15099::AirHorizontalDirection::Windward);
 
   py::class_<wincalc::Environment>(m, "Environment")
+      .def(py::init<double, double, double,
+                    Tarcog::ISO15099::BoundaryConditionsCoeffModel, double,
+                    double, double, Tarcog::ISO15099::AirHorizontalDirection,
+                    double>(),
+           py::arg("air_temperature"), py::arg("pressure"),
+           py::arg("convection_coefficient"), py::arg("coefficient_model"),
+           py::arg("radiation_temperature"), py::arg("emissivity"),
+           py::arg("air_speed") = 0,
+           py::arg("air_direction") =
+               Tarcog::ISO15099::AirHorizontalDirection::None,
+           py::arg("direct_solar_radiation") = 0)
       .def_readwrite("air_temperature", &wincalc::Environment::air_temperature)
       .def_readwrite("pressure", &wincalc::Environment::pressure)
       .def_readwrite("convection_coefficient",
@@ -461,6 +477,8 @@ PYBIND11_MODULE(_pywincalc, m) {
                      &wincalc::Environment::direct_solar_radiation);
 
   py::class_<wincalc::Environments>(m, "Environments")
+      .def(py::init<wincalc::Environment, wincalc::Environment>(),
+           py::arg("outside"), py::arg("inside"))
       .def_readwrite("outside", &wincalc::Environments::outside)
       .def_readwrite("inside", &wincalc::Environments::inside);
 
@@ -499,7 +517,10 @@ PYBIND11_MODULE(_pywincalc, m) {
       .def_readwrite("opening_right",
                      &wincalc::Product_Data_Thermal::opening_right)
       .def_readwrite("opening_front",
-                     &wincalc::Product_Data_Thermal::opening_front);
+                     &wincalc::Product_Data_Thermal::opening_front)
+      .def_readwrite("youngs_modulus",
+                     &wincalc::Product_Data_Thermal::youngs_modulus)
+      .def_readwrite("density", &wincalc::Product_Data_Thermal::density);
 
   py::class_<wincalc::Product_Data_Optical, Py_Product_Data_Optical,
              std::shared_ptr<wincalc::Product_Data_Optical>>(
@@ -538,16 +559,24 @@ PYBIND11_MODULE(_pywincalc, m) {
       .value("MONOLITHIC", FenestrationCommon::MaterialType::Monolithic)
       .value("THERMOCHROMIC", FenestrationCommon::MaterialType::Thermochromic);
 
+  py::enum_<wincalc::CoatedSide>(m, "CoatedSide", py::arithmetic())
+      .value("FRONT", wincalc::CoatedSide::FRONT)
+      .value("BACK", wincalc::CoatedSide::BACK)
+      .value("BOTH", wincalc::CoatedSide::BOTH)
+      .value("NEITHER", wincalc::CoatedSide::NEITHER);
+
   py::class_<wincalc::Product_Data_N_Band_Optical,
              wincalc::Product_Data_Optical,
              std::shared_ptr<wincalc::Product_Data_N_Band_Optical>>(
       m, "ProductDataOpticalNBand")
       .def(py::init<FenestrationCommon::MaterialType, double,
-                    std::vector<OpticsParser::WLData>, std::optional<double>,
+                    std::vector<OpticsParser::WLData>,
+                    std::optional<wincalc::CoatedSide>, std::optional<double>,
                     std::optional<double>, std::optional<double>,
                     std::optional<double>, double, bool>(),
            py::arg("material_type"), py::arg("thickness_meters"),
            py::arg("wavelength_data"),
+           py::arg("coated_side") = std::optional<wincalc::CoatedSide>(),
            py::arg("ir_transmittance_front") = std::optional<double>(),
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
@@ -812,17 +841,25 @@ PYBIND11_MODULE(_pywincalc, m) {
   m.def("nfrc_u_environments", &wincalc::nfrc_u_environments);
   m.def("nfrc_shgc_environments", &wincalc::nfrc_shgc_environments);
 
+  py::class_<wincalc::Deflection_Results>(m, "DeflectionResults")
+      .def_readwrite("deflection_max",
+                     &wincalc::Deflection_Results::deflection_max)
+      .def_readwrite("deflection_mean",
+                     &wincalc::Deflection_Results::deflection_mean)
+      .def_readwrite("panes_load", &wincalc::Deflection_Results::panes_load);
+
   py::class_<wincalc::Glazing_System>(m, "GlazingSystem")
       .def(py::init<window_standards::Optical_Standard const &,
                     std::vector<wincalc::Product_Data_Optical_Thermal> const &,
                     std::vector<wincalc::Engine_Gap_Info> const &, double,
-                    double, wincalc::Environments const &,
+                    double, double, wincalc::Environments const &,
                     std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
+           py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
                std::optional<SingleLayerOptics::CBSDFHemisphere>(),
@@ -834,13 +871,14 @@ PYBIND11_MODULE(_pywincalc, m) {
                window_standards::Optical_Standard const &,
                std::vector<std::shared_ptr<OpticsParser::ProductData>> const &,
                std::vector<wincalc::Engine_Gap_Info> const &, double, double,
-               wincalc::Environments const &,
+               double, wincalc::Environments const &,
                std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
+           py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
                std::optional<SingleLayerOptics::CBSDFHemisphere>(),
@@ -853,13 +891,14 @@ PYBIND11_MODULE(_pywincalc, m) {
                         std::shared_ptr<OpticsParser::ProductData>,
                         wincalc::Product_Data_Optical_Thermal>> const &,
                     std::vector<wincalc::Engine_Gap_Info> const &, double,
-                    double, wincalc::Environments const &,
+                    double, double, wincalc::Environments const &,
                     std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
+           py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
                std::optional<SingleLayerOptics::CBSDFHemisphere>(),
@@ -877,7 +916,10 @@ PYBIND11_MODULE(_pywincalc, m) {
            &wincalc::Glazing_System::optical_method_results,
            py::arg("method_name"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("color", &wincalc::Glazing_System::color, py::arg("theta") = 0,
-           py::arg("phi") = 0)
+           py::arg("phi") = 0,
+           py::arg("tristimulus_x_method") = "COLOR_TRISTIMX",
+           py::arg("tristimulus_y_method") = "COLOR_TRISTIMY",
+           py::arg("tristimulus_z_method") = "COLOR_TRISTIMZ")
       .def("solid_layers_effective_conductivities",
            &wincalc::Glazing_System::solid_layers_effective_conductivities,
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
@@ -895,7 +937,23 @@ PYBIND11_MODULE(_pywincalc, m) {
            py::arg("environments"))
       .def("environments",
            py::overload_cast<>(&wincalc::Glazing_System::environments,
-                                   py::const_));
+                               py::const_))
+      .def("enable_deflection", &wincalc::Glazing_System::enable_deflection,
+           py::arg("enable"))
+      .def("set_deflection_properties",
+           &wincalc::Glazing_System::set_deflection_properties,
+           py::arg("temperature_initial"), py::arg("pressure_initial"))
+      .def("calc_deflection_properties",
+           &wincalc::Glazing_System::calc_deflection_properties,
+           py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
+      .def("set_applied_loads", &wincalc::Glazing_System::set_applied_loads,
+           py::arg("loads"))
+      .def("set_height", &wincalc::Glazing_System::set_height,
+           py::arg("height_meters"))
+      .def("set_width", &wincalc::Glazing_System::set_width,
+           py::arg("width_meters"))
+      .def("set_tilt", &wincalc::Glazing_System::set_tilt,
+           py::arg("tilt_degrees"));
 
   m.def("convert_to_solid_layer", &wincalc::convert_to_solid_layer,
         "Convert product data into a solid layer that can be used in glazing "
@@ -1169,10 +1227,8 @@ PYBIND11_MODULE(_pywincalc, m) {
       .def("set_dividers", &CMA::CMAWindowDualVisionVertical::setDividers);
 	  
   py::class_<wincalc::ThermalIRResults>(m, "ThermalIRResults")
-      .def_readwrite("transmittance_front_direct_direct", &wincalc::ThermalIRResults::transmittance_front_direct_direct)
-      .def_readwrite("transmittance_back_direct_direct", &wincalc::ThermalIRResults::transmittance_back_direct_direct)
-	  .def_readwrite("emissivity_front_direct", &wincalc::ThermalIRResults::emissivity_front_direct)
-      .def_readwrite("emissivity_back_direct", &wincalc::ThermalIRResults::emissivity_back_direct)
+      .def_readwrite("transmittance_front_diffuse_diffuse", &wincalc::ThermalIRResults::transmittance_front_diffuse_diffuse)
+      .def_readwrite("transmittance_back_diffuse_diffuse", &wincalc::ThermalIRResults::transmittance_back_diffuse_diffuse)
 	  .def_readwrite("emissivity_front_hemispheric", &wincalc::ThermalIRResults::emissivity_front_hemispheric)
       .def_readwrite("emissivity_back_hemispheric", &wincalc::ThermalIRResults::emissivity_back_hemispheric);
 
