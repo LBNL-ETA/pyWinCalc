@@ -35,15 +35,13 @@ def convert_subtype(subtype):
     return pywincalc_material
 
 
-def convert_coated_side(coated_side):
-    mapping = {"front": pywincalc.CoatedSide.FRONT, "back": pywincalc.CoatedSide.BACK,
-               "both": pywincalc.CoatedSide.BOTH, "neither": pywincalc.CoatedSide.NEITHER}
-
-    pywincalc_coated_side = mapping.get(coated_side.lower())
-    if pywincalc_coated_side is None:
-        raise RuntimeError("Unsupported coated side: {v}".format(v=coated_side))
-
-    return pywincalc_coated_side
+def convert_coated_side(coated_side) -> str:
+    if not coated_side:
+        return pywincalc.CoatedSide.NEITHER.name
+    try:
+        return pywincalc.CoatedSide[coated_side.upper()].name
+    except KeyError:
+        raise RuntimeError(f"Unsupported coated side: {coated_side}")
 
 
 def convert_product(product):
