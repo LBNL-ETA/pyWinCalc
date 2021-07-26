@@ -43,7 +43,8 @@ def convert_coated_side(coated_side: str) -> str:
         "FRONT": pywincalc.CoatedSide.FRONT,
         "BACK": pywincalc.CoatedSide.BACK,
         "BOTH": pywincalc.CoatedSide.BOTH,
-        "NEITHER": pywincalc.CoatedSide.NEITHER
+        "NEITHER": pywincalc.CoatedSide.NEITHER,
+        "NA": pywincalc.CoatedSide.NEITHER
     }
     try:
         return mapping.get(coated_side)
