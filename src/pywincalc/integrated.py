@@ -35,9 +35,9 @@ def convert_subtype(subtype):
     return pywincalc_material
 
 
-def convert_coated_side(coated_side: str) -> str:
+def convert_coated_side(coated_side: str) -> pywincalc.CoatedSide:
     if not coated_side:
-        return "NEITHER"
+        return pywincalc.CoatedSide.NEITHER
     coated_side = coated_side.upper()
     mapping = {
         "FRONT": pywincalc.CoatedSide.FRONT,
