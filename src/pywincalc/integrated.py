@@ -1,8 +1,10 @@
-import pywincalc.optical
-from pywincalc.product import Product, ProductSubtype
-from pywincalc.standard import CalculationStandardName
-import pywincalc
 from functools import partial
+
+import pywincalc
+from pywincalc.product import Product, ProductSubtype
+from py_igsdb_optical_data.optical import OpticalStandardMethodResults, OpticalColorResults, \
+    IntegratedSpectralAveragesSummary, OpticalColorFluxResults, OpticalColorResult, RGBResult, \
+    LabResult, TrichromaticResult, ThermalIRResults, OpticalStandardMethodFluxResults
 
 
 def convert_wavelength_data(raw_wavelength_data):
@@ -72,32 +74,32 @@ def convert_product(product):
 
 
 def calc_optical(glazing_system, method, result_setter_f):
-    translated_results = pywincalc.optical.OpticalStandardMethodResults()
+    translated_results = OpticalStandardMethodResults()
     try:
         results = glazing_system.optical_method_results(method)
         system_results = results.system_results
-        translated_results.transmittance_front = pywincalc.optical.OpticalStandardMethodFluxResults(
+        translated_results.transmittance_front = OpticalStandardMethodFluxResults(
             direct_direct=system_results.front.transmittance.direct_direct,
             direct_diffuse=system_results.front.transmittance.direct_diffuse,
             direct_hemispherical=system_results.front.transmittance.direct_hemispherical,
             diffuse_diffuse=system_results.front.transmittance.diffuse_diffuse,
             matrix=system_results.front.transmittance.matrix)
 
-        translated_results.transmittance_back = pywincalc.optical.OpticalStandardMethodFluxResults(
+        translated_results.transmittance_back = OpticalStandardMethodFluxResults(
             direct_direct=system_results.back.transmittance.direct_direct,
             direct_diffuse=system_results.back.transmittance.direct_diffuse,
             direct_hemispherical=system_results.back.transmittance.direct_hemispherical,
             diffuse_diffuse=system_results.back.transmittance.diffuse_diffuse,
             matrix=system_results.back.transmittance.matrix)
 
-        translated_results.reflectance_front = pywincalc.optical.OpticalStandardMethodFluxResults(
+        translated_results.reflectance_front = OpticalStandardMethodFluxResults(
             direct_direct=system_results.front.reflectance.direct_direct,
             direct_diffuse=system_results.front.reflectance.direct_diffuse,
             direct_hemispherical=system_results.front.reflectance.direct_hemispherical,
             diffuse_diffuse=system_results.front.reflectance.diffuse_diffuse,
             matrix=system_results.front.reflectance.matrix)
 
-        translated_results.reflectance_back = pywincalc.optical.OpticalStandardMethodFluxResults(
+        translated_results.reflectance_back = OpticalStandardMethodFluxResults(
             direct_direct=system_results.back.reflectance.direct_direct,
             direct_diffuse=system_results.back.reflectance.direct_diffuse,
             direct_hemispherical=system_results.back.reflectance.direct_hemispherical,
@@ -117,19 +119,19 @@ def calc_optical(glazing_system, method, result_setter_f):
 
 
 def convert_trichromatic_result(trichromatic):
-    return pywincalc.optical.TrichromaticResult(x=trichromatic.X, y=trichromatic.Y, z=trichromatic.Z)
+    return TrichromaticResult(x=trichromatic.X, y=trichromatic.Y, z=trichromatic.Z)
 
 
 def convert_lab_result(lab):
-    return pywincalc.optical.LabResult(l=lab.L, a=lab.a, b=lab.b)
+    return LabResult(l=lab.L, a=lab.a, b=lab.b)
 
 
 def convert_rgb_result(rgb):
-    return pywincalc.optical.RGBResult(r=rgb.R, g=rgb.G, b=rgb.B)
+    return RGBResult(r=rgb.R, g=rgb.G, b=rgb.B)
 
 
 def calc_color(glazing_system, results_setter_f):
-    translated_results = pywincalc.optical.OpticalColorResults()
+    translated_results = OpticalColorResults()
     try:
         results = glazing_system.color()
         results = results.system_results
@@ -155,20 +157,20 @@ def calc_color(glazing_system, results_setter_f):
         diffuse_diffuse_front_transmittance_lab = convert_lab_result(results.front.transmittance.diffuse_diffuse.lab)
         diffuse_diffuse_front_transmittance_rgb = convert_rgb_result(results.front.transmittance.diffuse_diffuse.rgb)
 
-        translated_results.transmittance_front = pywincalc.optical.OpticalColorFluxResults(
-            direct_direct=pywincalc.optical.OpticalColorResult(
+        translated_results.transmittance_front = OpticalColorFluxResults(
+            direct_direct=OpticalColorResult(
                 trichromatic=direct_direct_front_transmittance_trichromatic,
                 lab=direct_direct_front_transmittance_lab,
                 rgb=direct_direct_front_transmittance_rgb),
-            direct_diffuse=pywincalc.optical.OpticalColorResult(
+            direct_diffuse=OpticalColorResult(
                 trichromatic=direct_diffuse_front_transmittance_trichromatic,
                 lab=direct_diffuse_front_transmittance_lab,
                 rgb=direct_diffuse_front_transmittance_rgb),
-            direct_hemispherical=pywincalc.optical.OpticalColorResult(
+            direct_hemispherical=OpticalColorResult(
                 trichromatic=direct_hemispherical_front_transmittance_trichromatic,
                 lab=direct_hemispherical_front_transmittance_lab,
                 rgb=direct_hemispherical_front_transmittance_rgb),
-            diffuse_diffuse=pywincalc.optical.OpticalColorResult(
+            diffuse_diffuse=OpticalColorResult(
                 trichromatic=diffuse_diffuse_front_transmittance_trichromatic,
                 lab=diffuse_diffuse_front_transmittance_lab,
                 rgb=diffuse_diffuse_front_transmittance_rgb))
@@ -195,20 +197,20 @@ def calc_color(glazing_system, results_setter_f):
         diffuse_diffuse_front_reflectance_lab = convert_lab_result(results.front.reflectance.diffuse_diffuse.lab)
         diffuse_diffuse_front_reflectance_rgb = convert_rgb_result(results.front.reflectance.diffuse_diffuse.rgb)
 
-        translated_results.reflectance_front = pywincalc.optical.OpticalColorFluxResults(
-            direct_direct=pywincalc.optical.OpticalColorResult(
+        translated_results.reflectance_front = OpticalColorFluxResults(
+            direct_direct=OpticalColorResult(
                 trichromatic=direct_direct_front_reflectance_trichromatic,
                 lab=direct_direct_front_reflectance_lab,
                 rgb=direct_direct_front_reflectance_rgb),
-            direct_diffuse=pywincalc.optical.OpticalColorResult(
+            direct_diffuse=OpticalColorResult(
                 trichromatic=direct_diffuse_front_reflectance_trichromatic,
                 lab=direct_diffuse_front_reflectance_lab,
                 rgb=direct_diffuse_front_reflectance_rgb),
-            direct_hemispherical=pywincalc.optical.OpticalColorResult(
+            direct_hemispherical=OpticalColorResult(
                 trichromatic=direct_hemispherical_front_reflectance_trichromatic,
                 lab=direct_hemispherical_front_reflectance_lab,
                 rgb=direct_hemispherical_front_reflectance_rgb),
-            diffuse_diffuse=pywincalc.optical.OpticalColorResult(
+            diffuse_diffuse=OpticalColorResult(
                 trichromatic=diffuse_diffuse_front_reflectance_trichromatic,
                 lab=diffuse_diffuse_front_reflectance_lab,
                 rgb=diffuse_diffuse_front_reflectance_rgb))
@@ -235,20 +237,20 @@ def calc_color(glazing_system, results_setter_f):
         diffuse_diffuse_back_transmittance_lab = convert_lab_result(results.back.transmittance.diffuse_diffuse.lab)
         diffuse_diffuse_back_transmittance_rgb = convert_rgb_result(results.back.transmittance.diffuse_diffuse.rgb)
 
-        translated_results.transmittance_back = pywincalc.optical.OpticalColorFluxResults(
-            direct_direct=pywincalc.optical.OpticalColorResult(
+        translated_results.transmittance_back = OpticalColorFluxResults(
+            direct_direct=OpticalColorResult(
                 trichromatic=direct_direct_back_transmittance_trichromatic,
                 lab=direct_direct_back_transmittance_lab,
                 rgb=direct_direct_back_transmittance_rgb),
-            direct_diffuse=pywincalc.optical.OpticalColorResult(
+            direct_diffuse=OpticalColorResult(
                 trichromatic=direct_diffuse_back_transmittance_trichromatic,
                 lab=direct_diffuse_back_transmittance_lab,
                 rgb=direct_diffuse_back_transmittance_rgb),
-            direct_hemispherical=pywincalc.optical.OpticalColorResult(
+            direct_hemispherical=OpticalColorResult(
                 trichromatic=direct_hemispherical_back_transmittance_trichromatic,
                 lab=direct_hemispherical_back_transmittance_lab,
                 rgb=direct_hemispherical_back_transmittance_rgb),
-            diffuse_diffuse=pywincalc.optical.OpticalColorResult(
+            diffuse_diffuse=OpticalColorResult(
                 trichromatic=diffuse_diffuse_back_transmittance_trichromatic,
                 lab=diffuse_diffuse_back_transmittance_lab,
                 rgb=diffuse_diffuse_back_transmittance_rgb))
@@ -275,20 +277,20 @@ def calc_color(glazing_system, results_setter_f):
         diffuse_diffuse_back_reflectance_lab = convert_lab_result(results.back.reflectance.diffuse_diffuse.lab)
         diffuse_diffuse_back_reflectance_rgb = convert_rgb_result(results.back.reflectance.diffuse_diffuse.rgb)
 
-        translated_results.reflectance_back = pywincalc.optical.OpticalColorFluxResults(
-            direct_direct=pywincalc.optical.OpticalColorResult(
+        translated_results.reflectance_back = OpticalColorFluxResults(
+            direct_direct=OpticalColorResult(
                 trichromatic=direct_direct_back_reflectance_trichromatic,
                 lab=direct_direct_back_reflectance_lab,
                 rgb=direct_direct_back_reflectance_rgb),
-            direct_diffuse=pywincalc.optical.OpticalColorResult(
+            direct_diffuse=OpticalColorResult(
                 trichromatic=direct_diffuse_back_reflectance_trichromatic,
                 lab=direct_diffuse_back_reflectance_lab,
                 rgb=direct_diffuse_back_reflectance_rgb),
-            direct_hemispherical=pywincalc.optical.OpticalColorResult(
+            direct_hemispherical=OpticalColorResult(
                 trichromatic=direct_hemispherical_back_reflectance_trichromatic,
                 lab=direct_hemispherical_back_reflectance_lab,
                 rgb=direct_hemispherical_back_reflectance_rgb),
-            diffuse_diffuse=pywincalc.optical.OpticalColorResult(
+            diffuse_diffuse=OpticalColorResult(
                 trichromatic=diffuse_diffuse_back_reflectance_trichromatic,
                 lab=diffuse_diffuse_back_reflectance_lab,
                 rgb=diffuse_diffuse_back_reflectance_rgb))
@@ -300,7 +302,7 @@ def calc_color(glazing_system, results_setter_f):
 
 
 def generate_thermal_ir_results(pywincalc_layer, optical_standard, result_setter_f):
-    converted_results = pywincalc.optical.ThermalIRResults()
+    converted_results = ThermalIRResults()
     thermal_results = pywincalc.calc_thermal_ir(optical_standard, pywincalc_layer)
     converted_results.transmittance_front_diffuse_diffuse = thermal_results.transmittance_front_diffuse_diffuse
     converted_results.transmittance_back_diffuse_diffuse = thermal_results.transmittance_back_diffuse_diffuse
@@ -311,7 +313,7 @@ def generate_thermal_ir_results(pywincalc_layer, optical_standard, result_setter
 
 def generate_integrated_spectral_averages_summary(product: Product,
                                                   optical_standard: pywincalc.OpticalStandard) \
-        -> pywincalc.optical.IntegratedSpectralAveragesSummary:
+        -> IntegratedSpectralAveragesSummary:
     """
     Generate
     integrated
@@ -330,7 +332,7 @@ def generate_integrated_spectral_averages_summary(product: Product,
     # TODO: Business logic that generates integrated spectral averages summary
     # TODO: for the given product and calculation standard.
 
-    results: pywincalc.optical.IntegratedSpectralAveragesSummary = pywincalc.optical.IntegratedSpectralAveragesSummary()
+    results: IntegratedSpectralAveragesSummary = IntegratedSpectralAveragesSummary()
 
     method_to_result_setter = {
         "SOLAR": partial(setattr, results, "solar"),

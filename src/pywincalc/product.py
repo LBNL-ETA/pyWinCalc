@@ -1,11 +1,9 @@
-from pydantic.dataclasses import dataclass
 from enum import Enum
 from typing import List, Dict
-from decimal import *
-from pydantic.dataclasses import dataclass
 
+from py_igsdb_optical_data.optical import OpticalProperties, IntegratedSpectralAveragesSummary
+from pydantic.dataclasses import dataclass
 from pywincalc.material import MaterialBulkProperties
-from pywincalc.optical import OpticalProperties, IntegratedSpectralAveragesSummary
 
 
 class TokenType(Enum):
