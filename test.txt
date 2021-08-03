@@ -1,0 +1,12 @@
+attrs==21.2.0
+iniconfig==1.1.1
+mypy-extensions==0.4.3
+packaging==21.0
+pluggy==0.13.1
+py==1.10.0
+-e git+https://github.com/LBNL-ETA/py_igsdb_optical_data@4bc074899b0859e8e73df155edeb71aa0fd4a56e#egg=py_igsdb_optical_data
+pydantic==1.8.2
+pyparsing==2.4.7
+pytest==6.2.4
+toml==0.10.2
+typing-extensions==3.10.0.0
