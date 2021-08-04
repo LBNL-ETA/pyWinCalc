@@ -58,7 +58,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='pywincalc',
-    version='2.2.6',
+    version='2.2.7',
     long_description='',
     # tell setuptools to look for any packages under 'src'
     packages=find_packages(where='src'),
@@ -66,6 +66,7 @@ setup(
     # and nowhere else
     package_dir={'': 'src'},
     ext_modules=[CMakeExtension('pywincalc/pywincalc')],
+    install_requires=['pydantic>=1.8.2', 'py_igsdb_optical_data @ git+https://github.com/LBNL-ETA/py_igsdb_optical_data#egg=py_igsdb_optical_data'],
     test_suite='tests',
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
