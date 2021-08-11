@@ -69,6 +69,10 @@ solid_layers = [clear_3] * 5
 glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard, solid_layers, gaps, width, height)
 print("U-value: {u}".format(u=glazing_system_u_environment.u()))
 # If SHGC results for the NFRC SHGC environment are needed create a glazing system with that environment
-glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard, solid_layers, gaps, width, height,
-                                                          pywincalc.nfrc_shgc_environments())
+glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                                          solid_layers=solid_layers,
+                                                          gap_layers=gaps,
+                                                          width_meters=width,
+                                                          height_meters=height,
+                                                          environment=pywincalc.nfrc_shgc_environments())
 print("SHGC: {shgc}".format(shgc=glazing_system_shgc_environment.shgc()))

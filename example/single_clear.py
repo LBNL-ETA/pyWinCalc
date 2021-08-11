@@ -92,11 +92,11 @@ print("Relative heat gain: {v}".format(v=relative_heat_gain))
 # SOLAR, PHOTOPIC, THERMAL_IR, TUV, SPF, TDW, TKR)
 #
 # Calculate all optical results using the solar method:
-solar_results = glazing_system_single_layer_u_environment.optical_method_results(pywincalc.OpticalMethodType.SOLAR)
+solar_results = glazing_system_single_layer_u_environment.optical_method_results("SOLAR")
 
 # Optical results have two parts, results that apply to the entire system and results for each layer.
 # System results and results for each layer are then divided by side (front, back).
-# then by transmission type (transmittance, reflectance) and then by ____________ (direct_direct, direct_diffuse,
+# then by transmission type (transmittance, reflectance) and then by flux type (direct_direct, direct_diffuse,
 # direct_hemispherical, and diffuse_diffuse).  direct_diffuse does not include the direct_direct component while
 # direct_hemispherical does.  In other words direct_direct + direct_diffuse = direct_hemispherical
 #
@@ -145,8 +145,7 @@ print("Layer 1 back direct solar absorptance: {v}".format(v=solar_results_per_la
 print("Layer 1 back diffuse solar absorptance: {v}".format(v=solar_results_per_layer[0].back.absorptance.diffuse))
 
 # Similarly for visible results calculate using the Photopic method
-visible_results = glazing_system_single_layer_u_environment.optical_method_results(
-    pywincalc.OpticalMethodType.PHOTOPIC)
+visible_results = glazing_system_single_layer_u_environment.optical_method_results("PHOTOPIC")
 print("Direct-direct front visible transmittance: {v}".format(
     v=visible_results.system_results.front.transmittance.direct_direct))
 print("Direct-hemispheric back visible reflectance: {v}".format(
@@ -186,8 +185,7 @@ shgc_value = glazing_system_single_layer_shgc_environment.shgc(theta, phi)
 print("SHGC at theta = {t} phi = {p}: {v}".format(t=theta, p=phi, v=shgc_value))
 
 # Calculate solar optical results at theta and phi
-solar_results = glazing_system_single_layer_u_environment.optical_method_results(pywincalc.OpticalMethodType.SOLAR,
-                                                                                 theta, phi)
+solar_results = glazing_system_single_layer_u_environment.optical_method_results("SOLAR", theta, phi)
 direct_direct_front_transmittance = solar_results.system_results.front.transmittance.direct_direct
 print("Direct-direct front solar transmittance at theta = {t} phi = {p}: {v}".format(t=theta, p=phi,
                                                                                      v=direct_direct_front_transmittance))

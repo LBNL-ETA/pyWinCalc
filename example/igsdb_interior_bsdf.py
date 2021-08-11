@@ -18,11 +18,11 @@ gap_1 = pywincalc.Gap(pywincalc.PredefinedGasType.AIR, .0127)  # .0127 is gap th
 # 
 bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.FULL)
 
-igsdb_api_token = "2aad63e52070a0cc92568d6e2b4e2d86f996595b"  # "INSERT_YOUR_TOKEN_HERE"
-url_single_product = "https://igsdb-staging.herokuapp.com/api/v1/products/{id}"
+igsdb_api_token = "INSERT_YOUR_API_KEY_HERE"
+url_single_product = "https://igsdb.lbl.gov/api/v1/products/{id}"  # Template URL for single product
 # BSDF shade measured data is currently stored behind a "datafile" API endpoint
 # on igsdb.lbl.gov.
-url_single_product_datafile = "https://igsdb-staging.herokuapp.com/api/v1/products/{id}/datafile"  # Template URL for getting data file for a product
+url_single_product_datafile = "https://igsdb.lbl.gov/api/v1/products/{id}/datafile"  # Template URL for getting data file for a product
 
 headers = {"Authorization": "Token {token}".format(token=igsdb_api_token)}  # Token authorization headers
 
