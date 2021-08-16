@@ -4,7 +4,7 @@ import sys
 import platform
 import subprocess
 
-from setuptools import setup, Extension, find_packages
+from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
@@ -41,7 +41,7 @@ class CMakeBuild(build_ext):
 
         if platform.system() == "Windows":
             cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir)]
-            if sys.maxsize > 2 ** 32:
+            if sys.maxsize > 2**32:
                 cmake_args += ['-A', 'x64']
             build_args += ['--', '/m']
         else:
@@ -58,16 +58,8 @@ class CMakeBuild(build_ext):
 
 setup(
     name='pywincalc',
-    version='2.2.7',
-    long_description='',
-    # tell setuptools to look for any packages under 'src'
-    packages=find_packages(where='src'),
-    # tell setuptools that all packages will be under the 'src' directory
-    # and nowhere else
-    package_dir={'': 'src'},
-    ext_modules=[CMakeExtension('pywincalc/pywincalc')],
-    install_requires=['pydantic>=1.8.2', 'py_igsdb_optical_data @ git+https://github.com/LBNL-ETA/py_igsdb_optical_data#egg=py_igsdb_optical_data'],
-    test_suite='tests',
+    version='2.2.8',
+    ext_modules=[CMakeExtension('pywincalc')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
 )
