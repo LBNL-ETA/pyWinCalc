@@ -604,10 +604,10 @@ PYBIND11_MODULE(pywincalc, m) {
       .def("wavelengths",
            &wincalc::Product_Data_Dual_Band_Optical::wavelengths);
 
-  py::class_<wincalc::Product_Data_Dual_Band_Optical_Specular,
+  py::class_<wincalc::Product_Data_Dual_Band_Optical_Hemispheric,
              wincalc::Product_Data_Dual_Band_Optical,
-             std::shared_ptr<wincalc::Product_Data_Dual_Band_Optical_Specular>>(
-      m, "ProductDataOpticalDualBandSpecular")
+             std::shared_ptr<wincalc::Product_Data_Dual_Band_Optical_Hemispheric>>(
+      m, "ProductDataOpticalDualBandHemispheric")
       .def(py::init<double, double, double, double, double, double, double,
                     double, double, std::optional<double>,
                     std::optional<double>, std::optional<double>,
@@ -627,28 +627,28 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("permeability_factor") = 0.0, py::arg("flipped") = false)
       .def_readwrite(
           "solar_transmittance_front",
-          &wincalc::Product_Data_Dual_Band_Optical_Specular::tf_solar)
+          &wincalc::Product_Data_Dual_Band_Optical_Hemispheric::tf_solar)
       .def_readwrite(
           "solar_transmittance_back",
-          &wincalc::Product_Data_Dual_Band_Optical_Specular::tb_solar)
+          &wincalc::Product_Data_Dual_Band_Optical_Hemispheric::tb_solar)
       .def_readwrite(
           "solar_reflectance_front",
-          &wincalc::Product_Data_Dual_Band_Optical_Specular::rf_solar)
+          &wincalc::Product_Data_Dual_Band_Optical_Hemispheric::rf_solar)
       .def_readwrite(
           "solar_reflectance_back",
-          &wincalc::Product_Data_Dual_Band_Optical_Specular::rb_solar)
+          &wincalc::Product_Data_Dual_Band_Optical_Hemispheric::rb_solar)
       .def_readwrite(
           "visible_transmittance_front",
-          &wincalc::Product_Data_Dual_Band_Optical_Specular::tf_visible)
+          &wincalc::Product_Data_Dual_Band_Optical_Hemispheric::tf_visible)
       .def_readwrite(
           "visible_transmittance_back",
-          &wincalc::Product_Data_Dual_Band_Optical_Specular::tb_visible)
+          &wincalc::Product_Data_Dual_Band_Optical_Hemispheric::tb_visible)
       .def_readwrite(
           "visible_reflectance_front",
-          &wincalc::Product_Data_Dual_Band_Optical_Specular::rf_visible)
+          &wincalc::Product_Data_Dual_Band_Optical_Hemispheric::rf_visible)
       .def_readwrite(
           "visible_reflectance_back",
-          &wincalc::Product_Data_Dual_Band_Optical_Specular::rb_visible);
+          &wincalc::Product_Data_Dual_Band_Optical_Hemispheric::rb_visible);
 
   py::class_<wincalc::Product_Data_Dual_Band_Optical_BSDF,
              wincalc::Product_Data_Dual_Band_Optical,
@@ -914,7 +914,7 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("optical_method_results",
            &wincalc::Glazing_System::optical_method_results,
-           py::arg("method_type"), py::arg("theta") = 0, py::arg("phi") = 0)
+           py::arg("method_name"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("color", &wincalc::Glazing_System::color, py::arg("theta") = 0,
            py::arg("phi") = 0,
            py::arg("tristimulus_x_method") = "COLOR_TRISTIMX",
@@ -1225,7 +1225,27 @@ PYBIND11_MODULE(pywincalc, m) {
       .def("set_frame_meeting_rail",
            &CMA::CMAWindowDualVisionVertical::setFrameMeetingRail)
       .def("set_dividers", &CMA::CMAWindowDualVisionVertical::setDividers);
+	  
+  py::class_<wincalc::ThermalIRResults>(m, "ThermalIRResults")
+      .def_readwrite("transmittance_front_diffuse_diffuse", &wincalc::ThermalIRResults::transmittance_front_diffuse_diffuse)
+      .def_readwrite("transmittance_back_diffuse_diffuse", &wincalc::ThermalIRResults::transmittance_back_diffuse_diffuse)
+	  .def_readwrite("emissivity_front_hemispheric", &wincalc::ThermalIRResults::emissivity_front_hemispheric)
+      .def_readwrite("emissivity_back_hemispheric", &wincalc::ThermalIRResults::emissivity_back_hemispheric);
 
+  m.def("calc_thermal_ir", &wincalc::calc_thermal_ir, py::arg("optical_standard"), py::arg("product_data"), 
+		py::arg("wavelength_range_method") = wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
+		py::arg("number_visible_bands") = 5, py::arg("number_solar_bands") = 10);
+#if 0	  
+  m.def("calc_thermal_ir", py::overload_cast<window_standards::Optical_Standard const&, wincalc::Product_Data_Optical_Thermal const&,
+		wincalc::Spectal_Data_Wavelength_Range_Method const&,int,int>(&wincalc::calc_thermal_ir), py::arg("optical_standard"), py::arg("product_data"), 
+		py::arg("wavelength_range_method") = wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
+		py::arg("number_visible_bands") = 5, py::arg("number_solar_bands") = 10);
+		
+//  m.def("calc_thermal_ir", py::overload_cast<window_standards::Optical_Standard const&, std::shared_ptr<OpticsParser::ProductData> const&,
+//		wincalc::Spectal_Data_Wavelength_Range_Method const&,int,int>(&wincalc::calc_thermal_ir), py::arg("optical_standard"), py::arg("product_data"), 
+//		py::arg("wavelength_range_method") = wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
+//		py::arg("number_visible_bands") = 5, py::arg("number_solar_bands") = 10);
+#endif 
   m.def("get_spacer_keff", &wincalc::get_spacer_keff,
         "Calculate the effective conductivity of a spacer from a THERM thmx "
         "file.");
