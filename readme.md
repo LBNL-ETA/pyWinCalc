@@ -252,7 +252,7 @@ See this paper for context and background about the CMA modeling process: [Compo
 
 ### THERM
 
-TODO: INSERT TEXT FOR THERM HERE
+In THERM, when inserting a glazing system, on the first Glazing Systems dialog box, instead of clicking the "Import" button, click the "NFRC CMA..." button. This will take you to a special "Insert Glazing System" dialog box specifically for the CMA calculation. The THMX file created when this THERM file is saved has the required CMA information in it. 
 
 ### CMA Calculations
 
