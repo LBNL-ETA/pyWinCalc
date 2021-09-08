@@ -953,7 +953,9 @@ PYBIND11_MODULE(pywincalc, m) {
       .def("set_width", &wincalc::Glazing_System::set_width,
            py::arg("width_meters"))
       .def("set_tilt", &wincalc::Glazing_System::set_tilt,
-           py::arg("tilt_degrees"));
+           py::arg("tilt_degrees"))
+	  .def("flip_layer", &wincalc::Glazing_System::flip_layer,
+		   py::arg("layer_index"), py::arg("flipped"));
 
   m.def("convert_to_solid_layer", &wincalc::convert_to_solid_layer,
         "Convert product data into a solid layer that can be used in glazing "
