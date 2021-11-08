@@ -31,7 +31,7 @@ generic_clear_3mm_glass_igsdb_id = 363
 
 # This is the same material used in the venetian in the igsdb_exterior_shade_on_cleara_glass.py example
 # but could be any material in the igsdb
-shade_material_igsdb_id = 13199
+shade_material_igsdb_id = 13914
 
 generic_clear_3mm_glass_igsdb_response = requests.get(url_single_product.format(id=generic_clear_3mm_glass_igsdb_id),
                                                       headers=headers)
@@ -47,7 +47,7 @@ slat_width = .020  # width of 20 mm
 slat_spacing = .050  # spacing of 50 mm
 slat_curvature = .025  # curvature of 25 mm
 slat_tilt = 15  # 15 degree tilt
-number_segments = 7  # Not sure what to say here.  The default is 5 but I do not know what impact changing this has
+number_segments = 5  # Not sure what to say here.  The default is 5 but I do not know what impact changing this has
 geometry = pywincalc.VenetianGeometry(slat_width, slat_spacing, slat_curvature, slat_tilt, number_segments)
 
 # combine the shade_material and the geometry together into a Product_Composistion_Data
@@ -67,15 +67,23 @@ venetian_solid_layer.optical_data.distribution_method = pywincalc.DistributionMe
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-exterior_venetian_nfrc_u_environment = pywincalc.GlazingSystem(optical_standard,
-                                                               [venetian_solid_layer, generic_clear_3mm_glass], [gap_1],
-                                                               glazing_system_width, glazing_system_height,
-                                                               pywincalc.nfrc_u_environments(), bsdf_hemisphere)
+exterior_venetian_nfrc_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                                               solid_layers=[venetian_solid_layer,
+                                                                             generic_clear_3mm_glass],
+                                                               gap_layers=[gap_1],
+                                                               width_meters=glazing_system_width,
+                                                               height_meters=glazing_system_height,
+                                                               environment=pywincalc.nfrc_u_environments(),
+                                                               bsdf_hemisphere=bsdf_hemisphere)
 
-exterior_venetian_nfrc_shgc_environment = pywincalc.GlazingSystem(
-    optical_standard, [venetian_solid_layer, generic_clear_3mm_glass], [gap_1],
-    glazing_system_width, glazing_system_height,
-    pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)
+exterior_venetian_nfrc_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                                                  solid_layers=[venetian_solid_layer,
+                                                                                generic_clear_3mm_glass],
+                                                                  gap_layers=[gap_1],
+                                                                  width_meters=glazing_system_width,
+                                                                  height_meters=glazing_system_height,
+                                                                  environment=pywincalc.nfrc_shgc_environments(),
+                                                                  bsdf_hemisphere=bsdf_hemisphere)
 
 exterior_venetian_nfrc_u = exterior_venetian_nfrc_u_environment.u()
 print("Exterior venetian NFRC U: {v}".format(v=exterior_venetian_nfrc_u))
