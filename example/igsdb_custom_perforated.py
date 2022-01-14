@@ -1,6 +1,6 @@
 import pywincalc
 import requests
-
+from igsdb_interaction import url_single_product, headers
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
 # taken to use NFRC standards if NFRC thermal results are desired.  This is because for thermal calculations currently
@@ -20,16 +20,10 @@ bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTE
 
 # Download some product data from the IGSDB.  This example gets a generic single clear 3mm glazing (NFRC 102),
 # and a material to use as part of the woven shade.
-# For more information on getting data from the igsdb please see igsdb.lbl.gov/openapi
-igsdb_api_token = "INSERT_YOUR_API_KEY_HERE"
-url_single_product = "https://igsdb.lbl.gov/api/v1/products/{id}"  # Template URL for single product
-
-headers = {"Authorization": "Token {token}".format(token=igsdb_api_token)}  # Token authorization headers
-
 generic_clear_3mm_glass_igsdb_id = 363
 
 # This is the same material used in the venetian example but could be any material in the igsdb
-shade_material_igsdb_id = 13199
+shade_material_igsdb_id = 14477
 
 generic_clear_3mm_glass_igsdb_response = requests.get(url_single_product.format(id=generic_clear_3mm_glass_igsdb_id),
                                                       headers=headers)
@@ -63,7 +57,8 @@ perforated_shade_layer = pywincalc.ComposedProductData(composition_data)
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
 exterior_perforated_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                            solid_layers=[perforated_shade_layer, generic_clear_3mm_glass],
+                                                            solid_layers=[perforated_shade_layer,
+                                                                          generic_clear_3mm_glass],
                                                             gap_layers=[gap_1],
                                                             width_meters=glazing_system_width,
                                                             height_meters=glazing_system_height,
@@ -71,14 +66,15 @@ exterior_perforated_u_environment = pywincalc.GlazingSystem(optical_standard=opt
                                                             bsdf_hemisphere=bsdf_hemisphere)
 
 exterior_perforated_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                               solid_layers=[perforated_shade_layer, generic_clear_3mm_glass],
-                                                               gaps=[gap_1],
+                                                               solid_layers=[perforated_shade_layer,
+                                                                             generic_clear_3mm_glass],
+                                                               gap_layers=[gap_1],
                                                                width_meters=glazing_system_width,
                                                                height_meters=glazing_system_height,
                                                                environment=pywincalc.nfrc_shgc_environments(),
                                                                bsdf_hemisphere=bsdf_hemisphere)
 
 exterior_perforated_u = exterior_perforated_u_environment.u()
-print("Exterior woven U: {v}".format(v=exterior_perforated_u))
+print("Exterior perforated NFRC U: {v}".format(v=exterior_perforated_u))
 exterior_perforated_shgc = exterior_perforated_shgc_environment.shgc()
-print("Exterior woven SHGC: {v}".format(v=exterior_perforated_shgc))
+print("Exterior perforated NFRC SHGC: {v}".format(v=exterior_perforated_shgc))

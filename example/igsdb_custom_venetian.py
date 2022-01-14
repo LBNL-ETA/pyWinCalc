@@ -1,5 +1,6 @@
 import pywincalc
 import requests
+from igsdb_interaction import url_single_product, headers
 
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
@@ -21,17 +22,11 @@ bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTE
 
 # Download some product data from the IGSDB.  This example gets a generic single clear 3mm glazing (NFRC 102),
 # and a material to use as part of the woven shade.
-# For more information on getting data from the igsdb please see igsdb.lbl.gov/openapi
-igsdb_api_token = "INSERT_YOUR_API_KEY_HERE"
-url_single_product = "https://igsdb.lbl.gov/api/v1/products/{id}"  # Template URL for single product
-
-headers = {"Authorization": "Token {token}".format(token=igsdb_api_token)}  # Token authorization headers
-
 generic_clear_3mm_glass_igsdb_id = 363
 
 # This is the same material used in the venetian in the igsdb_exterior_shade_on_cleara_glass.py example
 # but could be any material in the igsdb
-shade_material_igsdb_id = 13914
+shade_material_igsdb_id = 14477
 
 generic_clear_3mm_glass_igsdb_response = requests.get(url_single_product.format(id=generic_clear_3mm_glass_igsdb_id),
                                                       headers=headers)
@@ -47,10 +42,11 @@ slat_width = .020  # width of 20 mm
 slat_spacing = .050  # spacing of 50 mm
 slat_curvature = .025  # curvature of 25 mm
 slat_tilt = 15  # 15 degree tilt
-number_segments = 5  # Not sure what to say here.  The default is 5 but I do not know what impact changing this has
-geometry = pywincalc.VenetianGeometry(slat_width, slat_spacing, slat_curvature, slat_tilt, number_segments)
+number_segments = 5  # The default is 5.  Do not change unless there is a reason to.
+geometry = pywincalc.VenetianGeometry(slat_width=slat_width, slat_spacing=slat_spacing, slat_curvature=slat_curvature,
+                                      slat_tilt=slat_tilt, number_segments=number_segments)
 
-# combine the shade_material and the geometry together into a Product_Composistion_Data
+# combine the shade_material and the geometry together into a ProductComposistionData
 composition_data = pywincalc.ProductComposistionData(shade_material, geometry)
 venetian_layer = pywincalc.ComposedProductData(composition_data)
 

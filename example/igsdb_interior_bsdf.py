@@ -1,5 +1,6 @@
 import pywincalc
 import requests
+from igsdb_interaction import url_single_product, headers, url_single_product_datafile
 
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
@@ -15,19 +16,10 @@ glazing_system_height = 1.0  # height of the glazing system in meters
 # Define the gap between the shade and the glazing
 gap_1 = pywincalc.Gap(pywincalc.PredefinedGasType.AIR, .0127)  # .0127 is gap thickness in meters
 
-# 
 bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.FULL)
 
-igsdb_api_token = "INSERT_YOUR_API_KEY_HERE"
-url_single_product = "https://igsdb.lbl.gov/api/v1/products/{id}"  # Template URL for single product
-# BSDF shade measured data is currently stored behind a "datafile" API endpoint
-# on igsdb.lbl.gov.
-url_single_product_datafile = "https://igsdb.lbl.gov/api/v1/products/{id}/datafile"  # Template URL for getting data file for a product
-
-headers = {"Authorization": "Token {token}".format(token=igsdb_api_token)}  # Token authorization headers
-
 generic_clear_3mm_glass_igsdb_id = 363
-bsdf_igsdb_id = 12165
+bsdf_igsdb_id = 14710
 
 generic_clear_3mm_glass_igsdb_response = requests.get(url_single_product.format(id=generic_clear_3mm_glass_igsdb_id),
                                                       headers=headers)
@@ -45,17 +37,21 @@ bsdf_shade = pywincalc.parse_bsdf_xml_string(bsdf_igsdb_response.content)
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard,
-                                                       [clear_3, bsdf_shade],
-                                                       [gap_1],
-                                                       glazing_system_width,
-                                                       glazing_system_height,
-                                                       pywincalc.nfrc_u_environments(), bsdf_hemisphere)
+glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                                       solid_layers=[clear_3, bsdf_shade],
+                                                       gap_layers=[gap_1],
+                                                       width_meters=glazing_system_width,
+                                                       height_meters=glazing_system_height,
+                                                       environment=pywincalc.nfrc_u_environments(),
+                                                       bsdf_hemisphere=bsdf_hemisphere)
 
-glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard,
-                                                          [clear_3, bsdf_shade], [gap_1],
-                                                          glazing_system_width, glazing_system_height,
-                                                          pywincalc.nfrc_shgc_environments(), bsdf_hemisphere)
+glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                                          solid_layers=[clear_3, bsdf_shade],
+                                                          gap_layers=[gap_1],
+                                                          width_meters=glazing_system_width,
+                                                          height_meters=glazing_system_height,
+                                                          environment=pywincalc.nfrc_shgc_environments(),
+                                                          bsdf_hemisphere=bsdf_hemisphere)
 
 u = glazing_system_u_environment.u()
 print("Exterior venetian U: {u}".format(u=u))

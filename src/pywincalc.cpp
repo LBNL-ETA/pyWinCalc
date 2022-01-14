@@ -231,10 +231,10 @@ PYBIND11_MODULE(pywincalc, m) {
   py::class_<OpticsParser::VenetianGeometry, OpticsParser::ProductGeometry,
              std::shared_ptr<OpticsParser::VenetianGeometry>>(
       m, "VenetianGeometry")
-      .def(py::init<double, double, double, double, int>(),
+      .def(py::init<double, double, double, double, std::string, int>(),
            py::arg("slat_width"), py::arg("slat_spacing"),
            py::arg("slat_curvature"), py::arg("slat_tilt") = 0,
-           py::arg("number_segments") = 5)
+           py::arg("tilt_choice") = "0", py::arg("number_segments") = 5)
       .def_readwrite("slat_width", &OpticsParser::VenetianGeometry::slatWidth)
       .def_readwrite("slat_spacing",
                      &OpticsParser::VenetianGeometry::slatSpacing)

@@ -1,5 +1,6 @@
 import pywincalc
 import requests
+from igsdb_interaction import url_single_product, headers
 
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
@@ -17,24 +18,16 @@ gap_1 = pywincalc.Gap(pywincalc.PredefinedGasType.AIR, .0127)  # .0127 is gap th
 
 # Download some product data from the IGSDB.  This example gets a generic single clear 3mm glazing (NFRC 102),
 # and a generic single clear 6mm glazing (NFRC 103)
-# For more information on getting data from the igsdb please see igsdb.lbl.gov/openapi
-igsdb_api_token = "INSERT_YOUR_API_KEY_HERE"
-url_single_product = "https://igsdb.lbl.gov/api/v1/products/{id}"  # Template URL for single product
-
-headers = {"Authorization": "Token {token}".format(token=igsdb_api_token)}  # Token authorization headers
-
 generic_clear_3mm_glass_igsdb_id = 363
 generic_clear_6mm_glass_igsdb_id = 362
 
 generic_clear_3mm_glass_igsdb_response = requests.get(url_single_product.format(id=generic_clear_3mm_glass_igsdb_id),
                                                       headers=headers)
 generic_clear_6mm_glass_igsdb_response = requests.get(url_single_product.format(id=generic_clear_6mm_glass_igsdb_id),
-                                                      headers=headers)													  
-
+                                                      headers=headers)
 
 generic_clear_3mm_glass = pywincalc.parse_json(generic_clear_3mm_glass_igsdb_response.content)
 generic_clear_6mm_glass = pywincalc.parse_json(generic_clear_6mm_glass_igsdb_response.content)
-
 
 # Create a glazing system using the NFRC U environment in order to get NFRC U results
 # U and SHGC can be caculated for any given environment.  In order to get NFRC U and SHGC results the systems must
@@ -42,20 +35,19 @@ generic_clear_6mm_glass = pywincalc.parse_json(generic_clear_6mm_glass_igsdb_res
 # The NFRC U and SHGC environments are provided as already constructed environments.
 # Glazing_System defaults to using the NFRC U environment
 double_clear_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-													 solid_layers=[generic_clear_6mm_glass, generic_clear_3mm_glass],
-                                                     gap_layers=[gap_1], 
-													 width_meters=glazing_system_width, 
-													 height_meters=glazing_system_height,
+                                                     solid_layers=[generic_clear_6mm_glass, generic_clear_3mm_glass],
+                                                     gap_layers=[gap_1],
+                                                     width_meters=glazing_system_width,
+                                                     height_meters=glazing_system_height,
                                                      environment=pywincalc.nfrc_u_environments())
 
 double_clear_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-														solid_layers=[generic_clear_6mm_glass, generic_clear_3mm_glass],
-                                                        gap_layers=[gap_1], 
-														width_meters=glazing_system_width, 
-														height_meters=glazing_system_height,
+                                                        solid_layers=[generic_clear_6mm_glass, generic_clear_3mm_glass],
+                                                        gap_layers=[gap_1],
+                                                        width_meters=glazing_system_width,
+                                                        height_meters=glazing_system_height,
                                                         environment=pywincalc.nfrc_shgc_environments())
 
-															
 double_clear_u = double_clear_u_environment.u()
 print("Double clear NFRC U: {v}".format(v=double_clear_u))
 double_clear_shgc = double_clear_shgc_environment.shgc()
