@@ -1234,20 +1234,8 @@ PYBIND11_MODULE(pywincalc, m) {
 	  .def_readwrite("emissivity_front_hemispheric", &wincalc::ThermalIRResults::emissivity_front_hemispheric)
       .def_readwrite("emissivity_back_hemispheric", &wincalc::ThermalIRResults::emissivity_back_hemispheric);
 
-  m.def("calc_thermal_ir", &wincalc::calc_thermal_ir, py::arg("optical_standard"), py::arg("product_data"), 
-		py::arg("wavelength_range_method") = wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
-		py::arg("number_visible_bands") = 5, py::arg("number_solar_bands") = 10);
-#if 0	  
-  m.def("calc_thermal_ir", py::overload_cast<window_standards::Optical_Standard const&, wincalc::Product_Data_Optical_Thermal const&,
-		wincalc::Spectal_Data_Wavelength_Range_Method const&,int,int>(&wincalc::calc_thermal_ir), py::arg("optical_standard"), py::arg("product_data"), 
-		py::arg("wavelength_range_method") = wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
-		py::arg("number_visible_bands") = 5, py::arg("number_solar_bands") = 10);
-		
-//  m.def("calc_thermal_ir", py::overload_cast<window_standards::Optical_Standard const&, std::shared_ptr<OpticsParser::ProductData> const&,
-//		wincalc::Spectal_Data_Wavelength_Range_Method const&,int,int>(&wincalc::calc_thermal_ir), py::arg("optical_standard"), py::arg("product_data"), 
-//		py::arg("wavelength_range_method") = wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
-//		py::arg("number_visible_bands") = 5, py::arg("number_solar_bands") = 10);
-#endif 
+  m.def("calc_thermal_ir", &wincalc::calc_thermal_ir, py::arg("optical_standard"), py::arg("product_data"));
+
   m.def("get_spacer_keff", &wincalc::get_spacer_keff,
         "Calculate the effective conductivity of a spacer from a THERM thmx "
         "file.");
