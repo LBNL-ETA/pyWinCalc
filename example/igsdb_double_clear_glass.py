@@ -1,6 +1,8 @@
 import pywincalc
 import requests
 from igsdb_interaction import url_single_product, headers
+import results_printer
+
 
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
@@ -34,21 +36,22 @@ generic_clear_6mm_glass = pywincalc.parse_json(generic_clear_6mm_glass_igsdb_res
 # use the standard NFRC U and SHGC environments
 # The NFRC U and SHGC environments are provided as already constructed environments.
 # Glazing_System defaults to using the NFRC U environment
-double_clear_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
                                                      solid_layers=[generic_clear_6mm_glass, generic_clear_3mm_glass],
                                                      gap_layers=[gap_1],
                                                      width_meters=glazing_system_width,
                                                      height_meters=glazing_system_height,
                                                      environment=pywincalc.nfrc_u_environments())
 
-double_clear_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
                                                         solid_layers=[generic_clear_6mm_glass, generic_clear_3mm_glass],
                                                         gap_layers=[gap_1],
                                                         width_meters=glazing_system_width,
                                                         height_meters=glazing_system_height,
                                                         environment=pywincalc.nfrc_shgc_environments())
 
-double_clear_u = double_clear_u_environment.u()
-print("Double clear NFRC U: {v}".format(v=double_clear_u))
-double_clear_shgc = double_clear_shgc_environment.shgc()
-print("Double clear NFRC SHGC: {v}".format(v=double_clear_shgc))
+results_name = "Results for a double-layer system of clear glass downloaded from the IGSDB"
+print("*" * len(results_name))
+print(results_name)
+print("*" * len(results_name))
+results_printer.print_results(glazing_system_u_environment, glazing_system_shgc_environment)

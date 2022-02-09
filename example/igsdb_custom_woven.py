@@ -1,6 +1,7 @@
 import pywincalc
 import requests
 from igsdb_interaction import url_single_product, headers
+import results_printer
 
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
@@ -50,7 +51,7 @@ woven_shade_layer = pywincalc.ComposedProductData(composition_data)
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-exterior_woven_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
                                                        solid_layers=[woven_shade_layer, generic_clear_3mm_glass],
                                                        gap_layers=[gap_1],
                                                        width_meters=glazing_system_width,
@@ -58,7 +59,7 @@ exterior_woven_u_environment = pywincalc.GlazingSystem(optical_standard=optical_
                                                        environment=pywincalc.nfrc_u_environments(),
                                                        bsdf_hemisphere=bsdf_hemisphere)
 
-exterior_woven_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
                                                           solid_layers=[woven_shade_layer, generic_clear_3mm_glass],
                                                           gap_layers=[gap_1],
                                                           width_meters=glazing_system_width,
@@ -66,7 +67,8 @@ exterior_woven_shgc_environment = pywincalc.GlazingSystem(optical_standard=optic
                                                           environment=pywincalc.nfrc_shgc_environments(),
                                                           bsdf_hemisphere=bsdf_hemisphere)
 
-exterior_woven_u = exterior_woven_u_environment.u()
-print("Exterior woven U: {v}".format(v=exterior_woven_u))
-exterior_woven_shgc = exterior_woven_shgc_environment.shgc()
-print("Exterior woven SHGC: {v}".format(v=exterior_woven_shgc))
+results_name = "Results for a double-layer system with a custom exterior woven shade made from a material downloaded from the IGSDB"
+print("*" * len(results_name))
+print(results_name)
+print("*" * len(results_name))
+results_printer.print_results(glazing_system_u_environment, glazing_system_shgc_environment)

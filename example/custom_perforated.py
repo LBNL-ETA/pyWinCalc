@@ -1,4 +1,5 @@
 import pywincalc
+import results_printer
 
 
 def convert_wavelength_data(raw_wavelength_data):
@@ -1249,24 +1250,25 @@ perforated_layer = pywincalc.ProductDataOpticalAndThermal(perforated_screen_opti
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-exterior_perforated_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                            solid_layers=[perforated_layer, glass_layer],
-                                                            gap_layers=[gap_1],
-                                                            width_meters=glazing_system_width,
-                                                            height_meters=glazing_system_height,
-                                                            environment=pywincalc.nfrc_u_environments(),
-                                                            bsdf_hemisphere=bsdf_hemisphere)
+glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                                       solid_layers=[perforated_layer, glass_layer],
+                                                       gap_layers=[gap_1],
+                                                       width_meters=glazing_system_width,
+                                                       height_meters=glazing_system_height,
+                                                       environment=pywincalc.nfrc_u_environments(),
+                                                       bsdf_hemisphere=bsdf_hemisphere)
 
 # In order to get NFRC SHGC results the NFRC SHGC environment should be used when creating the glazing system
-exterior_perforated_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                               solid_layers=[perforated_layer, glass_layer],
-                                                               gap_layers=[gap_1],
-                                                               width_meters=glazing_system_width,
-                                                               height_meters=glazing_system_height,
-                                                               environment=pywincalc.nfrc_shgc_environments(),
-                                                               bsdf_hemisphere=bsdf_hemisphere)
+glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                                          solid_layers=[perforated_layer, glass_layer],
+                                                          gap_layers=[gap_1],
+                                                          width_meters=glazing_system_width,
+                                                          height_meters=glazing_system_height,
+                                                          environment=pywincalc.nfrc_shgc_environments(),
+                                                          bsdf_hemisphere=bsdf_hemisphere)
 
-exterior_perforated_u = exterior_perforated_u_environment.u()
-print("Exterior perforated U: {v}".format(v=exterior_perforated_u))
-exterior_perforated_shgc = exterior_perforated_shgc_environment.shgc()
-print("Exterior perforated SHGC: {v}".format(v=exterior_perforated_shgc))
+results_name = "Results for a double-layer system with a custom exterior perforated screen made from user-defined spectral data."
+print("*" * len(results_name))
+print(results_name)
+print("*" * len(results_name))
+results_printer.print_results(glazing_system_u_environment, glazing_system_shgc_environment)

@@ -1,5 +1,7 @@
 import pywincalc
 import requests
+from igsdb_interaction import url_single_product, headers, url_single_product_datafile
+import results_printer
 
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
@@ -26,29 +28,21 @@ bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTE
 # (CGDB ID 18000)
 generic_clear_3mm_glass_igsdb_id = 363
 slim_white_pella_venetian_blind_igsdb_id = 14684
-thermeshade_perforated_screen_igsdb_id = 14990
 
 generic_clear_3mm_glass_igsdb_response = requests.get(url_single_product.format(id=generic_clear_3mm_glass_igsdb_id),
                                                       headers=headers)
 slim_white_pella_venetian_blind_igsdb_response = requests.get(
     url_single_product.format(id=slim_white_pella_venetian_blind_igsdb_id), headers=headers)
-thermeshade_perforated_screen_igsdb_response = requests.get(
-    url_single_product.format(id=thermeshade_perforated_screen_igsdb_id), headers=headers)
 
 generic_clear_3mm_glass = pywincalc.parse_json(generic_clear_3mm_glass_igsdb_response.content)
-# NOTE:  By default venetian blinds are set to have a slat tilt of zero degrees
 slim_white_pella_venetian_blind = pywincalc.parse_json(slim_white_pella_venetian_blind_igsdb_response.content)
-# To change the slat tilt change the slat_tilt value in the geometry section of the product_composition information
-# slim_white_pella_venetian_blind.composition_information.geometry.slat_tilt = 15
-thermeshade_perforated_screen = pywincalc.parse_json(
-    thermeshade_perforated_screen_igsdb_response.content)
 
 # Create a glazing system using the NFRC U environment in order to get NFRC U results
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
 
-exterior_venetian_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
                                                           solid_layers=[slim_white_pella_venetian_blind,
                                                                         generic_clear_3mm_glass],
                                                           gap_layers=[gap_1], width_meters=glazing_system_width,
@@ -56,7 +50,7 @@ exterior_venetian_u_environment = pywincalc.GlazingSystem(optical_standard=optic
                                                           environment=pywincalc.nfrc_u_environments(),
                                                           bsdf_hemisphere=bsdf_hemisphere)
 
-exterior_venetian_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
                                                              solid_layers=[slim_white_pella_venetian_blind,
                                                                            generic_clear_3mm_glass],
                                                              gap_layers=[gap_1], width_meters=glazing_system_width,
@@ -64,28 +58,8 @@ exterior_venetian_shgc_environment = pywincalc.GlazingSystem(optical_standard=op
                                                              environment=pywincalc.nfrc_shgc_environments(),
                                                              bsdf_hemisphere=bsdf_hemisphere)
 
-exterior_perforated_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                            solid_layers=[thermeshade_perforated_screen,
-                                                                          generic_clear_3mm_glass],
-                                                            gap_layers=[gap_1], width_meters=glazing_system_width,
-                                                            height_meters=glazing_system_height,
-                                                            environment=pywincalc.nfrc_u_environments(),
-                                                            bsdf_hemisphere=bsdf_hemisphere)
-
-exterior_perforated_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                               solid_layers=[thermeshade_perforated_screen,
-                                                                             generic_clear_3mm_glass],
-                                                               gap_layers=[gap_1], width_meters=glazing_system_width,
-                                                               height_meters=glazing_system_height,
-                                                               environment=pywincalc.nfrc_shgc_environments(),
-                                                               bsdf_hemisphere=bsdf_hemisphere)
-
-exterior_venetian_u = exterior_venetian_u_environment.u()
-print("Exterior venetian U: {v}".format(v=exterior_venetian_u))
-exterior_venetian_shgc = exterior_venetian_shgc_environment.shgc()
-print("Exterior venetian SHGC: {v}".format(v=exterior_venetian_shgc))
-
-exterior_perforated_u = exterior_perforated_u_environment.u()
-print("Exterior perforated screen U: {v}".format(v=exterior_perforated_u))
-exterior_perforated_shgc = exterior_perforated_shgc_environment.shgc()
-print("Exterior perforated screen SHGC: {v}".format(v=exterior_perforated_shgc))
+results_name = "Results for a double-layer system with exterior Venetian blind downloaded from the IGSDB"
+print("*" * len(results_name))
+print(results_name)
+print("*" * len(results_name))
+results_printer.print_results(glazing_system_u_environment, glazing_system_shgc_environment)

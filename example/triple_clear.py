@@ -1,4 +1,5 @@
 import pywincalc
+import results_printer
 
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
@@ -48,33 +49,17 @@ gaps = [gap_1, gap_2]
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-glazing_system_triple_layer_u_environment = pywincalc.GlazingSystem(optical_standard, solid_layers, gaps, width, height)
-print("U-value: {u}".format(u=glazing_system_triple_layer_u_environment.u()))
+glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard, solid_layers, gaps, width, height)
 # If SHGC results for the NFRC SHGC environment are needed create a glazing system with that environment
-glazing_system_triple_layer_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
                                                                        solid_layers=solid_layers,
                                                                        gap_layers=gaps,
                                                                        width_meters=width,
                                                                        height_meters=height,
                                                                        environment=pywincalc.nfrc_shgc_environments())
-print("SHGC: {shgc}".format(shgc=glazing_system_triple_layer_shgc_environment.shgc()))
 
-# Get the results the same way as in example_single_clear.py.
-# The only difference is in this case since there are multiple layers there are
-# multiple layer results for optical methods
-solar_results = glazing_system_triple_layer_u_environment.optical_method_results("SOLAR")
-# In this case since there are multiple layers there are multiple layer results
-solar_results_per_layer = solar_results.layer_results
-# Print some of the layer solar absorptances
-print("Triple clear layer 1 front direct solar absorptance: {v}".format(
-    v=solar_results_per_layer[0].front.absorptance.direct))
-print("Triple clear layer 1 back diffuse solar absorptance: {v}".format(
-    v=solar_results_per_layer[0].back.absorptance.diffuse))
-print("Triple clear layer 2 front direct solar absorptance: {v}".format(
-    v=solar_results_per_layer[1].front.absorptance.direct))
-print("Triple clear layer 2 back diffuse solar absorptance: {v}".format(
-    v=solar_results_per_layer[1].back.absorptance.diffuse))
-print("Triple clear layer 3 front direct solar absorptance: {v}".format(
-    v=solar_results_per_layer[2].front.absorptance.direct))
-print("Triple clear layer 3 back diffuse solar absorptance: {v}".format(
-    v=solar_results_per_layer[2].back.absorptance.diffuse))
+results_name = "Results for a triple-clear system"
+print("*" * len(results_name))
+print(results_name)
+print("*" * len(results_name))
+results_printer.print_results(glazing_system_u_environment, glazing_system_shgc_environment)

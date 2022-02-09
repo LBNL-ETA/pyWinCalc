@@ -8,6 +8,7 @@ import results_printer
 # taken to use NFRC standards if NFRC thermal results are desired.  This is because for thermal calculations currently
 # only ISO 15099 is supported.  While it is possible to use EN optical standards and create thermal results
 # those results will not be based on EN 673
+
 optical_standard_path = "standards/W5_NFRC_2003.std"
 optical_standard = pywincalc.load_standard(optical_standard_path)
 
@@ -24,7 +25,8 @@ bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTE
 # and a material to use as part of the woven shade.
 generic_clear_3mm_glass_igsdb_id = 363
 
-# This is the same material used in the venetian example but could be any material in the igsdb
+# This is the same material used in the venetian in the igsdb_exterior_shade_on_cleara_glass.py example
+# but could be any material in the igsdb
 shade_material_igsdb_id = 14477
 
 generic_clear_3mm_glass_igsdb_response = requests.get(url_single_product.format(id=generic_clear_3mm_glass_igsdb_id),
@@ -36,30 +38,37 @@ generic_clear_3mm_glass = pywincalc.parse_json(generic_clear_3mm_glass_igsdb_res
 
 shade_material = pywincalc.parse_json(shade_material_igsdb_response.content)
 
-# Perforated screens need Perforated_Geometry.
-# Make a rectangular perforation here.  Other options include circular and square
-# Note: While using a string for perforation type is not ideal it is used here because this
-# example is mostly using data from the IGSDB for the material and only adding a custom geometry
-# For an example where the data is completely custom generated see custom_perforated.py
-perforation_type = "rectangular"
-spacing_x = 0.01  # 10mm horizontal spacing
-spacing_y = 0.02  # 20mm vertical spacing
-dimension_x = 0.002  # 2mm perforation in the horizontal direction
-dimension_y = 0.003  # 3mm perforation in the vertical direction
-geometry = pywincalc.PerforatedGeometry(spacing_x, spacing_y, dimension_x, dimension_y, perforation_type)
+# Ventian blinds need a Venetian_Geometry.
+slat_width = .020  # width of 20 mm
+slat_spacing = .050  # spacing of 50 mm
+slat_curvature = .025  # curvature of 25 mm
+slat_tilt = 15  # 15 degree tilt
+number_segments = 5  # The default is 5.  Do not change unless there is a reason to.
+geometry = pywincalc.VenetianGeometry(slat_width=slat_width, slat_spacing=slat_spacing, slat_curvature=slat_curvature,
+                                      slat_tilt=slat_tilt, number_segments=number_segments)
 
-# combine the shade_material and the geometry together into a Product_Composistion_Data
+# combine the shade_material and the geometry together into a ProductComposistionData
 composition_data = pywincalc.ProductComposistionData(shade_material, geometry)
+venetian_layer = pywincalc.ComposedProductData(composition_data)
 
-# create a layer from the product composition data.  No other information is required to create a layer in this case
-perforated_shade_layer = pywincalc.ComposedProductData(composition_data)
+# At this point the layer is only using measured value and any modeling parameters.
+# To change modeling parameters from their default the measured data must first be converted to
+# a solid layer.
+venetian_solid_layer = pywincalc.convert_to_solid_layer(venetian_layer)
+
+# Currently the only modeling parameter for venetian layers is the distribution method.
+# That defaults to directional diffuse but can be changed to uniform-diffuse on a per-layer basis
+venetian_solid_layer.optical_data.distribution_method = pywincalc.DistributionMethodType.UNIFORM_DIFFUSE
+
+# Set the is_horizontal property to false to model this as a vertical venetian
+venetian_solid_layer.optical_data.is_horizontal = False
 
 # Create a glazing system using the NFRC U environment in order to get NFRC U results
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
 glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                       solid_layers=[perforated_shade_layer,
+                                                       solid_layers=[venetian_solid_layer,
                                                                      generic_clear_3mm_glass],
                                                        gap_layers=[gap_1],
                                                        width_meters=glazing_system_width,
@@ -68,7 +77,7 @@ glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_
                                                        bsdf_hemisphere=bsdf_hemisphere)
 
 glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                          solid_layers=[perforated_shade_layer,
+                                                          solid_layers=[venetian_solid_layer,
                                                                         generic_clear_3mm_glass],
                                                           gap_layers=[gap_1],
                                                           width_meters=glazing_system_width,
@@ -76,7 +85,7 @@ glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optic
                                                           environment=pywincalc.nfrc_shgc_environments(),
                                                           bsdf_hemisphere=bsdf_hemisphere)
 
-results_name = "Results for a double-layer system with a custom exterior perforated screen made from a material downloaded from the IGSDB"
+results_name = "Results for a double-layer system with a custom exterior vertical louver made from a material downloaded from the IGSDB"
 print("*" * len(results_name))
 print(results_name)
 print("*" * len(results_name))

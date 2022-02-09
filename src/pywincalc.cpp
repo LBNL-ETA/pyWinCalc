@@ -727,12 +727,13 @@ PYBIND11_MODULE(pywincalc, m) {
       m, "ProductDataOpticalVenetian")
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
                     double, double, double, double, int,
-                    SingleLayerOptics::DistributionMethod>(),
+                    SingleLayerOptics::DistributionMethod, bool>(),
            py::arg("product_data_optical"), py::arg("slat_tilt_meters"),
            py::arg("slat_width_meters"), py::arg("slat_spacing_meters"),
            py::arg("slat_curvature_meters"), py::arg("numbers_slats"),
            py::arg("distribution_method") =
-               SingleLayerOptics::DistributionMethod::DirectionalDiffuse)
+               SingleLayerOptics::DistributionMethod::DirectionalDiffuse,
+           py::arg("is_horizontal") = true)
       .def_readwrite("slat_tilt",
                      &wincalc::Product_Data_Optical_Venetian::slat_tilt)
       .def_readwrite("slat_width",
@@ -745,7 +746,10 @@ PYBIND11_MODULE(pywincalc, m) {
                      &wincalc::Product_Data_Optical_Venetian::number_slats)
       .def_readwrite(
           "distribution_method",
-          &wincalc::Product_Data_Optical_Venetian::distribution_method);
+          &wincalc::Product_Data_Optical_Venetian::distribution_method)
+      .def_readwrite(
+          "is_horizontal",
+          &wincalc::Product_Data_Optical_Venetian::is_horizontal);
 
   py::class_<wincalc::Product_Data_Optical_Woven_Shade,
              wincalc::Product_Data_Optical_With_Material,
@@ -955,7 +959,14 @@ PYBIND11_MODULE(pywincalc, m) {
       .def("set_tilt", &wincalc::Glazing_System::set_tilt,
            py::arg("tilt_degrees"))
 	  .def("flip_layer", &wincalc::Glazing_System::flip_layer,
-		   py::arg("layer_index"), py::arg("flipped"));
+		   py::arg("layer_index"), py::arg("flipped"))
+	  .def("solid_layers",
+           py::overload_cast<std::vector<wincalc::Product_Data_Optical_Thermal> const &>(
+               &wincalc::Glazing_System::solid_layers),
+           py::arg("solid_layers"))
+      .def("solid_layers",
+           py::overload_cast<>(&wincalc::Glazing_System::solid_layers,
+                               py::const_));
 
   m.def("convert_to_solid_layer", &wincalc::convert_to_solid_layer,
         "Convert product data into a solid layer that can be used in glazing "

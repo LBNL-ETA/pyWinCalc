@@ -1,4 +1,5 @@
 import pywincalc
+import results_printer
 
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
@@ -46,7 +47,8 @@ glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optic
                                                           environment=pywincalc.nfrc_shgc_environments(),
                                                           bsdf_hemisphere=bsdf_hemisphere)
 
-u = glazing_system_u_environment.u()
-print("Exterior venetian U: {u}".format(u=u))
-shgc = glazing_system_shgc_environment.shgc()
-print("Exterior venetian SHGC: {shgc}".format(shgc=shgc))
+results_name = "Results for a double-layer system with interior BSDF shade"
+print("*" * len(results_name))
+print(results_name)
+print("*" * len(results_name))
+results_printer.print_results(glazing_system_u_environment, glazing_system_shgc_environment)

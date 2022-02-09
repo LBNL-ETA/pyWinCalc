@@ -1,6 +1,7 @@
 import pywincalc
 import requests
 from igsdb_interaction import url_single_product, headers
+import results_printer
 
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
@@ -63,25 +64,26 @@ venetian_solid_layer.optical_data.distribution_method = pywincalc.DistributionMe
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-exterior_venetian_nfrc_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                               solid_layers=[venetian_solid_layer,
-                                                                             generic_clear_3mm_glass],
-                                                               gap_layers=[gap_1],
-                                                               width_meters=glazing_system_width,
-                                                               height_meters=glazing_system_height,
-                                                               environment=pywincalc.nfrc_u_environments(),
-                                                               bsdf_hemisphere=bsdf_hemisphere)
+glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                                       solid_layers=[venetian_solid_layer,
+                                                                     generic_clear_3mm_glass],
+                                                       gap_layers=[gap_1],
+                                                       width_meters=glazing_system_width,
+                                                       height_meters=glazing_system_height,
+                                                       environment=pywincalc.nfrc_u_environments(),
+                                                       bsdf_hemisphere=bsdf_hemisphere)
 
-exterior_venetian_nfrc_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                                  solid_layers=[venetian_solid_layer,
-                                                                                generic_clear_3mm_glass],
-                                                                  gap_layers=[gap_1],
-                                                                  width_meters=glazing_system_width,
-                                                                  height_meters=glazing_system_height,
-                                                                  environment=pywincalc.nfrc_shgc_environments(),
-                                                                  bsdf_hemisphere=bsdf_hemisphere)
+glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                                          solid_layers=[venetian_solid_layer,
+                                                                        generic_clear_3mm_glass],
+                                                          gap_layers=[gap_1],
+                                                          width_meters=glazing_system_width,
+                                                          height_meters=glazing_system_height,
+                                                          environment=pywincalc.nfrc_shgc_environments(),
+                                                          bsdf_hemisphere=bsdf_hemisphere)
 
-exterior_venetian_nfrc_u = exterior_venetian_nfrc_u_environment.u()
-print("Exterior venetian NFRC U: {v}".format(v=exterior_venetian_nfrc_u))
-exterior_venetian_nfrc_shgc = exterior_venetian_nfrc_shgc_environment.shgc()
-print("Exterior venetian NFRC SHGC: {v}".format(v=exterior_venetian_nfrc_shgc))
+results_name = "Results for a double-layer system with a custom exterior Venetian blind made from a material downloaded from the IGSDB"
+print("*" * len(results_name))
+print(results_name)
+print("*" * len(results_name))
+results_printer.print_results(glazing_system_u_environment, glazing_system_shgc_environment)

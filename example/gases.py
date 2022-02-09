@@ -1,4 +1,5 @@
 import pywincalc
+import results_printer
 
 # Currently there are four pre-defined gases available: Air, Argon, Krypton, and Xenon
 # Vacuum gaps are not yet supported
@@ -67,12 +68,16 @@ clear_3_path = "products/CLEAR_3.DAT"
 clear_3 = pywincalc.parse_optics_file(clear_3_path)
 solid_layers = [clear_3] * 5
 glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard, solid_layers, gaps, width, height)
-print("U-value: {u}".format(u=glazing_system_u_environment.u()))
-# If SHGC results for the NFRC SHGC environment are needed create a glazing system with that environment
+
 glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
                                                           solid_layers=solid_layers,
                                                           gap_layers=gaps,
                                                           width_meters=width,
                                                           height_meters=height,
                                                           environment=pywincalc.nfrc_shgc_environments())
-print("SHGC: {shgc}".format(shgc=glazing_system_shgc_environment.shgc()))
+
+results_name = "Results for a 5-layer system with varying gases"
+print("*" * len(results_name))
+print(results_name)
+print("*" * len(results_name))
+results_printer.print_results(glazing_system_u_environment, glazing_system_shgc_environment)
