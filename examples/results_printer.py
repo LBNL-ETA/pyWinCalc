@@ -37,6 +37,30 @@ def print_thermal_results(glazing_system, theta=0, phi=0, leading_tabs=""):
     print("{t}Relative heat gain: {v}".format(t=leading_tabs, v=glazing_system.relative_heat_gain()))
 
 
+def print_system_optical_results_side(side_results, side, optical_method_name, leading_tabs=""):
+    print("{t}{m} method direct-direct {s} transmittance: {v}".format(t=leading_tabs, m=optical_method_name, s=side,
+                                                                      v=side_results.transmittance.direct_direct))
+    print("{t}{m} method direct-diffuse {s} transmittance: {v}".format(t=leading_tabs, m=optical_method_name, s=side,
+                                                                       v=side_results.transmittance.direct_direct))
+    print("{t}{m} method direct-hemispherical {s} transmittance: {v}".format(t=leading_tabs, m=optical_method_name,
+                                                                             s=side,
+                                                                             v=side_results.transmittance.direct_hemispherical))
+    print("{t}{m} method diffuse-diffuse {s} transmittance: {v}".format(t=leading_tabs, m=optical_method_name, s=side,
+                                                                        v=side_results.transmittance.diffuse_diffuse))
+    print("{t}{m} method direct-direct {s} reflectance: {v}".format(t=leading_tabs, m=optical_method_name, s=side,
+                                                                    v=side_results.reflectance.direct_direct))
+    print("{t}{m} method direct-diffuse {s} reflectance: {v}".format(t=leading_tabs, m=optical_method_name, s=side,
+                                                                     v=side_results.reflectance.direct_direct))
+    print("{t}{m} method direct-hemispherical {s} reflectance: {v}".format(t=leading_tabs, m=optical_method_name, s=side,
+                                                                         v=side_results.reflectance.direct_hemispherical))
+    print("{t}{m} method diffuse-diffuse {s} reflectance: {v}".format(t=leading_tabs, m=optical_method_name, s=side,
+                                                                      v=side_results.reflectance.diffuse_diffuse))
+    print("{t}{m} method {s} transmittance matrix: {v}".format(t=leading_tabs, m=optical_method_name, s=side,
+                                                               v=side_results.transmittance.matrix))
+    print("{t}{m} method {s} reflectance matrix: {v}".format(t=leading_tabs, m=optical_method_name, s=side,
+                                                             v=side_results.reflectance.matrix))
+
+
 def print_optical_method_results(glazing_system, optical_method_name, theta, phi, leading_tabs=""):
     try:
         results = glazing_system.optical_method_results(optical_method_name, theta, phi)
@@ -45,38 +69,8 @@ def print_optical_method_results(glazing_system, optical_method_name, theta, phi
         return
 
     system_results = results.system_results
-    print("{t}{m} method direct-direct front transmittance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                        v=system_results.front.transmittance.direct_direct))
-    print("{t}{m} method direct-diffuse front transmittance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                         v=system_results.front.transmittance.direct_direct))
-    print("{t}{m} method direct-hemispherical front transmittance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                               v=system_results.front.transmittance.direct_hemispherical))
-    print("{t}{m} method diffuse-diffuse front transmittance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                          v=system_results.front.transmittance.diffuse_diffuse))
-    print("{t}{m} method direct-direct front reflectance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                      v=system_results.front.reflectance.direct_direct))
-    print("{t}{m} method direct-diffuse front reflectance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                       v=system_results.front.reflectance.direct_direct))
-    print("{t}{m} method direct-hemispherical front reflectance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                             v=system_results.front.reflectance.direct_hemispherical))
-    print("{t}{m} method diffuse-diffuse front reflectance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                        v=system_results.front.reflectance.diffuse_diffuse))
-    print("{t}{m} method direct-direct back transmittance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                       v=system_results.back.transmittance.direct_direct))
-    print("{t}{m} method direct-diffuse back transmittance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                        v=system_results.back.transmittance.direct_direct))
-    print("{t}{m} method direct-hemispherical back transmittance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                              v=system_results.back.transmittance.direct_hemispherical))
-    print("{t}{m} method diffuse-diffuse back transmittance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                         v=system_results.back.transmittance.diffuse_diffuse))
-    print("{t}{m} method direct-direct back reflectance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                     v=system_results.back.reflectance.direct_direct))
-    print("{t}{m} method direct-diffuse back reflectance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                      v=system_results.back.reflectance.direct_direct))
-    print("{t}{m} method direct-hemispherical back reflectance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                            v=system_results.back.reflectance.direct_hemispherical))
-    print("{t}{m} method diffuse-diffuse back reflectance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                       v=system_results.back.reflectance.diffuse_diffuse))
+    print_system_optical_results_side(system_results.front, "front", optical_method_name, leading_tabs)
+    print_system_optical_results_side(system_results.front, "back", optical_method_name, leading_tabs)
 
     # Currently only absorptance results are provided for each solid layer.  Direct and diffuse absportances are
     # provided for each side of each layer.
