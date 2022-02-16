@@ -25,7 +25,7 @@ Version 2 has substantially more features but the interface has also changed as 
 		2. [Thermal Calculations](#Thermal-Calculations) 
 	2. [Units](#Units)
 	3. [Optical Standards](#Optical-Standards)
-		1.[Optical Standard File](#Optical-Standard-File) 
+		1. [Optical Standard File](#Optical-Standard-File) 
 	4. [Solid Layers](#Solid-Layers)
 		1. [Supported Solid Layer Types](#Supported-solid-layer-types)
 	5. [Gaps](#Gaps)
