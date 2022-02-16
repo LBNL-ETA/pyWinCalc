@@ -1,4 +1,5 @@
 
+  
 Berkeley Lab WINDOW Calc Engine (CalcEngine) Copyright (c) 2016 - 2020, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
 
 If you have questions about your rights to use or distribute this software, please contact Berkeley Lab's Innovation & Partnerships Office at IPO@lbl.gov.
@@ -24,6 +25,7 @@ Version 2 has substantially more features but the interface has also changed as 
 		2. [Thermal Calculations](Thermal-Calculations) 
 	2. [Units](Units)
 	3. [Optical Standards](Optical-Standards)
+		1.[Optical Standard File](Optical-Standard-File) 
 	4. [Solid Layers](Solid-Layers)
 		1. [Supported Solid Layer Types](Supported-solid-layer-types)
 	5. [Gaps](Gaps)
@@ -124,6 +126,29 @@ Calculations can be performed using predefined optical standards in the form tha
 
 Custom standards can be created by creating a new set of files following the same format.
 
+#### Optical Standard File
+Optical standards used by pywincalc are defined using a standards file and usually several related files referenced by the standards file.
+
+For an example standards file see [W5 NFRC 2003.std](https://github.com/LBNL-ETA/pyWinCalc/blob/develop/examples/standards/W5_NFRC_2003.std)
+
+Each standards file contains sections that define the optical methods provided by the standard.  In the W5 NFRC 2003 standard file the first method defined looks like this:
+
+```
+Name : SOLAR
+Description : NFRC 300-2003 Solar
+Source Spectrum : ASTM E891 Table 1 Direct AM1_5.ssp
+Detector Spectrum : None
+Wavelength Set : Source
+Integration Rule : Trapezoidal
+Minimum Wavelength : 0.3
+Maximum Wavelength : 2.5
+```
+The most important part for using pywincalc is the name of the method.  Since optical standard files can set anything for a name pywincalc has one generic method for calculating optical results and two other methods to handle exceptions to the generic rule:  Thermal IR and color calculations.  See the section on [optical calculation details](Optical-Calculations-Details) for more on those two cases.
+
+The choice of standards file affects what can be calculated because not all files implement all methods.  For example the [prEN_410.std](https://github.com/LBNL-ETA/pyWinCalc/blob/develop/examples/standards/prEN_410.std) file does not contain a definition of the thermal IR method.
+
+Calculations that rely on specific methods will not work if the standard does not provide them.  Since the prEN_410.std files does not contain a definition for the thermal IR method the `pywincalc.calc_thermal_ir` function will not work. 
+
 ### Solid layers
 Solid layers define the glazing or shading products that make up a glazing system.  The methods for creating solid layers currently supported are:
  
@@ -209,6 +234,7 @@ NOTE:  The igsdb examples require the python requests library and an API token f
 - [cma_single_vision.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/cma_single_vision.py) Shows how to do a CMA calculation for a single-vision window and which results are available for CMA calculations.
 - [cma_double_vision_horizontal.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/cma_double_vision_horizontal.py) Shows how to do a CMA calculation for a horizontal double-vision window and which results are available for CMA calculations.
 - [cma_double_vision_vertical.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/cma_double_vision_vertical.py) Shows how to do a CMA calculation for a vertical double-vision window and which results are available for CMA calculations.
+- [thermal_ir.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/thermal_ir.py) Shows how to calculate optical results for the thermal IR method.  Note that currently only calculations for a single solid layer are supported and these only have diffuse-diffuse transmittances and hemispherical emissivities.
 #### Non-example files
 These are files in the example folder that provide some functionality but are not calculation examples.
 - [igsdb_interaction.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_interaction.py) Encapsulates some basic interaction with the [IGSDB](http://igsdb.lbl.gov)
