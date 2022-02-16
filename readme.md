@@ -1,3 +1,4 @@
+
 Berkeley Lab WINDOW Calc Engine (CalcEngine) Copyright (c) 2016 - 2020, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
 
 If you have questions about your rights to use or distribute this software, please contact Berkeley Lab's Innovation & Partnerships Office at IPO@lbl.gov.
@@ -9,7 +10,47 @@ NOTICE.  This Software was developed under funding from the U.S. Department of E
 
 This module provides a simplified method for calculating various thermal and optical properties of glazing systems.
 
-Version 2.0 has substantially more features but the interface has also changed as a result.  For help updating existing code see [Migrating to 2.0](migrating-to-2.0)
+Version 2 has substantially more features but the interface has also changed as a result.  For help updating existing code see [Migrating to 2.0](migrating-to-2.0)
+
+# Table of contents
+1. [Requirements](Requirements)
+2. [Installation](Install)
+	1. [Linux](Linux)
+	2. [Mac](Mac)
+	3. [Windows](Windows)
+3. [Use](Use)
+	1. [Overview](Overview)
+		1. [Optical Calculations](Optical-Calculations)
+		2. [Thermal Calculations](Thermal-Calculations) 
+	2. [Units](Units)
+	3. [Optical Standards](Optical-Standards)
+	4. [Solid Layers](Solid-Layers)
+		1. [Supported Solid Layer Types](Supported-solid-layer-types)
+	5. [Gaps](Gaps)
+	6. [BSDF (Bidirectional scattering distribution function) Calculations](BSDF-Calculations)
+	7. [Example Use Cases](Example-Use-Cases)
+		1. [Examples](Examples) 
+	8. [pywincalc objects](pywincalc-objects)
+		1. [GlazingSystem](GlazingSystem)
+		2. [Optical Results](Optical-Results)
+			1. [Matrix Optical Results](Matrix-Optical-Results)
+			2. [Color Results](Color-Results)
+			3. [Thermal IR Results](Thermal-IR-Results)
+		3. [Environmental Conditions](Environmental-Conditions)
+		4. [Gases](Gases)
+			1. [Predefined gases](Predefined-gases)
+			2. [Custom gases](Custom-gases)
+			3. [Gas mixtures](Gas-mixtures)
+	9. [CMA](CMA)
+		1. [Context and Background](Context-and-Background)
+		2. [THERM](THERM)
+		3. [CMA Calculations](CMA-Calculations)
+		4. [CMA Examples](CMA-Examples)
+	10. [Migrating from version 1](Migrating-from-version-1)
+		1.	[Migrating Glazing_System](Migrating-Glazing_System)
+		2.	[Migrating Results](Migrating-Results)
+			1. [Migrating Optical Results](Migrating-Optical-Results)
+			2. [Migrating Thermal Results](Migrating-Thermal-Results)
 
 
 ### Requirements
@@ -30,7 +71,7 @@ Once the requirements have been installed this can be installed with pip by doin
 ` pip install git+https://github.com/LBNL-ETA/pyWinCalc.git `
 
 ### Windows
-Wheels have been provided for 32 and 64 bit versions of Python 2.7 and 3.7.  To insall
+Wheels have been provided for 32 and 64 bit versions of Python 2.7 and 3.7.  To install
 
 ```
 git clone https://github.com/LBNL-ETA/pyWinCalc.git
@@ -41,9 +82,31 @@ pip install pywincalc-0.0.1-your-version-of-python.whl
 For other versions of Python the correct C++ compiler first needs to be installed as well as CMake.  Once that has been installed pyWinCalc can be built following the Linux build steps.
 
 ## Use
-Calculations can be performed with either a single solid layer or multiple solid layers separated by gaps.
 
-A folder with example calculation script, products and standards is provided under the example directory.
+### Overview
+We recognize that there is a fair amount of complexity in the functionality provided by this library.  To attempt to mitigate this somewhat we have provided a selection of [examples](Examples) that we hope cover all potential use cases between them.  It may be beneficial to begin by looking at whichever example(s) seem to cover your particular use case and then consulting the rest of this and other documentation.
+
+For example, if you are interested in exploring the effect various gas fills have on glazing systems made from combinations of existing commercial glass products contained in the [IGSDB](igsdb.lbl.gov) you could look at the [gases](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/gases.py) example and the  [igsdb_double_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/develop/example/igsdb_double_clear_glass.py ) example
+
+Most of the functionality provided by pywincalc is based around a glazing system.  That is the solid and gap layers that make up a window not including frames or dividers.  One exception is CMA calculations using frames are also provided, see the [CMA](CMA) section for more information about the CMA process and calculations.
+
+For glazing systems calculations can be grouped into two broad categories:  optical and thermal calculations.
+
+In the context of this program `optical` and `thermal` refer to the algorithms used to perform the calculations and not the part of the spectrum used in the calculations.  E.g. the calculation for the transmittance of the infrared spectrum is considered an optical calculation here not a thermal calculation.
+
+#### Optical Calculations
+Optical calculations are based on optical standards which are defined by `.std` files and are not affected by environmental conditions.  The optical standards define various methods that can be used to generate [optical results](Optical-Results).
+
+Since optical standards are free to define which methods are provided as well as the names of the methods `pywincalc`provides a general way of calculating optical results via a `optical_method_results` method in the [GlazingSystem](GlazingSystem) class.
+
+There are a few important exceptions to this.  See the section on [optical calculation details](Optical-Calculation-Details) for more details.
+
+#### Thermal Calculations
+Currently only [ISO 15099](https://www.iso.org/standard/26425.html) thermal calculations are supported.
+
+Thermal calculations depend on the [environmental conditions](Environmental-Conditions) and, in some cases, optical results calculated using specific methods.  E.g. the [SHGC](https://www.energy.gov/energysaver/energy-performance-ratings-windows-doors-and-skylights) calculations can depend on optical results calculated using the `SOLAR`method from the optical standard.
+
+It is important to note that it is possible to calculate thermal results using an optical standard that does not necessarily conform to the ISO 15099 standard so care should be used when selecting which optical standard is used for thermal calculations.
 
 ### Units
 
@@ -124,17 +187,32 @@ print("Single Layer U-value: {u}".format(u=glazing_system.u()))
 
 Please see the following examples which contain more information.
 
-NOTE:  The igsdb examples require the python requests library and an API token for igsdb.lbl.gov.  An API token can be obtained by creating an account there.  See https://igsdb.lbl.gov/about/ for more information on creating an account.
+The examples names have the following meanings:
+1. `igsdb` means the example downloads data from the [IGSDB](http://igsdb.lbl.gov)
+2. `custom` means the example does not use a completely defined existing product.  This could be anything from using a pre-defined material to make a shade to using user-defined measured spectral data.
 
+NOTE:  The igsdb examples require the python requests library and an API token for igsdb.lbl.gov.  An API token can be obtained by creating an account there.  See https://igsdb.lbl.gov/about/ for more information on creating an account.
+#### Examples
+- [minimum_example.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/minumum_example.py) The minimum example shown above.  Calculates the U-value for a single piece of generic clear glass.
 - [single_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/single_clear.py): Creates a single layer glazing system from a sample optics file.  Shows all thermal results, all optical results for a single optical method and some optical results from a second optical method.
 - [triple_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/triple_clear.py):  Creates a triple layer glazing system from sample optics files.  Creates two gaps, one with a single gas and one with a gas mixture.  Shows another example of optical results for each layer.
-- [igsdb_exterior_shade_on_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_exterior_shade_on_clear_glass.py):  Creates two double-layer glazing systems with exterior shading products (Venetian blind and perforated screen).  Uses shading layers and glass from the [IGSDB](http://igsdb.lbl.gov).  
+- [igsdb_double_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/develop/example/igsdb_double_clear_glass.py ) Creates a double layer glazing system from products defined in the [IGSDB](http://igsdb.lbl.gov).
+- [igsdb_exterior perforated_shade_on_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_exterior_perforated_shade_on_clear_glass.py):  Creates a double-layer glazing system with an exterior perforated screen from products defined in the [IGSDB](http://igsdb.lbl.gov).  
+- [igsdb_exterior_venetian blind_on_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_exterior_venetian_blind_on_clear_glass.py):  Creates a double-layer glazing systems with  an exterior Venetian blind from products defined in the [IGSDB](http://igsdb.lbl.gov). 
 - [igsdb_custom_perforated.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_custom_perforated.py) Creates a double layer glazing system with an exterior perforated screen.  The perforated screen uses a material from the [IGSDB](http://igsdb.lbl.gov) and a user-defined geometry describing the perforations.  The glass layer uses data from the [IGSDB](http://igsdb.lbl.gov)
 - [igsdb_custom_venetian.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_custom_venetian.py).  Creates a double layer glazing system with an exterior venetian blind.  The venetian blind uses a material from the [IGSDB](http://igsdb.lbl.gov) and a user-defined geometry describing the slats.  Also includes an example of how to change the distribution method used for calculating optical results for the shade.  The glass layer uses data from the [IGSDB](http://igsdb.lbl.gov)
+- [igsdb_custom_vertical_venetian.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_custom_vertical_venetian.py).  Creates a double layer glazing system with an exterior vertical louver.  The vertical louver uses a material from the [IGSDB](http://igsdb.lbl.gov) and a user-defined geometry describing the slats.  Also includes an example of how to change the distribution method used for calculating optical results for the shade.  The glass layer uses data from the [IGSDB](http://igsdb.lbl.gov)
 - [igsdb_custom_woven.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_custom_woven.py) Creates a double layer glazing system with an exterior woven shade.  The woven shade uses a material from the [IGSDB](http://igsdb.lbl.gov) and a user-defined geometry describing the thread layout.  The glass layer uses data from the [IGSDB](http://igsdb.lbl.gov)
 - [custom_perforated.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/custom_perforated.py) Creates a double layer glazing system with an exterior perforated screen.  Shows an example of getting measured data from somewhere other than either the [IGSDB](http://igsdb.lbl.gov) or optics file.
 - [gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/gases.py) Creates gases and gas mixtures from predefined gas types and custom gases created from gas properties.
-- [minimum_example.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/minumum_example.py) The minimum example shown above.  Calculates the U-value for a single piece of generic clear glass.
+- [deflection.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/deflection.py) Shows how to set and enable deflection properties and which deflection results are available.
+- [cma_single_vision.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/cma_single_vision.py) Shows how to do a CMA calculation for a single-vision window and which results are available for CMA calculations.
+- [cma_double_vision_horizontal.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/cma_double_vision_horizontal.py) Shows how to do a CMA calculation for a horizontal double-vision window and which results are available for CMA calculations.
+- [cma_double_vision_vertical.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/cma_double_vision_vertical.py) Shows how to do a CMA calculation for a vertical double-vision window and which results are available for CMA calculations.
+#### Non-example files
+These are files in the example folder that provide some functionality but are not calculation examples.
+- [igsdb_interaction.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_interaction.py) Encapsulates some basic interaction with the [IGSDB](http://igsdb.lbl.gov)
+- [results_printer.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/results_printer.py) Contains some methods for displaying all available results.  The [single_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/single_clear.py) example contains notes on how to calculate and access the various results.  To simplify the other examples the code to display the results has been encapsulated in this file.
 
 If there is something you are trying to calculate that does not exist as an example yet please contact us.
 
@@ -163,20 +241,29 @@ If there is something you are trying to calculate that does not exist as an exam
         - gap_layers_effective_conductivities(TarcogSystemType, theta=0, phi=0)  Calculates the effective conductivity for each gap layer based on the given TarcogSystemType (U or SHGC) at theta and phi incidence angle.  Returns a list of effective conductivities for each gap layer.  See note in layer_temperatures for the meaning of the TarcogSystemType parameter.
         - system_effective_conductivities(TarcogSystemType, theta=0, phi=0)  Calculates the effective conductivity for the entire system based on the given TarcogSystemType (U or SHGC) at theta and phi incidence angle.  Returns a single value.  See note in layer_temperatures for the meaning of the TarcogSystemType parameter.
     - Optical
-        - optical_method_results(OpticalMethodType, theta=0, phi=0)  Calculates all optical results for the given OpticalMethodType at theta and phi incidence angle.  Returns an OpticalResults object containing all of the results.  See Optical Results section below.
+        - optical_method_results(method_name, theta=0, phi=0)  Calculates all optical results for the method in the optical standard with the name of `method_name` at theta and phi incidence angle.  Returns an `OpticalResults` object containing all of the results.  See [Optical Results](Optical-Results) section below.
         - color(theta=0, phi=0) Calculates color results and theta and phi incidence angle.  Returns a ColorResults object.  See the Color Results section in Optical Results below.
+
+##### Optical Calculations Details
+Most optical results can be calculated by passing the name of the optical method to the `optical_method_results`method of the `GlazingSystem`.  However there are two exceptions:
+
+1. Colors.  Color calculations are calculated using three tristimulus optical methods, not one.  In the [NFRC standard](https://github.com/LBNL-ETA/pyWinCalc/blob/develop/example/standards/W5_NFRC_2003.std) provided these three methods are named `COLOR_TRISTIMX`, `COLOR_TRISTIMY`, and `COLOR_TRISTIMZ`.  While it is possible to calculate results for each of these methods individually the results will not give accurate color information.
+2. `THERMAL IR`method.  Thermal IR optical results are only available for a single layer and cannot be calculated for a system.  These results should be calculated using the `calc_thermal_ir`function.
 
 #### Optical Results
 There are two types of optical results available: those calculated from any method that is not a color method and color results.  Color calculations are a special case and therefore have their own method used to calculate them and their own results structure.  The differences between color results and other optical results is discussed in the section below.
 
-An OpticalResults object has two parts: system\_results and layer\_results.
+An `OpticalResults` object has two parts: `system_results` and `layer_results`.
 
-system_results apply to the system as a whole and are objects nested as follows:  `system_results.side.transmission_type.flux_type` With the following options available for each
+`system_results` apply to the system as a whole and are objects nested as follows:  `system_results.side.transmission_type.flux_type` With the following options available for each
 
-- side:  front, back
-- transmission_type: transmittance, reflectance
-- flux_type: direct_direct, direct_diffuse, direct_hemispherical, diffuse_diffuse
-    - Note:  direct_hemisperical = direct_direct + direct_diffuse
+- side:  `front`, `back`
+- transmission_type: `transmittance`, `reflectance`
+- flux_type: `direct_direct`, `direct_diffuse`, `direct_hemispherical`, `diffuse_diffuse`, `matrix`
+    - Note:  `direct_hemisperical` = `direct_direct` + `direct_diffuse`
+
+##### Matrix Optical Results
+Matrix results are only available for systems that have a BSDF basis.  See the section on [BSDF Calculations](BSDF-Calculations) for information on how to create and use a BSDF basis.  For systems with a BSDF basis the matrix result is a square matrix of the same size as the number of patches in the basis.  
 
 E.g. the direct-diffuse front reflectance is `system_results.front.reflectance.direct_diffuse`
 
@@ -187,10 +274,16 @@ E.g the diffuse back absorptance for the first solid layer is `layer_results[0].
 ###### Color Results
 The structure of color results is similar to, but different from, the structure of other optical results.  There are two main differences.  First individual layer results are not yet supported for colors.  And second instead of one value at each flux type (direct-direct, direct-diffuse, etc...) color results have RGB, Lab, and Trichromatic values.  Those represent the same result mapped into three common color spaces for convenience.  
 
-So while for other results doing `results.front.transmittance.direct_direct` would return a single value for colors that returns an object that contains RGB, Lab, and Trichromatic objects.  E.g. to get the RGB blue value from a color result this is required: `results.front.transmittance.direct_direct.rgb.B`
+So while for other results `results.front.transmittance.direct_direct` would return a single value for colors that returns an object that contains RGB, Lab, and Trichromatic objects.  E.g. to get the RGB blue value from a color result this is required: `results.front.transmittance.direct_direct.rgb.B`
 
+##### Thermal IR Results
+Thermal IR results are only available for a single layer and only have four results available.  They are:
+1. `transmittance_front_diffuse_diffuse`
+2. `transmittance_back_diffuse_diffuse`
+3. `emissivity_front_hemispheric`
+4. `emissivity_back_hemispheric`
 
-#### Environments
+#### Environmental Conditions
 An environment consists of two parts:  the inside and outside environment.  The exterior environment will be used as the environment before the first solid layer in the system and the interior environment will be used after the last solid layer in the system.  Each contains the same fields.  To use custom values for thermal calculations create an Environments object from inside and outside Environment objects.
 
 Environment fields:
@@ -217,7 +310,7 @@ A gap layer can be created from a predefined gas type like so:
 gap_1 = pywincalc.Gap(pywincalc.PredefinedGasType.AIR, .0127)  # .0127 is gap thickness in meters
 ```
 
-#### Custom gases
+##### Custom gases
 A CustomGasData object can be created by providing the following information:
 - Name
 - molecular_weight
@@ -231,7 +324,7 @@ A CustomGasData object can be created by providing the following information:
 
 See [gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/gases.py) for more on creating custom gases.
 
-#### Gas mixtures
+##### Gas mixtures
 Gas mixtures can be created from custom and predefined gases by specifying the percentage of each in the mixtures.  E,g,
 
 ```
@@ -342,7 +435,7 @@ tf_rgb_results_triple_layer = color_results_triple_layer.system_results.front.tr
 print("Triple Layer color results transmittance front direct-direct RGB: ({r}, {g}, {b})".format(r=tf_rgb_results_triple_layer.R, g=tf_rgb_results_triple_layer.G, b=tf_rgb_results_triple_layer.B))
 ```
 
-#### GlazingSystem
+#### Migrating Glazing_System
 
 
 First Glazing_System was changed to GlazingSystem to be more in line with python's naming conventions.
@@ -374,9 +467,9 @@ nfrc_u_value = glazing_system_nfrc_u_env.u()
 nfrc_shgc_value = glazing_system_nfrc_shgc_env.shgc()
 ```
 
-#### Results
+#### Migrating Results
 
-##### Optical Results
+##### Migrating Optical Results
 The `all_method_results` function has been renamed to `optical_method_results`.  It still requires an optical method but now also accepts optional theta and phi values for angular calculations.
 
 The top level object returned by the `optical_method_results` now has two components: system\_results and layer\_results.  As the names imply system\_results contains results that apply to the system as a whole while layer\_results have results on a per-solid-layer basis.
@@ -384,9 +477,7 @@ The top level object returned by the `optical_method_results` now has two compon
 Under system\_results then it goes side, transmittance or reflectance, then flux type (direct-direct, direct-diffuse, direct-hemispheric, or diffuse-diffuse)
 
 
-##### Thermal Results
+##### Migrating Thermal Results
 
 GlazingSystem.u() and GlazingSystem.shgc() now return single values
 Both u() and shgc() take optional theta and phi values for angular calculations.  Both theta and phi default to zero so if neither are provided the result will be for normal incidence angle.
-
-
