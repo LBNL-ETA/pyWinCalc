@@ -20,6 +20,8 @@
 .directory
 .DS_Store
 
+pybind11/
+
 # ignore python
 *.pyc
 
