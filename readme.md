@@ -11,7 +11,7 @@ NOTICE.  This Software was developed under funding from the U.S. Department of E
 
 This module provides a simplified method for calculating various thermal and optical properties of glazing systems.
 
-Version 2 has substantially more features but the interface has also changed as a result.  For help updating existing code see [Migrating to 2.0](#migrating-to-2.0)
+Version 2 has substantially more features but the interface has also changed as a result.  For help updating existing code see [Migrating from version 1](#Migrating-from-version-1)
 
 # Table of contents
 1. [Requirements](#Requirements)
@@ -434,16 +434,16 @@ print("Single Layer SHGC t_sol: {t}".format(t=shgc_results.t_sol))
 print("Single Layer SHGC solar absorptances per layer: {a}".format(a=shgc_results.layer_solar_absorptances))
 
 #v1 code
-optical_results_single_layer = glazing_system_single_layer.all_method_values(pywincalc.Method_Type.THERMAL_IR)
+solar_optical_results_single_layer = glazing_system_single_layer.all_method_values(pywincalc.Method_Type.SOLAR)
 
 # v2 code
-thermal_ir_optical_results_single_layer = glazing_system_single_layer.optical_method_results(pywincalc.OpticalMethodType.THERMAL_IR)
+solar_optical_results_single_layer = glazing_system_single_layer.optical_method_results("SOLAR")
 
 # v1 code
-print("Single Layer Thermal IR optical transmittance front direct-direct: {r}".format(r=thermal_ir_optical_results_single_layer.direct_direct.tf))
+print("Single Layer Solar optical transmittance front direct-direct: {r}".format(r=solar_optical_results_single_layer.direct_direct.tf))
 
 # v2 code
-print("Single Layer Thermal IR optical transmittance front direct-direct: {r}".format(r=thermal_ir_optical_results_single_layer.system_results..front.transmittance.direct_direct))
+print("Single Layer Solar optical transmittance front direct-direct: {r}".format(r=solar_optical_results_single_layer.system_results.front.transmittance.direct_direct))
 
 # v1 code
 gap_1 = pywincalc.Gap_Data(pywincalc.Gas_Type.AIR, .0127) # .0127 is gap thickness in meters
