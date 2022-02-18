@@ -88,7 +88,7 @@ For other versions of Python the correct C++ compiler first needs to be installe
 ### Overview
 We recognize that there is a fair amount of complexity in the functionality provided by this library.  To attempt to mitigate this somewhat we have provided a selection of [examples](#Examples) that we hope cover all potential use cases between them.  It may be beneficial to begin by looking at whichever example(s) seem to cover your particular use case and then consulting the rest of this and other documentation.
 
-For example, if you are interested in exploring the effect various gas fills have on glazing systems made from combinations of existing commercial glass products contained in the [IGSDB](igsdb.lbl.gov) you could look at the [gases](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/gases.py) example and the  [igsdb_double_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/develop/example/igsdb_double_clear_glass.py ) example
+For example, if you are interested in exploring the effect various gas fills have on glazing systems made from combinations of existing commercial glass products contained in the [IGSDB](igsdb.lbl.gov) you could look at the [gases](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gases.py) example and the  [igsdb_double_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_double_clear_glass.py ) example
 
 Most of the functionality provided by pywincalc is based around a glazing system.  That is the solid and gap layers that make up a window not including frames or dividers.  One exception is CMA calculations using frames are also provided, see the [CMA](#CMA) section for more information about the CMA process and calculations.
 
@@ -218,7 +218,7 @@ The examples names have the following meanings:
 
 NOTE:  The igsdb examples require the python requests library and an API token for igsdb.lbl.gov.  An API token can be obtained by creating an account there.  See https://igsdb.lbl.gov/about/ for more information on creating an account.
 #### Examples
-- [minimum_example.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/minumum_example.py) The minimum example shown above.  Calculates the U-value for a single piece of generic clear glass.
+- [minimum_example.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/minimum_example.py) The minimum example shown above.  Calculates the U-value for a single piece of generic clear glass.
 - [single_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/single_clear.py): Creates a single layer glazing system from a sample optics file.  Shows all thermal results, all optical results for a single optical method and some optical results from a second optical method.
 - [triple_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/triple_clear.py):  Creates a triple layer glazing system from sample optics files.  Creates two gaps, one with a single gas and one with a gas mixture.  Shows another example of optical results for each layer.
 - [igsdb_double_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_double_clear_glass.py ) Creates a double layer glazing system from products defined in the [IGSDB](http://igsdb.lbl.gov).
