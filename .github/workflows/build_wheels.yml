@@ -20,9 +20,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Checkout submodule
-        run: git submodule update --init
-
+      - name: Install packages
+        run: pip install wheel
 
       - name: build
         run: python setup.py bdist_wheel
