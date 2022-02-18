@@ -25,7 +25,7 @@ Version 2 has substantially more features but the interface has also changed as 
 		2. [Thermal Calculations](#Thermal-Calculations) 
 	2. [Units](#Units)
 	3. [Optical Standards](#Optical-Standards)
-		1.[Optical Standard File](#Optical-Standard-File) 
+		1. [Optical Standard File](#Optical-Standard-File) 
 	4. [Solid Layers](#Solid-Layers)
 		1. [Supported Solid Layer Types](#Supported-solid-layer-types)
 	5. [Gaps](#Gaps)
@@ -235,6 +235,7 @@ NOTE:  The igsdb examples require the python requests library and an API token f
 - [cma_double_vision_horizontal.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/cma_double_vision_horizontal.py) Shows how to do a CMA calculation for a horizontal double-vision window and which results are available for CMA calculations.
 - [cma_double_vision_vertical.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/cma_double_vision_vertical.py) Shows how to do a CMA calculation for a vertical double-vision window and which results are available for CMA calculations.
 - [thermal_ir.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/thermal_ir.py) Shows how to calculate optical results for the thermal IR method.  Note that currently only calculations for a single solid layer are supported and these only have diffuse-diffuse transmittances and hemispherical emissivities.
+- [custom_environmental_conditions.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/custom_environmental_conditions.py) Shows how to create custom environmental conditions.
 #### Non-example files
 These are files in the example folder that provide some functionality but are not calculation examples.
 - [igsdb_interaction.py](https://github.com/LBNL-ETA/pyWinCalc/blob/shading_calcs/example/igsdb_interaction.py) Encapsulates some basic interaction with the [IGSDB](http://igsdb.lbl.gov)
