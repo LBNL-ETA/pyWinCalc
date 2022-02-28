@@ -57,8 +57,6 @@ class CMakeBuild(build_ext):
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
 setup(
-    name='pywincalc',
-    version='2.3.2',
     ext_modules=[CMakeExtension('pywincalc')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
