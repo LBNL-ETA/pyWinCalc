@@ -28,13 +28,12 @@ jobs:
       - name: Install packages
         run: pip install wheel
 
- - name: Build wheels
+      - name: Build wheels
         uses: pypa/cibuildwheel@v2.2.2
         # to supply options, put them in 'env', like:
         env:
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
 
-      - name: upload wheels
-        uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2
         with:
-          path: ./dist/*.whl
+          path: ./wheelhouse/*.whl
