@@ -7,6 +7,6 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
-archs = ["auto", "universal2"]
+archs = ["auto"]
 
 manylinux-x86_64-image = "manylinux2014"
