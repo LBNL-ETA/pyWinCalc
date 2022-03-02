@@ -37,7 +37,7 @@ jobs:
         with:
           path: ./dist/*.whl
           
-    build_wheels_windows_x64:
+  build_wheels_windows_x64:
     name: Build wheels on ${{ matrix.python-version }} x64 ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
