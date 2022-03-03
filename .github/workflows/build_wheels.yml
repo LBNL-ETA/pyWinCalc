@@ -9,11 +9,12 @@ on:
 
 jobs:
   build_wheels_windows_x86:
-    name: Build wheels on ${{ matrix.python-version }} x86 ${{ matrix.os }}
+    name: Build wheels on ${{ matrix.python-version }} ${{ matrix.arch }} ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-2019]
+        arch: [x86]
         python-version: [3.7, 3.8, 3.9, "3.10"]
 
     steps:
@@ -24,13 +25,15 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: x86
+          architecture: ${{ matrix.arch }}
 
       - name: Install packages
         run: pip install wheel
 
       - name: build
         run: python setup.py bdist_wheel
+        env:
+          RUNNER_ARCH: ${{ matrix.arch }}
 
       - name: upload wheels
         uses: actions/upload-artifact@v2
