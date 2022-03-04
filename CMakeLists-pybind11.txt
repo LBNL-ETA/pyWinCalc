@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.2)
+cmake_minimum_required(VERSION 3.5)
 
 set(pybind11_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/pybind11-src/include")
 include_directories(${pybind11_INCLUDE_DIRS})
