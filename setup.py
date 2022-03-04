@@ -41,7 +41,6 @@ class CMakeBuild(build_ext):
 
         if platform.system() == "Windows":
             cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir)]
-            print("sys.maxsize={s}, 2**32={v}".format(s=sys.maxsize, v=2**32))
             if sys.maxsize > 2**32:
                 cmake_args += ['-A', 'x64']
             else:
