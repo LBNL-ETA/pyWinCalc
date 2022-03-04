@@ -9,14 +9,15 @@ on:
 
 jobs:
   build_wheels_windows_x86:
-    name: Wheels • ${{ matrix.cibw-arch }}
+    name: Wheels ${{ matrix.runs-on }} - ${{ matrix.cibw-arch }} - ${{ matrix.python-version }}
     runs-on: ${{ matrix.runs-on }}
-    matrix:
-      python-version: [3.7, 3.8, 3.9, "3.10"]
-      include:
-        - runs-on: windows-2019
-          cibw-arch: win32
-          python-arch: x86
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9, "3.10"]
+        include:
+          - runs-on: windows-2019
+            cibw-arch: win32
+            python-arch: x86
 
     steps:
       - name: Checkout code
