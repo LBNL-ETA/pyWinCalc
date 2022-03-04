@@ -9,27 +9,24 @@ on:
 
 jobs:
   build_wheels_windows_x86:
-    name: Wheels ${{ matrix.runs-on }} - ${{ matrix.cibw-arch }} - ${{ matrix.python-version }}
+    name: Wheels ${{ matrix.runs-on }} - ${{ matrix.cibw-arch }}
     runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9, "3.10"]
         include:
-          - runs-on: windows-2019
+          - runs-on: windows-latest
             cibw-arch: win32
             python-arch: x86
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          submodules: recursive
 
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
-          architecture: ${{ matrix.python-arch }}
+          python-version: '3.8'
+          architecture: x86
 
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.12
@@ -41,10 +38,13 @@ jobs:
       - name: Configure cibuildwheel
         shell: bash
         run: |
-          CMAKE_ARCH="${{ matrix.cibw-arch == 'win32' && '-A Win32' || '' }}"
-          echo "CIBW_BUILD=*-${{ matrix.cibw-arch }}" >> $GITHUB_ENV
-          echo "CIBW_ENVIRONMENT=$CIBW_ENVIRONMENT_COMMON" >> $GITHUB_ENV
-
+          echo "CIBW_BUILD=cp38-win32" >> $GITHUB_ENV
+          echo "CIBW_ARCHS=x86" >> $GITHUB_ENV
+          echo "RUNNER_ARCH=x86" >> $GITHUB_ENV
+          echo "PLAT=win32" >> $GITHUB_ENV
+          echo "RUNNER_ARCH=x86" >> $GITHUB_ENV
+          echo "PROCESSOR_ARCHITECTURE=x86" >> $GITHUB_ENV
+ 
       - name: Run cibuildwheel
         run: cibuildwheel
           
