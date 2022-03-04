@@ -10,45 +10,25 @@ on:
 jobs:
   build_wheels_windows_x86:
     name: Build wheels on ${{ matrix.python-version }} ${{ matrix.arch }} ${{ matrix.os }}
-    runs-on: windows-2019
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python:
-        - 3.7
-		
-		args: >
-              -DPYBIND11_FINDPYTHON=ON
-
-        include:
-          - python: 3.7
-            args: -DCMAKE_CXX_STANDARD=17
+        os: [windows-2019]
+        arch: [x86]
+        python-version: [3.7]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Setup Python ${{ matrix.python }}
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python }}
+          python-version: ${{ matrix.python-version }}
           architecture: x86
 
       - name: Install packages
         run: pip install wheel
-		
-	  - name: Prepare MSVC
-        uses: ilammy/msvc-dev-cmd@v1.10.0
-        with:
-          arch: x86
-		  
-	  - name: Configure ${{ matrix.args }}
-        run: >
-          cmake -S . -B build
-          -G "Visual Studio 16 2019" -A Win32
-          -DPYBIND11_WERROR=ON
-          -DDOWNLOAD_CATCH=ON
-          -DDOWNLOAD_EIGEN=ON
-          ${{ matrix.args }}
 
       - name: build
         run: python setup.py bdist_wheel
