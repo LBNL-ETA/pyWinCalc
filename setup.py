@@ -44,6 +44,9 @@ class CMakeBuild(build_ext):
             print("sys.maxsize={s}, 2**32={v}".format(s=sys.maxsize, v=2**32))
             if sys.maxsize > 2**32:
                 cmake_args += ['-A', 'x64']
+            else:
+                cmake_args += ['-G', "Visual Studio 16 2019"]
+                cmake_args += ['-A', 'Win32']
             build_args += ['--', '/m']
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
