@@ -9,7 +9,7 @@ on:
 
 jobs:
   build_wheels_windows:
-    name: Build wheels on ${{ matrix.os }} Python ${{ matrix.python-version }} ${{ matrix.arch }}
+    name: ${{ matrix.os }} ${{ matrix.python-version }} ${{ matrix.arch }} wheels
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -39,7 +39,7 @@ jobs:
           path: ./dist/*.whl
                     
   build_wheels_mac:
-    name: Build wheels on ${{ matrix.os }} Python ${{ matrix.python-version }}
+    name: ${{ matrix.os }} ${{ matrix.python-version }} wheels
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
