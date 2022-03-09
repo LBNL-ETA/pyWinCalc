@@ -46,7 +46,7 @@ class CMakeBuild(build_ext):
             else:
                 cmake_args += ['-A', 'Win32']
             build_args += ['--', '/m']
-            buld_args += ['-G', 'Visual Studio 15 2017']
+            build_args += ['-G', 'Visual Studio 15 2017']
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
             build_args += ['--', '-j2']
