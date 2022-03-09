@@ -1,6 +1,3 @@
-
-  
-  
 Berkeley Lab WINDOW Calc Engine (CalcEngine) Copyright (c) 2016 - 2020, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
 
 If you have questions about your rights to use or distribute this software, please contact Berkeley Lab's Innovation & Partnerships Office at IPO@lbl.gov.
@@ -16,10 +13,13 @@ Version 2 has substantially more features but the interface has also changed as 
 
 # Table of contents
 1. [Requirements](#Requirements)
+	1. [Windows](#Windows)
+	2. [Linux/Mac](#Linux/Mac)
+	3. [Building from source](#Building-from-source)
 2. [Installation](#Install)
-	1. [Linux](#Linux)
-	2. [Mac](#Mac)
-	3. [Windows](#Windows)
+	1. [From PyPi](#From-PyPi)
+	2. [Building from source](#Building-from-source)
+		1. [Building From Source On Windows](#Building-from-source-on-windows)
 3. [Use](#Use)
 	1. [Overview](#Overview)
 		1. [Optical Calculations](#Optical-Calculations)
@@ -58,32 +58,32 @@ Version 2 has substantially more features but the interface has also changed as 
 
 
 ### Requirements
+
+#### Windows
+Windows requires a version of the Microsoft C++ redistributable >= the version of Visual Studio used to build the library.  Currently the wheels on pypi are generated using Visual Studio 16 2019.  However in general installing the latest version of the C++ runtime for your architecture should always be sufficient.  Installation packages are available from Microsoft here: https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist
+
+#### Linux/Mac
+The pre-built wheels provided at pypi should work on any x86/x64 version of Linux or Mac that supports at least C++17.
+
+#### Building from source
 [Git](https://git-scm.com/)
 
 [CMake](https://cmake.org/) - Not required for installing from wheel files on Windows.
 
 ## Install
 
-### Linux
+### From PyPi
+Once the requirements have been installed this can be installed with pip by doing
+
+` pip install pywincalc `
+
+### Building from source
 Once the requirements have been installed this can be installed with pip by doing
 
 ` pip install git+https://github.com/LBNL-ETA/pyWinCalc.git `
 
-### Mac
-Once the requirements have been installed this can be installed with pip by doing
-
-` pip install git+https://github.com/LBNL-ETA/pyWinCalc.git `
-
-### Windows
-Wheels have been provided for 32 and 64 bit versions of current versions of Python 3.  To install
-
-```
-git clone https://github.com/LBNL-ETA/pyWinCalc.git
-cd pywincalc\wheels
-pip install pywincalc-2.3.2-your-version-of-python.whl
-```
-
-For other versions of Python the correct C++ compiler first needs to be installed as well as CMake.  Once that has been installed pyWinCalc can be built following the Linux build steps.
+#### Building from source on windows
+Building Python packages from source on Windows is more complicated than Mac/Linux.  First the correct C++ compiler first needs to be installed as well as CMake.  See https://wiki.python.org/moin/WindowsCompilers for more information about C++ compilers for Python packages on Windows.  Once that has been installed pyWinCalc can be built following the build from source steps.
 
 ## Use
 

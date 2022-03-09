@@ -8,12 +8,42 @@ on:
     branches: [ main ]
 
 jobs:
-  build_wheels:
-    name: Build wheels on ${{ matrix.python-version }} ${{ matrix.os }}
+  build_wheels_windows:
+    name: ${{ matrix.os }} ${{ matrix.python-version }} ${{ matrix.arch }} wheels
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-2019, macos-10.15]
+        os: [windows-2019]
+        arch: [x86, x64]
+        python-version: [3.7, 3.8, 3.9, "3.10"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: ${{ matrix.arch }}
+
+      - name: Install packages
+        run: pip install wheel
+
+      - name: build
+        run: python setup.py bdist_wheel
+
+      - name: upload wheels
+        uses: actions/upload-artifact@v2
+        with:
+          path: ./dist/*.whl
+                    
+  build_wheels_mac:
+    name: ${{ matrix.os }} ${{ matrix.python-version }} wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-10.15]
         python-version: [3.7, 3.8, 3.9, "3.10"]
 
     steps:
@@ -35,3 +65,19 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: ./dist/*.whl
+          
+  build_wheels_manylinux:
+    name: Build manylinux wheels
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build manylinux Python wheels
+        uses: RalfG/python-wheels-manylinux-build@v0.4.2-manylinux2014_x86_64
+
+      - name: upload wheels
+        uses: actions/upload-artifact@v2
+        with:
+          path: ./dist/*-manylinux*.whl
+  
