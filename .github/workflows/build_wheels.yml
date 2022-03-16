@@ -6,6 +6,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    
+# Cannot use cibuildwheels because the current images used by cibuildwheels do not support C++17.
 
 jobs:
   build_wheels_windows:
@@ -43,6 +45,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        # Trying to use cibuildwheels to build mac wheels fails because the version of XCode is not high enough.
+        # There is documentation here https://github.com/pypa/cibuildwheel/blob/main/docs/cpp_standards.md on how to
+        # set it but I could not get it to work while using the standard images provided by github actions does work.
         os: [macos-10.15]
         python-version: [3.7, 3.8, 3.9, "3.10"]
 
@@ -73,6 +78,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+        # Need to use the image specified below to build manylinux wheels
+        # PyPi only accepts manylinux wheels, it does not accept wheels for specific versions/architectures
+        # Note that at least manylinux2014 is needed to get support for C++17
       - name: Build manylinux Python wheels
         uses: RalfG/python-wheels-manylinux-build@v0.4.2-manylinux2014_x86_64
 
