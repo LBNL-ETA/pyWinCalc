@@ -27,8 +27,14 @@ void declare_wce_optical_result_absorptance(py::module &m,
   std::string pyclass_name = std::string("OpticalResultAbsorptance") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
-      .def_readwrite("direct", &Class::direct)
-      .def_readwrite("diffuse", &Class::diffuse);
+      .def_readwrite("direct", &Class::total_direct)
+      .def_readwrite("diffuse", &Class::total_diffuse)
+	  .def_readwrite("total_direct", &Class::total_direct)
+      .def_readwrite("total_diffuse", &Class::total_diffuse)
+	  .def_readwrite("heat_direct", &Class::heat_direct)
+      .def_readwrite("heat_diffuse", &Class::heat_diffuse)
+	  .def_readwrite("electricity_direct", &Class::electricity_direct)
+      .def_readwrite("electricity_diffuse", &Class::electricity_diffuse);
 }
 
 template <typename T>
@@ -198,6 +204,15 @@ PYBIND11_MODULE(pywincalc, m) {
                      &OpticsParser::MeasurementComponent::rf)
       .def_readwrite("reflectance_back",
                      &OpticsParser::MeasurementComponent::rb);
+					 
+					 
+  py::class_<OpticsParser::PVWavelengthData>(m, "PVWavelengthData")
+      .def(py::init<double, double>(),
+           py::arg("eqe_front"), py::arg("eqe_back"))
+      .def_readwrite("eqq_front",
+                     &OpticsParser::MeasurementComponent::eqef)
+      .def_readwrite("eqe_back",
+                     &OpticsParser::MeasurementComponent::eqeb);
 
   py::class_<OpticsParser::WLData>(m, "WavelengthData")
       .def(py::init<double, OpticsParser::MeasurementComponent,
@@ -222,7 +237,9 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("wavelength", &OpticsParser::WLData::wavelength)
       .def_readwrite("direct_component", &OpticsParser::WLData::directComponent)
       .def_readwrite("diffuse_component",
-                     &OpticsParser::WLData::diffuseComponent);
+                     &OpticsParser::WLData::diffuseComponent)
+	  .def_readwrite("pv_component",
+                     &OpticsParser::WLData::pvComponent);
 
   py::class_<OpticsParser::ProductGeometry,
              std::shared_ptr<OpticsParser::ProductGeometry>>(m,
@@ -286,6 +303,16 @@ PYBIND11_MODULE(pywincalc, m) {
   py::class_<OpticsParser::DualBandBSDF>(m, "DualBandBSDF")
       .def_readwrite("solar", &OpticsParser::DualBandBSDF::solar)
       .def_readwrite("visible", &OpticsParser::DualBandBSDF::visible);
+	  
+  py::class_<OpticsParser::PVPowerProperty>(m, "PVPowerProperty")
+      .def(py::init<double, double, double>(),
+           py::arg("jsc"), py::arg("voc"), py::arg("ff"))
+      .def_readwrite("jsc",
+                     &OpticsParser::MeasurementComponent::jsc)
+      .def_readwrite("voc",
+                     &OpticsParser::MeasurementComponent::voc)
+	  .def_readwrite("ff",
+                     &OpticsParser::MeasurementComponent::ff);
 
   py::class_<OpticsParser::ProductData,
              std::shared_ptr<OpticsParser::ProductData>>(m, "ProductData")
@@ -306,7 +333,9 @@ PYBIND11_MODULE(pywincalc, m) {
                      &OpticsParser::ProductData::permeabilityFactor)
       .def_readwrite("density", &OpticsParser::ProductData::density)
       .def_readwrite("youngs_modulus",
-                     &OpticsParser::ProductData::youngsModulus);
+                     &OpticsParser::ProductData::youngsModulus)
+      .def_readwrite("pv_power_properties",
+                     &OpticsParser::ProductData::pvPowerProperties);
 
   py::class_<OpticsParser::CompositionInformation,
              std::shared_ptr<OpticsParser::CompositionInformation>>(
@@ -332,6 +361,7 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite(
           "product_composition_data",
           &OpticsParser::ComposedProductData::compositionInformation);
+		  
 
   py::enum_<window_standards::Spectrum_Type>(m, "SpectrumType",
                                              py::arithmetic())
