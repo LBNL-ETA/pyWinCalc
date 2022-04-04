@@ -308,11 +308,11 @@ PYBIND11_MODULE(pywincalc, m) {
       .def(py::init<double, double, double>(),
            py::arg("jsc"), py::arg("voc"), py::arg("ff"))
       .def_readwrite("jsc",
-                     &OpticsParser::MeasurementComponent::jsc)
+                     &OpticsParser::PVPowerProperty::jsc)
       .def_readwrite("voc",
-                     &OpticsParser::MeasurementComponent::voc)
+                     &OpticsParser::PVPowerProperty::voc)
 	  .def_readwrite("ff",
-                     &OpticsParser::MeasurementComponent::ff);
+                     &OpticsParser::PVPowerProperty::ff);
 
   py::class_<OpticsParser::ProductData,
              std::shared_ptr<OpticsParser::ProductData>>(m, "ProductData")
