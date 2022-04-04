@@ -210,9 +210,9 @@ PYBIND11_MODULE(pywincalc, m) {
       .def(py::init<double, double>(),
            py::arg("eqe_front"), py::arg("eqe_back"))
       .def_readwrite("eqq_front",
-                     &OpticsParser::MeasurementComponent::eqef)
+                     &OpticsParser::PVWavelengthData::eqef)
       .def_readwrite("eqe_back",
-                     &OpticsParser::MeasurementComponent::eqeb);
+                     &OpticsParser::PVWavelengthData::eqeb);
 
   py::class_<OpticsParser::WLData>(m, "WavelengthData")
       .def(py::init<double, OpticsParser::MeasurementComponent,
