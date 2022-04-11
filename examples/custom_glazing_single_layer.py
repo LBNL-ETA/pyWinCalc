@@ -13,7 +13,7 @@ def convert_wavelength_data(raw_wavelength_data):
     for individual_wavelength_measurement in raw_wavelength_data:
         wavelength = individual_wavelength_measurement["wavelength_microns"]
         # In this case the raw data only has the direct component measured
-        # Diffuse measured data is also not yet supported in the calculations
+        # Diffuse measured data is not yet supported in the calculations
         direct_component = pywincalc.OpticalMeasurementComponent(
             individual_wavelength_measurement["transmittance_front"],
             individual_wavelength_measurement["transmittance_back"],
@@ -25,6 +25,7 @@ def convert_wavelength_data(raw_wavelength_data):
 
 
 def raw_glazing_wavelength_data():
+    # This format is for example purposes only.
     return [{"wavelength_microns": 0.300, "transmittance_front": 0.0020, "transmittance_back": 0.0020,
              "reflectance_front": 0.0470, "reflectance_back": 0.0480},
             {"wavelength_microns": 0.305, "transmittance_front": 0.0030, "transmittance_back": 0.0030,
@@ -261,10 +262,16 @@ glazing_system_height = 1.0  # height of the glazing system in meters
 
 
 # Create optical data for the glass layer
+
+# Make sure to select the approriate material type for the layer.
+# Current supported options are: 
+# APPLIED_FILM, COATED, ELECTROCHROMIC, FILM, INTERLAYER, LAMINATE, MONOLITHIC, THERMOCHROMIC
 glass_material_type = pywincalc.MaterialType.MONOLITHIC
 glass_material_thickness = .003048  # 3.048mm thick
 glass_wavelength_measurements = convert_wavelength_data(raw_glazing_wavelength_data())
 # Since the measurements do not extend to the IR range emissivity and IR transmittances should be provided
+# If there are measurements that extend to the IR range these values can be provided but result calculated
+# from the measurements will be used
 glass_emissivity_front = .84
 glass_emissivity_back = .84
 glass_ir_transmittance_front = 0
