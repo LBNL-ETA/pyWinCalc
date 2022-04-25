@@ -576,7 +576,7 @@ Please refer to the [generic_pv.json](https://github.com/LBNL-ETA/pyWinCalc/tree
  - power_properties: These are values used for PV calculations.
 	 - Required: Optional in general but required for any PV layers.
 	 - type: A list of objects where each object has the following properties:
-		 - temperature: A temperature in Kelvin
+		 - temperature: In Kelvin
 			 - Allowed values:
 				 - A string that is convertible to a float.
 		 - values: A list of objects with the following properties:
