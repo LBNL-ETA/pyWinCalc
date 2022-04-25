@@ -1,3 +1,5 @@
+
+
 Berkeley Lab WINDOW Calc Engine (CalcEngine) Copyright (c) 2016 - 2020, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
 
 If you have questions about your rights to use or distribute this software, please contact Berkeley Lab's Innovation & Partnerships Office at IPO@lbl.gov.
@@ -55,6 +57,8 @@ Version 2 has substantially more features but the interface has also changed as 
 		2.	[Migrating Results](#Migrating-Results)
 			1. [Migrating Optical Results](#Migrating-Optical-Results)
 			2. [Migrating Thermal Results](#Migrating-Thermal-Results)
+	11. [IGSDB v2 JSON format](#IGSDB-v2-JSON-format) 
+	12. [Changelog](#Changelog) 
 
 
 ### Requirements
@@ -238,6 +242,7 @@ NOTE:  The igsdb examples require the python requests library and an API token f
 - [cma_double_vision_vertical.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/cma_double_vision_vertical.py) Shows how to do a CMA calculation for a vertical double-vision window and which results are available for CMA calculations.
 - [thermal_ir.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/thermal_ir.py) Shows how to calculate optical results for the thermal IR method.  Note that currently only calculations for a single solid layer are supported and these only have diffuse-diffuse transmittances and hemispherical emissivities.
 - [custom_environmental_conditions.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/custom_environmental_conditions.py) Shows how to create custom environmental conditions.
+- [pv_single_layer.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/pv_single_layer.py) Shows how to create a system with a single layer that has integrated PV data.  For information on creating a IGSDB v2 json file with PV data see the provided [generic_pv.json](https://github.com/LBNL-ETA/pyWinCalc/tree/main/examples/products/generic_pv.json) file and the [IGSDB v2 JSON format](#IGSDB-v2-JSON-format) section below.
 #### Non-example files
 These are files in the example folder that provide some functionality but are not calculation examples.
 - [igsdb_interaction.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_interaction.py) Encapsulates some basic interaction with the [IGSDB](http://igsdb.lbl.gov)
@@ -293,7 +298,10 @@ An `OpticalResults` object has two parts: `system_results` and `layer_results`.
 
 E.g. the direct-diffuse front reflectance is `system_results.front.reflectance.direct_diffuse`
 
-`layer_results` contain a list of results corresponding to each solid layer.  Results for both sides are provided for each layer.  Currently the only supported result per side is absorptance.  Absorptance is available for both direct and diffuse cases.
+`layer_results` contain a list of results corresponding to each solid layer.  Results for both sides are provided for each layer.  Currently the only supported result per side is absorptance.  Absorptance is available for both direct and diffuse cases.   
+
+As of version 2.4.0 absorptance results are available as heat and electricity.  Electricity absoprtance is only non-zero for layers with PV data.  The following results are available for each side of each layer:
+`total_direct, total_diffuse, heat_direct, heat_diffuse, electricity_direct, electricity_diffuse, direct, diffuse` NOTE: direct and diffuse are deprecated and equal to total_direct and total_diffuse.  
 
 E.g the diffuse back absorptance for the first solid layer is `layer_results[0].back.absorptance.diffuse`
 
@@ -522,3 +530,150 @@ Under `system_results` then it goes side (`front` or `back`), then `transmittanc
 
 `GlazingSystem.u()` and `GlazingSystem.shgc()` now return single values
 Both `u()` and `shgc()` take optional `theta` and `phi` values for angular calculations.  Both `theta` and `phi` default to zero so if neither are provided the result will be for normal incidence angle.
+
+## IGSDB v2 JSON format
+Note:  This should only be used for creating glazing layers with PV properties.  This format is not yet supported for any other solid layer types.
+
+Please refer to the [generic_pv.json](https://github.com/LBNL-ETA/pyWinCalc/tree/main/examples/products/generic_pv.json) file provided for a working example.
+
+### Fields:
+ - id:  This field is required by the parser but not used in calculations.
+	 - Required: Yes
+	 - Allowed values:
+		 - any int
+		 - null
+ - name: This field is required by the parser but not used in calculations.
+	 - Required: Yes
+	 - Allowed values:
+		 - any string (including empty string)  
+ - manufacturer: This field is required by the parser but not used in calculations.
+	 - Required: Yes
+	 - Allowed values:
+		 - any string (including empty string)
+ - type: This field is required by the parser but not used in calculations.
+	 - Required: Yes
+	 - Allowed values:
+		 - any string (including empty string)
+ - subtype: 	
+	 - Required: Optional in general but likely required for any PV layers.
+	 - Allowed values:
+		 - A string equal to one of the following (case insensitive):
+			 - "monolithic"
+			 - "coated-glass"
+			 - "coated"
+			 - "applied-film"
+			 - "applied film"
+			 - "laminate" 
+ - coated_side: 
+	 - Required: Optional in general but likely required for any PV layers.
+	 - Allowed values:
+		 - A string equal to one of the following (case insensitive):
+			 - "front"
+			 - "back"
+			 - "both"
+			 - "neither"
+			 - "na"
+ - power_properties: These are values used for PV calculations.
+	 - Required: Optional in general but required for any PV layers.
+	 - type: A list of objects where each object has the following properties:
+		 - temperature: A temperature in Kelvin
+			 - Allowed values:
+				 - A string that is convertible to a float.
+		 - values: A list of objects with the following properties:
+			 - jsc:
+				 - Allowed values:
+					 - A string that is convertible to a float.
+			 - voc:
+				 - Allowed values:
+					 - A string that is convertible to a float.
+			 - ff:
+				 - Allowed values:
+					 - A string that is convertible to a float.
+	 - Note:  Currently only power properties for one temperature is supported.  If power properties for multiple temperatures are provided only the first will be used.
+ - predefined_tir_front:
+	 - Required: Optional in general.  Required for calculating results requiring IR values if wavelength measurements do not extend to the IR.
+	 - Allowed values:
+		 - non-null float
+ - predefined_tir_back:
+	 - Required: Optional in general.  Required for calculating results requiring IR values if wavelength measurements do not extend to the IR. 
+	 - Allowed values:
+		 - non-null float
+ - predefined_emissivity_front:
+	 - Required: Optional in general.  Required for calculating results requiring IR values if wavelength measurements do not extend to the IR.
+	 - Allowed values:
+		 - non-null float
+ - predefined_emissivity_back:
+	 - Required: Optional in general.  Required for calculating results requiring IR values if wavelength measurements do not extend to the IR.
+	 - Allowed values:
+		 - non-null float
+ - thickness: Layer thickness in mm.
+	 - Required: Optional in general but likely required for any PV layers.
+	 - Allowed values:
+		 - non-null float
+ - conductivity:
+	 - Required: Optional in general but likely required for any PV layers.
+	 - Allowed values:
+		 - non-null float
+ - permeability_factor:
+	 - Required: Optional
+	 - Allowed values:
+		 - null
+		 - float
+ - optical_properties:  
+	 - Required: Yes.
+	 - Allowed values:
+		 - optical_data
+	 - optical_data:
+		 - Required: Yes.
+		 - Note:  Currently only normal incidence values are supported.  If multiple lists of angle_blocks are provided only the first will be used and it will be treated as normal incidence.
+		 - Allowed values:
+			 - angle_blocks
+		 - angle_blocks:
+			 - Required: Yes.
+			 - Allowed values:
+				 - wavelength_data 
+			 - wavelength_data:
+				 - Required: Yes
+				 - Allowed values:
+					 - Object with these fields:
+						 - wavelength:  The wavelength in microns
+							 - Required: Yes
+							 - Allowed values:
+								 - A string that is convertible to a float. 
+						 - specular: An object with these fields:
+							 - Required: Optional
+							 - tf: 
+								 - Required: Yes
+								 - Allowed values:
+									 - A string that is convertible to a float.
+							 - tb
+								 - Required: Yes
+								 - Allowed values:
+									 - A string that is convertible to a float.
+							 - rf
+								 - Required: Yes
+								 - Allowed values:
+									 - A string that is convertible to a float.
+							 - rb
+								 - Required: Yes
+								 - Allowed values:
+									 - A string that is convertible to a float.
+						 - pv: An object with these fields:
+							 - Required: Optional
+							 - eqef:
+								 - Required: Yes
+								 - Allowed values:
+									 - A string that is convertible to a float.
+							 - eqeb:
+								 - Required: Yes
+								 - Allowed values:
+									 - A string that is convertible to a float.
+
+## Changelog
+### v.2.4.0
+
+- Added the ability to use PV data.
+	- Can now parse a modified subset of IGSDB v2 json format to create PV layers. 
+- Layer absorptances now return separate heat and electricity values.
+	- Available absoprtance results are now:  total_direct, total_diffuse, heat_direct, heat_diffuse, electricity_direct, electricity_diffuse, direct, diffuse.
+	- Direct and diffuse are equal to total_direct and total_diffuse.  Direct and diffuse are deprecated.
