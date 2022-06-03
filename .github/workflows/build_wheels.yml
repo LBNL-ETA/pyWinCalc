@@ -3,7 +3,7 @@ name: Build wheels
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main, dual_band_bsdf_fix_june_2022]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
     
