@@ -670,6 +670,10 @@ Please refer to the [generic_pv.json](https://github.com/LBNL-ETA/pyWinCalc/tree
 									 - A string that is convertible to a float.
 
 ## Changelog
+### v2.4.2
+
+- Changed the behavior of dual-band BSDF materials.  Now if there a system only has a single layer that is a dual band BSDF and the requested optical method is solar or photopic the layer is treated as a single band using the appropritate band values.  In all other cases the layer is created as a dual band layer as before.  This change is needed so that the single layer calculated solar and visible properties are derived from the values specified for those bands in the input data. 
+
 ### v.2.4.0
 
 - Added the ability to use PV data.
