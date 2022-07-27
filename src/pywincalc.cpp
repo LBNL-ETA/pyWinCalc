@@ -256,14 +256,14 @@ PYBIND11_MODULE(pywincalc, m) {
       .def(py::init<double, double, double, double, std::string, int>(),
            py::arg("slat_width"), py::arg("slat_spacing"),
            py::arg("slat_curvature_radius"), py::arg("slat_tilt") = 0,
-           py::arg("tilt_choice") = "0", py::arg("number_segments") = 5)
+           py::arg("tilt_choice") = "0", py::arg("number_slat_segments") = 5)
       .def_readwrite("slat_width", &OpticsParser::VenetianGeometry::slatWidth)
       .def_readwrite("slat_spacing",
                      &OpticsParser::VenetianGeometry::slatSpacing)
       .def_readwrite("slat_curvature_radius",
                      &OpticsParser::VenetianGeometry::slatCurvature)
       .def_readwrite("slat_tilt", &OpticsParser::VenetianGeometry::slatTilt)
-      .def_readwrite("number_segments",
+      .def_readwrite("number_slat_segments",
                      &OpticsParser::VenetianGeometry::numberSegments);
 
   py::class_<OpticsParser::WovenGeometry, OpticsParser::ProductGeometry,
