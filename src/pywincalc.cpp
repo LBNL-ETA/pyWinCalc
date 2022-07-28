@@ -263,7 +263,7 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("slat_curvature_radius",
                      &OpticsParser::VenetianGeometry::slatCurvature)
       .def_readwrite("slat_tilt", &OpticsParser::VenetianGeometry::slatTilt)
-      .def_readwrite("number_slat_segments",
+      .def_readwrite("number_slatProductDataOpticalNBand_segments",
                      &OpticsParser::VenetianGeometry::numberSegments);
 
   py::class_<OpticsParser::WovenGeometry, OpticsParser::ProductGeometry,
@@ -761,7 +761,7 @@ PYBIND11_MODULE(pywincalc, m) {
                     SingleLayerOptics::DistributionMethod, bool>(),
            py::arg("product_data_optical"), py::arg("slat_tilt"),
            py::arg("slat_width"), py::arg("slat_spacing"),
-           py::arg("slat_curvature_radius"), py::arg("numbers_slat_segments"),
+           py::arg("slat_curvature_radius"), py::arg("number_slat_segments"),
            py::arg("distribution_method") =
                SingleLayerOptics::DistributionMethod::DirectionalDiffuse,
            py::arg("is_horizontal") = true,
