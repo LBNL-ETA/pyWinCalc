@@ -525,7 +525,8 @@ PYBIND11_MODULE(pywincalc, m) {
       m, "FlippableSolidLayer")
       .def(py::init<double, bool>(), py::arg("thickness"),
            py::arg("flipped") = false)
-      .def_readwrite("thickness", &wincalc::Flippable_Solid_Layer::thickness_meters)
+      .def_readwrite("thickness",
+                     &wincalc::Flippable_Solid_Layer::thickness_meters)
       .def_readwrite("flipped", &wincalc::Flippable_Solid_Layer::flipped);
 
   py::class_<wincalc::Product_Data_Thermal, wincalc::Flippable_Solid_Layer,
@@ -899,7 +900,7 @@ PYBIND11_MODULE(pywincalc, m) {
                     int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
-           py::arg("width") = 1.0, py::arg("height") = 1.0,
+           py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
@@ -918,7 +919,7 @@ PYBIND11_MODULE(pywincalc, m) {
                int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
-           py::arg("width") = 1.0, py::arg("height") = 1.0,
+           py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
@@ -938,7 +939,7 @@ PYBIND11_MODULE(pywincalc, m) {
                     int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
-           py::arg("width") = 1.0, py::arg("height") = 1.0,
+           py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
@@ -990,8 +991,9 @@ PYBIND11_MODULE(pywincalc, m) {
       .def("set_applied_loads", &wincalc::Glazing_System::set_applied_loads,
            py::arg("loads"))
       .def("set_height", &wincalc::Glazing_System::set_height,
-           py::arg("height"))
-      .def("set_width", &wincalc::Glazing_System::set_width, py::arg("width"))
+           py::arg("height_meters"))
+      .def("set_width", &wincalc::Glazing_System::set_width,
+           py::arg("width_meters"))
       .def("set_tilt", &wincalc::Glazing_System::set_tilt,
            py::arg("tilt_degrees"))
       .def("flip_layer", &wincalc::Glazing_System::flip_layer,
