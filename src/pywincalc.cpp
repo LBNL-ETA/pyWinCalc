@@ -787,9 +787,9 @@ PYBIND11_MODULE(pywincalc, m) {
                      &wincalc::Product_Data_Optical_Venetian::geometry);
 
   py::class_<wincalc::Woven_Geometry>(m, "WovenGeometry")
-      .def(py::init<double, double, double>(), py::arg("thread_diamater"),
+      .def(py::init<double, double, double>(), py::arg("thread_diameter"),
            py::arg("thread_spacing"), py::arg("shade_thickness"),
-           "Creates a WovenGeometry.  thread_diamater, thread_spacing, and "
+           "Creates a WovenGeometry.  thread_diameter, thread_spacing, and "
            "shade_thickness are in meters.")
       .def_readwrite("thread_diameter",
                      &wincalc::Woven_Geometry::thread_diameter)
