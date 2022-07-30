@@ -200,8 +200,8 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("gases", &wincalc::Engine_Gap_Info::gases)
       .def_readwrite("thickness", &wincalc::Engine_Gap_Info::thickness);
 
-  py::class_<OpticsParser::MeasurementComponent>(m,
-                                                 "OpticalMeasurementComponent")
+  py::class_<OpticsParser::MeasurementComponent>(
+      m, "ParsedOpticalMeasurementComponent")
       .def(py::init<double, double, double, double>(),
            py::arg("transmittance_front"), py::arg("transmittance_back"),
            py::arg("reflectance_front"), py::arg("reflectance_back"))
@@ -214,13 +214,13 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("reflectance_back",
                      &OpticsParser::MeasurementComponent::rb);
 
-  py::class_<OpticsParser::PVWavelengthData>(m, "PVWavelengthData")
+  py::class_<OpticsParser::PVWavelengthData>(m, "ParsedPVWavelengthData")
       .def(py::init<double, double>(), py::arg("eqe_front"),
            py::arg("eqe_back"))
       .def_readwrite("eqq_front", &OpticsParser::PVWavelengthData::eqef)
       .def_readwrite("eqe_back", &OpticsParser::PVWavelengthData::eqeb);
 
-  py::class_<OpticsParser::WLData>(m, "WavelengthData")
+  py::class_<OpticsParser::WLData>(m, "ParsedWavelengthData")
       .def(py::init<double, OpticsParser::MeasurementComponent,
                     std::optional<OpticsParser::MeasurementComponent>>(),
            py::arg("wavelength_microns"), py::arg("direct_component"),
@@ -247,12 +247,12 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("pv_component", &OpticsParser::WLData::pvComponent);
 
   py::class_<OpticsParser::ProductGeometry,
-             std::shared_ptr<OpticsParser::ProductGeometry>>(m,
-                                                             "ProductGeometry");
+             std::shared_ptr<OpticsParser::ProductGeometry>>(
+      m, "ParsedProductGeometry");
 
   py::class_<OpticsParser::VenetianGeometry, OpticsParser::ProductGeometry,
              std::shared_ptr<OpticsParser::VenetianGeometry>>(
-      m, "VenetianGeometry")
+      m, "ParsedVenetianGeometry")
       .def(py::init<double, double, double, double, std::string, int>(),
            py::arg("slat_width"), py::arg("slat_spacing"),
            py::arg("slat_curvature_radius"), py::arg("slat_tilt") = 0,
@@ -267,7 +267,8 @@ PYBIND11_MODULE(pywincalc, m) {
                      &OpticsParser::VenetianGeometry::numberSegments);
 
   py::class_<OpticsParser::WovenGeometry, OpticsParser::ProductGeometry,
-             std::shared_ptr<OpticsParser::WovenGeometry>>(m, "WovenGeometry")
+             std::shared_ptr<OpticsParser::WovenGeometry>>(
+      m, "ParsedWovenGeometry")
       .def(py::init<double, double, double>(), py::arg("thread_diameter"),
            py::arg("thread_spacing"), py::arg("shade_thickness"))
       .def_readwrite("thread_diameter",
@@ -279,7 +280,7 @@ PYBIND11_MODULE(pywincalc, m) {
 
   py::class_<OpticsParser::PerforatedGeometry, OpticsParser::ProductGeometry,
              std::shared_ptr<OpticsParser::PerforatedGeometry>>(
-      m, "PerforatedGeometry")
+      m, "ParsedPerforatedGeometry")
       .def(py::init<double, double, double, double, std::string>(),
            py::arg("spacing_x"), py::arg("spacing_y"), py::arg("dimension_x"),
            py::arg("dimension_y"), py::arg("perforation_type"))
@@ -292,24 +293,24 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("perforation_type",
                      &OpticsParser::PerforatedGeometry::perforationType);
 
-  py::class_<OpticsParser::BSDF>(m, "BSDF")
+  py::class_<OpticsParser::BSDF>(m, "ParsedBSDF")
       .def_readwrite("data", &OpticsParser::BSDF::data)
       .def_readwrite("row_angle_basis_name",
                      &OpticsParser::BSDF::rowAngleBasisName)
       .def_readwrite("column_angle_basis_name",
                      &OpticsParser::BSDF::columnAngleBasisName);
 
-  py::class_<OpticsParser::WavelengthBSDFs>(m, "WavelengthBSDFs")
+  py::class_<OpticsParser::WavelengthBSDFs>(m, "ParsedWavelengthBSDFs")
       .def_readwrite("transmittance_front", &OpticsParser::WavelengthBSDFs::tf)
       .def_readwrite("transmittance_back", &OpticsParser::WavelengthBSDFs::tb)
       .def_readwrite("reflectance_front", &OpticsParser::WavelengthBSDFs::rf)
       .def_readwrite("reflectance_back", &OpticsParser::WavelengthBSDFs::rb);
 
-  py::class_<OpticsParser::DualBandBSDF>(m, "DualBandBSDF")
+  py::class_<OpticsParser::DualBandBSDF>(m, "ParsedDualBandBSDF")
       .def_readwrite("solar", &OpticsParser::DualBandBSDF::solar)
       .def_readwrite("visible", &OpticsParser::DualBandBSDF::visible);
 
-  py::class_<OpticsParser::PVPowerProperty>(m, "PVPowerProperty")
+  py::class_<OpticsParser::PVPowerProperty>(m, "ParsedPVPowerProperty")
       .def(py::init<double, double, double>(), py::arg("jsc"), py::arg("voc"),
            py::arg("ff"))
       .def_readwrite("jsc", &OpticsParser::PVPowerProperty::jsc)
@@ -317,7 +318,7 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("ff", &OpticsParser::PVPowerProperty::ff);
 
   py::class_<OpticsParser::ProductData,
-             std::shared_ptr<OpticsParser::ProductData>>(m, "ProductData")
+             std::shared_ptr<OpticsParser::ProductData>>(m, "ParsedProductData")
       .def("composed_product", &OpticsParser::ProductData::composedProduct)
       .def_readwrite("product_name", &OpticsParser::ProductData::productName)
       .def_readwrite("product_type", &OpticsParser::ProductData::productType)
@@ -341,7 +342,7 @@ PYBIND11_MODULE(pywincalc, m) {
 
   py::class_<OpticsParser::CompositionInformation,
              std::shared_ptr<OpticsParser::CompositionInformation>>(
-      m, "ProductComposistionData")
+      m, "ParsedProductComposistionData")
       .def(py::init<std::shared_ptr<OpticsParser::ProductData>,
                     std::shared_ptr<OpticsParser::ProductGeometry>>(),
            py::arg("solid_layers"), py::arg("product_geometry"))
@@ -352,7 +353,7 @@ PYBIND11_MODULE(pywincalc, m) {
 
   py::class_<OpticsParser::ComposedProductData, OpticsParser::ProductData,
              std::shared_ptr<OpticsParser::ComposedProductData>>(
-      m, "ComposedProductData")
+      m, "ParsedComposedProductData")
       .def(py::init<OpticsParser::ProductData const &,
                     std::shared_ptr<OpticsParser::CompositionInformation>>(),
            py::arg("solid_layers"), py::arg("product_composition_data"))
@@ -753,96 +754,143 @@ PYBIND11_MODULE(pywincalc, m) {
       .value("DIRECTIONAL_DIFFUSE",
              SingleLayerOptics::DistributionMethod::DirectionalDiffuse);
 
+  py::class_<wincalc::Venetian_Geometry>(m, "VenetianGeometry")
+      .def(py::init<double, double, double, double, int,
+                    SingleLayerOptics::DistributionMethod, bool>(),
+           py::arg("slat_tilt"), py::arg("slat_width"), py::arg("slat_spacing"),
+           py::arg("slat_curvature_radius"), py::arg("number_slat_segments"),
+           py::arg("distribution_method") =
+               SingleLayerOptics::DistributionMethod::DirectionalDiffuse,
+           py::arg("is_horizontal") = true,
+           "Creates a VenetianGeometry.  slat_width, slat_spacing, "
+           "and slat_curvature_radius are in meters.")
+      .def_readwrite("slat_tilt", &wincalc::Venetian_Geometry::slat_tilt)
+      .def_readwrite("slat_width", &wincalc::Venetian_Geometry::slat_width)
+      .def_readwrite("slat_spacing", &wincalc::Venetian_Geometry::slat_spacing)
+      .def_readwrite("slat_curvature_radius",
+                     &wincalc::Venetian_Geometry::slat_curvature)
+      .def_readwrite("number_slat_segments",
+                     &wincalc::Venetian_Geometry::number_slat_segments)
+      .def_readwrite("distribution_method",
+                     &wincalc::Venetian_Geometry::distribution_method)
+      .def_readwrite("is_horizontal",
+                     &wincalc::Venetian_Geometry::is_horizontal);
+
   py::class_<wincalc::Product_Data_Optical_Venetian,
              wincalc::Product_Data_Optical_With_Material,
              std::shared_ptr<wincalc::Product_Data_Optical_Venetian>>(
       m, "ProductDataOpticalVenetian")
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
-                    double, double, double, double, int,
-                    SingleLayerOptics::DistributionMethod, bool>(),
-           py::arg("product_data_optical"), py::arg("slat_tilt"),
-           py::arg("slat_width"), py::arg("slat_spacing"),
-           py::arg("slat_curvature_radius"), py::arg("number_slat_segments"),
-           py::arg("distribution_method") =
-               SingleLayerOptics::DistributionMethod::DirectionalDiffuse,
-           py::arg("is_horizontal") = true,
-           "Creates a ProductDataOpticalVenetian.  slat_width, slat_spacing, "
-           "and slat_curvature_radius are in meters.")
-      .def_readwrite("slat_tilt",
-                     &wincalc::Product_Data_Optical_Venetian::slat_tilt)
-      .def_readwrite("slat_width",
-                     &wincalc::Product_Data_Optical_Venetian::slat_width)
-      .def_readwrite("slat_spacing",
-                     &wincalc::Product_Data_Optical_Venetian::slat_spacing)
-      .def_readwrite("slat_curvature_radius",
-                     &wincalc::Product_Data_Optical_Venetian::slat_curvature)
-      .def_readwrite(
-          "number_slat_segments",
-          &wincalc::Product_Data_Optical_Venetian::number_slat_segments)
-      .def_readwrite(
-          "distribution_method",
-          &wincalc::Product_Data_Optical_Venetian::distribution_method)
-      .def_readwrite("is_horizontal",
-                     &wincalc::Product_Data_Optical_Venetian::is_horizontal);
+                    wincalc::Venetian_Geometry const &>(),
+           py::arg("product_data_optical"), py::arg("geometry"))
+      .def_readwrite("geometry",
+                     &wincalc::Product_Data_Optical_Venetian::geometry);
+
+  py::class_<wincalc::Woven_Geometry>(m, "WovenGeometry")
+      .def(py::init<double, double, double>(), py::arg("thread_diamater"),
+           py::arg("thread_spacing"), py::arg("shade_thickness"),
+           "Creates a WovenGeometry.  thread_diamater, thread_spacing, and "
+           "shade_thickness are in meters.")
+      .def_readwrite("thread_diameter",
+                     &wincalc::Woven_Geometry::thread_diameter)
+      .def_readwrite("thread_spacing", &wincalc::Woven_Geometry::thread_spacing)
+      .def_readwrite("shade_thickness",
+                     &wincalc::Woven_Geometry::shade_thickness);
 
   py::class_<wincalc::Product_Data_Optical_Woven_Shade,
              wincalc::Product_Data_Optical_With_Material,
              std::shared_ptr<wincalc::Product_Data_Optical_Woven_Shade>>(
       m, "ProductDataOpticalWovenShade")
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
-                    double, double, double>(),
-           py::arg("material_product_data_optical"), py::arg("thread_diamater"),
-           py::arg("thread_spacing"), py::arg("shade_thickness"),
-           "Creates a ProductDataOpticalWovenShade.  thread_diamater, "
-           "thread_spacing, and shade_thickness are in meters.")
-      .def_readwrite(
-          "thread_diameter",
-          &wincalc::Product_Data_Optical_Woven_Shade::thread_diameter)
-      .def_readwrite("thread_spacing",
-                     &wincalc::Product_Data_Optical_Woven_Shade::thread_spacing)
-      .def_readwrite(
-          "shade_thickness",
-          &wincalc::Product_Data_Optical_Woven_Shade::shade_thickness);
+                    wincalc::Woven_Geometry>(),
+           py::arg("material_product_data_optical"), py::arg("geometry"))
+      .def_readwrite("geometry",
+                     &wincalc::Product_Data_Optical_Woven_Shade::geometry);
+
+  py::class_<wincalc::Perforated_Geometry> perforated_geometry(
+      m, "PerforatedGeometry");
+
+  perforated_geometry
+      .def(py::init<double, double, double, double,
+                    wincalc::Perforated_Geometry::Type>(),
+           py::arg("spacing_x"), py::arg("spacing_y"), py::arg("dimension_x"),
+           py::arg("dimension_y"), py::arg("perforation_type"),
+           "Creates a PerforatedGeometry.  spacing_x, spacing_y, dimension_x, "
+           "and dimension_y are in meters.")
+      .def_readwrite("spacing_x", &wincalc::Perforated_Geometry::spacing_x)
+      .def_readwrite("spacing_y", &wincalc::Perforated_Geometry::spacing_y)
+      .def_readwrite("dimension_x", &wincalc::Perforated_Geometry::dimension_x)
+      .def_readwrite("dimension_y", &wincalc::Perforated_Geometry::dimension_y)
+      .def_readwrite("perforation_type",
+                     &wincalc::Perforated_Geometry::perforation_type);
+
+  py::enum_<wincalc::Perforated_Geometry::Type>(perforated_geometry, "Type")
+      .value("CIRCULAR", wincalc::Perforated_Geometry::Type::CIRCULAR)
+      .value("RECTANGULAR", wincalc::Perforated_Geometry::Type::RECTANGULAR)
+      .value("SQUARE", wincalc::Perforated_Geometry::Type::SQUARE);
 
   py::class_<wincalc::Product_Data_Optical_Perforated_Screen,
              wincalc::Product_Data_Optical_With_Material,
-             std::shared_ptr<wincalc::Product_Data_Optical_Perforated_Screen>>
-      product_data_optical_perforated_screen(
-          m, "ProductDataOpticalPerforatedScreen");
-
-  product_data_optical_perforated_screen
+             std::shared_ptr<wincalc::Product_Data_Optical_Perforated_Screen>>(
+      m, "ProductDataOpticalPerforatedScreen")
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
-                    double, double, double, double,
-                    wincalc::Product_Data_Optical_Perforated_Screen::Type>(),
-           py::arg("material_product_data_optical"), py::arg("spacing_x"),
-           py::arg("spacing_y"), py::arg("dimension_x"), py::arg("dimension_y"),
-           py::arg("perforation_type"),
-           "Creates a ProductDataOpticalPerforatedScreen.  spacing_x, "
-           "spacing_y, dimension_x, and dimension_y are in meters.")
+                    wincalc::Perforated_Geometry const &>(),
+           py::arg("material_product_data_optical"), py::arg("geometry"))
       .def_readwrite(
-          "spacing_x",
-          &wincalc::Product_Data_Optical_Perforated_Screen::spacing_x)
-      .def_readwrite(
-          "spacing_y",
-          &wincalc::Product_Data_Optical_Perforated_Screen::spacing_y)
-      .def_readwrite(
-          "dimension_x",
-          &wincalc::Product_Data_Optical_Perforated_Screen::dimension_x)
-      .def_readwrite(
-          "dimension_y",
-          &wincalc::Product_Data_Optical_Perforated_Screen::dimension_y)
-      .def_readwrite(
-          "perforation_type",
-          &wincalc::Product_Data_Optical_Perforated_Screen::perforation_type);
+          "geometry",
+          &wincalc::Product_Data_Optical_Perforated_Screen::geometry);
 
-  py::enum_<wincalc::Product_Data_Optical_Perforated_Screen::Type>(
-      product_data_optical_perforated_screen, "Type")
-      .value("CIRCULAR",
-             wincalc::Product_Data_Optical_Perforated_Screen::Type::CIRCULAR)
-      .value("RECTANGULAR",
-             wincalc::Product_Data_Optical_Perforated_Screen::Type::RECTANGULAR)
-      .value("SQUARE",
-             wincalc::Product_Data_Optical_Perforated_Screen::Type::SQUARE);
+  m.def(
+      "create_venetian_blind",
+      py::overload_cast<wincalc::Venetian_Geometry const &,
+                        std::shared_ptr<OpticsParser::ProductData> const &>(
+          &wincalc::create_venetian_blind),
+      py::arg("geometry"), py::arg("parsed_material"),
+      "Creates a Venetian blind out of geometry and parsed slat material data");
+
+  m.def("create_venetian_blind",
+        py::overload_cast<wincalc::Venetian_Geometry const &,
+                          std::shared_ptr<wincalc::Product_Data_Optical>,
+                          std::shared_ptr<wincalc::Product_Data_Thermal>>(
+            &wincalc::create_venetian_blind),
+        py::arg("geometry"), py::arg("material_data_optical"),
+        py::arg("material_data_thermal"),
+        "Creates a Venetian blind out of geometry as well as optical and "
+        "thermal properties of the slat material.");
+
+  m.def("create_woven_shade",
+        py::overload_cast<wincalc::Woven_Geometry const &,
+                          std::shared_ptr<OpticsParser::ProductData> const &>(
+            &wincalc::create_woven_shade),
+	  py::arg("geometry"), py::arg("parsed_material"),
+	  "Creates a woven shade out of geometry and parsed weave material data");
+
+  m.def("create_woven_shade",
+        py::overload_cast<wincalc::Woven_Geometry const &,
+                          std::shared_ptr<wincalc::Product_Data_Optical>,
+                          std::shared_ptr<wincalc::Product_Data_Thermal>>(
+            &wincalc::create_woven_shade),
+	  py::arg("geometry"), py::arg("material_data_optical"),
+	  py::arg("material_data_thermal"),
+	  "Creates a woven shade out of geometry as well as optical and "
+	  "thermal properties of the woven material.");
+
+  m.def("create_perforated_screen",
+        py::overload_cast<wincalc::Perforated_Geometry const &,
+                          std::shared_ptr<OpticsParser::ProductData> const &>(
+            &wincalc::create_perforated_screen),
+	  py::arg("geometry"), py::arg("parsed_material"),
+	  "Creates a perforated screen out of geometry and parsed shade material data");
+
+  m.def("create_perforated_screen",
+        py::overload_cast<wincalc::Perforated_Geometry const &,
+                          std::shared_ptr<wincalc::Product_Data_Optical>,
+                          std::shared_ptr<wincalc::Product_Data_Thermal>>(
+            &wincalc::create_perforated_screen),
+	  py::arg("geometry"), py::arg("material_data_optical"),
+	  py::arg("material_data_thermal"),
+	  "Creates a perforated screen out of geometry as well as optical and "
+	  "thermal properties of the shade material.");
 
   py::class_<wincalc::Product_Data_Optical_Thermal>(
       m, "ProductDataOpticalAndThermal")
