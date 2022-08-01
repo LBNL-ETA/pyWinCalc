@@ -200,8 +200,8 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("gases", &wincalc::Engine_Gap_Info::gases)
       .def_readwrite("thickness", &wincalc::Engine_Gap_Info::thickness);
 
-  py::class_<OpticsParser::MeasurementComponent>(
-      m, "ParsedOpticalMeasurementComponent")
+  py::class_<OpticsParser::MeasurementComponent>(m,
+                                                 "OpticalMeasurementComponent")
       .def(py::init<double, double, double, double>(),
            py::arg("transmittance_front"), py::arg("transmittance_back"),
            py::arg("reflectance_front"), py::arg("reflectance_back"))
@@ -214,13 +214,13 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("reflectance_back",
                      &OpticsParser::MeasurementComponent::rb);
 
-  py::class_<OpticsParser::PVWavelengthData>(m, "ParsedPVWavelengthData")
+  py::class_<OpticsParser::PVWavelengthData>(m, "PVWavelengthData")
       .def(py::init<double, double>(), py::arg("eqe_front"),
            py::arg("eqe_back"))
       .def_readwrite("eqq_front", &OpticsParser::PVWavelengthData::eqef)
       .def_readwrite("eqe_back", &OpticsParser::PVWavelengthData::eqeb);
 
-  py::class_<OpticsParser::WLData>(m, "ParsedWavelengthData")
+  py::class_<OpticsParser::WLData>(m, "WavelengthData")
       .def(py::init<double, OpticsParser::MeasurementComponent,
                     std::optional<OpticsParser::MeasurementComponent>>(),
            py::arg("wavelength_microns"), py::arg("direct_component"),
@@ -293,24 +293,24 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("perforation_type",
                      &OpticsParser::PerforatedGeometry::perforationType);
 
-  py::class_<OpticsParser::BSDF>(m, "ParsedBSDF")
+  py::class_<OpticsParser::BSDF>(m, "BSDF")
       .def_readwrite("data", &OpticsParser::BSDF::data)
       .def_readwrite("row_angle_basis_name",
                      &OpticsParser::BSDF::rowAngleBasisName)
       .def_readwrite("column_angle_basis_name",
                      &OpticsParser::BSDF::columnAngleBasisName);
 
-  py::class_<OpticsParser::WavelengthBSDFs>(m, "ParsedWavelengthBSDFs")
+  py::class_<OpticsParser::WavelengthBSDFs>(m, "WavelengthBSDFs")
       .def_readwrite("transmittance_front", &OpticsParser::WavelengthBSDFs::tf)
       .def_readwrite("transmittance_back", &OpticsParser::WavelengthBSDFs::tb)
       .def_readwrite("reflectance_front", &OpticsParser::WavelengthBSDFs::rf)
       .def_readwrite("reflectance_back", &OpticsParser::WavelengthBSDFs::rb);
 
-  py::class_<OpticsParser::DualBandBSDF>(m, "ParsedDualBandBSDF")
+  py::class_<OpticsParser::DualBandBSDF>(m, "DualBandBSDF")
       .def_readwrite("solar", &OpticsParser::DualBandBSDF::solar)
       .def_readwrite("visible", &OpticsParser::DualBandBSDF::visible);
 
-  py::class_<OpticsParser::PVPowerProperty>(m, "ParsedPVPowerProperty")
+  py::class_<OpticsParser::PVPowerProperty>(m, "PVPowerProperty")
       .def(py::init<double, double, double>(), py::arg("jsc"), py::arg("voc"),
            py::arg("ff"))
       .def_readwrite("jsc", &OpticsParser::PVPowerProperty::jsc)
@@ -318,7 +318,7 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("ff", &OpticsParser::PVPowerProperty::ff);
 
   py::class_<OpticsParser::ProductData,
-             std::shared_ptr<OpticsParser::ProductData>>(m, "ParsedProductData")
+             std::shared_ptr<OpticsParser::ProductData>>(m, "ProductData")
       .def("composed_product", &OpticsParser::ProductData::composedProduct)
       .def_readwrite("product_name", &OpticsParser::ProductData::productName)
       .def_readwrite("product_type", &OpticsParser::ProductData::productType)
@@ -342,7 +342,7 @@ PYBIND11_MODULE(pywincalc, m) {
 
   py::class_<OpticsParser::CompositionInformation,
              std::shared_ptr<OpticsParser::CompositionInformation>>(
-      m, "ParsedProductComposistionData")
+      m, "ProductComposistionData")
       .def(py::init<std::shared_ptr<OpticsParser::ProductData>,
                     std::shared_ptr<OpticsParser::ProductGeometry>>(),
            py::arg("solid_layers"), py::arg("product_geometry"))
@@ -353,7 +353,7 @@ PYBIND11_MODULE(pywincalc, m) {
 
   py::class_<OpticsParser::ComposedProductData, OpticsParser::ProductData,
              std::shared_ptr<OpticsParser::ComposedProductData>>(
-      m, "ParsedComposedProductData")
+      m, "ComposedProductData")
       .def(py::init<OpticsParser::ProductData const &,
                     std::shared_ptr<OpticsParser::CompositionInformation>>(),
            py::arg("solid_layers"), py::arg("product_composition_data"))
@@ -862,35 +862,36 @@ PYBIND11_MODULE(pywincalc, m) {
         py::overload_cast<wincalc::Woven_Geometry const &,
                           std::shared_ptr<OpticsParser::ProductData> const &>(
             &wincalc::create_woven_shade),
-	  py::arg("geometry"), py::arg("parsed_material"),
-	  "Creates a woven shade out of geometry and parsed weave material data");
+        py::arg("geometry"), py::arg("parsed_material"),
+        "Creates a woven shade out of geometry and parsed weave material data");
 
   m.def("create_woven_shade",
         py::overload_cast<wincalc::Woven_Geometry const &,
                           std::shared_ptr<wincalc::Product_Data_Optical>,
                           std::shared_ptr<wincalc::Product_Data_Thermal>>(
             &wincalc::create_woven_shade),
-	  py::arg("geometry"), py::arg("material_data_optical"),
-	  py::arg("material_data_thermal"),
-	  "Creates a woven shade out of geometry as well as optical and "
-	  "thermal properties of the woven material.");
+        py::arg("geometry"), py::arg("material_data_optical"),
+        py::arg("material_data_thermal"),
+        "Creates a woven shade out of geometry as well as optical and "
+        "thermal properties of the woven material.");
 
   m.def("create_perforated_screen",
         py::overload_cast<wincalc::Perforated_Geometry const &,
                           std::shared_ptr<OpticsParser::ProductData> const &>(
             &wincalc::create_perforated_screen),
-	  py::arg("geometry"), py::arg("parsed_material"),
-	  "Creates a perforated screen out of geometry and parsed shade material data");
+        py::arg("geometry"), py::arg("parsed_material"),
+        "Creates a perforated screen out of geometry and parsed shade material "
+        "data");
 
   m.def("create_perforated_screen",
         py::overload_cast<wincalc::Perforated_Geometry const &,
                           std::shared_ptr<wincalc::Product_Data_Optical>,
                           std::shared_ptr<wincalc::Product_Data_Thermal>>(
             &wincalc::create_perforated_screen),
-	  py::arg("geometry"), py::arg("material_data_optical"),
-	  py::arg("material_data_thermal"),
-	  "Creates a perforated screen out of geometry as well as optical and "
-	  "thermal properties of the shade material.");
+        py::arg("geometry"), py::arg("material_data_optical"),
+        py::arg("material_data_thermal"),
+        "Creates a perforated screen out of geometry as well as optical and "
+        "thermal properties of the shade material.");
 
   py::class_<wincalc::Product_Data_Optical_Thermal>(
       m, "ProductDataOpticalAndThermal")
