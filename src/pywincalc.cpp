@@ -757,11 +757,13 @@ PYBIND11_MODULE(pywincalc, m) {
   py::class_<wincalc::Venetian_Geometry>(m, "VenetianGeometry")
       .def(py::init<double, double, double, double, int,
                     SingleLayerOptics::DistributionMethod, bool>(),
-           py::arg("slat_tilt"), py::arg("slat_width"), py::arg("slat_spacing"),
-           py::arg("slat_curvature_radius"), py::arg("number_slat_segments"),
+           py::arg("slat_tilt"), py::arg("slat_width"),
+           py::arg("slat_spacing"),
+           py::arg("slat_curvature_radius"),
+           py::arg("is_horizontal") = true,
            py::arg("distribution_method") =
                SingleLayerOptics::DistributionMethod::DirectionalDiffuse,
-           py::arg("is_horizontal") = true,
+           py::arg("number_slat_segments") = 5,
            "Creates a VenetianGeometry.  slat_width, slat_spacing, "
            "and slat_curvature_radius are in meters.")
       .def_readwrite("slat_tilt", &wincalc::Venetian_Geometry::slat_tilt)

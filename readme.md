@@ -259,8 +259,8 @@ If there is something you are trying to calculate that does not exist as an exam
         - solid_layers
     - Optional parameters:
         - gap_layers  Defaults to no gap layers.  If more than one solid layer is provided then len(solid_layers) - 1 gap_layers must be provided
-        - width_meters  Defaults to 1.0 meters
-        - height_meters  Defaults to 1.0 meters
+        - width  Defaults to 1.0 meters
+        - height  Defaults to 1.0 meters
         - environment  Defaults to NFRC U environment
         - bsdf_hemisphere  Defaults to no BSDF hemisphere. Required if any solid layers require BSDF calculations.
         - spectral_data_wavelength_range_method  Defaults to full wavelength range.
