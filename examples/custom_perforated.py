@@ -1170,15 +1170,15 @@ glass_ir_transmittance_back = 0
 glass_coated_side = pywincalc.CoatedSide.NEITHER
 flipped = False
 
-glass_n_band_optical_data = pywincalc.ProductDataOpticalNBand(glass_material_type,
-                                                              glass_material_thickness,
-                                                              glass_wavelength_measurements,
-                                                              glass_coated_side,
-                                                              glass_emissivity_front,
-                                                              glass_emissivity_back,
-                                                              glass_ir_transmittance_front,
-                                                              glass_ir_transmittance_back,
-                                                              flipped)
+glass_n_band_optical_data = pywincalc.ProductDataOpticalNBand(material_type=glass_material_type,
+                                                              thickness_meters=glass_material_thickness,
+                                                              wavelength_data=glass_wavelength_measurements,
+                                                              coated_side=glass_coated_side,
+                                                              ir_transmittance_front=glass_ir_transmittance_front,
+                                                              ir_transmittance_back=glass_ir_transmittance_back,
+                                                              emissivity_front=glass_emissivity_front,
+                                                              emissivity_back=glass_emissivity_back,
+                                                              flipped=flipped)
 
 # Next create the thermal data for the glass layer
 glass_conductivity = 1
@@ -1187,9 +1187,16 @@ glass_opening_top = 0
 glass_opening_bottom = 0
 glass_opening_left = 0
 glass_opening_right = 0
+glass_opening_front = 0
 
-glass_thermal = pywincalc.ProductDataThermal(glass_conductivity, glass_material_thickness, flipped, glass_opening_top,
-                                             glass_opening_bottom, glass_opening_left, glass_opening_right)
+glass_thermal = pywincalc.ProductDataThermal(conductivity=glass_conductivity,
+                                             thickness_meters=glass_material_thickness,
+                                             flipped=flipped,
+                                             opening_top=glass_opening_top,
+                                             opening_bottom=glass_opening_bottom,
+                                             opening_left=glass_opening_left,
+                                             opening_right=glass_opening_right,
+                                             opening_front=glass_opening_front)
 
 # Create a glass layer from both the optical and thermal data
 glass_layer = pywincalc.ProductDataOpticalAndThermal(glass_n_band_optical_data, glass_thermal)
@@ -1212,10 +1219,10 @@ flipped = False
 shade_material_n_band_optical_data = pywincalc.ProductDataOpticalNBand(material_type=shade_material_type,
                                                                        thickness_meters=shade_material_thickness,
                                                                        wavelength_data=shade_material_wavelength_measurements,
-                                                                       emissivity_front=shade_emissivity_front,
-                                                                       emissivity_back=shade_emissivity_back,
                                                                        ir_transmittance_front=shade_ir_transmittance_front,
                                                                        ir_transmittance_back=shade_ir_transmittance_back,
+                                                                       emissivity_front=shade_emissivity_front,
+                                                                       emissivity_back=shade_emissivity_back,
                                                                        flipped=flipped)
 
 # Create a pywincalc.Product_Data_Optical_Perforated_Screen out of the material n-band data and desired geometry
@@ -1225,10 +1232,13 @@ spacing_y = .03  # 30mm vertical spacing
 dimension_x = .001  # 1mm perforation in the horizontal direction
 dimension_y = .003  # 3mm perforation in the horizontal direction
 
-perforated_screen_optical = pywincalc.ProductDataOpticalPerforatedScreen(shade_material_n_band_optical_data,
-                                                                         spacing_x,
-                                                                         spacing_y, dimension_x, dimension_y,
-                                                                         perforation_type)
+perforated_screen_optical = pywincalc.ProductDataOpticalPerforatedScreen(
+    material_product_data_optical=shade_material_n_band_optical_data,
+    spacing_x=spacing_x,
+    spacing_y=spacing_y,
+    dimension_x=dimension_x,
+    dimension_y=dimension_y,
+    perforation_type=perforation_type)
 
 # Create a pywincalc.Product_Data_Thermal out of the information that only applies to thermal calculations
 # These numbers are only for example purposes.
@@ -1238,13 +1248,17 @@ shade_opening_bottom = .01
 shade_opening_left = .02
 shade_opening_right = .02
 
-perforated_screen_thermal = pywincalc.ProductDataThermal(shade_conductivity, shade_material_thickness, flipped,
-                                                         shade_opening_top,
-                                                         shade_opening_bottom, shade_opening_left,
-                                                         shade_opening_right)
+perforated_screen_thermal = pywincalc.ProductDataThermal(conductivity=shade_conductivity,
+                                                         thickness_meters=shade_material_thickness,
+                                                         flipped=flipped,
+                                                         opening_top=shade_opening_top,
+                                                         opening_bottom=shade_opening_bottom,
+                                                         opening_left=shade_opening_left,
+                                                         opening_right=shade_opening_right)
 
 # Combine optical and thermal parts into one pywincalc.Product_Data_Optical_Thermal
-perforated_layer = pywincalc.ProductDataOpticalAndThermal(perforated_screen_optical, perforated_screen_thermal)
+perforated_layer = pywincalc.ProductDataOpticalAndThermal(perforated_screen_optical,
+                                                          perforated_screen_thermal)
 
 # Create a glazing system using the NFRC U environment in order to get NFRC U results
 # U and SHGC can be caculated for any given environment but in order to get results

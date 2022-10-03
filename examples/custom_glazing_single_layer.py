@@ -249,6 +249,7 @@ def raw_glazing_wavelength_data():
             {"wavelength_microns": 2.500, "transmittance_front": 0.8220, "transmittance_back": 0.8220,
              "reflectance_front": 0.0680, "reflectance_back": 0.0680}]
 
+
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
 # taken to use NFRC standards if NFRC thermal results are desired.  This is because for thermal calculations currently
@@ -259,7 +260,6 @@ optical_standard = pywincalc.load_standard(optical_standard_path)
 
 glazing_system_width = 1.0  # width of the glazing system in meters
 glazing_system_height = 1.0  # height of the glazing system in meters
-
 
 # Create optical data for the glass layer
 
@@ -279,15 +279,15 @@ glass_ir_transmittance_back = 0
 glass_coated_side = pywincalc.CoatedSide.NEITHER
 flipped = False
 
-glass_n_band_optical_data = pywincalc.ProductDataOpticalNBand(glass_material_type,
-                                                              glass_material_thickness,
-                                                              glass_wavelength_measurements,
-                                                              glass_coated_side,
-                                                              glass_emissivity_front,
-                                                              glass_emissivity_back,
-                                                              glass_ir_transmittance_front,
-                                                              glass_ir_transmittance_back,
-                                                              flipped)
+glass_n_band_optical_data = pywincalc.ProductDataOpticalNBand(material_type=glass_material_type,
+                                                              thickness_meters=glass_material_thickness,
+                                                              wavelength_data=glass_wavelength_measurements,
+                                                              coated_side=glass_coated_side,
+                                                              ir_transmittance_front=glass_ir_transmittance_front,
+                                                              ir_transmittance_back=glass_ir_transmittance_back,
+                                                              emissivity_front=glass_emissivity_front,
+                                                              emissivity_back=glass_emissivity_back,
+                                                              flipped=flipped)
 
 # Next create the thermal data for the glass layer
 glass_conductivity = 1
@@ -296,12 +296,20 @@ glass_opening_top = 0
 glass_opening_bottom = 0
 glass_opening_left = 0
 glass_opening_right = 0
+glass_opening_front = 0
 
-glass_thermal = pywincalc.ProductDataThermal(glass_conductivity, glass_material_thickness, flipped, glass_opening_top,
-                                             glass_opening_bottom, glass_opening_left, glass_opening_right)
+glass_thermal = pywincalc.ProductDataThermal(conductivity=glass_conductivity,
+                                             thickness_meters=glass_material_thickness,
+                                             flipped=flipped,
+                                             opening_top=glass_opening_top,
+                                             opening_bottom=glass_opening_bottom,
+                                             opening_left=glass_opening_left,
+                                             opening_right=glass_opening_right,
+                                             opening_front=glass_opening_front)
 
 # Create a glass layer from both the optical and thermal data
-glass_layer = pywincalc.ProductDataOpticalAndThermal(glass_n_band_optical_data, glass_thermal)
+glass_layer = pywincalc.ProductDataOpticalAndThermal(glass_n_band_optical_data,
+                                                     glass_thermal)
 
 # Create a glazing system using the NFRC U environment in order to get NFRC U results
 # U and SHGC can be caculated for any given environment but in order to get results
