@@ -277,6 +277,7 @@ glass_emissivity_back = .84
 glass_ir_transmittance_front = 0
 glass_ir_transmittance_back = 0
 glass_coated_side = pywincalc.CoatedSide.NEITHER
+glass_permeability_factor = 0
 flipped = False
 
 glass_n_band_optical_data = pywincalc.ProductDataOpticalNBand(material_type=glass_material_type,
@@ -287,6 +288,7 @@ glass_n_band_optical_data = pywincalc.ProductDataOpticalNBand(material_type=glas
                                                               ir_transmittance_back=glass_ir_transmittance_back,
                                                               emissivity_front=glass_emissivity_front,
                                                               emissivity_back=glass_emissivity_back,
+                                                              permeability_factor=glass_permeability_factor,
                                                               flipped=flipped)
 
 # Next create the thermal data for the glass layer

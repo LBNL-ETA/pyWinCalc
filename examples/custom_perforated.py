@@ -1168,6 +1168,7 @@ glass_emissivity_back = .84
 glass_ir_transmittance_front = 0
 glass_ir_transmittance_back = 0
 glass_coated_side = pywincalc.CoatedSide.NEITHER
+glass_permeability_factor = 0
 flipped = False
 
 glass_n_band_optical_data = pywincalc.ProductDataOpticalNBand(material_type=glass_material_type,
@@ -1178,6 +1179,7 @@ glass_n_band_optical_data = pywincalc.ProductDataOpticalNBand(material_type=glas
                                                               ir_transmittance_back=glass_ir_transmittance_back,
                                                               emissivity_front=glass_emissivity_front,
                                                               emissivity_back=glass_emissivity_back,
+                                                              permeability_factor=glass_permeability_factor,
                                                               flipped=flipped)
 
 # Next create the thermal data for the glass layer
@@ -1213,6 +1215,7 @@ shade_emissivity_front = .8
 shade_emissivity_back = .76
 shade_ir_transmittance_front = .02
 shade_ir_transmittance_back = .01
+shade_permeability_factor = 0
 
 flipped = False
 
@@ -1223,6 +1226,7 @@ shade_material_n_band_optical_data = pywincalc.ProductDataOpticalNBand(material_
                                                                        ir_transmittance_back=shade_ir_transmittance_back,
                                                                        emissivity_front=shade_emissivity_front,
                                                                        emissivity_back=shade_emissivity_back,
+                                                                       permeability_factor=shade_permeability_factor,
                                                                        flipped=flipped)
 
 # Create a pywincalc.Product_Data_Optical_Perforated_Screen out of the material n-band data and desired geometry
