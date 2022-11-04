@@ -2,7 +2,7 @@ name: Build wheels
 
 on: [push, pull_request]
     
-# Cannot use cibuildwheels because the current images used by cibuildwheels do not support C++17.
+# Cannot use cibuildwheels because the current images used by cibuildwheels do not support C++17. 
 
 jobs:
   build_wheels_windows:
