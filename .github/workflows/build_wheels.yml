@@ -1,11 +1,6 @@
 name: Build wheels
 
-on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on:[push, pull_request]
     
 # Cannot use cibuildwheels because the current images used by cibuildwheels do not support C++17.
 
