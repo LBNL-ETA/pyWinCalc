@@ -261,7 +261,7 @@ PYBIND11_MODULE(pywincalc, m) {
                      &OpticsParser::VenetianGeometry::numberSegments);
 
   py::class_<OpticsParser::WovenGeometry, OpticsParser::ProductGeometry,
-             std::shared_ptr<OpticsParser::WovenGeometry>>(m, "WovenGeometry")
+             std::shared_ptr<OpticsParser::WovenGeometry>>(m, "ParsedWovenGeometry")
       .def(py::init<double, double, double>())
       .def_readwrite("thread_diameter",
                      &OpticsParser::WovenGeometry::threadDiameter)
@@ -272,7 +272,7 @@ PYBIND11_MODULE(pywincalc, m) {
 
   py::class_<OpticsParser::PerforatedGeometry, OpticsParser::ProductGeometry,
              std::shared_ptr<OpticsParser::PerforatedGeometry>>(
-      m, "PerforatedGeometry")
+      m, "ParsedPerforatedGeometry")
       .def(py::init<double, double, double, double, std::string>(),
            py::arg("spacing_x_meters"), py::arg("spacing_y_meters"),
            py::arg("dimension_x_meters"), py::arg("dimension_y_meters"),
