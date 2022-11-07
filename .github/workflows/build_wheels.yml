@@ -1,6 +1,6 @@
 name: Build wheels
 
-on: [push, pull_request]
+on: [push, pull_request] 
     
 # Cannot use cibuildwheels because the current images used by cibuildwheels do not support C++17. 
 
