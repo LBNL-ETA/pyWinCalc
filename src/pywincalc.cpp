@@ -362,86 +362,6 @@ PYBIND11_MODULE(pywincalc, m) {
           "product_composition_data",
           &OpticsParser::ComposedProductData::compositionInformation);
 		  
-
-  py::enum_<window_standards::Spectrum_Type>(m, "SpectrumType",
-                                             py::arithmetic())
-      .value("NONE", window_standards::Spectrum_Type::NONE)
-      .value("FILE", window_standards::Spectrum_Type::FILE)
-      .value("BLACKBODY", window_standards::Spectrum_Type::BLACKBODY)
-      .value("UV_ACTION", window_standards::Spectrum_Type::UV_ACTION)
-      .value("KROCHMANN", window_standards::Spectrum_Type::KROCHMANN);
-
-  py::class_<window_standards::Spectrum>(m, "Spectrum")
-      .def_readwrite("type", &window_standards::Spectrum::type)
-      .def_readwrite("description", &window_standards::Spectrum::description)
-      .def_readwrite("t", &window_standards::Spectrum::t)
-      .def_readwrite("a", &window_standards::Spectrum::a)
-      .def_readwrite("b", &window_standards::Spectrum::b)
-      .def_readwrite("values", &window_standards::Spectrum::values);
-
-  py::enum_<window_standards::Wavelength_Set_Type>(m, "WavelengthSetType",
-                                                   py::arithmetic())
-      .value("FILE", window_standards::Wavelength_Set_Type::FILE)
-      .value("SOURCE", window_standards::Wavelength_Set_Type::SOURCE)
-      .value("DATA", window_standards::Wavelength_Set_Type::DATA);
-
-  py::class_<window_standards::Wavelength_Set>(m, "WavelengthSet")
-      .def_readwrite("type", &window_standards::Wavelength_Set::type)
-      .def_readwrite("description",
-                     &window_standards::Wavelength_Set::description)
-      .def_readwrite("values", &window_standards::Wavelength_Set::values);
-
-  py::enum_<window_standards::Wavelength_Boundary_Type>(
-      m, "WavelengthBoundaryType", py::arithmetic())
-      .value("NUMBER", window_standards::Wavelength_Boundary_Type::NUMBER)
-      .value("WAVELENGTH_SET",
-             window_standards::Wavelength_Boundary_Type::WAVELENGTH_SET);
-
-  py::class_<window_standards::Wavelength_Boundary>(m, "WavelengthBoundary")
-      .def_readwrite("type", &window_standards::Wavelength_Boundary::type)
-      .def_readwrite("value", &window_standards::Wavelength_Boundary::value);
-
-  py::enum_<window_standards::Integration_Rule_Type>(m, "IntegrationRuleType",
-                                                     py::arithmetic())
-      .value("TRAPEZOIDAL",
-             window_standards::Integration_Rule_Type::TRAPEZOIDAL)
-      .value("RECTANGULAR",
-             window_standards::Integration_Rule_Type::RECTANGULAR)
-      .value("TABLE", window_standards::Integration_Rule_Type::TABLE);
-
-  py::class_<window_standards::Integration_Rule>(m, "IntegrationRule")
-      .def_readwrite("type", &window_standards::Integration_Rule::type)
-      .def_readwrite("k", &window_standards::Integration_Rule::k);
-
-  py::class_<window_standards::Optical_Standard_Method>(m,
-                                                        "OpticalStandardMethod")
-      .def_readwrite("name", &window_standards::Optical_Standard_Method::name)
-      .def_readwrite("description",
-                     &window_standards::Optical_Standard_Method::description)
-      .def_readwrite(
-          "source_spectrum",
-          &window_standards::Optical_Standard_Method::source_spectrum)
-      .def_readwrite(
-          "detector_spectrum",
-          &window_standards::Optical_Standard_Method::detector_spectrum)
-      .def_readwrite("wavelength_set",
-                     &window_standards::Optical_Standard_Method::wavelength_set)
-      .def_readwrite(
-          "integration_rule",
-          &window_standards::Optical_Standard_Method::integration_rule)
-      .def_readwrite("min_wavelength",
-                     &window_standards::Optical_Standard_Method::min_wavelength)
-      .def_readwrite(
-          "max_wavelength",
-          &window_standards::Optical_Standard_Method::max_wavelength);
-
-  py::class_<window_standards::Optical_Standard>(m, "OpticalStandard")
-      .def_readwrite("name", &window_standards::Optical_Standard::name)
-      .def_readwrite("description",
-                     &window_standards::Optical_Standard::description)
-      .def_readwrite("file", &window_standards::Optical_Standard::file)
-      .def_readwrite("methods", &window_standards::Optical_Standard::methods);
-
   py::class_<wincalc::Trichromatic>(m, "Trichromatic")
       .def_readwrite("X", &wincalc::Trichromatic::X)
       .def_readwrite("Y", &wincalc::Trichromatic::Y)
@@ -1006,10 +926,6 @@ PYBIND11_MODULE(pywincalc, m) {
         "Convert a list of product data into a solid layer that can be used in "
         "glazing systems.");
 
-  m.def("load_standard",
-        py::overload_cast<std::string const &>(
-            &window_standards::load_optical_standard),
-        "Load standard from .std file");
   m.def("parse_json", &OpticsParser::parseJSONString,
         "Load product data from json string");
   m.def("parse_json_file", &OpticsParser::parseJSONFile,
