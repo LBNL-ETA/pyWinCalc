@@ -35,9 +35,9 @@ void declare_wce_optical_result_absorptance(py::module &m,
       .def_readwrite("heat_diffuse", &Class::heat_diffuse)
       .def_readwrite("electricity_direct", &Class::electricity_direct)
       .def_readwrite("electricity_diffuse", &Class::electricity_diffuse)
-	  .def_readwrite("angular_total", &Class::angular_total)
-	  .def_readwrite("angular_heat", &Class::angular_heat)
-	  .def_readwrite("angular_electricity", &Class::angular_electricity);
+      .def_readwrite("angular_total", &Class::angular_total)
+      .def_readwrite("angular_heat", &Class::angular_heat)
+      .def_readwrite("angular_electricity", &Class::angular_electricity);
 }
 
 template <typename T>
@@ -261,7 +261,8 @@ PYBIND11_MODULE(pywincalc, m) {
                      &OpticsParser::VenetianGeometry::numberSegments);
 
   py::class_<OpticsParser::WovenGeometry, OpticsParser::ProductGeometry,
-             std::shared_ptr<OpticsParser::WovenGeometry>>(m, "ParsedWovenGeometry")
+             std::shared_ptr<OpticsParser::WovenGeometry>>(
+      m, "ParsedWovenGeometry")
       .def(py::init<double, double, double>())
       .def_readwrite("thread_diameter",
                      &OpticsParser::WovenGeometry::threadDiameter)
@@ -1327,4 +1328,80 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("vt", &wincalc::CMAResult::vt);
 
   m.def("calc_cma", &wincalc::calc_cma, "Get CMA results.");
+
+  py::enum_<SingleLayerOptics::BSDFDirection>(m, "BSDFDirection",
+                                              py::arithmetic())
+      .value("Incoming", SingleLayerOptics::BSDFDirection::Incoming)
+      .value("Outgoing", SingleLayerOptics::BSDFDirection::Outgoing);
+
+  py::enum_<FenestrationCommon::Side>(m, "Side", py::arithmetic())
+      .value("Front", FenestrationCommon::Side::Front)
+      .value("Back", FenestrationCommon::Side::Back);
+
+  py::enum_<FenestrationCommon::PropertySimple>(m, "PropertySimple",
+                                                py::arithmetic())
+      .value("T", FenestrationCommon::PropertySimple::T)
+      .value("R", FenestrationCommon::PropertySimple::R);
+
+  py::class_<FenestrationCommon::SquareMatrix>(m, "SquareMatrix")
+      .def(py::init<std::vector<std::vector<double>> const&>(), py::arg("input"))
+      .def("size", &FenestrationCommon::SquareMatrix::size)
+      .def("set_zeros", &FenestrationCommon::SquareMatrix::setZeros)
+      .def("set_identity", &FenestrationCommon::SquareMatrix::setIdentity)
+      .def("set_diagonal",
+           &FenestrationCommon::SquareMatrix::setDiagonal)
+      .def("make_upper_triangular", &FenestrationCommon::SquareMatrix::makeUpperTriangular)
+      .def("inverse", &FenestrationCommon::SquareMatrix::inverse)
+      .def("mmult_rows", &FenestrationCommon::SquareMatrix::mmultRows)
+      .def("get_matrix", &FenestrationCommon::SquareMatrix::getMatrix);
+	  
+  py::class_<SingleLayerOptics::BSDFDirections>(m, "BSDFDirections")
+      .def(py::init<>())
+      .def(py::init<std::vector<SingleLayerOptics::BSDFDefinition> const &,
+                    SingleLayerOptics::BSDFDirection>(),
+           py::arg("definitions"), py::arg("side"))
+      .def("lambda_vector", &SingleLayerOptics::BSDFDirections::lambdaVector)
+      .def("profile_angles", &SingleLayerOptics::BSDFDirections::profileAngles)
+      .def("lambda_matrix", &SingleLayerOptics::BSDFDirections::lambdaMatrix)
+      .def("get_nearest_beam_index",
+           &SingleLayerOptics::BSDFDirections::getNearestBeamIndex);
+
+  py::class_<SingleLayerOptics::BSDFIntegrator>(m, "BSDFIntegrator")
+      .def(py::init<SingleLayerOptics::BSDFDirections const &>(),
+           py::arg("directions"))
+      .def("get_matrix", &SingleLayerOptics::BSDFIntegrator::getMatrix)
+      .def("at", &SingleLayerOptics::BSDFIntegrator::at)
+      .def("set_matrices", &SingleLayerOptics::BSDFIntegrator::setMatrices)
+      .def(
+          "direct_direct",
+          py::overload_cast<FenestrationCommon::Side,
+                            FenestrationCommon::PropertySimple, double, double>(
+              &SingleLayerOptics::BSDFIntegrator::DirDir, py::const_))
+      .def("direct_direct",
+           py::overload_cast<FenestrationCommon::Side,
+                             FenestrationCommon::PropertySimple, size_t>(
+               &SingleLayerOptics::BSDFIntegrator::DirDir, py::const_))
+      .def("direct_hemispheric",
+           py::overload_cast<FenestrationCommon::Side,
+                             FenestrationCommon::PropertySimple>(
+               &SingleLayerOptics::BSDFIntegrator::DirHem))
+      .def(
+          "direct_hemispheric",
+          py::overload_cast<FenestrationCommon::Side,
+                            FenestrationCommon::PropertySimple, double, double>(
+              &SingleLayerOptics::BSDFIntegrator::DirHem))
+      .def("absorptance", py::overload_cast<FenestrationCommon::Side>(
+                              &SingleLayerOptics::BSDFIntegrator::Abs))
+      .def("absorptance",
+           py::overload_cast<FenestrationCommon::Side, double, double>(
+               &SingleLayerOptics::BSDFIntegrator::Abs))
+      .def("absorptance", py::overload_cast<FenestrationCommon::Side, size_t>(
+                              &SingleLayerOptics::BSDFIntegrator::Abs))
+      .def("diffuse_diffuse", &SingleLayerOptics::BSDFIntegrator::DiffDiff)
+      .def("absorptance_diffuse_diffuse",
+           &SingleLayerOptics::BSDFIntegrator::AbsDiffDiff)
+      .def("lambda_vector", &SingleLayerOptics::BSDFIntegrator::lambdaVector)
+      .def("lambda_matrix", &SingleLayerOptics::BSDFIntegrator::lambdaMatrix)
+      .def("get_nearest_beam_index",
+           &SingleLayerOptics::BSDFIntegrator::getNearestBeamIndex);
 }
