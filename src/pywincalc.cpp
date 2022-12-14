@@ -738,7 +738,7 @@ PYBIND11_MODULE(pywincalc, m) {
              std::shared_ptr<wincalc::Venetian_Geometry>>(m, "VenetianGeometry")
       .def(py::init<double, double, double, double, int,
                     SingleLayerOptics::DistributionMethod, bool>(),
-           py::arg("slat_tilt_meters"), py::arg("slat_width_meters"),
+           py::arg("slat_tilt_degrees"), py::arg("slat_width_meters"),
            py::arg("slat_spacing_meters"), py::arg("slat_curvature_meters"),
            py::arg("number_slat_segments"),
            py::arg("distribution_method") =
