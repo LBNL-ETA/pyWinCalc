@@ -163,7 +163,11 @@ PYBIND11_MODULE(pywincalc, m) {
                     Gases::CIntCoeff const &>(),
            py::arg("name"), py::arg("molecular_weight"),
            py::arg("specific_heat_ratio"), py::arg("Cp"),
-           py::arg("thermal_conductivity"), py::arg("viscosity"));
+           py::arg("thermal_conductivity"), py::arg("viscosity"))
+	  .def("get_molecular_weight", &Gases::CGasData::getMolecularWeight)
+	  .def("get_property_value", &Gases::CGasData::getPropertyValue, py::arg("type"), py::arg("temperature"))
+	  .def("get_specific_heat_ratio", &Gases::CGasData::getSpecificHeatRatio)
+	  .def("name", &Gases::CGasData::name);
 
   py::class_<wincalc::Engine_Gas_Mixture_Component>(m,
                                                     "CustomGasMixtureComponent")
