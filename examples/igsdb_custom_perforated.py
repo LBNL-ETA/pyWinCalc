@@ -38,28 +38,32 @@ shade_material = pywincalc.parse_json(shade_material_igsdb_response.content)
 
 # Perforated screens need Perforated_Geometry.
 # Make a rectangular perforation here.  Other options include circular and square
-# Note: While using a string for perforation type is not ideal it is used here because this
-# example is mostly using data from the IGSDB for the material and only adding a custom geometry
 # For an example where the data is completely custom generated see custom_perforated.py
-perforation_type = "rectangular"
-spacing_x = 0.01  # 10mm horizontal spacing
-spacing_y = 0.02  # 20mm vertical spacing
-dimension_x = 0.002  # 2mm perforation in the horizontal direction
-dimension_y = 0.003  # 3mm perforation in the vertical direction
+# Create perforated geometry 
+perforation_type = pywincalc.PerforatedGeometry.Type.RECTANGULAR
+spacing_x = .02  # 20mm horizontal spacing
+spacing_y = .03  # 30mm vertical spacing
+dimension_x = .001  # 1mm perforation in the horizontal direction
+dimension_y = .003  # 3mm perforation in the vertical direction
 geometry = pywincalc.PerforatedGeometry(spacing_x, spacing_y, dimension_x, dimension_y, perforation_type)
 
-# combine the shade_material and the geometry together into a Product_Composistion_Data
-composition_data = pywincalc.ProductComposistionData(shade_material, geometry)
+# Convert the parsed shade data into a solid layer and then replace the optical portion 
+# with a ProductDataOpticalPerforatedScreen object made from the material's optical data and geometry.
+perforated_layer = pywincalc.convert_to_solid_layer(shade_material)
+perforated_layer.optical_data = pywincalc.ProductDataOpticalPerforatedScreen(perforated_layer.optical_data, geometry)
 
-# create a layer from the product composition data.  No other information is required to create a layer in this case
-perforated_shade_layer = pywincalc.ComposedProductData(composition_data)
+# If there are any side gaps in the shade those can be set in the thermal part of the solid layer
+# These values are for example purposes only
+perforated_layer.thermal_data.opening_bottom = .01 # 10mm bottom gap
+perforated_layer.thermal_data.opening_left = .02 # 20mm left gap
+perforated_layer.thermal_data.opening_right = .02 # 20mm right gap
 
 # Create a glazing system using the NFRC U environment in order to get NFRC U results
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
 glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                       solid_layers=[perforated_shade_layer,
+                                                       solid_layers=[perforated_layer,
                                                                      generic_clear_3mm_glass],
                                                        gap_layers=[gap_1],
                                                        width_meters=glazing_system_width,
@@ -68,7 +72,7 @@ glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_
                                                        bsdf_hemisphere=bsdf_hemisphere)
 
 glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                          solid_layers=[perforated_shade_layer,
+                                                          solid_layers=[perforated_layer,
                                                                         generic_clear_3mm_glass],
                                                           gap_layers=[gap_1],
                                                           width_meters=glazing_system_width,

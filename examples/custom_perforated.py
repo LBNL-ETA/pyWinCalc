@@ -1229,22 +1229,21 @@ shade_material_n_band_optical_data = pywincalc.ProductDataOpticalNBand(material_
                                                                        permeability_factor=shade_permeability_factor,
                                                                        flipped=flipped)
 
-# Create a pywincalc.Product_Data_Optical_Perforated_Screen out of the material n-band data and desired geometry
-perforation_type = pywincalc.ProductDataOpticalPerforatedScreen.Type.RECTANGULAR
+# Create perforated geometry 
+perforation_type = pywincalc.PerforatedGeometry.Type.RECTANGULAR
 spacing_x = .02  # 20mm horizontal spacing
 spacing_y = .03  # 30mm vertical spacing
 dimension_x = .001  # 1mm perforation in the horizontal direction
-dimension_y = .003  # 3mm perforation in the horizontal direction
+dimension_y = .003  # 3mm perforation in the vertical direction
 
+geometry = pywincalc.PerforatedGeometry(spacing_x, spacing_y, dimension_x, dimension_y, perforation_type)
+
+# Create a ProductDataOpticalPerforatedScreen from optical data and geometry
 perforated_screen_optical = pywincalc.ProductDataOpticalPerforatedScreen(
     material_product_data_optical=shade_material_n_band_optical_data,
-    spacing_x=spacing_x,
-    spacing_y=spacing_y,
-    dimension_x=dimension_x,
-    dimension_y=dimension_y,
-    perforation_type=perforation_type)
+    geometry=geometry)
 
-# Create a pywincalc.Product_Data_Thermal out of the information that only applies to thermal calculations
+# Create a pywincalc.ProductDataThermal out of the information that only applies to thermal calculations
 # These numbers are only for example purposes.
 shade_conductivity = 160
 shade_opening_top = .01
