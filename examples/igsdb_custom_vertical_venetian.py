@@ -44,31 +44,37 @@ slat_spacing = .050  # spacing of 50 mm
 slat_curvature = .025  # curvature of 25 mm
 slat_tilt = 15  # 15 degree tilt
 number_segments = 5  # The default is 5.  Do not change unless there is a reason to.
-geometry = pywincalc.VenetianGeometry(slat_width=slat_width, slat_spacing=slat_spacing, slat_curvature=slat_curvature,
-                                      slat_tilt=slat_tilt, number_segments=number_segments)
-
-# combine the shade_material and the geometry together into a ProductComposistionData
-composition_data = pywincalc.ProductComposistionData(shade_material, geometry)
-venetian_layer = pywincalc.ComposedProductData(composition_data)
-
-# At this point the layer is only using measured value and any modeling parameters.
-# To change modeling parameters from their default the measured data must first be converted to
-# a solid layer.
-venetian_solid_layer = pywincalc.convert_to_solid_layer(venetian_layer)
 
 # Currently the only modeling parameter for venetian layers is the distribution method.
 # That defaults to directional diffuse but can be changed to uniform-diffuse on a per-layer basis
-venetian_solid_layer.optical_data.distribution_method = pywincalc.DistributionMethodType.UNIFORM_DIFFUSE
+distribution_method = pywincalc.DistributionMethodType.UNIFORM_DIFFUSE
 
-# Set the is_horizontal property to false to model this as a vertical venetian
-venetian_solid_layer.optical_data.is_horizontal = False
+# Create the geometry making sure to set is_horizontal to false to model vertical venetian blinds.
+geometry = pywincalc.VenetianGeometry(slat_width_meters=slat_width, 
+                                      slat_spacing_meters=slat_spacing, 
+                                      slat_curvature_meters=slat_curvature,
+                                      slat_tilt_degrees=slat_tilt, 
+                                      number_slat_segments=number_segments, 
+                                      distribution_method=distribution_method,
+									  is_horizontal=False)
+
+# Convert the parsed shade data into a solid layer and then replace the optical portion 
+# with a ProductDataOpticalVenetian object made from the material's optical data and geometry.
+venetian_layer = pywincalc.convert_to_solid_layer(shade_material)
+venetian_layer.optical_data = pywincalc.ProductDataOpticalVenetian(venetian_layer.optical_data, geometry)
+
+# If there are any side gaps in the shade those can be set in the thermal part of the solid layer
+# These values are for example purposes only
+venetian_layer.thermal_data.opening_bottom = .01 # 10mm bottom gap
+venetian_layer.thermal_data.opening_left = .02 # 20mm left gap
+venetian_layer.thermal_data.opening_right = .02 # 20mm right gap
 
 # Create a glazing system using the NFRC U environment in order to get NFRC U results
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
 glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                       solid_layers=[venetian_solid_layer,
+                                                       solid_layers=[venetian_layer,
                                                                      generic_clear_3mm_glass],
                                                        gap_layers=[gap_1],
                                                        width_meters=glazing_system_width,
@@ -77,7 +83,7 @@ glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_
                                                        bsdf_hemisphere=bsdf_hemisphere)
 
 glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                          solid_layers=[venetian_solid_layer,
+                                                          solid_layers=[venetian_layer,
                                                                         generic_clear_3mm_glass],
                                                           gap_layers=[gap_1],
                                                           width_meters=glazing_system_width,
