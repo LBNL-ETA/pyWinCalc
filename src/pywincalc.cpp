@@ -35,9 +35,9 @@ void declare_wce_optical_result_absorptance(py::module &m,
       .def_readwrite("heat_diffuse", &Class::heat_diffuse)
       .def_readwrite("electricity_direct", &Class::electricity_direct)
       .def_readwrite("electricity_diffuse", &Class::electricity_diffuse)
-	  .def_readwrite("angular_total", &Class::angular_total)
-	  .def_readwrite("angular_heat", &Class::angular_heat)
-	  .def_readwrite("angular_electricity", &Class::angular_electricity);
+      .def_readwrite("angular_total", &Class::angular_total)
+      .def_readwrite("angular_heat", &Class::angular_heat)
+      .def_readwrite("angular_electricity", &Class::angular_electricity);
 }
 
 template <typename T>
@@ -120,6 +120,18 @@ public:
   }
 };
 
+class Py_CSupportPillar : public Tarcog::ISO15099::CSupportPillar //_Base
+{
+public:
+	using Tarcog::ISO15099::CSupportPillar::CSupportPillar; // Inherit constructors
+	
+protected:
+	double conductivityOfPillarArray() override {
+		PYBIND11_OVERRIDE_PURE(double, Tarcog::ISO15099::CSupportPillar,
+			conductivityOfPillarArray, );
+	}
+};
+
 #if 0
 template <class Product_Data_N_Band_Optical_Base =
               wincalc::Product_Data_N_Band_Optical>
@@ -145,6 +157,69 @@ PYBIND11_MODULE(pywincalc, m) {
       .value("KRYPTON", Gases::GasDef::Krypton)
       .value("XENON", Gases::GasDef::Xenon);
 
+  py::class_<Gases::CIntCoeff>(m, "GasCoefficients")
+      .def(py::init<double const, double const, double const>(), py::arg("A"),
+           py::arg("B"), py::arg("C"));
+
+  py::class_<Gases::CGasData>(m, "GasData")
+      .def(py::init<std::string const &, double const, double const,
+                    Gases::CIntCoeff const &, Gases::CIntCoeff const &,
+                    Gases::CIntCoeff const &>(),
+           py::arg("name"), py::arg("molecular_weight"),
+           py::arg("specific_heat_ratio"), py::arg("Cp"),
+           py::arg("thermal_conductivity"), py::arg("viscosity"));
+
+  py::class_<Gases::CGas>(m, "Gas")
+      .def(py::init<std::vector<std::pair<double, Gases::CGasData>> const &>(),
+           py::arg("gases"))
+      .def(py::init<std::vector<std::pair<double, Gases::GasDef>> const &>(),
+           py::arg("gases"))
+      .def("get_simple_gas_properties", &Gases::CGas::getSimpleGasProperties)
+      .def("get_gas_properties", &Gases::CGas::getGasProperties)
+      .def("set_temperature_and_pressure",
+           &Gases::CGas::setTemperatureAndPressure)
+      .def("gas_items", &Gases::CGas::gasItems);
+
+  py::class_<Tarcog::ISO15099::CIGUGapLayer,
+             std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer>>(m, "IGUGapLayer")
+      .def(py::init<double, double>(), py::arg("thickness"),
+           py::arg("pressure"))
+      .def(py::init<double, double, Gases::CGas const &>(),
+           py::arg("thickness"), py::arg("pressure"), py::arg("gas"));
+
+  py::class_<Tarcog::ISO15099::CIGUGapLayerDeflection,
+             Tarcog::ISO15099::CIGUGapLayer,
+             std::shared_ptr<Tarcog::ISO15099::CIGUGapLayerDeflection>>(
+      m, "IGUGapLayerDeflection")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double, double>(),
+           py::arg("gap_layer"), py::arg("temperature_initial"),
+           py::arg("pressure_initial"));
+
+  py::class_<Tarcog::ISO15099::CIGUVentilatedGapLayer,
+             Tarcog::ISO15099::CIGUGapLayer,
+             std::shared_ptr<Tarcog::ISO15099::CIGUVentilatedGapLayer>>(
+      m, "IGUGapLayerVentilated")
+      .def(py::init<std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer> const &,
+                    double, double>(),
+           py::arg("gap_layer"), py::arg("inlet_temperature"),
+           py::arg("inlet_speed"));
+
+  py::class_<Tarcog::ISO15099::CSupportPillar, Py_CSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::CSupportPillar>>(m,
+                                                                "SupportPillar")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double>(),
+           py::arg("gap_layer"), py::arg("conductivity"));
+
+  py::class_<Tarcog::ISO15099::CCircularPillar,
+             Tarcog::ISO15099::CSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::CCircularPillar>>(
+      m, "CircularPillar")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double, double,
+                    double>(),
+           py::arg("gap_layer"), py::arg("conductivity"), py::arg("spacing"),
+           py::arg("radius"));
+
+#if 0
   py::class_<wincalc::Predefined_Gas_Mixture_Component>(
       m, "PredefinedGasMixtureComponent")
       .def(py::init<Gases::GasDef const &, double>(), py::arg("gas"),
@@ -153,17 +228,6 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("percent",
                      &wincalc::Predefined_Gas_Mixture_Component::percent);
 
-  py::class_<Gases::CIntCoeff>(m, "GasCoefficients")
-      .def(py::init<double const, double const, double const>(), py::arg("A"),
-           py::arg("B"), py::arg("C"));
-
-  py::class_<Gases::CGasData>(m, "CustomGasData")
-      .def(py::init<std::string const &, double const, double const,
-                    Gases::CIntCoeff const &, Gases::CIntCoeff const &,
-                    Gases::CIntCoeff const &>(),
-           py::arg("name"), py::arg("molecular_weight"),
-           py::arg("specific_heat_ratio"), py::arg("Cp"),
-           py::arg("thermal_conductivity"), py::arg("viscosity"));
 
   py::class_<wincalc::Engine_Gas_Mixture_Component>(m,
                                                     "CustomGasMixtureComponent")
@@ -193,6 +257,7 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("gas_list"), py::arg("thickness_meters"))
       .def_readwrite("gases", &wincalc::Engine_Gap_Info::gases)
       .def_readwrite("thickness", &wincalc::Engine_Gap_Info::thickness);
+#endif
 
   py::class_<OpticsParser::MeasurementComponent>(m,
                                                  "OpticalMeasurementComponent")
@@ -261,7 +326,8 @@ PYBIND11_MODULE(pywincalc, m) {
                      &OpticsParser::VenetianGeometry::numberSegments);
 
   py::class_<OpticsParser::WovenGeometry, OpticsParser::ProductGeometry,
-             std::shared_ptr<OpticsParser::WovenGeometry>>(m, "ParsedWovenGeometry")
+             std::shared_ptr<OpticsParser::WovenGeometry>>(
+      m, "ParsedWovenGeometry")
       .def(py::init<double, double, double>())
       .def_readwrite("thread_diameter",
                      &OpticsParser::WovenGeometry::threadDiameter)
@@ -863,62 +929,72 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("panes_load", &wincalc::Deflection_Results::panes_load);
 
   py::class_<wincalc::Glazing_System>(m, "GlazingSystem")
-      .def(py::init<window_standards::Optical_Standard const &,
-                    std::vector<wincalc::Product_Data_Optical_Thermal> const &,
-                    std::vector<wincalc::Engine_Gap_Info> const &, double,
-                    double, double, wincalc::Environments const &,
-                    std::optional<SingleLayerOptics::BSDFHemisphere> const &,
-                    wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
-                    int>(),
-           py::arg("optical_standard"), py::arg("solid_layers"),
-           py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
-           py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
-           py::arg("tilt_degrees") = 90,
-           py::arg("environment") = wincalc::nfrc_u_environments(),
-           py::arg("bsdf_hemisphere") =
-               std::optional<SingleLayerOptics::BSDFHemisphere>(),
-           py::arg("spectral_data_wavelength_range_method") =
-               wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
-           py::arg("number_visible_bands") = 5,
-           py::arg("number_solar_bands") = 10)
-      .def(py::init<window_standards::Optical_Standard const &,
-                    std::vector<OpticsParser::ProductData> const &,
-                    std::vector<wincalc::Engine_Gap_Info> const &, double,
-                    double, double, wincalc::Environments const &,
-                    std::optional<SingleLayerOptics::BSDFHemisphere> const &,
-                    wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
-                    int>(),
-           py::arg("optical_standard"), py::arg("solid_layers"),
-           py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
-           py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
-           py::arg("tilt_degrees") = 90,
-           py::arg("environment") = wincalc::nfrc_u_environments(),
-           py::arg("bsdf_hemisphere") =
-               std::optional<SingleLayerOptics::BSDFHemisphere>(),
-           py::arg("spectral_data_wavelength_range_method") =
-               wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
-           py::arg("number_visible_bands") = 5,
-           py::arg("number_solar_bands") = 10)
-      .def(py::init<window_standards::Optical_Standard const &,
-                    std::vector<std::variant<
-                        OpticsParser::ProductData,
-                        wincalc::Product_Data_Optical_Thermal>> const &,
-                    std::vector<wincalc::Engine_Gap_Info> const &, double,
-                    double, double, wincalc::Environments const &,
-                    std::optional<SingleLayerOptics::BSDFHemisphere> const &,
-                    wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
-                    int>(),
-           py::arg("optical_standard"), py::arg("solid_layers"),
-           py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
-           py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
-           py::arg("tilt_degrees") = 90,
-           py::arg("environment") = wincalc::nfrc_u_environments(),
-           py::arg("bsdf_hemisphere") =
-               std::optional<SingleLayerOptics::BSDFHemisphere>(),
-           py::arg("spectral_data_wavelength_range_method") =
-               wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
-           py::arg("number_visible_bands") = 5,
-           py::arg("number_solar_bands") = 10)
+      .def(
+          py::init<window_standards::Optical_Standard const &,
+                   std::vector<wincalc::Product_Data_Optical_Thermal> const &,
+                   std::vector<
+                       std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer>> const &,
+                   double, double, double, wincalc::Environments const &,
+                   std::optional<SingleLayerOptics::BSDFHemisphere> const &,
+                   wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
+                   int>(),
+          py::arg("optical_standard"), py::arg("solid_layers"),
+          py::arg("gap_layers") =
+              std::vector<std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer>>(),
+          py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
+          py::arg("tilt_degrees") = 90,
+          py::arg("environment") = wincalc::nfrc_u_environments(),
+          py::arg("bsdf_hemisphere") =
+              std::optional<SingleLayerOptics::BSDFHemisphere>(),
+          py::arg("spectral_data_wavelength_range_method") =
+              wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
+          py::arg("number_visible_bands") = 5,
+          py::arg("number_solar_bands") = 10)
+      .def(
+          py::init<window_standards::Optical_Standard const &,
+                   std::vector<OpticsParser::ProductData> const &,
+                   std::vector<
+                       std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer>> const &,
+                   double, double, double, wincalc::Environments const &,
+                   std::optional<SingleLayerOptics::BSDFHemisphere> const &,
+                   wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
+                   int>(),
+          py::arg("optical_standard"), py::arg("solid_layers"),
+          py::arg("gap_layers") =
+              std::vector<std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer>>(),
+          py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
+          py::arg("tilt_degrees") = 90,
+          py::arg("environment") = wincalc::nfrc_u_environments(),
+          py::arg("bsdf_hemisphere") =
+              std::optional<SingleLayerOptics::BSDFHemisphere>(),
+          py::arg("spectral_data_wavelength_range_method") =
+              wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
+          py::arg("number_visible_bands") = 5,
+          py::arg("number_solar_bands") = 10)
+      .def(
+          py::init<
+              window_standards::Optical_Standard const &,
+              std::vector<
+                  std::variant<OpticsParser::ProductData,
+                               wincalc::Product_Data_Optical_Thermal>> const &,
+              std::vector<std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer>> const
+                  &,
+              double, double, double, wincalc::Environments const &,
+              std::optional<SingleLayerOptics::BSDFHemisphere> const &,
+              wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
+              int>(),
+          py::arg("optical_standard"), py::arg("solid_layers"),
+          py::arg("gap_layers") =
+              std::vector<std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer>>(),
+          py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
+          py::arg("tilt_degrees") = 90,
+          py::arg("environment") = wincalc::nfrc_u_environments(),
+          py::arg("bsdf_hemisphere") =
+              std::optional<SingleLayerOptics::BSDFHemisphere>(),
+          py::arg("spectral_data_wavelength_range_method") =
+              wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
+          py::arg("number_visible_bands") = 5,
+          py::arg("number_solar_bands") = 10)
       .def("u", &wincalc::Glazing_System::u, py::arg("theta") = 0,
            py::arg("phi") = 0)
       .def("shgc", &wincalc::Glazing_System::shgc, py::arg("theta") = 0,
