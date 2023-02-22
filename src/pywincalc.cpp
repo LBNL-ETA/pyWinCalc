@@ -826,7 +826,7 @@ PYBIND11_MODULE(pywincalc, m) {
       m, "ProductDataOpticalAndThermal")
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical>,
                     std::shared_ptr<wincalc::Product_Data_Thermal>>(),
-           py::arg("prouct_data_optical"), py::arg("product_data_thermal"))
+           py::arg("product_data_optical"), py::arg("product_data_thermal"))
       .def_readwrite("optical_data",
                      &wincalc::Product_Data_Optical_Thermal::optical_data)
       .def_readwrite("thermal_data",
