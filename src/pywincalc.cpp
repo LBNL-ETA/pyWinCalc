@@ -744,10 +744,10 @@ PYBIND11_MODULE(pywincalc, m) {
                     SingleLayerOptics::DistributionMethod, bool>(),
            py::arg("slat_tilt_degrees"), py::arg("slat_width_meters"),
            py::arg("slat_spacing_meters"), py::arg("slat_curvature_meters"),
-           py::arg("number_slat_segments"),
+           py::arg("is_horizontal") = true,
            py::arg("distribution_method") =
                SingleLayerOptics::DistributionMethod::DirectionalDiffuse,
-           py::arg("is_horizontal") = true)
+           py::arg("number_slat_segments") = 5)
       .def_readwrite("slat_tilt", &wincalc::Venetian_Geometry::slat_tilt)
       .def_readwrite("slat_width", &wincalc::Venetian_Geometry::slat_width)
       .def_readwrite("slat_spacing", &wincalc::Venetian_Geometry::slat_spacing)
