@@ -76,23 +76,59 @@ def print_optical_method_results(glazing_system, optical_method_name, theta, phi
     # provided for each side of each layer.
     results_per_layer = results.layer_results
     for i in range(len(results_per_layer)):
-        print("{t}{m} method layer {idx} front direct solar absorptance: {v}".format(t=leading_tabs,
+        print("{t}{m} method layer {idx} front total direct absorptance: {v}".format(t=leading_tabs,
                                                                                      m=optical_method_name, idx=i + 1,
                                                                                      v=results_per_layer[
-                                                                                         i].front.absorptance.direct))
-        print("{t}{m} method layer {idx} front diffuse solar absorptance: {v}".format(t=leading_tabs,
+                                                                                         i].front.absorptance.total_direct))
+        print("{t}{m} method layer {idx} front total diffuse absorptance: {v}".format(t=leading_tabs,
                                                                                       m=optical_method_name, idx=i + 1,
                                                                                       v=results_per_layer[
-                                                                                          i].front.absorptance.diffuse))
-        print(
-            "{t}{m} method layer {idx} back direct solar absorptance: {v}".format(t=leading_tabs, m=optical_method_name,
-                                                                                  idx=i + 1,
-                                                                                  v=results_per_layer[
-                                                                                      i].back.absorptance.direct))
-        print("{t}{m} method layer {idx} back diffuse solar absorptance: {v}".format(t=leading_tabs,
+                                                                                          i].front.absorptance.total_diffuse))
+																						  
+        print("{t}{m} method layer {idx} front heat direct absorptance: {v}".format(t=leading_tabs,
                                                                                      m=optical_method_name, idx=i + 1,
                                                                                      v=results_per_layer[
-                                                                                         i].back.absorptance.diffuse))
+                                                                                         i].front.absorptance.heat_direct))
+        print("{t}{m} method layer {idx} front heat diffuse absorptance: {v}".format(t=leading_tabs,
+                                                                                      m=optical_method_name, idx=i + 1,
+                                                                                      v=results_per_layer[
+                                                                                          i].front.absorptance.heat_diffuse))
+																						  
+        print("{t}{m} method layer {idx} front electricity direct absorptance: {v}".format(t=leading_tabs,
+                                                                                     m=optical_method_name, idx=i + 1,
+                                                                                     v=results_per_layer[
+                                                                                         i].front.absorptance.electricity_direct))
+        print("{t}{m} method layer {idx} front electricity diffuse absorptance: {v}".format(t=leading_tabs,
+                                                                                      m=optical_method_name, idx=i + 1,
+                                                                                      v=results_per_layer[
+                                                                                          i].front.absorptance.electricity_diffuse))
+        print(
+            "{t}{m} method layer {idx} back total direct absorptance: {v}".format(t=leading_tabs, m=optical_method_name,
+                                                                                  idx=i + 1,
+                                                                                  v=results_per_layer[
+                                                                                      i].back.absorptance.total_direct))
+        print("{t}{m} method layer {idx} back total diffuse absorptance: {v}".format(t=leading_tabs,
+                                                                                     m=optical_method_name, idx=i + 1,
+                                                                                     v=results_per_layer[
+                                                                                         i].back.absorptance.total_diffuse))
+																						 
+        print("{t}{m} method layer {idx} back heat direct absorptance: {v}".format(t=leading_tabs,
+                                                                                     m=optical_method_name, idx=i + 1,
+                                                                                     v=results_per_layer[
+                                                                                         i].back.absorptance.heat_direct))
+        print("{t}{m} method layer {idx} back heat diffuse absorptance: {v}".format(t=leading_tabs,
+                                                                                      m=optical_method_name, idx=i + 1,
+                                                                                      v=results_per_layer[
+                                                                                          i].back.absorptance.heat_diffuse))
+																						  
+        print("{t}{m} method layer {idx} back electricity direct absorptance: {v}".format(t=leading_tabs,
+                                                                                     m=optical_method_name, idx=i + 1,
+                                                                                     v=results_per_layer[
+                                                                                         i].back.absorptance.electricity_direct))
+        print("{t}{m} method layer {idx} back electricity diffuse absorptance: {v}".format(t=leading_tabs,
+                                                                                      m=optical_method_name, idx=i + 1,
+                                                                                      v=results_per_layer[
+                                                                                          i].back.absorptance.electricity_diffuse))
 
 
 def print_color_space_results(flux_results, leading_tabs):
