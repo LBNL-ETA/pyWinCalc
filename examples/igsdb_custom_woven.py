@@ -42,17 +42,23 @@ thread_spacing = 0.003  # 3mm spacing
 shade_thickness = 0.002  # 2mm shade thickness
 geometry = pywincalc.WovenGeometry(thread_diameter, thread_spacing, shade_thickness)
 
-# combine the shade_material and the geometry together into a Product_Composistion_Data
-composition_data = pywincalc.ProductComposistionData(shade_material, geometry)
+# Convert the parsed shade data into a solid layer and then replace the optical portion 
+# with a ProductDataOpticalWovenShade object made from the material's optical data and geometry.
+woven_layer = pywincalc.convert_to_solid_layer(shade_material)
+woven_layer.optical_data = pywincalc.ProductDataOpticalWovenShade(woven_layer.optical_data, geometry)
 
-woven_shade_layer = pywincalc.ComposedProductData(composition_data)
+# If there are any side gaps in the shade those can be set in the thermal part of the solid layer
+# These values are for example purposes only
+woven_layer.thermal_data.opening_bottom = .01 # 10mm bottom gap
+woven_layer.thermal_data.opening_left = .02 # 20mm left gap
+woven_layer.thermal_data.opening_right = .02 # 20mm right gap
 
 # Create a glazing system using the NFRC U environment in order to get NFRC U results
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
 glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                       solid_layers=[woven_shade_layer, generic_clear_3mm_glass],
+                                                       solid_layers=[woven_layer, generic_clear_3mm_glass],
                                                        gap_layers=[gap_1],
                                                        width_meters=glazing_system_width,
                                                        height_meters=glazing_system_height,
@@ -60,7 +66,7 @@ glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_
                                                        bsdf_hemisphere=bsdf_hemisphere)
 
 glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                          solid_layers=[woven_shade_layer, generic_clear_3mm_glass],
+                                                          solid_layers=[woven_layer, generic_clear_3mm_glass],
                                                           gap_layers=[gap_1],
                                                           width_meters=glazing_system_width,
                                                           height_meters=glazing_system_height,

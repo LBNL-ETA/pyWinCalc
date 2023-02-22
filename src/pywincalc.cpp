@@ -27,8 +27,17 @@ void declare_wce_optical_result_absorptance(py::module &m,
   std::string pyclass_name = std::string("OpticalResultAbsorptance") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
-      .def_readwrite("direct", &Class::direct)
-      .def_readwrite("diffuse", &Class::diffuse);
+      .def_readwrite("direct", &Class::total_direct)
+      .def_readwrite("diffuse", &Class::total_diffuse)
+      .def_readwrite("total_direct", &Class::total_direct)
+      .def_readwrite("total_diffuse", &Class::total_diffuse)
+      .def_readwrite("heat_direct", &Class::heat_direct)
+      .def_readwrite("heat_diffuse", &Class::heat_diffuse)
+      .def_readwrite("electricity_direct", &Class::electricity_direct)
+      .def_readwrite("electricity_diffuse", &Class::electricity_diffuse)
+      .def_readwrite("angular_total", &Class::angular_total)
+      .def_readwrite("angular_heat", &Class::angular_heat)
+      .def_readwrite("angular_electricity", &Class::angular_electricity);
 }
 
 template <typename T>
@@ -154,7 +163,11 @@ PYBIND11_MODULE(pywincalc, m) {
                     Gases::CIntCoeff const &>(),
            py::arg("name"), py::arg("molecular_weight"),
            py::arg("specific_heat_ratio"), py::arg("Cp"),
-           py::arg("thermal_conductivity"), py::arg("viscosity"));
+           py::arg("thermal_conductivity"), py::arg("viscosity"))
+	  .def("get_molecular_weight", &Gases::CGasData::getMolecularWeight)
+	  .def("get_property_value", &Gases::CGasData::getPropertyValue, py::arg("type"), py::arg("temperature"))
+	  .def("get_specific_heat_ratio", &Gases::CGasData::getSpecificHeatRatio)
+	  .def("name", &Gases::CGasData::name);
 
   py::class_<wincalc::Engine_Gas_Mixture_Component>(m,
                                                     "CustomGasMixtureComponent")
@@ -199,6 +212,12 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("reflectance_back",
                      &OpticsParser::MeasurementComponent::rb);
 
+  py::class_<OpticsParser::PVWavelengthData>(m, "PVWavelengthData")
+      .def(py::init<double, double>(), py::arg("eqe_front"),
+           py::arg("eqe_back"))
+      .def_readwrite("eqq_front", &OpticsParser::PVWavelengthData::eqef)
+      .def_readwrite("eqe_back", &OpticsParser::PVWavelengthData::eqeb);
+
   py::class_<OpticsParser::WLData>(m, "WavelengthData")
       .def(py::init<double, OpticsParser::MeasurementComponent,
                     std::optional<OpticsParser::MeasurementComponent>>(),
@@ -222,7 +241,8 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("wavelength", &OpticsParser::WLData::wavelength)
       .def_readwrite("direct_component", &OpticsParser::WLData::directComponent)
       .def_readwrite("diffuse_component",
-                     &OpticsParser::WLData::diffuseComponent);
+                     &OpticsParser::WLData::diffuseComponent)
+      .def_readwrite("pv_component", &OpticsParser::WLData::pvComponent);
 
   py::class_<OpticsParser::ProductGeometry,
              std::shared_ptr<OpticsParser::ProductGeometry>>(m,
@@ -230,7 +250,7 @@ PYBIND11_MODULE(pywincalc, m) {
 
   py::class_<OpticsParser::VenetianGeometry, OpticsParser::ProductGeometry,
              std::shared_ptr<OpticsParser::VenetianGeometry>>(
-      m, "VenetianGeometry")
+      m, "ParsedVenetianGeometry")
       .def(py::init<double, double, double, double, std::string, int>(),
            py::arg("slat_width"), py::arg("slat_spacing"),
            py::arg("slat_curvature"), py::arg("slat_tilt") = 0,
@@ -245,7 +265,8 @@ PYBIND11_MODULE(pywincalc, m) {
                      &OpticsParser::VenetianGeometry::numberSegments);
 
   py::class_<OpticsParser::WovenGeometry, OpticsParser::ProductGeometry,
-             std::shared_ptr<OpticsParser::WovenGeometry>>(m, "WovenGeometry")
+             std::shared_ptr<OpticsParser::WovenGeometry>>(
+      m, "ParsedWovenGeometry")
       .def(py::init<double, double, double>())
       .def_readwrite("thread_diameter",
                      &OpticsParser::WovenGeometry::threadDiameter)
@@ -256,7 +277,7 @@ PYBIND11_MODULE(pywincalc, m) {
 
   py::class_<OpticsParser::PerforatedGeometry, OpticsParser::ProductGeometry,
              std::shared_ptr<OpticsParser::PerforatedGeometry>>(
-      m, "PerforatedGeometry")
+      m, "ParsedPerforatedGeometry")
       .def(py::init<double, double, double, double, std::string>(),
            py::arg("spacing_x_meters"), py::arg("spacing_y_meters"),
            py::arg("dimension_x_meters"), py::arg("dimension_y_meters"),
@@ -287,9 +308,15 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("solar", &OpticsParser::DualBandBSDF::solar)
       .def_readwrite("visible", &OpticsParser::DualBandBSDF::visible);
 
+  py::class_<OpticsParser::PVPowerProperty>(m, "PVPowerProperty")
+      .def(py::init<double, double, double>(), py::arg("jsc"), py::arg("voc"),
+           py::arg("ff"))
+      .def_readwrite("jsc", &OpticsParser::PVPowerProperty::jsc)
+      .def_readwrite("voc", &OpticsParser::PVPowerProperty::voc)
+      .def_readwrite("ff", &OpticsParser::PVPowerProperty::ff);
+
   py::class_<OpticsParser::ProductData,
              std::shared_ptr<OpticsParser::ProductData>>(m, "ProductData")
-      .def("composed_product", &OpticsParser::ProductData::composedProduct)
       .def_readwrite("product_name", &OpticsParser::ProductData::productName)
       .def_readwrite("product_type", &OpticsParser::ProductData::productType)
       .def_readwrite("nfrc_id", &OpticsParser::ProductData::nfrcid)
@@ -306,7 +333,10 @@ PYBIND11_MODULE(pywincalc, m) {
                      &OpticsParser::ProductData::permeabilityFactor)
       .def_readwrite("density", &OpticsParser::ProductData::density)
       .def_readwrite("youngs_modulus",
-                     &OpticsParser::ProductData::youngsModulus);
+                     &OpticsParser::ProductData::youngsModulus)
+      .def_readwrite("pv_power_properties",
+                     &OpticsParser::ProductData::pvPowerProperties)
+      .def_readwrite("composition", &OpticsParser::ProductData::composition);
 
   py::class_<OpticsParser::CompositionInformation,
              std::shared_ptr<OpticsParser::CompositionInformation>>(
@@ -318,20 +348,6 @@ PYBIND11_MODULE(pywincalc, m) {
                      &OpticsParser::CompositionInformation::material)
       .def_readwrite("geometry",
                      &OpticsParser::CompositionInformation::geometry);
-
-  py::class_<OpticsParser::ComposedProductData, OpticsParser::ProductData,
-             std::shared_ptr<OpticsParser::ComposedProductData>>(
-      m, "ComposedProductData")
-      .def(py::init<OpticsParser::ProductData const &,
-                    std::shared_ptr<OpticsParser::CompositionInformation>>(),
-           py::arg("solid_layers"), py::arg("product_composition_data"))
-      .def(py::init<std::shared_ptr<OpticsParser::CompositionInformation>>(),
-           py::arg("product_composition_data"))
-      .def("composed_product",
-           &OpticsParser::ComposedProductData::composedProduct)
-      .def_readwrite(
-          "product_composition_data",
-          &OpticsParser::ComposedProductData::compositionInformation);
 
   py::enum_<window_standards::Spectrum_Type>(m, "SpectrumType",
                                              py::arithmetic())
@@ -604,9 +620,10 @@ PYBIND11_MODULE(pywincalc, m) {
       .def("wavelengths",
            &wincalc::Product_Data_Dual_Band_Optical::wavelengths);
 
-  py::class_<wincalc::Product_Data_Dual_Band_Optical_Hemispheric,
-             wincalc::Product_Data_Dual_Band_Optical,
-             std::shared_ptr<wincalc::Product_Data_Dual_Band_Optical_Hemispheric>>(
+  py::class_<
+      wincalc::Product_Data_Dual_Band_Optical_Hemispheric,
+      wincalc::Product_Data_Dual_Band_Optical,
+      std::shared_ptr<wincalc::Product_Data_Dual_Band_Optical_Hemispheric>>(
       m, "ProductDataOpticalDualBandHemispheric")
       .def(py::init<double, double, double, double, double, double, double,
                     double, double, std::optional<double>,
@@ -662,7 +679,7 @@ PYBIND11_MODULE(pywincalc, m) {
                     std::vector<std::vector<double>> const &,
                     std::vector<std::vector<double>> const &,
                     std::vector<std::vector<double>> const &,
-                    SingleLayerOptics::CBSDFHemisphere const &, double,
+                    SingleLayerOptics::BSDFHemisphere const &, double,
                     std::optional<double>, std::optional<double>,
                     std::optional<double>, std::optional<double>, double,
                     bool>(),
@@ -721,90 +738,89 @@ PYBIND11_MODULE(pywincalc, m) {
       .value("DIRECTIONAL_DIFFUSE",
              SingleLayerOptics::DistributionMethod::DirectionalDiffuse);
 
+  py::class_<wincalc::Venetian_Geometry,
+             std::shared_ptr<wincalc::Venetian_Geometry>>(m, "VenetianGeometry")
+      .def(py::init<double, double, double, double, int,
+                    SingleLayerOptics::DistributionMethod, bool>(),
+           py::arg("slat_tilt_degrees"), py::arg("slat_width_meters"),
+           py::arg("slat_spacing_meters"), py::arg("slat_curvature_meters"),
+           py::arg("number_slat_segments"),
+           py::arg("distribution_method") =
+               SingleLayerOptics::DistributionMethod::DirectionalDiffuse,
+           py::arg("is_horizontal") = true)
+      .def_readwrite("slat_tilt", &wincalc::Venetian_Geometry::slat_tilt)
+      .def_readwrite("slat_width", &wincalc::Venetian_Geometry::slat_width)
+      .def_readwrite("slat_spacing", &wincalc::Venetian_Geometry::slat_spacing)
+      .def_readwrite("slat_curvature",
+                     &wincalc::Venetian_Geometry::slat_curvature)
+      .def_readwrite("number_slat_segments",
+                     &wincalc::Venetian_Geometry::number_slat_segments)
+      .def_readwrite("distribution_method",
+                     &wincalc::Venetian_Geometry::distribution_method)
+      .def_readwrite("is_horizontal",
+                     &wincalc::Venetian_Geometry::is_horizontal);
+
   py::class_<wincalc::Product_Data_Optical_Venetian,
              wincalc::Product_Data_Optical_With_Material,
              std::shared_ptr<wincalc::Product_Data_Optical_Venetian>>(
       m, "ProductDataOpticalVenetian")
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
-                    double, double, double, double, int,
-                    SingleLayerOptics::DistributionMethod, bool>(),
-           py::arg("product_data_optical"), py::arg("slat_tilt_meters"),
-           py::arg("slat_width_meters"), py::arg("slat_spacing_meters"),
-           py::arg("slat_curvature_meters"), py::arg("numbers_slats"),
-           py::arg("distribution_method") =
-               SingleLayerOptics::DistributionMethod::DirectionalDiffuse,
-           py::arg("is_horizontal") = true)
-      .def_readwrite("slat_tilt",
-                     &wincalc::Product_Data_Optical_Venetian::slat_tilt)
-      .def_readwrite("slat_width",
-                     &wincalc::Product_Data_Optical_Venetian::slat_width)
-      .def_readwrite("slat_spacing",
-                     &wincalc::Product_Data_Optical_Venetian::slat_spacing)
-      .def_readwrite("slat_curvature",
-                     &wincalc::Product_Data_Optical_Venetian::slat_curvature)
-      .def_readwrite("number_slats",
-                     &wincalc::Product_Data_Optical_Venetian::number_slats)
-      .def_readwrite(
-          "distribution_method",
-          &wincalc::Product_Data_Optical_Venetian::distribution_method)
-      .def_readwrite(
-          "is_horizontal",
-          &wincalc::Product_Data_Optical_Venetian::is_horizontal);
+                    wincalc::Venetian_Geometry const &>(),
+           py::arg("product_data_optical"), py::arg("geometry"))
+      .def_readwrite("geometry",
+                     &wincalc::Product_Data_Optical_Venetian::geometry);
+
+  py::class_<wincalc::Woven_Geometry, std::shared_ptr<wincalc::Woven_Geometry>>(
+      m, "WovenGeometry")
+      .def(py::init<double, double, double>(), py::arg("thread_diamater"),
+           py::arg("thread_spacing"), py::arg("shade_thickness"))
+      .def_readwrite("thread_diameter",
+                     &wincalc::Woven_Geometry::thread_diameter)
+      .def_readwrite("thread_spacing", &wincalc::Woven_Geometry::thread_spacing)
+      .def_readwrite("shade_thickness",
+                     &wincalc::Woven_Geometry::shade_thickness);
 
   py::class_<wincalc::Product_Data_Optical_Woven_Shade,
              wincalc::Product_Data_Optical_With_Material,
              std::shared_ptr<wincalc::Product_Data_Optical_Woven_Shade>>(
       m, "ProductDataOpticalWovenShade")
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
-                    double, double, double>(),
-           py::arg("material_product_data_optical"), py::arg("thread_diamater"),
-           py::arg("thread_spacing"), py::arg("shade_thickness"))
-      .def_readwrite(
-          "thread_diameter",
-          &wincalc::Product_Data_Optical_Woven_Shade::thread_diameter)
-      .def_readwrite("thread_spacing",
-                     &wincalc::Product_Data_Optical_Woven_Shade::thread_spacing)
-      .def_readwrite(
-          "shade_thickness",
-          &wincalc::Product_Data_Optical_Woven_Shade::shade_thickness);
+                    wincalc::Woven_Geometry const &>(),
+           py::arg("material_product_data_optical"), py::arg("geometry"))
+      .def_readwrite("geometry",
+                     &wincalc::Product_Data_Optical_Woven_Shade::geometry);
+
+  py::class_<wincalc::Perforated_Geometry,
+             std::shared_ptr<wincalc::Perforated_Geometry>>
+      perforated_geometry(m, "PerforatedGeometry");
+
+  perforated_geometry
+      .def(py::init<double, double, double, double,
+                    wincalc::Perforated_Geometry::Type>(),
+           py::arg("spacing_x"), py::arg("spacing_y"), py::arg("dimension_x"),
+           py::arg("dimension_y"), py::arg("perforation_type"))
+      .def_readwrite("spacing_x", &wincalc::Perforated_Geometry::spacing_x)
+      .def_readwrite("spacing_y", &wincalc::Perforated_Geometry::spacing_y)
+      .def_readwrite("dimension_x", &wincalc::Perforated_Geometry::dimension_x)
+      .def_readwrite("dimension_y", &wincalc::Perforated_Geometry::dimension_y)
+      .def_readwrite("perforation_type",
+                     &wincalc::Perforated_Geometry::perforation_type);
+
+  py::enum_<wincalc::Perforated_Geometry::Type>(perforated_geometry, "Type")
+      .value("CIRCULAR", wincalc::Perforated_Geometry::Type::CIRCULAR)
+      .value("RECTANGULAR", wincalc::Perforated_Geometry::Type::RECTANGULAR)
+      .value("SQUARE", wincalc::Perforated_Geometry::Type::SQUARE);
 
   py::class_<wincalc::Product_Data_Optical_Perforated_Screen,
              wincalc::Product_Data_Optical_With_Material,
-             std::shared_ptr<wincalc::Product_Data_Optical_Perforated_Screen>>
-      product_data_optical_perforated_screen(
-          m, "ProductDataOpticalPerforatedScreen");
-
-  product_data_optical_perforated_screen
+             std::shared_ptr<wincalc::Product_Data_Optical_Perforated_Screen>>(
+      m, "ProductDataOpticalPerforatedScreen")
       .def(py::init<std::shared_ptr<wincalc::Product_Data_Optical> const &,
-                    double, double, double, double,
-                    wincalc::Product_Data_Optical_Perforated_Screen::Type>(),
-           py::arg("material_product_data_optical"), py::arg("spacing_x"),
-           py::arg("spacing_y"), py::arg("dimension_x"), py::arg("dimension_y"),
-           py::arg("perforation_type"))
+                    wincalc::Perforated_Geometry const &>(),
+           py::arg("material_product_data_optical"), py::arg("geometry"))
       .def_readwrite(
-          "spacing_x",
-          &wincalc::Product_Data_Optical_Perforated_Screen::spacing_x)
-      .def_readwrite(
-          "spacing_y",
-          &wincalc::Product_Data_Optical_Perforated_Screen::spacing_y)
-      .def_readwrite(
-          "dimension_x",
-          &wincalc::Product_Data_Optical_Perforated_Screen::dimension_x)
-      .def_readwrite(
-          "dimension_y",
-          &wincalc::Product_Data_Optical_Perforated_Screen::dimension_y)
-      .def_readwrite(
-          "perforation_type",
-          &wincalc::Product_Data_Optical_Perforated_Screen::perforation_type);
-
-  py::enum_<wincalc::Product_Data_Optical_Perforated_Screen::Type>(
-      product_data_optical_perforated_screen, "Type")
-      .value("CIRCULAR",
-             wincalc::Product_Data_Optical_Perforated_Screen::Type::CIRCULAR)
-      .value("RECTANGULAR",
-             wincalc::Product_Data_Optical_Perforated_Screen::Type::RECTANGULAR)
-      .value("SQUARE",
-             wincalc::Product_Data_Optical_Perforated_Screen::Type::SQUARE);
+          "geometry",
+          &wincalc::Product_Data_Optical_Perforated_Screen::geometry);
 
   py::class_<wincalc::Product_Data_Optical_Thermal>(
       m, "ProductDataOpticalAndThermal")
@@ -822,13 +838,12 @@ PYBIND11_MODULE(pywincalc, m) {
       .value("HALF", SingleLayerOptics::BSDFBasis::Half)
       .value("FULL", SingleLayerOptics::BSDFBasis::Full);
 
-  py::class_<SingleLayerOptics::CBSDFHemisphere>(m, "BSDFHemisphere")
+  py::class_<SingleLayerOptics::BSDFHemisphere>(m, "BSDFHemisphere")
       .def_static("create",
                   py::overload_cast<SingleLayerOptics::BSDFBasis>(
-                      &SingleLayerOptics::CBSDFHemisphere::create),
+                      &SingleLayerOptics::BSDFHemisphere::create),
                   py::arg("bsdf_basis"))
-      .def("get_directions",
-           &SingleLayerOptics::CBSDFHemisphere::getDirections);
+      .def("get_directions", &SingleLayerOptics::BSDFHemisphere::getDirections);
 
   py::enum_<Tarcog::ISO15099::System>(m, "TarcogSystemType", py::arithmetic())
       .value("U", Tarcog::ISO15099::System::Uvalue)
@@ -857,7 +872,7 @@ PYBIND11_MODULE(pywincalc, m) {
                     std::vector<wincalc::Product_Data_Optical_Thermal> const &,
                     std::vector<wincalc::Engine_Gap_Info> const &, double,
                     double, double, wincalc::Environments const &,
-                    std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
+                    std::optional<SingleLayerOptics::BSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
@@ -866,37 +881,36 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
-               std::optional<SingleLayerOptics::CBSDFHemisphere>(),
+               std::optional<SingleLayerOptics::BSDFHemisphere>(),
            py::arg("spectral_data_wavelength_range_method") =
                wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
            py::arg("number_visible_bands") = 5,
            py::arg("number_solar_bands") = 10)
-      .def(py::init<
-               window_standards::Optical_Standard const &,
-               std::vector<std::shared_ptr<OpticsParser::ProductData>> const &,
-               std::vector<wincalc::Engine_Gap_Info> const &, double, double,
-               double, wincalc::Environments const &,
-               std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
-               wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
-               int>(),
+      .def(py::init<window_standards::Optical_Standard const &,
+                    std::vector<OpticsParser::ProductData> const &,
+                    std::vector<wincalc::Engine_Gap_Info> const &, double,
+                    double, double, wincalc::Environments const &,
+                    std::optional<SingleLayerOptics::BSDFHemisphere> const &,
+                    wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
+                    int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
            py::arg("gap_layers") = std::vector<wincalc::Engine_Gap_Info>(),
            py::arg("width_meters") = 1.0, py::arg("height_meters") = 1.0,
            py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
-               std::optional<SingleLayerOptics::CBSDFHemisphere>(),
+               std::optional<SingleLayerOptics::BSDFHemisphere>(),
            py::arg("spectral_data_wavelength_range_method") =
                wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
            py::arg("number_visible_bands") = 5,
            py::arg("number_solar_bands") = 10)
       .def(py::init<window_standards::Optical_Standard const &,
                     std::vector<std::variant<
-                        std::shared_ptr<OpticsParser::ProductData>,
+                        OpticsParser::ProductData,
                         wincalc::Product_Data_Optical_Thermal>> const &,
                     std::vector<wincalc::Engine_Gap_Info> const &, double,
                     double, double, wincalc::Environments const &,
-                    std::optional<SingleLayerOptics::CBSDFHemisphere> const &,
+                    std::optional<SingleLayerOptics::BSDFHemisphere> const &,
                     wincalc::Spectal_Data_Wavelength_Range_Method const &, int,
                     int>(),
            py::arg("optical_standard"), py::arg("solid_layers"),
@@ -905,7 +919,7 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("tilt_degrees") = 90,
            py::arg("environment") = wincalc::nfrc_u_environments(),
            py::arg("bsdf_hemisphere") =
-               std::optional<SingleLayerOptics::CBSDFHemisphere>(),
+               std::optional<SingleLayerOptics::BSDFHemisphere>(),
            py::arg("spectral_data_wavelength_range_method") =
                wincalc::Spectal_Data_Wavelength_Range_Method::FULL,
            py::arg("number_visible_bands") = 5,
@@ -958,10 +972,11 @@ PYBIND11_MODULE(pywincalc, m) {
            py::arg("width_meters"))
       .def("set_tilt", &wincalc::Glazing_System::set_tilt,
            py::arg("tilt_degrees"))
-	  .def("flip_layer", &wincalc::Glazing_System::flip_layer,
-		   py::arg("layer_index"), py::arg("flipped"))
-	  .def("solid_layers",
-           py::overload_cast<std::vector<wincalc::Product_Data_Optical_Thermal> const &>(
+      .def("flip_layer", &wincalc::Glazing_System::flip_layer,
+           py::arg("layer_index"), py::arg("flipped"))
+      .def("solid_layers",
+           py::overload_cast<
+               std::vector<wincalc::Product_Data_Optical_Thermal> const &>(
                &wincalc::Glazing_System::solid_layers),
            py::arg("solid_layers"))
       .def("solid_layers",
@@ -1238,26 +1253,78 @@ PYBIND11_MODULE(pywincalc, m) {
       .def("set_frame_meeting_rail",
            &CMA::CMAWindowDualVisionVertical::setFrameMeetingRail)
       .def("set_dividers", &CMA::CMAWindowDualVisionVertical::setDividers);
-	  
-  py::class_<wincalc::ThermalIRResults>(m, "ThermalIRResults")
-      .def_readwrite("transmittance_front_diffuse_diffuse", &wincalc::ThermalIRResults::transmittance_front_diffuse_diffuse)
-      .def_readwrite("transmittance_back_diffuse_diffuse", &wincalc::ThermalIRResults::transmittance_back_diffuse_diffuse)
-	  .def_readwrite("emissivity_front_hemispheric", &wincalc::ThermalIRResults::emissivity_front_hemispheric)
-      .def_readwrite("emissivity_back_hemispheric", &wincalc::ThermalIRResults::emissivity_back_hemispheric);
 
-  m.def("calc_thermal_ir", &wincalc::calc_thermal_ir, py::arg("optical_standard"), py::arg("product_data"));
+  py::class_<wincalc::ThermalIRResults>(m, "ThermalIRResults")
+      .def_readwrite(
+          "transmittance_front_diffuse_diffuse",
+          &wincalc::ThermalIRResults::transmittance_front_diffuse_diffuse)
+      .def_readwrite(
+          "transmittance_back_diffuse_diffuse",
+          &wincalc::ThermalIRResults::transmittance_back_diffuse_diffuse)
+      .def_readwrite("emissivity_front_hemispheric",
+                     &wincalc::ThermalIRResults::emissivity_front_hemispheric)
+      .def_readwrite("emissivity_back_hemispheric",
+                     &wincalc::ThermalIRResults::emissivity_back_hemispheric);
+
+  m.def("calc_thermal_ir", &wincalc::calc_thermal_ir,
+        py::arg("optical_standard"), py::arg("product_data"));
 
   m.def("get_spacer_keff", &wincalc::get_spacer_keff,
         "Calculate the effective conductivity of a spacer from a THERM thmx "
         "file.");
-  m.def("get_cma_window_single_vision", &wincalc::get_cma_window_single_vision,
+  m.def("get_cma_window_single_vision",
+        py::overload_cast<thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &, double, double>(
+            &wincalc::get_cma_window_single_vision),
         "Get the CMA template for a single vision window.");
+  m.def(
+      "get_cma_window_single_vision",
+      py::overload_cast<
+          CMA::CMAFrame const &, CMA::CMAFrame const &, CMA::CMAFrame const &,
+          CMA::CMAFrame const &, double, double, double, double,
+          CMA::CMABestWorstUFactors const &, CMA::CMABestWorstUFactors const &>(
+          &wincalc::get_cma_window_single_vision),
+      "Get the CMA template for a single vision window.");
   m.def("get_cma_window_double_vision_vertical",
-        &wincalc::get_cma_window_double_vision_vertical,
+        py::overload_cast<thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &, double, double>(
+            &wincalc::get_cma_window_double_vision_vertical),
         "Get the CMA template for a double vision vertical window.");
+  m.def(
+      "get_cma_window_double_vision_vertical",
+      py::overload_cast<
+          CMA::CMAFrame const &, CMA::CMAFrame const &, CMA::CMAFrame const &,
+          CMA::CMAFrame const &, CMA::CMAFrame const &, CMA::CMAFrame const &,
+          CMA::CMAFrame const &, double, double, double, double,
+          CMA::CMABestWorstUFactors const &, CMA::CMABestWorstUFactors const &>(
+          &wincalc::get_cma_window_double_vision_vertical),
+      "Get the CMA template for a double vision vertical window.");
   m.def("get_cma_window_double_vision_horizontal",
-        &wincalc::get_cma_window_double_vision_horizontal,
+        py::overload_cast<thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &,
+                          thmxParser::ThmxFileContents const &, double, double>(
+            &wincalc::get_cma_window_double_vision_horizontal),
         "Get the CMA template for a double vision horizontal window.");
+  m.def(
+      "get_cma_window_double_vision_horizontal",
+      py::overload_cast<
+          CMA::CMAFrame const &, CMA::CMAFrame const &, CMA::CMAFrame const &,
+          CMA::CMAFrame const &, CMA::CMAFrame const &, CMA::CMAFrame const &,
+          CMA::CMAFrame const &, double, double, double, double,
+          CMA::CMABestWorstUFactors const &, CMA::CMABestWorstUFactors const &>(
+          &wincalc::get_cma_window_double_vision_horizontal),
+      "Get the CMA template for a double vision horizontal window.");
 
   py::class_<wincalc::CMAResult>(m, "CMAResult")
       .def_readwrite("u", &wincalc::CMAResult::u)
@@ -1265,4 +1332,80 @@ PYBIND11_MODULE(pywincalc, m) {
       .def_readwrite("vt", &wincalc::CMAResult::vt);
 
   m.def("calc_cma", &wincalc::calc_cma, "Get CMA results.");
+
+  py::enum_<SingleLayerOptics::BSDFDirection>(m, "BSDFDirection",
+                                              py::arithmetic())
+      .value("Incoming", SingleLayerOptics::BSDFDirection::Incoming)
+      .value("Outgoing", SingleLayerOptics::BSDFDirection::Outgoing);
+
+  py::enum_<FenestrationCommon::Side>(m, "Side", py::arithmetic())
+      .value("Front", FenestrationCommon::Side::Front)
+      .value("Back", FenestrationCommon::Side::Back);
+
+  py::enum_<FenestrationCommon::PropertySimple>(m, "PropertySimple",
+                                                py::arithmetic())
+      .value("T", FenestrationCommon::PropertySimple::T)
+      .value("R", FenestrationCommon::PropertySimple::R);
+
+  py::class_<FenestrationCommon::SquareMatrix>(m, "SquareMatrix")
+      .def(py::init<std::vector<std::vector<double>> const&>(), py::arg("input"))
+      .def("size", &FenestrationCommon::SquareMatrix::size)
+      .def("set_zeros", &FenestrationCommon::SquareMatrix::setZeros)
+      .def("set_identity", &FenestrationCommon::SquareMatrix::setIdentity)
+      .def("set_diagonal",
+           &FenestrationCommon::SquareMatrix::setDiagonal)
+      .def("make_upper_triangular", &FenestrationCommon::SquareMatrix::makeUpperTriangular)
+      .def("inverse", &FenestrationCommon::SquareMatrix::inverse)
+      .def("mmult_rows", &FenestrationCommon::SquareMatrix::mmultRows)
+      .def("get_matrix", &FenestrationCommon::SquareMatrix::getMatrix);
+	  
+  py::class_<SingleLayerOptics::BSDFDirections>(m, "BSDFDirections")
+      .def(py::init<>())
+      .def(py::init<std::vector<SingleLayerOptics::BSDFDefinition> const &,
+                    SingleLayerOptics::BSDFDirection>(),
+           py::arg("definitions"), py::arg("side"))
+      .def("lambda_vector", &SingleLayerOptics::BSDFDirections::lambdaVector)
+      .def("profile_angles", &SingleLayerOptics::BSDFDirections::profileAngles)
+      .def("lambda_matrix", &SingleLayerOptics::BSDFDirections::lambdaMatrix)
+      .def("get_nearest_beam_index",
+           &SingleLayerOptics::BSDFDirections::getNearestBeamIndex);
+
+  py::class_<SingleLayerOptics::BSDFIntegrator>(m, "BSDFIntegrator")
+      .def(py::init<SingleLayerOptics::BSDFDirections const &>(),
+           py::arg("directions"))
+      .def("get_matrix", &SingleLayerOptics::BSDFIntegrator::getMatrix)
+      .def("at", &SingleLayerOptics::BSDFIntegrator::at)
+      .def("set_matrices", &SingleLayerOptics::BSDFIntegrator::setMatrices)
+      .def(
+          "direct_direct",
+          py::overload_cast<FenestrationCommon::Side,
+                            FenestrationCommon::PropertySimple, double, double>(
+              &SingleLayerOptics::BSDFIntegrator::DirDir, py::const_))
+      .def("direct_direct",
+           py::overload_cast<FenestrationCommon::Side,
+                             FenestrationCommon::PropertySimple, size_t>(
+               &SingleLayerOptics::BSDFIntegrator::DirDir, py::const_))
+      .def("direct_hemispheric",
+           py::overload_cast<FenestrationCommon::Side,
+                             FenestrationCommon::PropertySimple>(
+               &SingleLayerOptics::BSDFIntegrator::DirHem))
+      .def(
+          "direct_hemispheric",
+          py::overload_cast<FenestrationCommon::Side,
+                            FenestrationCommon::PropertySimple, double, double>(
+              &SingleLayerOptics::BSDFIntegrator::DirHem))
+      .def("absorptance", py::overload_cast<FenestrationCommon::Side>(
+                              &SingleLayerOptics::BSDFIntegrator::Abs))
+      .def("absorptance",
+           py::overload_cast<FenestrationCommon::Side, double, double>(
+               &SingleLayerOptics::BSDFIntegrator::Abs))
+      .def("absorptance", py::overload_cast<FenestrationCommon::Side, size_t>(
+                              &SingleLayerOptics::BSDFIntegrator::Abs))
+      .def("diffuse_diffuse", &SingleLayerOptics::BSDFIntegrator::DiffDiff)
+      .def("absorptance_diffuse_diffuse",
+           &SingleLayerOptics::BSDFIntegrator::AbsDiffDiff)
+      .def("lambda_vector", &SingleLayerOptics::BSDFIntegrator::lambdaVector)
+      .def("lambda_matrix", &SingleLayerOptics::BSDFIntegrator::lambdaMatrix)
+      .def("get_nearest_beam_index",
+           &SingleLayerOptics::BSDFIntegrator::getNearestBeamIndex);
 }
