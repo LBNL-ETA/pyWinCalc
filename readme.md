@@ -73,7 +73,7 @@ Once the requirements have been installed this can be installed with pip by doin
 ` pip install git+https://github.com/LBNL-ETA/pyWinCalc.git `
 
 ### Windows
-Wheels have been provided for 32 and 64 bit versions of Python 2.7 and 3.7.  To install
+Wheels have been provided for 32 and 64 bit versions of current versions of Python 3.  To install
 
 ```
 git clone https://github.com/LBNL-ETA/pyWinCalc.git
