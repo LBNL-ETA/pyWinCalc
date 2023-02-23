@@ -1,9 +1,11 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.12)
 
 set( CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON )
 
 set( target_name pywincalc )
 project( ${target_name} )
+
+find_package (Python3 COMPONENTS Interpreter Development)
 
 set(JSON_BuildTests OFF CACHE BOOL "")
 set(BUILD_WinCalc_tests OFF CACHE BOOL "")
