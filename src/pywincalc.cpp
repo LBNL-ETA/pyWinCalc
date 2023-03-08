@@ -1438,6 +1438,17 @@ PYBIND11_MODULE(pywincalc, m) {
       .def("get_nearest_beam_index",
            &SingleLayerOptics::BSDFIntegrator::getNearestBeamIndex);
 
+  py::class_<EffectiveLayers::EffectiveOpenness>(m, "EffectiveOpenness")
+	  .def(py::init<double, double, double, double, double, double>(),
+		  py::arg("ah"), py::arg("al"), py::arg("ar"), py::arg("atop"), py::arg("abot"), py::arg("front_porosity"))
+	  .def("is_closed", &EffectiveLayers::EffectiveOpenness::isClosed)
+	  .def_readwrite("ah", &EffectiveLayers::EffectiveOpenness::Ah)
+	  .def_readwrite("al", &EffectiveLayers::EffectiveOpenness::Al)
+	  .def_readwrite("ar", &EffectiveLayers::EffectiveOpenness::Ar)
+	  .def_readwrite("atop", &EffectiveLayers::EffectiveOpenness::Atop)
+	  .def_readwrite("abot", &EffectiveLayers::EffectiveOpenness::Abot)
+	  .def_readwrite("front_porosity", &EffectiveLayers::EffectiveOpenness::FrontPorosity);
+
   py::class_<Tarcog::ISO15099::Layers>(m, "Layers")
       .def_static("solid", &Tarcog::ISO15099::Layers::solid,
                   "Factory method for creating a solid Tarcog layer",
