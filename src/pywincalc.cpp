@@ -1437,4 +1437,46 @@ PYBIND11_MODULE(pywincalc, m) {
       .def("lambda_matrix", &SingleLayerOptics::BSDFIntegrator::lambdaMatrix)
       .def("get_nearest_beam_index",
            &SingleLayerOptics::BSDFIntegrator::getNearestBeamIndex);
+
+  py::class_<Tarcog::ISO15099::Layers>(m, "Layers")
+      .def_static("solid", &Tarcog::ISO15099::Layers::solid,
+                  "Factory method for creating a solid Tarcog layer",
+                  py::arg("thickness"), py::arg("conductivity"),
+                  py::arg("frontEmissivity") = 0.84,
+                  py::arg("frontIRTransmittance") = 0.0,
+                  py::arg("backEmissivity") = 0.84,
+                  py::arg("backIRTransmittance") = 0.0)
+      .def_static("update_material_data",
+                  &Tarcog::ISO15099::Layers::updateMaterialData,
+                  "Static method for updating the material information for a "
+                  "solid Tarcog layer.",
+                  py::arg("layer"),
+                  py::arg("density") = Tarcog::MaterialConstants::GLASSDENSITY,
+                  py::arg("youngs_modulus") =
+                      Tarcog::DeflectionConstants::YOUNGSMODULUS)
+      .def_static("shading", &Tarcog::ISO15099::Layers::shading,
+                  "Factory function to create a Tarcog shading layer.",
+                  py::arg("thickness"), py::arg("conductivity"),
+                  py::arg("effective_openness") =
+                      EffectiveLayers::EffectiveOpenness(0, 0, 0, 0, 0, 0),
+                  py::arg("front_emissivity") = 0.84,
+                  py::arg("front_transmittance") = 0.0,
+                  py::arg("back_emissivity") = 0.84,
+                  py::arg("back_transmittance") = 0.0)
+      .def_static(
+          "gap",
+          py::overload_cast<double, double>(&Tarcog::ISO15099::Layers::gap),
+          "Factory function to create a Tarcog air gap", py::arg("thickness"),
+          py::arg("pressure") = 101325)
+      .def_static("gap",
+                  py::overload_cast<double, Gases::CGas const &, double>(
+                      &Tarcog::ISO15099::Layers::gap),
+                  "Factory function to create a Tarcog gap from a gas",
+                  py::arg("thickness"), py::arg("gas"),
+                  py::arg("pressure") = 101325)
+      .def_static("add_circular_pillar",
+                  &Tarcog::ISO15099::Layers::addCircularPillar,
+                  "Static function to add a curcular pillar to a Tarcog gap",
+                  py::arg("gap"), py::arg("conductivity"), py::arg("spacing"),
+                  py::arg("radius"));
 }
