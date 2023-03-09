@@ -22,24 +22,16 @@ pv = pywincalc.parse_json_file(pv_path)
 # Create a list of solid layers in order from outside to inside
 solid_layers = [pv]
 
-# Create a glazing system using the NFRC U environment in order to get NFRC U results
-# U and SHGC can be caculated for any given environment but in order to get results
-# The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
-# defaults to using the NFRC U environments
-glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard, 
-                                                       solid_layers=solid_layers, 
-													   width_meters=width, 
-													   height_meters=height)
-													   
-# If SHGC results for the NFRC SHGC environment are needed create a glazing system with that environment
-glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                          solid_layers=solid_layers,
-                                                          width_meters=width,
-                                                          height_meters=height,
-                                                          environment=pywincalc.nfrc_shgc_environments())
+# Create a glazing system.  This only shows an example of getting one result from a glazing system
+# created using default environmental conditions.
+#
+# For more possible results see all_NFRC_results.py
+#
+# For more on environmental conditions see custom_environmental_conditions.py
+glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                         solid_layers=solid_layers,
+                                         width_meters=width,
+                                         height_meters=height)
 
-results_name = "Results for a single layer system with integrated PV"
-print("*" * len(results_name))
-print(results_name)
-print("*" * len(results_name))
-results_printer.print_results(glazing_system_u_environment, glazing_system_shgc_environment)
+u_value = glazing_system.u()
+print("U-value for a single layer system with integrated PV: {v}".format(v=u_value))
