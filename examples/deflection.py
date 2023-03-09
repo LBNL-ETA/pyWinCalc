@@ -22,18 +22,10 @@ clear_6 = pywincalc.parse_optics_file(clear_6_path)
 # that was just loaded and the middle is the same glass as the single clear example above
 solid_layers = [clear_6, clear_3, clear_6]
 
-# Solid layers must be separated by gap layers
-# Currently there are four pre-defined gases available: Air, Argon, Krypton, and Xenon
-# Vacuum gaps are not yet supported
-# To create a gap with 100% of a predefined gas create a Gap_Data object with the gas type
-# and thickness in meters
-gap_1 = pywincalc.Gap(pywincalc.PredefinedGasType.AIR, .0127)  # .0127 is gap thickness in meters
-
-# To create a mixture of predefined gases first create the components with the gas type and portion of the mixture
-# The following creates a gas that is 70% Krypton and 30% Xenon and 2cm thick
-gap_2_component_1 = pywincalc.PredefinedGasMixtureComponent(pywincalc.PredefinedGasType.KRYPTON, .7)
-gap_2_component_2 = pywincalc.PredefinedGasMixtureComponent(pywincalc.PredefinedGasType.XENON, .3)
-gap_2 = pywincalc.Gap([gap_2_component_1, gap_2_component_2], .02)  # .02 is gap thickness in meters
+# Solid layers must be separated by gap layers.  This example uses two air gaps
+# See gases.py in examples for more on creating gases
+gap_1 = pywincalc.Layers.gap(thickness=.0127)
+gap_2 = pywincalc.Layers.gap(thickness=.02)
 
 # Put all gaps into a list ordered from outside to inside
 # Note:  This is only specifying gaps between solid layers
@@ -160,17 +152,7 @@ custom_outside_env = pywincalc.Environment(air_temperature=air_temperature_outsi
 
 custom_env = pywincalc.Environments(outside=custom_outside_env, inside=custom_inside_env)
 
-# changing environmental conditions currently requires creating a new glazing system
-# note:  this resets any changes made such as if deflection is enabled or applied load is set.
-# if this is a problem or you think it would be better to be able to change environmental conditions
-# like tilt and load let us know.
-
-glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard, solid_layers=solid_layers, gap_layers=gaps,
-                                         width_meters=width, height_meters=height, tilt_degrees=tilt,
-                                         environment=custom_env)
-
-glazing_system.enable_deflection(True)
-glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=1013200)
+glazing_system.environments(custom_env)
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
@@ -194,11 +176,8 @@ custom_env_2 = pywincalc.nfrc_shgc_environments()
 custom_env_2.outside.pressure += 500
 custom_env_2.inside.pressure -= 200
 
-glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard, solid_layers=solid_layers, gap_layers=gaps,
-                                         width_meters=width, height_meters=height, tilt_degrees=tilt,
-                                         environment=custom_env_2)
+glazing_system.environments(custom_env_2)
 
-glazing_system.enable_deflection(True)
 glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=1013200)
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 

@@ -18,26 +18,17 @@ bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.FULL)
 bsdf_path = "products/2011-SA1.XML"
 bsdf_shade = pywincalc.parse_bsdf_xml_file(bsdf_path)
 
-# Create a glazing system using the NFRC U environment in order to get NFRC U results
-# U and SHGC can be caculated for any given environment but in order to get results
-# The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
-# defaults to using the NFRC U environments
-glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                       solid_layers=[bsdf_shade],
-                                                       width_meters=glazing_system_width,
-                                                       height_meters=glazing_system_height,
-                                                       environment=pywincalc.nfrc_u_environments(),
-                                                       bsdf_hemisphere=bsdf_hemisphere)
+# Create a glazing system.  This only shows an example of getting one result from a glazing system
+# created using default environmental conditions.
+#
+# For more possible results see all_NFRC_results.py
+#
+# For more on environmental conditions see custom_environmental_conditions.py
+glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard,
+                                         solid_layers=[bsdf_shade],
+                                         width_meters=glazing_system_width,
+                                         height_meters=glazing_system_height,
+                                         bsdf_hemisphere=bsdf_hemisphere)
 
-glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                          solid_layers=[bsdf_shade],
-                                                          width_meters=glazing_system_width,
-                                                          height_meters=glazing_system_height,
-                                                          environment=pywincalc.nfrc_shgc_environments(),
-                                                          bsdf_hemisphere=bsdf_hemisphere)
-
-results_name = "Results for a BSDF shade"
-print("*" * len(results_name))
-print(results_name)
-print("*" * len(results_name))
-results_printer.print_results(glazing_system_u_environment, glazing_system_shgc_environment)
+u_value = glazing_system.u()
+print("U-value for a single layer system with BSDF shade: {v}".format(v=u_value))
