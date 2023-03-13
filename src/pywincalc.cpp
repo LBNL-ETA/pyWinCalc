@@ -1037,6 +1037,57 @@ PYBIND11_MODULE(pywincalc, m) {
   m.def("parse_thmx_string", &thmxParser::parseString,
         "Parse THERM thmx format from a string");
 
+  m.def("create_venetian_blind",
+        py::overload_cast<wincalc::Venetian_Geometry const &,
+                          OpticsParser::ProductData const &>(
+            &wincalc::create_venetian_blind),
+        py::arg("geometry"), py::arg("material"),
+        "Create a venetian blind from a geometry and parsed material.");
+
+  m.def("create_venetian_blind",
+        py::overload_cast<wincalc::Venetian_Geometry const &,
+                          std::shared_ptr<wincalc::Product_Data_Optical>,
+                          std::shared_ptr<wincalc::Product_Data_Thermal>>(
+            &wincalc::create_venetian_blind),
+        py::arg("geometry"), py::arg(" material_data_optical"),
+        py::arg("material_data_thermal"),
+        "Create a venetian blind from a geometry and material optical and "
+        "thermal data.");
+
+  m.def("create_woven_shade",
+        py::overload_cast<wincalc::Woven_Geometry const &,
+                          OpticsParser::ProductData const &>(
+            &wincalc::create_woven_shade),
+        py::arg("geometry"), py::arg("material"),
+        "Create a woven shade from a geometry and parsed material.");
+
+  m.def("create_woven_shade",
+        py::overload_cast<wincalc::Woven_Geometry const &,
+                          std::shared_ptr<wincalc::Product_Data_Optical>,
+                          std::shared_ptr<wincalc::Product_Data_Thermal>>(
+            &wincalc::create_woven_shade),
+        py::arg("geometry"), py::arg(" material_data_optical"),
+        py::arg("material_data_thermal"),
+        "Create a woven shade from a geometry and material optical and "
+        "thermal data.");
+
+  m.def("create_perforated_screen",
+	  py::overload_cast<wincalc::Perforated_Geometry const &,
+	  OpticsParser::ProductData const &>(
+		  &wincalc::create_perforated_screen),
+	  py::arg("geometry"), py::arg("material"),
+	  "Create a perforated screen from a geometry and parsed material.");
+
+  m.def("create_perforated_screen",
+	  py::overload_cast<wincalc::Perforated_Geometry const &,
+	  std::shared_ptr<wincalc::Product_Data_Optical>,
+	  std::shared_ptr<wincalc::Product_Data_Thermal>>(
+		  &wincalc::create_perforated_screen),
+	  py::arg("geometry"), py::arg(" material_data_optical"),
+	  py::arg("material_data_thermal"),
+	  "Create a perforated screen from a geometry and material optical and "
+	  "thermal data.");
+
   py::class_<thmxParser::MeshParameters>(m, "ThmxMeshParameters")
       .def_readwrite("quad_tree_mesh_level",
                      &thmxParser::MeshParameters::quadTreeMeshLevel)
@@ -1439,15 +1490,17 @@ PYBIND11_MODULE(pywincalc, m) {
            &SingleLayerOptics::BSDFIntegrator::getNearestBeamIndex);
 
   py::class_<EffectiveLayers::EffectiveOpenness>(m, "EffectiveOpenness")
-	  .def(py::init<double, double, double, double, double, double>(),
-		  py::arg("ah"), py::arg("al"), py::arg("ar"), py::arg("atop"), py::arg("abot"), py::arg("front_porosity"))
-	  .def("is_closed", &EffectiveLayers::EffectiveOpenness::isClosed)
-	  .def_readwrite("ah", &EffectiveLayers::EffectiveOpenness::Ah)
-	  .def_readwrite("al", &EffectiveLayers::EffectiveOpenness::Al)
-	  .def_readwrite("ar", &EffectiveLayers::EffectiveOpenness::Ar)
-	  .def_readwrite("atop", &EffectiveLayers::EffectiveOpenness::Atop)
-	  .def_readwrite("abot", &EffectiveLayers::EffectiveOpenness::Abot)
-	  .def_readwrite("front_porosity", &EffectiveLayers::EffectiveOpenness::FrontPorosity);
+      .def(py::init<double, double, double, double, double, double>(),
+           py::arg("ah"), py::arg("al"), py::arg("ar"), py::arg("atop"),
+           py::arg("abot"), py::arg("front_porosity"))
+      .def("is_closed", &EffectiveLayers::EffectiveOpenness::isClosed)
+      .def_readwrite("ah", &EffectiveLayers::EffectiveOpenness::Ah)
+      .def_readwrite("al", &EffectiveLayers::EffectiveOpenness::Al)
+      .def_readwrite("ar", &EffectiveLayers::EffectiveOpenness::Ar)
+      .def_readwrite("atop", &EffectiveLayers::EffectiveOpenness::Atop)
+      .def_readwrite("abot", &EffectiveLayers::EffectiveOpenness::Abot)
+      .def_readwrite("front_porosity",
+                     &EffectiveLayers::EffectiveOpenness::FrontPorosity);
 
   py::class_<Tarcog::ISO15099::Layers>(m, "Layers")
       .def_static("solid", &Tarcog::ISO15099::Layers::solid,
