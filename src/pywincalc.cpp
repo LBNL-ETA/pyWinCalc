@@ -762,10 +762,10 @@ PYBIND11_MODULE(pywincalc, m) {
                     SingleLayerOptics::DistributionMethod, bool>(),
            py::arg("slat_tilt_degrees"), py::arg("slat_width_meters"),
            py::arg("slat_spacing_meters"), py::arg("slat_curvature_meters"),
-           py::arg("number_slat_segments"),
+           py::arg("is_horizontal") = true,
            py::arg("distribution_method") =
                SingleLayerOptics::DistributionMethod::DirectionalDiffuse,
-           py::arg("is_horizontal") = true)
+           py::arg("number_slat_segments") = 5)
       .def_readwrite("slat_tilt", &wincalc::Venetian_Geometry::slat_tilt)
       .def_readwrite("slat_width", &wincalc::Venetian_Geometry::slat_width)
       .def_readwrite("slat_spacing", &wincalc::Venetian_Geometry::slat_spacing)
@@ -1072,21 +1072,21 @@ PYBIND11_MODULE(pywincalc, m) {
         "thermal data.");
 
   m.def("create_perforated_screen",
-	  py::overload_cast<wincalc::Perforated_Geometry const &,
-	  OpticsParser::ProductData const &>(
-		  &wincalc::create_perforated_screen),
-	  py::arg("geometry"), py::arg("material"),
-	  "Create a perforated screen from a geometry and parsed material.");
+        py::overload_cast<wincalc::Perforated_Geometry const &,
+                          OpticsParser::ProductData const &>(
+            &wincalc::create_perforated_screen),
+        py::arg("geometry"), py::arg("material"),
+        "Create a perforated screen from a geometry and parsed material.");
 
   m.def("create_perforated_screen",
-	  py::overload_cast<wincalc::Perforated_Geometry const &,
-	  std::shared_ptr<wincalc::Product_Data_Optical>,
-	  std::shared_ptr<wincalc::Product_Data_Thermal>>(
-		  &wincalc::create_perforated_screen),
-	  py::arg("geometry"), py::arg(" material_data_optical"),
-	  py::arg("material_data_thermal"),
-	  "Create a perforated screen from a geometry and material optical and "
-	  "thermal data.");
+        py::overload_cast<wincalc::Perforated_Geometry const &,
+                          std::shared_ptr<wincalc::Product_Data_Optical>,
+                          std::shared_ptr<wincalc::Product_Data_Thermal>>(
+            &wincalc::create_perforated_screen),
+        py::arg("geometry"), py::arg(" material_data_optical"),
+        py::arg("material_data_thermal"),
+        "Create a perforated screen from a geometry and material optical and "
+        "thermal data.");
 
   py::class_<thmxParser::MeshParameters>(m, "ThmxMeshParameters")
       .def_readwrite("quad_tree_mesh_level",
