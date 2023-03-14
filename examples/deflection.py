@@ -44,7 +44,7 @@ glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard, soli
 glazing_system.enable_deflection(True)
 
 # Set initial temperature and pressure.  Values just chosen for example purposes
-glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=1013200)
+glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=101320)
 
 # Density can be calculated using either U or SHGC TARCOG system types.  Just using SHGC for this
 # example for simplicity.
@@ -62,7 +62,7 @@ print("\tVT: {val}".format(val=visible_results.system_results.front.transmittanc
 
 
 # Change initial temperature and pressure.  Values just chosen for example purposes
-glazing_system.set_deflection_properties(temperature_initial=290, pressure_initial=1014500)
+glazing_system.set_deflection_properties(temperature_initial=290, pressure_initial=101450)
 print("")
 print("Changed initial temperature and pressure")
 print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
@@ -178,7 +178,7 @@ custom_env_2.inside.pressure -= 200
 
 glazing_system.environments(custom_env_2)
 
-glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=1013200)
+glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=101320)
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
@@ -208,7 +208,7 @@ glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard, soli
                                          environment=custom_env_2)
 
 glazing_system.enable_deflection(True)
-glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=1013200)
+glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=101320)
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
