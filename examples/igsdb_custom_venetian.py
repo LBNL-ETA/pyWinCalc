@@ -35,20 +35,15 @@ number_segments = 5  # The default is 5.  Do not change unless there is a reason
 # Currently the only modeling parameter for venetian layers is the distribution method.
 # That defaults to directional diffuse but can be changed to uniform-diffuse on a per-layer basis
 distribution_method = pywincalc.DistributionMethodType.UNIFORM_DIFFUSE
-geometry = pywincalc.VenetianGeometry(slat_width_meters=slat_width, 
-                                      slat_spacing_meters=slat_spacing, 
+geometry = pywincalc.VenetianGeometry(slat_width_meters=slat_width,
+                                      slat_spacing_meters=slat_spacing,
                                       slat_curvature_meters=slat_curvature,
-                                      slat_tilt_degrees=slat_tilt, 
-                                      number_slat_segments=number_segments, 
+                                      slat_tilt_degrees=slat_tilt,
+                                      number_slat_segments=number_segments,
                                       distribution_method=distribution_method)
 
-# Convert the parsed shade material data into a solid layer.  Without doing
-# anything else this would be treated as a solid sheet of the material.
-venetian_layer = pywincalc.convert_to_solid_layer(shade_material)
-# The easiest way to transform it into a Venetian blind is to replace the optical portion
-# with a ProductDataOpticalVenetian object made from the material's optical data
-# and the user-defined geometry created above.
-venetian_layer.optical_data = pywincalc.ProductDataOpticalVenetian(venetian_layer.optical_data, geometry)
+# Create a layer from the geometry and material
+venetian_layer = pywincalc.create_venetian_blind(geometry=geometry, material=shade_material)
 
 # If there are any side gaps in the shade those can be set in the thermal part of the solid layer.
 # In this case the left and right openings would apply if the length of the slats was less than the width
@@ -56,10 +51,10 @@ venetian_layer.optical_data = pywincalc.ProductDataOpticalVenetian(venetian_laye
 # sit flush with the top and bottom of the glazing system when the slats are closed.
 # Do not take slat angle into account for these values.
 # These values are for example purposes only
-venetian_layer.thermal_data.opening_top = .01 # 10mm top gap
-venetian_layer.thermal_data.opening_bottom = .01 # 10mm bottom gap
-venetian_layer.thermal_data.opening_left = .02 # 20mm left gap
-venetian_layer.thermal_data.opening_right = .02 # 20mm right gap
+venetian_layer.thermal_data.opening_top = .01  # 10mm top gap
+venetian_layer.thermal_data.opening_bottom = .01  # 10mm bottom gap
+venetian_layer.thermal_data.opening_left = .02  # 20mm left gap
+venetian_layer.thermal_data.opening_right = .02  # 20mm right gap
 
 # Create a glazing system.  This only shows an example of getting one result from a glazing system
 # created using default environmental conditions.
@@ -68,11 +63,11 @@ venetian_layer.thermal_data.opening_right = .02 # 20mm right gap
 #
 # For more on environmental conditions see custom_environmental_conditions.py
 glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                       solid_layers=[venetian_layer],
-                                                       gap_layers=[],
-                                                       width_meters=glazing_system_width,
-                                                       height_meters=glazing_system_height,
-                                                       bsdf_hemisphere=bsdf_hemisphere)
+                                         solid_layers=[venetian_layer],
+                                         gap_layers=[],
+                                         width_meters=glazing_system_width,
+                                         height_meters=glazing_system_height,
+                                         bsdf_hemisphere=bsdf_hemisphere)
 
 u_value = glazing_system.u()
 print(
