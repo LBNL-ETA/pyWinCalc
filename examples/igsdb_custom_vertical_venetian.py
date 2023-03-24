@@ -1,7 +1,6 @@
 import pywincalc
 import requests
 from igsdb_interaction import url_single_product, headers
-import results_printer
 
 # Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
 # Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
@@ -32,12 +31,12 @@ slat_width = .020  # width of 20 mm
 slat_spacing = .050  # spacing of 50 mm
 slat_curvature = .025  # curvature of 25 mm
 slat_tilt = 15  # 15 degree tilt
-number_segments = 5  # The default is 5.  Do not change unless there is a reason to.  This should usually be omitted but is shown here for completeness
+number_segments = 5  # The default is 5.  Do not change unless there is a reason to.
 # Currently the only modeling parameter for venetian layers is the distribution method.
 # That defaults to directional diffuse but can be changed to uniform-diffuse on a per-layer basis
 distribution_method = pywincalc.DistributionMethodType.UNIFORM_DIFFUSE
 
-# To make the Venetian vertical set is_horizonatl = False when creating the geometry
+# To make the Venetian vertical set is_horizontal = False when creating the geometry
 geometry = pywincalc.VenetianGeometry(slat_width_meters=slat_width,
                                       slat_spacing_meters=slat_spacing,
                                       slat_curvature_meters=slat_curvature,
@@ -46,18 +45,13 @@ geometry = pywincalc.VenetianGeometry(slat_width_meters=slat_width,
                                       distribution_method=distribution_method,
                                       is_horizontal=False)
 
-# Convert the parsed shade material data into a solid layer.  Without doing
-# anything else this would be treated as a solid sheet of the material.
-venetian_layer = pywincalc.convert_to_solid_layer(shade_material)
-# The easiest way to transform it into a Venetian blind is to replace the optical portion
-# with a ProductDataOpticalVenetian object made from the material's optical data
-# and the user-defined geometry created above.
-venetian_layer.optical_data = pywincalc.ProductDataOpticalVenetian(venetian_layer.optical_data, geometry)
+# Create a layer from the geometry and material
+venetian_layer = pywincalc.create_venetian_blind(geometry=geometry, material=shade_material)
 
 # If there are any side gaps in the shade those can be set in the thermal part of the solid layer.
-# In this case the top and bottom openings would apply if the length of the slats was less than the height
-# of the glazing system and the left and right openings would apply if the left and  slats did not sit flush
-# with the sides of the glazing system when the slats are closed.  D
+# In this case the left and right openings would apply if the length of the slats was less than the width
+# of the glazing system and the top and bottom openings would apply if the top and bottom slats did not
+# sit flush with the top and bottom of the glazing system when the slats are closed.
 # Do not take slat angle into account for these values.
 # These values are for example purposes only
 venetian_layer.thermal_data.opening_top = .01  # 10mm top gap
@@ -80,5 +74,4 @@ glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard,
 
 u_value = glazing_system.u()
 print(
-    "U-value for a custom vertical Venetian blind made from a material downloaded from igsdb.lbl.glv: {v}".format(
-        v=u_value))
+    "U-value for a custom Venetian blind made from a material downloaded from igsdb.lbl.glv: {v}".format(v=u_value))

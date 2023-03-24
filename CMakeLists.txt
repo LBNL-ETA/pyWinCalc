@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 
 set( CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON )
 
-set( target_name pywincalc )
+set( target_name _pywincalc )
 project( ${target_name} )
 
 set(JSON_BuildTests OFF CACHE BOOL "")

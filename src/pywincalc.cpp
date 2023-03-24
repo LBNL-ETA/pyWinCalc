@@ -149,7 +149,7 @@ template <class Product_Data_N_Band_Optical_Base =
 };
 #endif
 
-PYBIND11_MODULE(pywincalc, m) {
+PYBIND11_MODULE(_pywincalc, m) {
   m.doc() = "Python bindings for WinCalc";
 
   py::enum_<Gases::GasDef>(m, "PredefinedGasType", py::arithmetic())
@@ -1019,7 +1019,7 @@ PYBIND11_MODULE(pywincalc, m) {
         "Convert a list of product data into a solid layer that can be used in "
         "glazing systems.");
 
-  m.def("load_standard",
+  m.def("_load_standard",
         py::overload_cast<std::string const &>(
             &window_standards::load_optical_standard),
         "Load standard from .std file");

@@ -1,0 +1,6 @@
+include pywincalc/standards/*.dsp
+include pywincalc/standards/*.loc
+include pywincalc/standards/*.scc
+include pywincalc/standards/*.ssp
+include pywincalc/standards/*.std
+include pywincalc/standards/*.wvl
