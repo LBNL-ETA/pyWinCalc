@@ -1049,7 +1049,7 @@ PYBIND11_MODULE(_pywincalc, m) {
                           std::shared_ptr<wincalc::Product_Data_Optical>,
                           std::shared_ptr<wincalc::Product_Data_Thermal>>(
             &wincalc::create_venetian_blind),
-        py::arg("geometry"), py::arg(" material_data_optical"),
+        py::arg("geometry"), py::arg("material_data_optical"),
         py::arg("material_data_thermal"),
         "Create a venetian blind from a geometry and material optical and "
         "thermal data.");
@@ -1066,7 +1066,7 @@ PYBIND11_MODULE(_pywincalc, m) {
                           std::shared_ptr<wincalc::Product_Data_Optical>,
                           std::shared_ptr<wincalc::Product_Data_Thermal>>(
             &wincalc::create_woven_shade),
-        py::arg("geometry"), py::arg(" material_data_optical"),
+        py::arg("geometry"), py::arg("material_data_optical"),
         py::arg("material_data_thermal"),
         "Create a woven shade from a geometry and material optical and "
         "thermal data.");
@@ -1083,7 +1083,7 @@ PYBIND11_MODULE(_pywincalc, m) {
                           std::shared_ptr<wincalc::Product_Data_Optical>,
                           std::shared_ptr<wincalc::Product_Data_Thermal>>(
             &wincalc::create_perforated_screen),
-        py::arg("geometry"), py::arg(" material_data_optical"),
+        py::arg("geometry"), py::arg("material_data_optical"),
         py::arg("material_data_thermal"),
         "Create a perforated screen from a geometry and material optical and "
         "thermal data.");
