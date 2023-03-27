@@ -1041,6 +1041,9 @@ PYBIND11_MODULE(wincalcbindings, m) {
   m.def("parse_thmx_string", &thmxParser::parseString,
         "Parse THERM thmx format from a string");
 
+  m.def("create_gas", &wincalc::create_gas, py::arg("components"),
+        "Create a gas mixture from components: a list of pairs where the first in each item is the percent of the total and the second is the gas.");
+
   m.def("create_venetian_blind",
         py::overload_cast<wincalc::Venetian_Geometry const &,
                           OpticsParser::ProductData const &>(
