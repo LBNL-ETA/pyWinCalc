@@ -1,12 +1,11 @@
 from pathlib import Path
-from _pywincalc import *
-from _pywincalc import _load_standard
+from wincalcbindings import *
+from wincalcbindings import _load_standard
 
 standard_path = Path(__file__).parent / "standards"
 
-
-def load_standard(standard_file=str(standard_path / "W5_NFRC_2003.std")):
-    return _load_standard(standard_file)
+def load_standard(standard_file=standard_path / "W5_NFRC_2003.std"):
+    return _load_standard(str(standard_file))
 
 
 def create_glazing_system(solid_layers, gap_layers=[], optical_standard=load_standard(), width_meters=1.0,

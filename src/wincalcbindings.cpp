@@ -149,7 +149,7 @@ template <class Product_Data_N_Band_Optical_Base =
 };
 #endif
 
-PYBIND11_MODULE(_pywincalc, m) {
+PYBIND11_MODULE(wincalcbindings, m) {
   m.doc() = "Python bindings for WinCalc";
 
   py::enum_<Gases::GasDef>(m, "PredefinedGasType", py::arithmetic())
@@ -185,6 +185,10 @@ PYBIND11_MODULE(_pywincalc, m) {
       .def("set_temperature_and_pressure",
            &Gases::CGas::setTemperatureAndPressure)
       .def("gas_items", &Gases::CGas::gasItems);
+
+  py::class_<Gases::Gas>(m, "PredefinedGasConverter")
+	  .def_static("instance", &Gases::Gas::instance)
+	  .def("get", &Gases::Gas::get);
 
   py::class_<Tarcog::ISO15099::CIGUGapLayer,
              std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer>>(m, "IGUGapLayer")
@@ -758,8 +762,8 @@ PYBIND11_MODULE(_pywincalc, m) {
 
   py::class_<wincalc::Venetian_Geometry,
              std::shared_ptr<wincalc::Venetian_Geometry>>(m, "VenetianGeometry")
-      .def(py::init<double, double, double, double, int,
-                    SingleLayerOptics::DistributionMethod, bool>(),
+      .def(py::init<double, double, double, double, bool,
+                    SingleLayerOptics::DistributionMethod, int>(),
            py::arg("slat_tilt_degrees"), py::arg("slat_width_meters"),
            py::arg("slat_spacing_meters"), py::arg("slat_curvature_meters"),
            py::arg("is_horizontal") = true,
@@ -1050,7 +1054,7 @@ PYBIND11_MODULE(_pywincalc, m) {
                           std::shared_ptr<wincalc::Product_Data_Thermal>>(
             &wincalc::create_venetian_blind),
         py::arg("geometry"), py::arg("material_data_optical"),
-        py::arg("material_data_thermal"),
+        py::arg("material_data_thermal").none(true),
         "Create a venetian blind from a geometry and material optical and "
         "thermal data.");
 
@@ -1067,7 +1071,7 @@ PYBIND11_MODULE(_pywincalc, m) {
                           std::shared_ptr<wincalc::Product_Data_Thermal>>(
             &wincalc::create_woven_shade),
         py::arg("geometry"), py::arg("material_data_optical"),
-        py::arg("material_data_thermal"),
+        py::arg("material_data_thermal").none(true),
         "Create a woven shade from a geometry and material optical and "
         "thermal data.");
 
@@ -1084,7 +1088,7 @@ PYBIND11_MODULE(_pywincalc, m) {
                           std::shared_ptr<wincalc::Product_Data_Thermal>>(
             &wincalc::create_perforated_screen),
         py::arg("geometry"), py::arg("material_data_optical"),
-        py::arg("material_data_thermal"),
+        py::arg("material_data_thermal").none(true),
         "Create a perforated screen from a geometry and material optical and "
         "thermal data.");
 
