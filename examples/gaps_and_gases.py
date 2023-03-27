@@ -9,14 +9,14 @@ gap_1 = pywincalc.Layers.gap(thickness=.0127)  # .0127 is gap thickness in meter
 # and the second item is either one of the predefined gas types or a user-defined GasData object
 
 # Here a gas consisting of 100% Argon is created
-gas_2 = pywincalc.Gas([[1.0, pywincalc.PredefinedGasType.ARGON]])
+gas_2 = pywincalc.create_gas([[1.0, pywincalc.PredefinedGasType.ARGON]])
 # Create a gap from this gas by passing it to the gap function.
 # In this case the gap is given a different pressure as well
 gap_2 = pywincalc.Layers.gap(thickness=.0127, gas=gas_2, pressure=101300)
 
 # Gaps may also contain a mixture of gases.
 # Here is a gas that is 70% Krypton and 30% Xenon
-gas_3 = pywincalc.Gas([[0.7, pywincalc.PredefinedGasType.KRYPTON], [0.3, pywincalc.PredefinedGasType.XENON]])
+gas_3 = pywincalc.create_gas([[0.7, pywincalc.PredefinedGasType.KRYPTON], [0.3, pywincalc.PredefinedGasType.XENON]])
 # Create a gap from this gas the same as above.  Here the pressure is omitted so it uses the default 101325
 gap_3 = pywincalc.Layers.gap(thickness=.0127, gas=gas_3)
 
@@ -50,18 +50,15 @@ sulfur_hexafluoride = pywincalc.GasData("sulfur_hexafluoride",
                                         viscosity=sulfur_hexafluoride_viscosity_coefficients)
 
 # Once a custom gas is created it can either be used by itself
-gas_4 = pywincalc.Gas([[1.0, sulfur_hexafluoride]])
+gas_4 = pywincalc.create_gas([[1.0, sulfur_hexafluoride]])
 gap_4 = pywincalc.Layers.gap(thickness=.003, gas=gas_4)  # 3mm thick gap filled with sulfur hexafluoride
 
 # Or it can be mixed with either other predefined or custom gases
-# The following creates a gas that is 80% sulfur hexafluoride, 15% Argonm and 5% Air
-# Currently mixing predefined gases and custom gases directly is not supported, the predefined
-# gases need to be converted first using PredefinedGasConverter
-gas_converter = pywincalc.PredefinedGasConverter.instance()
-gas_5 = pywincalc.Gas(
+# The following creates a gas that is 80% sulfur hexafluoride, 15% Argon, and 5% Air
+gas_5 = pywincalc.create_gas(
     [[0.8, sulfur_hexafluoride],
-     [0.15, gas_converter.get(pywincalc.PredefinedGasType.ARGON)],
-     [0.05, gas_converter.get(pywincalc.PredefinedGasType.AIR)]])
+     [0.15, pywincalc.PredefinedGasType.ARGON],
+     [0.05, pywincalc.PredefinedGasType.AIR]])
 # And uses it it a 2.5mm thick gap at pressure = 101500
 gap_5 = pywincalc.Layers.gap(thickness=.0025, gas=gas_5, pressure=101500)
 

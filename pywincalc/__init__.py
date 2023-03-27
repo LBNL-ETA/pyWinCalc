@@ -1,6 +1,27 @@
 from pathlib import Path
 from wincalcbindings import *
 from wincalcbindings import _load_standard
+import deprecation
+
+@deprecation.deprecated(deprecated_in="2.5", removed_in="3",
+                        current_version="2.5",
+                        details="Use pywincalc.Layers.gap instead")
+def Gap(gas, thickness):
+    converted_gas = None
+    if type(gas) is list:
+        # Assume it is a list of PredefinedGasMixtureComponent.
+        # i.e. a list of (percent, component) tuples
+        converted_gas = create_gas(gas)
+    else:
+        # otherwise it is just a single component and therefore 100% of the mixture
+        converted_gas = create_gas([[1.0, gas]])
+    return Layers.gap(gas=converted_gas, thickness=thickness)
+
+@deprecation.deprecated(deprecated_in="2.5", removed_in="3",
+                        current_version="2.5",
+                        details="Use pywincalc.Layers.gap instead")
+def PredefinedGasMixtureComponent(component, percent):
+    return [percent, component]
 
 standard_path = Path(__file__).parent / "standards"
 
