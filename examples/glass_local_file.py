@@ -11,9 +11,9 @@ solid_layers = [clear_3]
 # Create a glazing system.  This only shows an example of getting one result from a glazing system
 # created using default environmental conditions.
 #
-# For more possible results see all_NFRC_results.py
+# For more possible results see optical_results_NFRC.py
 #
-# For more on environmental conditions see custom_environmental_conditions.py
+# For more on environmental conditions see environmental_conditions_user_defined.py
 glazing_system = pywincalc.create_glazing_system(solid_layers=solid_layers)
 
 u_value = glazing_system.u()

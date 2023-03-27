@@ -1,8 +1,5 @@
 import pywincalc
 
-optical_standard_path = "standards/W5_NFRC_2003.std"
-optical_standard = pywincalc.load_standard(optical_standard_path)
-
 clear_3_path = "products/CLEAR_3.DAT"
 clear_3 = pywincalc.parse_optics_file(clear_3_path)
 
@@ -45,5 +42,7 @@ outside_environment = pywincalc.Environment(air_temperature=outside_air_temperat
                                            direct_solar_radiation=outside_direct_solar_radiation)
 
 environmental_conditions = pywincalc.Environments(outside_environment, inside_environment)
-glazing_system = pywincalc.GlazingSystem(optical_standard, solid_layers, environment=environmental_conditions)
-print("U-value for a single-clear system with custom environmental conditions: {u}".format(u=glazing_system.u()))
+glazing_system = pywincalc.create_glazing_system(solid_layers=solid_layers, environment=environmental_conditions)
+
+u_value = glazing_system.u()
+print("U-value for a glazing system with user-defined environmental conditions: {v}".format(v=u_value))

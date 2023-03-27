@@ -1,6 +1,6 @@
 import pywincalc
-import results_printer
 
+# This example shows how to create a glass layer from user-defined thermal and n-band optical data
 
 def convert_wavelength_data(raw_wavelength_data):
     # Whatever format your raw wavelength data is it will need to be converted to a list of pywincalc.WavelengthData
@@ -249,21 +249,9 @@ def raw_glazing_wavelength_data():
             {"wavelength_microns": 2.500, "transmittance_front": 0.8220, "transmittance_back": 0.8220,
              "reflectance_front": 0.0680, "reflectance_back": 0.0680}]
 
-
-# Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
-# Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
-# taken to use NFRC standards if NFRC thermal results are desired.  This is because for thermal calculations currently
-# only ISO 15099 is supported.  While it is possible to use EN optical standards and create thermal results
-# those results will not be based on EN 673
-optical_standard_path = "standards/W5_NFRC_2003.std"
-optical_standard = pywincalc.load_standard(optical_standard_path)
-
-glazing_system_width = 1.0  # width of the glazing system in meters
-glazing_system_height = 1.0  # height of the glazing system in meters
-
 # Create optical data for the glass layer
 
-# Make sure to select the approriate material type for the layer.
+# Make sure to select the appropriate material type for the layer.
 # Current supported options are: 
 # APPLIED_FILM, COATED, ELECTROCHROMIC, FILM, INTERLAYER, LAMINATE, MONOLITHIC, THERMOCHROMIC
 glass_material_type = pywincalc.MaterialType.MONOLITHIC
@@ -317,21 +305,7 @@ glass_layer = pywincalc.ProductDataOpticalAndThermal(glass_n_band_optical_data,
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-glazing_system_u_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                       solid_layers=[glass_layer],
-                                                       width_meters=glazing_system_width,
-                                                       height_meters=glazing_system_height,
-                                                       environment=pywincalc.nfrc_u_environments())
+glazing_system = pywincalc.create_glazing_system(solid_layers=[glass_layer])
 
-# In order to get NFRC SHGC results the NFRC SHGC environment should be used when creating the glazing system
-glazing_system_shgc_environment = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                                          solid_layers=[glass_layer],
-                                                          width_meters=glazing_system_width,
-                                                          height_meters=glazing_system_height,
-                                                          environment=pywincalc.nfrc_shgc_environments())
-
-results_name = "Results for a single-layer system with a single glazing layer made from user-defined spectral data."
-print("*" * len(results_name))
-print(results_name)
-print("*" * len(results_name))
-results_printer.print_results(glazing_system_u_environment, glazing_system_shgc_environment)
+u_value = glazing_system.u()
+print("U-value for a single layer made from a user-defined glass layer: {v}".format(v=u_value))

@@ -1,5 +1,4 @@
 import pywincalc
-import results_printer
 
 # The default way to create a gap.  Creates a gap containing air with a given thickness
 # at a default pressure of 101325
@@ -56,23 +55,17 @@ gap_4 = pywincalc.Layers.gap(thickness=.003, gas=gas_4)  # 3mm thick gap filled 
 
 # Or it can be mixed with either other predefined or custom gases
 # The following creates a gas that is 80% sulfur hexafluoride, 15% Argonm and 5% Air
+# Currently mixing predefined gases and custom gases directly is not supported, the predefined
+# gases need to be converted first using PredefinedGasConverter
+gas_converter = pywincalc.PredefinedGasConverter.instance()
 gas_5 = pywincalc.Gas(
     [[0.8, sulfur_hexafluoride],
-     [0.15, pywincalc.PredefinedGasType.ARGON],
-     [0.05, pywincalc.PredefinedGasType.AIR]])
+     [0.15, gas_converter.get(pywincalc.PredefinedGasType.ARGON)],
+     [0.05, gas_converter.get(pywincalc.PredefinedGasType.AIR)]])
 # And uses it it a 2.5mm thick gap at pressure = 101500
-gap_5 = pywincalc.Gap(thickness=.0025, gas=gas_5, pressure=101500)
+gap_5 = pywincalc.Layers.gap(thickness=.0025, gas=gas_5, pressure=101500)
 
 gaps = [gap_1, gap_2, gap_3, gap_4, gap_5]
-
-# Next load the other things required to create a glazing system.  Since this example is just for how to create gaps
-# it will use the included generic clear 3 glass and NFRC optical standards to make a six layer system.  Six
-# solid layer to accommodate the 4 gases created above
-optical_standard_path = "standards/W5_NFRC_2003.std"
-optical_standard = pywincalc.load_standard(optical_standard_path)
-
-width = 1.0  # width of the glazing system in meters
-height = 1.0  # height of the glazing system in meters
 
 clear_3_path = "products/CLEAR_3.DAT"
 clear_3 = pywincalc.parse_optics_file(clear_3_path)
@@ -81,9 +74,9 @@ solid_layers = [clear_3] * 6
 # Create a glazing system.  This only shows an example of getting one result from a glazing system
 # created using default environmental conditions.
 #
-# For more possible results see all_NFRC_results.py
+# For more possible results see optical_results_NFRC.py
 #
-# For more on environmental conditions see custom_environmental_conditions.py
-glazing_system = pywincalc.GlazingSystem(optical_standard, solid_layers, gaps, width, height)
+# For more on environmental conditions see environmental_conditions_user_defined.py
+glazing_system = pywincalc.create_glazing_system(solid_layers=solid_layers, gap_layers=gaps)
 u_value = glazing_system.u()
 print("U-value for six-layer system of various gases: {v}".format(v=u_value))
