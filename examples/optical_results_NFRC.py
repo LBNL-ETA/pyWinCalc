@@ -126,6 +126,21 @@ for i in range(len(solid_layers)):
                                                                                v=solar_results.layer_results[
                                                                                    i].back.absorptance.electricity_diffuse))
 
+    print(
+        "Layer {idx} solar back total angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=solar_results.layer_results[
+                i].back.absorptance.angular_total))
+
+    print(
+        "Layer {idx} solar back heat angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=solar_results.layer_results[
+                i].back.absorptance.angular_heat))
+
+    print(
+        "Layer {idx} solar back electricity angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=solar_results.layer_results[
+                i].back.absorptance.angular_electricity))
+
 # ---------------------------------Photopic (aka Visible)-----------------------
 photopic_results = glazing_system.optical_method_results("PHOTOPIC")
 
@@ -215,6 +230,22 @@ for i in range(len(solid_layers)):
     print("Layer {idx} photopic back electricity diffuse absorptance: {v}".format(idx=i + 1,
                                                                                   v=photopic_results.layer_results[
                                                                                       i].back.absorptance.electricity_diffuse))
+
+    print(
+        "Layer {idx} photopic back total angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=photopic_results.layer_results[
+                i].back.absorptance.angular_total))
+
+    print(
+        "Layer {idx} photopic back heat angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=photopic_results.layer_results[
+                i].back.absorptance.angular_heat))
+
+    print(
+        "Layer {idx} photopic back electricity angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1,
+            v=solar_results.layer_results[
+                i].back.absorptance.angular_electricity))
 
 # -------------------------------SPF-------------------------
 # Unlike the other methods the layers in the glazing system do not contain
@@ -315,6 +346,22 @@ for i in range(len(solid_layers)):
                                                                              v=tuv_results.layer_results[
                                                                                  i].back.absorptance.electricity_diffuse))
 
+    print(
+        "Layer {idx} TUV back total angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=tuv_results.layer_results[
+                i].back.absorptance.angular_total))
+
+    print(
+        "Layer {idx} TUV back heat angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=tuv_results.layer_results[
+                i].back.absorptance.angular_heat))
+
+    print(
+        "Layer {idx} TUV back electricity angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1,
+            v=tuv_results.layer_results[
+                i].back.absorptance.angular_electricity))
+
 # ---------------------------------TDW-----------------------
 tdw_results = glazing_system.optical_method_results("TDW")
 
@@ -403,6 +450,22 @@ for i in range(len(solid_layers)):
     print("Layer {idx} TDW back electricity diffuse absorptance: {v}".format(idx=i + 1,
                                                                              v=tdw_results.layer_results[
                                                                                  i].back.absorptance.electricity_diffuse))
+
+    print(
+        "Layer {idx} TDW back total angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=tdw_results.layer_results[
+                i].back.absorptance.angular_total))
+
+    print(
+        "Layer {idx} TDW back heat angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=tdw_results.layer_results[
+                i].back.absorptance.angular_heat))
+
+    print(
+        "Layer {idx} TDW back electricity angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1,
+            v=tdw_results.layer_results[
+                i].back.absorptance.angular_electricity))
 
 # ---------------------------------TKR-----------------------
 tkr_results = glazing_system.optical_method_results("TKR")
@@ -493,7 +556,23 @@ for i in range(len(solid_layers)):
                                                                              v=tkr_results.layer_results[
                                                                                  i].back.absorptance.electricity_diffuse))
 
-# ------------------------------------Color------------------------------------  
+    print(
+        "Layer {idx} TKR back total angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=tkr_results.layer_results[
+                i].back.absorptance.angular_total))
+
+    print(
+        "Layer {idx} TKR back heat angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=tkr_results.layer_results[
+                i].back.absorptance.angular_heat))
+
+    print(
+        "Layer {idx} TRK back electricity angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1,
+            v=tkr_results.layer_results[
+                i].back.absorptance.angular_electricity))
+
+# ------------------------------------Color------------------------------------
 # Color results have a different calculation method and so require a different call to calculate
 # Also color results do not have results for each layer.  Only system results exist for color
 color_results = glazing_system.color()
