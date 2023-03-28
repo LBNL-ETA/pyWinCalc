@@ -200,7 +200,7 @@ A minimum example might look like this
 ```
 import pywincalc
 
-optical_standard_path = "standards/W5_NFRC_2003.std"
+optical_standard_path = pywincalc.standard_path / "W5_NFRC_2003.std"
 optical_standard = pywincalc.load_standard(optical_standard_path)
 
 width = 1.0
