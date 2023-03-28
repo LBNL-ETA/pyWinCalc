@@ -131,6 +131,21 @@ for i in range(len(solid_layers)):
                                                                                v=solar_results.layer_results[
                                                                                    i].back.absorptance.electricity_diffuse))
 
+    print(
+        "Layer {idx} solar back total angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=solar_results.layer_results[
+                i].back.absorptance.angular_total))
+
+    print(
+        "Layer {idx} solar back heat angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=solar_results.layer_results[
+                i].back.absorptance.angular_heat))
+
+    print(
+        "Layer {idx} solar back electricity angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=solar_results.layer_results[
+                i].back.absorptance.angular_electricity))
+
 # ---------------------------------Photopic (aka Visible)-----------------------
 photopic_results = glazing_system.optical_method_results("PHOTOPIC")
 
@@ -220,6 +235,22 @@ for i in range(len(solid_layers)):
     print("Layer {idx} photopic back electricity diffuse absorptance: {v}".format(idx=i + 1,
                                                                                   v=photopic_results.layer_results[
                                                                                       i].back.absorptance.electricity_diffuse))
+
+    print(
+        "Layer {idx} photopic back total angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=photopic_results.layer_results[
+                i].back.absorptance.angular_total))
+
+    print(
+        "Layer {idx} photopic back heat angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1, v=photopic_results.layer_results[
+                i].back.absorptance.angular_heat))
+
+    print(
+        "Layer {idx} photopic back electricity angular absorptance (only available for systems calculated with a BSDF hemisphere): {v}".format(
+            idx=i + 1,
+            v=solar_results.layer_results[
+                i].back.absorptance.angular_electricity))
 
 # -------------------------------TUV-------------------------
 # Unlike the other methods the layers in the glazing system do not contain
