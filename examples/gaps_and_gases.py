@@ -1,5 +1,7 @@
 import pywincalc
 
+# This contains examples of all currently supported methods of creating gases and gaps.
+
 # The default way to create a gap.  Creates a gap containing air with a given thickness
 # at a default pressure of 101325
 gap_1 = pywincalc.Layers.gap(thickness=.0127)  # .0127 is gap thickness in meters
@@ -62,11 +64,20 @@ gas_5 = pywincalc.create_gas(
 # And uses it it a 2.5mm thick gap at pressure = 101500
 gap_5 = pywincalc.Layers.gap(thickness=.0025, gas=gas_5, pressure=101500)
 
-gaps = [gap_1, gap_2, gap_3, gap_4, gap_5]
+# Vacuum gaps are supported by setting a low pressure in the gap and
+# (optionally) adding support pillars.  Currently only circular pillars
+# are supported.
+
+# This creates a gap with the default gas (Air) and a pressure of 0.1333 Pa
+gap_6 = pywincalc.Layers.gap(thickness=.001, pressure=0.1333)
+# Add circular pillars to the gap
+gap_6 = pywincalc.Layers.add_circular_pillar(gap_6, conductivity=999, spacing=0.03, radius=0.0002)
+
+gaps = [gap_1, gap_2, gap_3, gap_4, gap_5, gap_6]
 
 clear_3_path = "products/CLEAR_3.DAT"
 clear_3 = pywincalc.parse_optics_file(clear_3_path)
-solid_layers = [clear_3] * 6
+solid_layers = [clear_3] * 7
 
 # Create a glazing system.  This only shows an example of getting one result from a glazing system
 # created using default environmental conditions.

@@ -109,6 +109,7 @@ void declare_wce_optical_results_template<wincalc::Color_Result>(
                      "are not currently supported.");
 }
 
+
 class Py_Product_Data_Optical : public wincalc::Product_Data_Optical //_Base
 {
 public:
@@ -205,9 +206,8 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("gap_layer"), py::arg("temperature_initial"),
            py::arg("pressure_initial"));
 
-  py::class_<Tarcog::ISO15099::CSupportPillar, Py_CSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::CSupportPillar>>(m,
-                                                                "SupportPillar")
+  py::class_<Tarcog::ISO15099::CSupportPillar, Py_CSupportPillar, Tarcog::ISO15099::CIGUGapLayer,
+             std::shared_ptr<Tarcog::ISO15099::CSupportPillar>>(m, "SupportPillar")
       .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double>(),
            py::arg("gap_layer"), py::arg("conductivity"));
 
@@ -1547,7 +1547,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
                   py::arg("pressure") = 101325)
       .def_static("add_circular_pillar",
                   &Tarcog::ISO15099::Layers::addCircularPillar,
-                  "Static function to add a curcular pillar to a Tarcog gap",
+                  "Static function to add a circular pillar to a Tarcog gap",
                   py::arg("gap"), py::arg("conductivity"), py::arg("spacing"),
                   py::arg("radius"));
 }
