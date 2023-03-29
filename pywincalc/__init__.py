@@ -54,9 +54,9 @@ from wincalcbindings import AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDir
     parse_json, parse_json_file, parse_optics_file, parse_thmx_file, parse_thmx_string
 
 
-@deprecation.deprecated(deprecated_in="2.5", removed_in="3",
-                        current_version="2.5",
-                        details="Use pywincalc.Layers.gap instead")
+@deprecation.deprecated(deprecated_in="3.0.0", removed_in="4.0.0",
+                        current_version="3.0.0",
+                        details="Use pywincalc.Layers.gap or pywincalc.create_gas instead")
 def Gap(gas, thickness):
     converted_gas = None
     if type(gas) is list:
@@ -69,8 +69,9 @@ def Gap(gas, thickness):
     return Layers.gap(gas=converted_gas, thickness=thickness)
 
 
-@deprecation.deprecated(deprecated_in="3.0.0", current_version="3.0.0",
-                        details="Use pywincalc.Layers.gap instead")
+@deprecation.deprecated(deprecated_in="3.0.0", removed_in="4.0.0",
+                        current_version="3.0.0",
+                        details="Use pywincalc.create_gas instead")
 def PredefinedGasMixtureComponent(component, percent):
     return [percent, component]
 
