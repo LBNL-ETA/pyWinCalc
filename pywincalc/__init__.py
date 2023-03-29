@@ -1,5 +1,7 @@
 from pathlib import Path
-# Ideally this would just be from wincalcbindings import *
+import deprecation
+
+# Ideally the following long list would just be `from wincalcbindings import *`.
 # But there are a few things that we'd like to provide python versions of
 # while keeping the same function name for backwards compatibility.
 # So the options seem to be either change the name of the C++ bindings, which is a possiblilty
@@ -9,7 +11,22 @@ from pathlib import Path
 # Also changing library code because of an issue in the client does not seem like the correct approach in general.
 #
 # If there were a way to import * and then rename the individual functions that would likely work as well
-# and require less maintenance.
+# and require less maintenance.  However so far the only way I have come up with is something like
+#
+# def prepend_underscore_to_package_item(package, name):
+#    f = getattr(package, name)
+#    setattr(package, "_"+name, f)
+#    delattr(package, name)
+#    return package
+#
+# wincalcbindings_pkg = importlib.import_module("wincalcbindings")
+# wincalcbindings_pkg = prepend_underscore_to_package_item(wincalcbindings_pkg, "load_standard")
+# wincalcbindings_pkg = prepend_underscore_to_package_item(wincalcbindings_pkg, "GlazingSystem")
+# globals().update(vars(wincalcbindings_pkg))
+#
+# And I don't think I understand the implications of that fully enough to trust it doesn't have
+# any other side effets.  e.g. __file__ changes after the globals update
+
 from wincalcbindings import AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDirection, BSDFDirections, BSDFHemisphere, \
     BSDFIntegrator, BoundaryConditionsCoefficientModelType, CMABestWorstUFactors, CMAResult, CMAWindow, \
     CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, CircularPillar, CoatedSide, \
@@ -20,8 +37,8 @@ from wincalcbindings import AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDir
     OpticalResultLayer, OpticalResultSide, OpticalResultSideColor, OpticalResultSide_Layer, OpticalResultTransmission, \
     OpticalResultTransmissionColor, OpticalResults, OpticalResultsColor, OpticalStandard, OpticalStandardMethod, \
     PVPowerProperty, PVWavelengthData, ParsedPerforatedGeometry, ParsedVenetianGeometry, ParsedWovenGeometry, \
-    PerforatedGeometry, PredefinedGasConverter, PredefinedGasType, \
-    ProductComposistionData, ProductData, ProductDataOptical, ProductDataOpticalAndThermal, ProductDataOpticalDualBand, \
+    PerforatedGeometry, PredefinedGasConverter, PredefinedGasType, ProductComposistionData, ProductData, \
+    ProductDataOptical, ProductDataOpticalAndThermal, ProductDataOpticalDualBand, \
     ProductDataOpticalDualBandBSDF, ProductDataOpticalDualBandHemispheric, ProductDataOpticalNBand, \
     ProductDataOpticalPerforatedScreen, ProductDataOpticalVenetian, ProductDataOpticalWithMaterial, \
     ProductDataOpticalWovenShade, ProductDataThermal, ProductGeometry, PropertySimple, RGB, Side, \
@@ -35,8 +52,6 @@ from wincalcbindings import AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDir
     get_cma_window_double_vision_horizontal, get_cma_window_double_vision_vertical, get_cma_window_single_vision, \
     get_spacer_keff, nfrc_shgc_environments, nfrc_u_environments, parse_bsdf_xml_file, parse_bsdf_xml_string, \
     parse_json, parse_json_file, parse_optics_file, parse_thmx_file, parse_thmx_string
-
-import deprecation
 
 
 @deprecation.deprecated(deprecated_in="2.5", removed_in="3",
@@ -78,9 +93,3 @@ def GlazingSystem(solid_layers, gap_layers=[], optical_standard=load_standard(),
                           spectral_data_wavelength_range_method=spectral_data_wavelength_range_method,
                           number_visible_bands=number_visible_bands,
                           number_solar_bands=number_solar_bands)
-
-
-__all__ = (
-    'load_standard',
-    'standard_path',
-)
