@@ -14,7 +14,7 @@ bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.SMALL)
 
 # Create a glazing system.  By default a glazing system created this way uses the NFRC optical standard.
 # To use a different optical standard see optical_results_EN_410.py for an example of using a different standard
-glazing_system = pywincalc.create_glazing_system(solid_layers=solid_layers, bsdf_hemisphere=bsdf_hemisphere)
+glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, bsdf_hemisphere=bsdf_hemisphere)
 
 # In general there are two types of results: optical and thermal.  Here optical and thermal
 # refer to the calculation methods and not the wavelengths.

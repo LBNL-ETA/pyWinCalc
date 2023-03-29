@@ -53,7 +53,7 @@ bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTE
 # For more possible results see optical_results_NFRC.py
 #
 # For more on environmental conditions see environmental_conditions_user_defined.py
-glazing_system = pywincalc.create_glazing_system(solid_layers=[venetian_layer], bsdf_hemisphere=bsdf_hemisphere)
+glazing_system = pywincalc.GlazingSystem(solid_layers=[venetian_layer], bsdf_hemisphere=bsdf_hemisphere)
 
 u_value = glazing_system.u()
 print(

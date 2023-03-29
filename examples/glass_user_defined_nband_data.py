@@ -305,7 +305,7 @@ glass_layer = pywincalc.ProductDataOpticalAndThermal(glass_n_band_optical_data,
 # U and SHGC can be caculated for any given environment but in order to get results
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
-glazing_system = pywincalc.create_glazing_system(solid_layers=[glass_layer])
+glazing_system = pywincalc.GlazingSystem(solid_layers=[glass_layer])
 
 u_value = glazing_system.u()
 print("U-value for a single layer made from a user-defined glass layer: {v}".format(v=u_value))

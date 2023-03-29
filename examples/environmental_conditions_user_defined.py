@@ -42,7 +42,7 @@ outside_environment = pywincalc.Environment(air_temperature=outside_air_temperat
                                            direct_solar_radiation=outside_direct_solar_radiation)
 
 environmental_conditions = pywincalc.Environments(outside_environment, inside_environment)
-glazing_system = pywincalc.create_glazing_system(solid_layers=solid_layers, environment=environmental_conditions)
+glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, environment=environmental_conditions)
 
 u_value = glazing_system.u()
 print("U-value for a glazing system with user-defined environmental conditions: {v}".format(v=u_value))

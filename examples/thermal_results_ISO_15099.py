@@ -14,13 +14,13 @@ bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.SMALL)
 
 # By default a glazing system is created using the environmental conditions defined by
 # the NFRC U-value calculations
-glazing_system_u_environment = pywincalc.create_glazing_system(solid_layers=solid_layers,
+glazing_system_u_environment = pywincalc.GlazingSystem(solid_layers=solid_layers,
                                                                bsdf_hemisphere=bsdf_hemisphere)
 
 # To calculate SHGC use the NFRC SHGC environments for the glazing system instead.
 # These are provided by calling pywincalc.nfrc_shgc_environments().
 # U-value conditions are also available with pywincalc.nfrc_u_environments().
-glazing_system_shgc_environment = pywincalc.create_glazing_system(solid_layers=solid_layers,
+glazing_system_shgc_environment = pywincalc.GlazingSystem(solid_layers=solid_layers,
                                                                   environment=pywincalc.nfrc_shgc_environments(),
                                                                   bsdf_hemisphere=bsdf_hemisphere)
 
