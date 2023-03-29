@@ -1,7 +1,7 @@
 import pywincalc
 
-optical_standard_path = "standards/W5_NFRC_2003.std"
-optical_standard = pywincalc.load_standard(optical_standard_path)
+# Load default NFRC optical standard
+optical_standard = pywincalc.load_standard()
 
 clear_3_path = "products/CLEAR_3.DAT"
 clear_3 = pywincalc.parse_optics_file(clear_3_path)

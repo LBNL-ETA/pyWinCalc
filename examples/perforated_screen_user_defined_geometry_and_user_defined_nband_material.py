@@ -1,6 +1,8 @@
 import pywincalc
-import results_printer
 
+
+# This shows an example of how to create a perforated screen from user-defined n-band shade
+# material data and user-defined perforated geometry.
 
 def convert_wavelength_data(raw_wavelength_data):
     # Whatever format your raw wavelength data is it will need to be converted to a list of pywincalc.Wavelength_Data
@@ -915,24 +917,10 @@ def raw_shade_material_wavelength_data():
          "reflectance_back": 0.48}]
 
 
-# Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
-# Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
-# taken to use NFRC standards if NFRC thermal results are desired.  This is because for thermal calculations currently
-# only ISO 15099 is supported.  While it is possible to use EN optical standards and create thermal results
-# those results will not be based on EN 673
-optical_standard_path = "standards/W5_NFRC_2003.std"
-optical_standard = pywincalc.load_standard(optical_standard_path)
-
-glazing_system_width = 1.0  # width of the glazing system in meters
-glazing_system_height = 1.0  # height of the glazing system in meters
-
-# A woven shade requires a BSDF hemisphere.  Create one based on a standard quarter basis for this test
-bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTER)
-
 # Create n-band optical product data for the shade material
 # n-band is created because per-wavelength measurements are available
 shade_material_type = pywincalc.MaterialType.MONOLITHIC
-shade_material_thickness = .001  # 1 mm thick
+shade_material_thickness = 0.001  # 1 mm thick
 shade_material_wavelength_measurements = convert_wavelength_data(raw_shade_material_wavelength_data())
 # Since the measurements do not extend to the IR range emissivity and IR transmittances should be provided
 # These numbers are just for example
@@ -944,15 +932,15 @@ shade_permeability_factor = 0
 
 flipped = False
 
-shade_material_n_band_optical_data = pywincalc.ProductDataOpticalNBand(material_type=shade_material_type,
-                                                                       thickness_meters=shade_material_thickness,
-                                                                       wavelength_data=shade_material_wavelength_measurements,
-                                                                       ir_transmittance_front=shade_ir_transmittance_front,
-                                                                       ir_transmittance_back=shade_ir_transmittance_back,
-                                                                       emissivity_front=shade_emissivity_front,
-                                                                       emissivity_back=shade_emissivity_back,
-                                                                       permeability_factor=shade_permeability_factor,
-                                                                       flipped=flipped)
+shade_material_optical_data = pywincalc.ProductDataOpticalNBand(material_type=shade_material_type,
+                                                                thickness_meters=shade_material_thickness,
+                                                                wavelength_data=shade_material_wavelength_measurements,
+                                                                ir_transmittance_front=shade_ir_transmittance_front,
+                                                                ir_transmittance_back=shade_ir_transmittance_back,
+                                                                emissivity_front=shade_emissivity_front,
+                                                                emissivity_back=shade_emissivity_back,
+                                                                permeability_factor=shade_permeability_factor,
+                                                                flipped=flipped)
 
 # Create perforated geometry 
 perforation_type = pywincalc.PerforatedGeometry.Type.RECTANGULAR
@@ -963,11 +951,6 @@ dimension_y = .003  # 3mm perforation in the vertical direction
 
 geometry = pywincalc.PerforatedGeometry(spacing_x, spacing_y, dimension_x, dimension_y, perforation_type)
 
-# Create a ProductDataOpticalPerforatedScreen from optical data and geometry
-perforated_screen_optical = pywincalc.ProductDataOpticalPerforatedScreen(
-    material_product_data_optical=shade_material_n_band_optical_data,
-    geometry=geometry)
-
 # Create a pywincalc.ProductDataThermal out of the information that only applies to thermal calculations
 # These numbers are only for example purposes.
 shade_conductivity = 160
@@ -976,30 +959,33 @@ shade_opening_bottom = .01
 shade_opening_left = .02
 shade_opening_right = .02
 
-perforated_screen_thermal = pywincalc.ProductDataThermal(conductivity=shade_conductivity,
-                                                         thickness_meters=shade_material_thickness,
-                                                         flipped=flipped,
-                                                         opening_top=shade_opening_top,
-                                                         opening_bottom=shade_opening_bottom,
-                                                         opening_left=shade_opening_left,
-                                                         opening_right=shade_opening_right)
+shade_material_thermal = pywincalc.ProductDataThermal(conductivity=shade_conductivity,
+                                                      thickness_meters=shade_material_thickness,
+                                                      flipped=flipped,
+                                                      opening_top=shade_opening_top,
+                                                      opening_bottom=shade_opening_bottom,
+                                                      opening_left=shade_opening_left,
+                                                      opening_right=shade_opening_right)
 
-# Combine optical and thermal parts into one pywincalc.Product_Data_Optical_Thermal
-perforated_layer = pywincalc.ProductDataOpticalAndThermal(product_data_optical=perforated_screen_optical,
-                                                          product_data_thermal=perforated_screen_thermal)
+# Create a perforated screen from the geometry and optical and thermal data
+perforated_layer = pywincalc.create_perforated_screen(geometry=geometry,
+                                                      material_data_optical=shade_material_optical_data,
+                                                      material_data_thermal=shade_material_thermal)
+
+# A perforated screen requires a BSDF hemisphere.  Create one based on a standard quarter basis for this example
+bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTER)
 
 # Create a glazing system.  This only shows an example of getting one result from a glazing system
-# created using default environmental conditions.
+# created using default NFRC standard and environmental conditions.
 #
-# For more possible results see all_NFRC_results.py
+# For more possible results see:
+# - optical_results_NFRC.py for all optical results available in the default NFRC optical standard
+# - thermal_results_ISO_15099.py for all thermal results available.
+# - deflection.py for additional results when deflection calculations are enabled
 #
-# For more on environmental conditions see custom_environmental_conditions.py
-glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard,
-                                         solid_layers=[perforated_layer],
-                                         gap_layers=[],
-                                         width_meters=glazing_system_width,
-                                         height_meters=glazing_system_height,
-                                         bsdf_hemisphere=bsdf_hemisphere)
+# For more on environmental conditions see environmental_conditions_user_defined.py
+glazing_system = pywincalc.GlazingSystem(solid_layers=[perforated_layer],
+                                                 bsdf_hemisphere=bsdf_hemisphere)
 
 u_value = glazing_system.u()
-print("U-value for a custom perforated screen made from a user-defined material: {v}".format(v=u_value))
+print("U-value for a perforated screen made from user-defined material and geometry: {v}".format(v=u_value))
