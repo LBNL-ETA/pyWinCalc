@@ -16,7 +16,7 @@ slim_white_pella_venetian_blind = pywincalc.parse_json_file("products/venetian_b
 # The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
 # defaults to using the NFRC U environments
 
-glazing_system = pywincalc.create_glazing_system(solid_layers=[slim_white_pella_venetian_blind],
+glazing_system = pywincalc.GlazingSystem(solid_layers=[slim_white_pella_venetian_blind],
                                                  bsdf_hemisphere=bsdf_hemisphere)
 
 u_value = glazing_system.u()

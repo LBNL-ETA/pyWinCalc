@@ -18,7 +18,7 @@ bsdf_shade = pywincalc.parse_bsdf_xml_string(bsdf_igsdb_response.content)
 # For more possible results see optical_results_NFRC.py
 #
 # For more on environmental conditions see environmental_conditions_user_defined.py
-glazing_system = pywincalc.create_glazing_system(solid_layers=[bsdf_shade], bsdf_hemisphere=bsdf_hemisphere)
+glazing_system = pywincalc.GlazingSystem(solid_layers=[bsdf_shade], bsdf_hemisphere=bsdf_hemisphere)
 
 u_value = glazing_system.u()
 print("U-value for a BSDF shade downloaded from igsdb.lbl.glv: {v}".format(v=u_value))

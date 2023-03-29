@@ -1023,7 +1023,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
         "Convert a list of product data into a solid layer that can be used in "
         "glazing systems.");
 
-  m.def("_load_standard",
+  m.def("load_standard",
         py::overload_cast<std::string const &>(
             &window_standards::load_optical_standard),
         "Load standard from .std file");

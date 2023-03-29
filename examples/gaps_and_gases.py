@@ -85,6 +85,6 @@ solid_layers = [clear_3] * 7
 # For more possible results see optical_results_NFRC.py
 #
 # For more on environmental conditions see environmental_conditions_user_defined.py
-glazing_system = pywincalc.create_glazing_system(solid_layers=solid_layers, gap_layers=gaps)
+glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, gap_layers=gaps)
 u_value = glazing_system.u()
 print("U-value for six-layer system of various gases: {v}".format(v=u_value))

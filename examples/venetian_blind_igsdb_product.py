@@ -22,7 +22,7 @@ slim_white_pella_venetian_blind = pywincalc.parse_json(slim_white_pella_venetian
 # For more possible results see optical_results_NFRC.py
 #
 # For more on environmental conditions see environmental_conditions_user_defined.py
-glazing_system = pywincalc.create_glazing_system(solid_layers=[slim_white_pella_venetian_blind],
+glazing_system = pywincalc.GlazingSystem(solid_layers=[slim_white_pella_venetian_blind],
                                                  bsdf_hemisphere=bsdf_hemisphere)
 
 u_value = glazing_system.u()

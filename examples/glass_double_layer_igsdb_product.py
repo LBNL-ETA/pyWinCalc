@@ -25,7 +25,7 @@ generic_clear_6mm_glass = pywincalc.parse_json(generic_clear_6mm_glass_igsdb_res
 # For more possible results see optical_results_NFRC.py
 #
 # For more on environmental conditions see environmental_conditions_user_defined.py
-glazing_system = pywincalc.create_glazing_system(solid_layers=[generic_clear_6mm_glass, generic_clear_3mm_glass],
+glazing_system = pywincalc.GlazingSystem(solid_layers=[generic_clear_6mm_glass, generic_clear_3mm_glass],
                                                  gap_layers=[gap_1])
 
 u_value = glazing_system.u()

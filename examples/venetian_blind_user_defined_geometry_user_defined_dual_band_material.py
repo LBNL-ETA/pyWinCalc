@@ -51,7 +51,7 @@ venetian_layer = pywincalc.create_venetian_blind(geometry=geometry,
 bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.FULL)
 
 # Create a glazing system
-glazing_system = pywincalc.create_glazing_system(solid_layers=[venetian_layer], bsdf_hemisphere=bsdf_hemisphere)
+glazing_system = pywincalc.GlazingSystem(solid_layers=[venetian_layer], bsdf_hemisphere=bsdf_hemisphere)
 
 solar_results = glazing_system.optical_method_results("SOLAR")
 tf_sol_hemispheric = solar_results.system_results.front.transmittance.direct_hemispherical

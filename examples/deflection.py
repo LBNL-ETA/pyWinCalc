@@ -29,7 +29,7 @@ width = 1.0  # width of the glazing system in meters
 height = 1.0  # height of the glazing system in meters
 tilt = 90  # glazing system tilt in degrees
 
-glazing_system = pywincalc.create_glazing_system(solid_layers=solid_layers, gap_layers=gaps,
+glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, gap_layers=gaps,
                                                  width_meters=width, height_meters=height, tilt_degrees=tilt)
 
 # Deflection calcs currently need to be specifically enabled
@@ -200,7 +200,7 @@ clear_3.youngs_modulus = 7e10;
 
 solid_layers = [clear_6, clear_3, clear_6]
 
-glazing_system = pywincalc.create_glazing_system(solid_layers=solid_layers, gap_layers=gaps, width_meters=width,
+glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, gap_layers=gaps, width_meters=width,
                                                  height_meters=height, tilt_degrees=tilt, environment=custom_env_2)
 
 glazing_system.enable_deflection(True)
