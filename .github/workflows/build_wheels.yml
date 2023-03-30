@@ -44,27 +44,21 @@ jobs:
         # There is documentation here https://github.com/pypa/cibuildwheel/blob/main/docs/cpp_standards.md on how to
         # set it but I could not get it to work while using the standard images provided by github actions does work.
         os: [macos-latest]
-        python-version: [3.7, 3.8, 3.9, "3.10", "3.11"]
+        python-version: [3.8, 3.9, "3.10", "3.11"]
     env:
       SYSTEM_VERSION_COMPAT: 0
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install packages
-        run: pip install wheel
-
-      - name: build
-        run: python setup.py bdist_wheel
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.12.1
+        env:
+          CIBW_ARCHS_MACOS: universal2
 
       - name: upload wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: ./dist/*.whl
           
