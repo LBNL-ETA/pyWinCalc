@@ -1,13 +1,8 @@
 name: Build wheels
 
-on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request] 
     
-# Cannot use cibuildwheels because the current images used by cibuildwheels do not support C++17.
+# Cannot use cibuildwheels because the current images used by cibuildwheels do not support C++17. 
 
 jobs:
   build_wheels_windows:
@@ -17,7 +12,7 @@ jobs:
       matrix:
         os: [windows-2019]
         arch: [x86, x64]
-        python-version: [3.7, 3.8, 3.9, "3.10"]
+        python-version: [3.7, 3.8, 3.9, "3.10", "3.11"]
 
     steps:
       - name: Checkout repository
@@ -48,8 +43,10 @@ jobs:
         # Trying to use cibuildwheels to build mac wheels fails because the version of XCode is not high enough.
         # There is documentation here https://github.com/pypa/cibuildwheel/blob/main/docs/cpp_standards.md on how to
         # set it but I could not get it to work while using the standard images provided by github actions does work.
-        os: [macos-10.15]
-        python-version: [3.7, 3.8, 3.9, "3.10"]
+        os: [macos-latest]
+        python-version: [3.7, 3.8, 3.9, "3.10", "3.11"]
+    env:
+      SYSTEM_VERSION_COMPAT: 0
 
     steps:
       - name: Checkout repository

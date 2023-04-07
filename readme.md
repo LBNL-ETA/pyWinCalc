@@ -1,6 +1,6 @@
 
 
-Berkeley Lab WINDOW Calc Engine (CalcEngine) Copyright (c) 2016 - 2020, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
+Berkeley Lab WINDOW Calc Engine (CalcEngine) Copyright (c) 2016 - 2023, The Regents of the University of California, through Lawrence Berkeley National Laboratory (subject to receipt of any required approvals from the U.S. Dept. of Energy).  All rights reserved.
 
 If you have questions about your rights to use or distribute this software, please contact Berkeley Lab's Innovation & Partnerships Office at IPO@lbl.gov.
 
@@ -12,6 +12,8 @@ NOTICE.  This Software was developed under funding from the U.S. Department of E
 This module provides a simplified method for calculating various thermal and optical properties of glazing systems.
 
 Version 2 has substantially more features but the interface has also changed as a result.  For help updating existing code see [Migrating from version 1](#Migrating-from-version-1)
+
+Version 3 has additional features but should maintain compatability with code written for version 2 with the exception of cases creating user-defined shades.  Some methods of creating gases and gaps have been deprecated.  If you experience any problems updating code that creates user-defined shades to match the updated examples or problems with gaps or gases please let us know.
 
 # Table of contents
 1. [Requirements](#Requirements)
@@ -69,6 +71,8 @@ Windows requires a version of the Microsoft C++ redistributable >= the version o
 #### Linux/Mac
 The pre-built wheels provided at pypi should work on any x86/x64 version of Linux or Mac that supports at least C++17.
 
+For M2 Macs pre-built wheels are not currently available.  From our limited testing building from source (see below) should work.  If you have experience problems building from source on a Mac using the M2 architecture please let us know.
+
 #### Building from source
 [Git](https://git-scm.com/)
 
@@ -77,12 +81,12 @@ The pre-built wheels provided at pypi should work on any x86/x64 version of Linu
 ## Install
 
 ### From PyPi
-Once the requirements have been installed this can be installed with pip by doing
+Once any needed requirements have been installed:
 
 ` pip install pywincalc `
 
 ### Building from source
-Once the requirements have been installed this can be installed with pip by doing
+Once the requirements have been installed this project can be built from source directly from the repository by
 
 ` pip install git+https://github.com/LBNL-ETA/pyWinCalc.git `
 
@@ -94,13 +98,15 @@ Building Python packages from source on Windows is more complicated than Mac/Lin
 ### Overview
 We recognize that there is a fair amount of complexity in the functionality provided by this library.  To attempt to mitigate this somewhat we have provided a selection of [examples](#Examples) that we hope cover all potential use cases between them.  It may be beneficial to begin by looking at whichever example(s) seem to cover your particular use case and then consulting the rest of this and other documentation.
 
-For example, if you are interested in exploring the effect various gas fills have on glazing systems made from combinations of existing commercial glass products contained in the [IGSDB](igsdb.lbl.gov) you could look at the [gases](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gases.py) example and the  [igsdb_double_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_double_clear_glass.py ) example
+For example, if you are interested in exploring the effect various gas fills have on glazing systems made from combinations of existing commercial glass products contained in the [IGSDB](igsdb.lbl.gov) you could look at the [gaps_and_gases](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gaps_and_gases.py) example.
+
+Or if you are interested in seeing all of the possible optical results that can be calculated from the NFRC standard you can find them in the [optical_results_NFRC.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/optica_results_NFRC.py) example.
 
 Most of the functionality provided by pywincalc is based around a glazing system.  That is the solid and gap layers that make up a window not including frames or dividers.  One exception is CMA calculations using frames are also provided, see the [CMA](#CMA) section for more information about the CMA process and calculations.
 
 For glazing systems calculations can be grouped into two broad categories:  optical and thermal calculations.
 
-In the context of this program `optical` and `thermal` refer to the algorithms used to perform the calculations and not the part of the spectrum used in the calculations.  E.g. the calculation for the transmittance of the infrared spectrum is considered an optical calculation here not a thermal calculation.
+In the context of this program `optical` and `thermal` refer to the algorithms used to perform the calculations and not the part of the spectrum used in the calculations.  E.g. the calculation for the transmittance in the infrared spectrum is considered an optical calculation here not a thermal calculation.
 
 #### Optical Calculations
 Optical calculations are based on optical standards which are defined by `.std` files and are not affected by environmental conditions.  The optical standards define various methods that can be used to generate [optical results](#Optical-Results).
@@ -112,7 +118,7 @@ There are a few important exceptions to this.  See the section on [optical calcu
 #### Thermal Calculations
 Currently only [ISO 15099](https://www.iso.org/standard/26425.html) thermal calculations are supported.
 
-Thermal calculations depend on the [environmental conditions](#Environmental-Conditions) and, in some cases, optical results calculated using specific methods.  E.g. the [SHGC](https://www.energy.gov/energysaver/energy-performance-ratings-windows-doors-and-skylights) calculations can depend on optical results calculated using the `SOLAR`method from the optical standard.
+Thermal calculations depend on the [environmental conditions](#Environmental-Conditions) and, in some cases, optical results calculated using specific methods.  E.g. the [SHGC](https://www.energy.gov/energysaver/energy-performance-ratings-windows-doors-and-skylights) calculations can depend on optical results calculated using the `SOLAR` method from the optical standard.
 
 It is important to note that it is possible to calculate thermal results using an optical standard that does not necessarily conform to the ISO 15099 standard so care should be used when selecting which optical standard is used for thermal calculations.
 
@@ -132,10 +138,16 @@ Calculations can be performed using predefined optical standards in the form tha
 
 Custom standards can be created by creating a new set of files following the same format.
 
+As of version 3.0.0 the standards files are now bundled with the python package so there should be no longer be a need to clone the repository just to get the standards files.
+
+As of version 3.0.0 optical_standard is no longer a required parameter for GlazingSystem.  By default a glazing system created without an optical standard will use the NFRC standard as implemented in the [W5_NFRC_2003.std](https://github.com/LBNL-ETA/pyWinCalc/blob/main/pywincalc/standards/W5_NFRC_2003.std) file.
+
+The path to the directory the bundled standards files are in is in the `pywincalc.standard_path` variable.
+
 #### Optical Standard File
 Optical standards used by pywincalc are defined using a standards file and usually several related files referenced by the standards file.
 
-For an example standards file see [W5 NFRC 2003.std](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/standards/W5_NFRC_2003.std)
+For an example standards file see [W5_NFRC_2003.std](https://github.com/LBNL-ETA/pyWinCalc/blob/main/pywincalc/standards/W5_NFRC_2003.std)
 
 Each standards file contains sections that define the optical methods provided by the standard.  In the W5 NFRC 2003 standard file the first method defined looks like this:
 
@@ -151,23 +163,33 @@ Maximum Wavelength : 2.5
 ```
 The most important part for using pywincalc is the name of the method.  Since optical standard files can set anything for a name pywincalc has one generic method for calculating optical results and two other methods to handle exceptions to the generic rule:  THERMAL IR and color calculations.  See the section on [optical calculation details](#Optical-Calculations-Details) for more on those two cases.
 
-The choice of standards file affects what can be calculated because not all files implement all methods.  For example the [prEN_410.std](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/standards/prEN_410.std) file does not contain a definition of the THERMAL IR method.
+The choice of standards file affects what can be calculated because not all files implement all methods.  For example the [prEN_410.std](https://github.com/LBNL-ETA/pyWinCalc/blob/main/pywincalc/standards/prEN_410.std) file does not contain a definition of the THERMAL IR method.
 
 Calculations that rely on specific methods will not work if the standard does not provide them.  Since the prEN_410.std files does not contain a definition for the thermal IR method the `pywincalc.calc_thermal_ir` function will not work. 
 
 ### Solid layers
-Solid layers define the glazing or shading products that make up a glazing system.  The methods for creating solid layers currently supported are:
- 
-- From paths to measured data files as exported by [Optics](https://windows.lbl.gov/software/optics).  See [single_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/single_clear.py) and [triple_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/triple_clear.py) in the examples directory.
-- From json returned by a request for a shading layer to the [IGSDB](igsdb.lbl.gov).  See [igsdb_exterior_shade_on_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_exterior_shade_on_clear_glass.py) in the examples directory.
-- From a combination of json returned by a request for a material from the [IGSDB](igsdb.lbl.gov) and user-defined geometry.  See [igsdb_custom_perforated.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_custom_perforated.py), [igsdb_custom_venetian.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_custom_venetian.py), and [igsdb_custom_woven.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_custom_woven.py) in the examples directory.
-- Shading layers that are represented by discrete BSDFs are currently a special case in the [IGSDB](igsdb.lbl.gov).  See [igsdb_interior_bsdf.py] (https://github.com/LBNL-ETA/pyWinCalc/blob/bsdf_input/examples/igsdb_interior_bsdf.py)
-- From measured wavelength data from some other source and user-defined geometry.  See [custom_perforated.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/custom_perforated.py) in the examples directory.
+Solid layers define the glazing or shading products that make up a glazing system.  There are several methods for creating solid layers currently supported which use two broad categories of data sources: 
+- Data files exported from either [Optics](https://windows.lbl.gov/software/optics) or the [IGSDB](https://igsdb.lbl.gov)
+- User-defined data which is data the user has obtained from some other source and needs to be transformed into data structures pywincalc recognizes.
+
+In the examples files with "igsdb" in the name use data downloaded from the IGSDB.  Files with "user_defined" in the name show how to create objects using data supplied by the user.
+
+It is possible to use data IGSDB in conjunction with user-defined data.  E.g. the example file [perforated_screen_user_defined_geometry_igsdb_material](https://github.com/LBNL-ETA/pyWinCalc/blob/include_standards/examples/perforated_screen_user_defined_geometry_igsdb_material.py) uses data downloaded from the IGSDB for a shade material and combines that with a user-defined geometry to create a perforated screen.
+
+Here are some examples of each method of creating a solid layer 
+- For a glass layer made from measured data files as exported by Optics:  [glass_local_file.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/glass_local_file.py)
+- For a glass layer made from n-band wavelength data from a user-defined source:  [glass_user_defined_nband_data.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/glass_user_defined_nband_data.py)
+- For a glass or shade layer made from json returned from the [IGSDB](igsdb.lbl.gov): [glass_double_layer_igsdb_product.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/glass_double_layer_igsdb_product.py) or [venetian_blind_igsdb_product.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/venetian_blind_igsdb_product.py).
+- For a shade layer made from a combination of json returned by a request for a material from the [IGSDB](igsdb.lbl.gov) and user-defined geometry: [woven_shade_user_defined_geometry_igsdb_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/woven_shade_user_defined_geometry_igsdb_material.py)
+- For a shade layers made from a local bsdf xml file: [bsdf_shade_local_file.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/bsdf_shade_local_file.py)
+  - Shading layers that are represented by discrete BSDFs are currently a special case in the [IGSDB](igsdb.lbl.gov).  For an example of how to download them see [igsdb_interior_bsdf.py] (https://github.com/LBNL-ETA/pyWinCalc/blob/bsdf_input/examples/igsdb_interior_bsdf.py)
+- For a shade layer made from measured n-band wavelength data from some other source and user-defined geometry: [perforated_screen_user_defined_geometry_and_user_defined_nband_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/perforated_screen_user_defined_geometry_and_user_defined_nband_material.py)
+- For a shade layer made from dual-band wavelength data from some other source and user-defined geometry: [venetian_blind_user_defined_geometry_user_defined_dual_band_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/venetian_blind_user_defined_geometry_user_defined_dual_band_material.py)
 
 #### Supported solid layer types
 The following types of solid layers are currently supported:
 - Glazings that are represented as one set of measured wavelength data.  Products that require deconstruction like some laminates and coated glass are not yet supported.
-- Venetian blinds
+- Venetian blinds (both horizontal and vertical)
 - Woven shades
 - Perforated screens
 - BSDF shades
@@ -180,13 +202,15 @@ For systems with more than one solid layer each solid layer must be separated by
 - From creating a custom gas by providing molecular weight, specific heat ratio, and coefficients for specific heat at constant pressure (Cp), thermal conductivity, and viscosity.
 - From a mixture of custom gases.
 
-For examples of each see [gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gases.py) in the examples directory.
+As of version 3.0.0 vacuum gaps are supported.
+
+For examples of each see [gaps_and_gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gaps_and_gases.py) in the examples directory.
 
 ### BSDF Calculations
 
-Shading products require BSDF calculations while glazings do not.  If any layer passed to a glazing system is a shading layer the glazing system will also require a BSDF hemisphere.  For examples see any of the igsdb examples or [custom_perforated.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/custom_perforated.py) in the examples directory.
+Shading products require BSDF calculations while glazings do not.  If any layer passed to a glazing system is a shading layer the glazing system will also require a BSDF hemisphere.  For examples see any of the shade examples e.g. [venetian_blind_local_file.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/venetian_blind_local_file.py)
 
-However it is possible to use BSDF calculations for a system with no shading products.  To do so pass a BSDF hemisphere as in the examples with shading systems.
+However it is possible to use BSDF calculations for a system with no shading products.  To do so pass a BSDF hemisphere as in the examples with shading systems.  For an example that also shows results that are only available for BSDF calculations see [optical_results_NFRC.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/optical_results_NFRC.py)
 
 If a glazing system is given a BSDF hemisphere as a parameter it will always use that for optical calculations.
 
@@ -194,25 +218,18 @@ If a glazing system is given a BSDF hemisphere as a parameter it will always use
 
 Since there are several ways of creating and combining layers plus different calculation options example scripts are provided in the [/example](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/) directory.  
 
-These scripts use optical standards provided in the [/examples/standards](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/standards) directory.  Some scripts use measured data for example products provided in the [/examples/products](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/products) directory.
+These scripts use optical standards that are included with pywincalc.  Some scripts use measured data for example products provided in the [/examples/products](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/products) directory.
 
 A minimum example might look like this
 ```
 import pywincalc
 
-optical_standard_path = "standards/W5_NFRC_2003.std"
-optical_standard = pywincalc.load_standard(optical_standard_path)
-
-width = 1.0
-height = 1.0
-
 clear_3_path = "products/CLEAR_3.DAT"
 clear_3 = pywincalc.parse_optics_file(clear_3_path)
 
 solid_layers = [clear_3]
-gaps = []
 
-glazing_system = pywincalc.GlazingSystem(solid_layers, gaps, optical_standard, width, height)
+glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers)
 print("Single Layer U-value: {u}".format(u=glazing_system.u()))
 ```
 
@@ -220,44 +237,55 @@ Please see the following examples which contain more information.
 
 The examples names have the following meanings:
 1. `igsdb` means the example downloads data from the [IGSDB](http://igsdb.lbl.gov)
-2. `custom` means the example does not use a completely defined existing product.  This could be anything from using a pre-defined material to make a shade to using user-defined measured spectral data.
+2. `user-defined` means the example does not use a completely defined existing product.  This could be anything from using a pre-defined material to make a shade to using user-defined measured spectral data.
 
 NOTE:  The igsdb examples require the python requests library and an API token for igsdb.lbl.gov.  An API token can be obtained by creating an account there.  See https://igsdb.lbl.gov/about/ for more information on creating an account.
 #### Examples
 - [minimum_example.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/minimum_example.py) The minimum example shown above.  Calculates the U-value for a single piece of generic clear glass.
-- [single_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/single_clear.py): Creates a single layer glazing system from a sample optics file.  Shows all thermal results, all optical results for a single optical method and some optical results from a second optical method.
-- [triple_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/triple_clear.py):  Creates a triple layer glazing system from sample optics files.  Creates two gaps, one with a single gas and one with a gas mixture.  Shows another example of optical results for each layer.
-- [igsdb_double_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_double_clear_glass.py ) Creates a double layer glazing system from products defined in the [IGSDB](http://igsdb.lbl.gov).
-- [igsdb_exterior perforated_shade_on_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_exterior_perforated_shade_on_clear_glass.py):  Creates a double-layer glazing system with an exterior perforated screen from products defined in the [IGSDB](http://igsdb.lbl.gov).  
-- [igsdb_exterior_venetian blind_on_clear_glass.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_exterior_venetian_blind_on_clear_glass.py):  Creates a double-layer glazing systems with  an exterior Venetian blind from products defined in the [IGSDB](http://igsdb.lbl.gov). 
-- [igsdb_custom_perforated.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_custom_perforated.py) Creates a double layer glazing system with an exterior perforated screen.  The perforated screen uses a material from the [IGSDB](http://igsdb.lbl.gov) and a user-defined geometry describing the perforations.  The glass layer uses data from the [IGSDB](http://igsdb.lbl.gov)
-- [igsdb_custom_venetian.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_custom_venetian.py).  Creates a double layer glazing system with an exterior venetian blind.  The venetian blind uses a material from the [IGSDB](http://igsdb.lbl.gov) and a user-defined geometry describing the slats.  Also includes an example of how to change the distribution method used for calculating optical results for the shade.  The glass layer uses data from the [IGSDB](http://igsdb.lbl.gov)
-- [igsdb_custom_vertical_venetian.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_custom_vertical_venetian.py).  Creates a double layer glazing system with an exterior vertical louver.  The vertical louver uses a material from the [IGSDB](http://igsdb.lbl.gov) and a user-defined geometry describing the slats.  Also includes an example of how to change the distribution method used for calculating optical results for the shade.  The glass layer uses data from the [IGSDB](http://igsdb.lbl.gov)
-- [igsdb_custom_woven.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_custom_woven.py) Creates a double layer glazing system with an exterior woven shade.  The woven shade uses a material from the [IGSDB](http://igsdb.lbl.gov) and a user-defined geometry describing the thread layout.  The glass layer uses data from the [IGSDB](http://igsdb.lbl.gov)
-- [custom_perforated.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/custom_perforated.py) Creates a double layer glazing system with an exterior perforated screen.  Shows an example of getting measured data from somewhere other than either the [IGSDB](http://igsdb.lbl.gov) or optics file.
-- [gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gases.py) Creates gases and gas mixtures from predefined gas types and custom gases created from gas properties.
-- [deflection.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/deflection.py) Shows how to set and enable deflection properties and which deflection results are available.
-- [cma_single_vision.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/cma_single_vision.py) Shows how to do a CMA calculation for a single-vision window and which results are available for CMA calculations.
-- [cma_double_vision_horizontal.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/cma_double_vision_horizontal.py) Shows how to do a CMA calculation for a horizontal double-vision window and which results are available for CMA calculations.
-- [cma_double_vision_vertical.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/cma_double_vision_vertical.py) Shows how to do a CMA calculation for a vertical double-vision window and which results are available for CMA calculations.
-- [thermal_ir.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/thermal_ir.py) Shows how to calculate optical results for the thermal IR method.  Note that currently only calculations for a single solid layer are supported and these only have diffuse-diffuse transmittances and hemispherical emissivities.
-- [custom_environmental_conditions.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/custom_environmental_conditions.py) Shows how to create custom environmental conditions.
-- [pv_single_layer.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/pv_single_layer.py) Shows how to create a system with a single layer that has integrated PV data.  For information on creating a IGSDB v2 json file with PV data see the provided [generic_pv.json](https://github.com/LBNL-ETA/pyWinCalc/tree/main/examples/products/generic_pv.json) file and the [IGSDB v2 JSON format](#IGSDB-v2-JSON-format) section below.
+- [bsdf_integrator.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/bsdf_integrator.py): Shows how to integrate BSDF matrices to get transmittances and reflectances for each incident angle.
+- [bsdf_shade_igsdb_product.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/bsdf_shade_igsdb_product.py): Shows how to create a BSDF shade by downloading data from the IGSDB.
+- [bsdf_shade_local_file.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/bsdf_shade_local_file.py): Shows how to create a BSDF shade from a BSDF XML file stored locally.
+- [bsdf_shade_local_file.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/bsdf_shade_local_file.py): Shows how to create a BSDF shade from a BSDF XML file stored locally.
+- [cma_single_vision.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/cma_single_vision.py): Shows how to do a CMA calculation for a single-vision window and which results are available for CMA calculations.
+- [cma_double_vision_horizontal.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/cma_double_vision_horizontal.py): Shows how to do a CMA calculation for a horizontal double-vision window and which results are available for CMA calculations.
+- [cma_double_vision_vertical.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/cma_double_vision_vertical.py): Shows how to do a CMA calculation for a vertical double-vision window and which results are available for CMA calculations.
+- [deflection.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/deflection.py): Shows how to enable and set deflection properties and which deflection results are available.
+- [environmental_conditions_user_defined.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/environmental_conditions_user_defined.py): Shows how to create user-defined environmental conditions.
+- [gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gases.py): Shows how to create gases and gas mixtures from predefined gas types and custom gases created from gas properties.  Then shows how to uses those gases in gap layers for the glazing system.
+- [glass_double_layer_igsdb_product.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/glass_double_layer_igsdb_product.py): Shows how to create a double layer glazing system from generic glass data downloaded from the IGSDB.
+- [glass_local_file.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/glass_local_file.py): Shows how to create a single layer glazing system from generic glass data from a local file.
+- [glass_triple_layer_local_file.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/glass_triple_layer_local_file.py): Shows how to create a triple layer glazing system from generic glass data from a local file
+- [glass_user_defined_nband_data.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/glass_user_defined_nband_data.py): Shows how to create a single layer glazing system from user-defined data.
+- [optical_results_EN_410.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/optical_results_EN_410.py): Shows how to create a glazing system using the EN-410 optical standard and all optical results available.
+- [optical_results_NFRC.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/optical_results_NFRC.py): Shows how to create a glazing system using the NFRC optical standard and all optical results available.
+- [perforated_screen_igsdb_product.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/perforated_screen_igsdb_product.py): Shows how to create a perforated screen by downloading shading layer information from the IGSDB.
+- [perforated_screen_user_defined_geometry_and_user_defined_nband_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/perforated_screen_user_defined_geometry_and_user_defined_nband_material.py): Shows how to create a perforated screen from user-defined n-band material data and a user-defined geometry.
+- [perforated_screen_user_defined_geometry_igsdb_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/perforated_screen_user_defined_geometry_igsdb_material.py): Shows how to create a perforated screen by downloading shade material data from the IGSDB and combining it with a user-defined geometry.
+- [pv_local_file.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/pv_local_file.py): Shows how to create a system with a single layer that has integrated PV data.  For information on creating a IGSDB v2 json file with PV data see the provided [generic_pv.json](https://github.com/LBNL-ETA/pyWinCalc/tree/main/examples/products/generic_pv.json) file and the [IGSDB v2 JSON format](#IGSDB-v2-JSON-format) section below.
+- [thermal_ir.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/thermal_ir.py): Shows how to calculate optical results for the thermal IR method.  Note that currently only calculations for a single solid layer are supported and these only have diffuse-diffuse transmittances and hemispherical emissivities.
+- [thermal_results_ISO_15099.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/thermal_results_ISO_15099.py): Shows all thermal results available.  Currently only ISO 15099 is supported for thermal calculations.
+- [venetian_blind_igsdb_product.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/venetian_blind_igsdb_product.py): Shows how to create a Venetian blind by downloading shading layer information from the IGSDB.
+- [venetian_blind_local_file.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/venetian_blind_local_file.py): Shows how to create a Venetian blind by using shading layer information stored in a local file.
+- [venetian_blind_user_defined_geometry_igsdb_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/venetian_blind_user_defined_geometry_igsdb_material.py): Shows how to create a Venetian blind from material data downloaded from the IGSDB and a user-defined geometry.
+- [venetian_blind_user_defined_geometry_user_defined_dual_band_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/venetian_blind_user_defined_geometry_user_defined_dual_band_material.py): Shows how to create a Venetian blind from user-defined dual-band material data and a user-defined geometry.
+- [vertical_venetian_user_defined_geometry_igsdb_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/vertical_venetian_user_defined_geometry_igsdb_material.py): Shows how to create a vertical Venetian blind from material data downloaded from the IGSDB and a user-defined geometry.
+- [woven_shade_user_defined_geometry_igsdb_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/woven_shade_user_defined_geometry_igsdb_material.py): Shows how to create a woven shade from material data downloaded from the IGSDB and a user-defined geometry.
+
 #### Non-example files
 These are files in the example folder that provide some functionality but are not calculation examples.
-- [igsdb_interaction.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_interaction.py) Encapsulates some basic interaction with the [IGSDB](http://igsdb.lbl.gov)
-- [results_printer.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/results_printer.py) Contains some methods for displaying all available results.  The [single_clear.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/single_clear.py) example contains notes on how to calculate and access the various results.  To simplify the other examples the code to display the results has been encapsulated in this file.
+- [igsdb_interaction.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/igsdb_interaction.py): Encapsulates some basic interaction with the [IGSDB](http://igsdb.lbl.gov)
 
 If there is something you are trying to calculate that does not exist as an example yet please contact us.
 
 ### pywincalc objects
 
 #### GlazingSystem
+As of version 3.0.0 if you create a GlazingSystem without an optical standard it will default to using the NFRC optical standard and optical_standard is not required.
 - Constructor:  
     - Requires parameters:  
-        - optical_standard
         - solid_layers
     - Optional parameters:
+        - optical_standard  Defaults to NFRC
         - gap_layers  Defaults to no gap layers.  If more than one solid layer is provided then len(solid_layers) - 1 gap_layers must be provided
         - width_meters  Defaults to 1.0 meters
         - height_meters  Defaults to 1.0 meters
@@ -298,10 +326,12 @@ An `OpticalResults` object has two parts: `system_results` and `layer_results`.
 
 E.g. the direct-diffuse front reflectance is `system_results.front.reflectance.direct_diffuse`
 
-`layer_results` contain a list of results corresponding to each solid layer.  Results for both sides are provided for each layer.  Currently the only supported result per side is absorptance.  Absorptance is available for both direct and diffuse cases.   
+`layer_results` contain a list of results corresponding to each solid layer.  Results for both sides are provided for each layer.  Currently the only supported result per side is absorptance.  Absorptance is available for both direct and diffuse cases.
 
 As of version 2.4.0 absorptance results are available as heat and electricity.  Electricity absoprtance is only non-zero for layers with PV data.  The following results are available for each side of each layer:
 `total_direct, total_diffuse, heat_direct, heat_diffuse, electricity_direct, electricity_diffuse, direct, diffuse` NOTE: direct and diffuse are deprecated and equal to total_direct and total_diffuse.  
+
+As of version 3.0.0 angular absorptance results are also available.  These results are only available for systems that have a BSDF hemisphere.
 
 E.g the diffuse back absorptance for the first solid layer is `layer_results[0].back.absorptance.diffuse`
 
@@ -321,7 +351,7 @@ Thermal IR results are only available for a single layer and only have four resu
 4. `emissivity_back_hemispheric`
 
 #### Environmental Conditions
-An environment consists of two parts:  the inside and outside environment.  The exterior environment will be used as the environment before the first solid layer in the system and the interior environment will be used after the last solid layer in the system.  Each contains the same fields.  To use custom values for thermal calculations create an Environments object from inside and outside Environment objects.
+Environmental conditions consists of two parts:  the inside and outside environment.  The exterior environment will be used as the environment before the first solid layer in the system and the interior environment will be used after the last solid layer in the system.  Each contains the same fields.  To use custom values for thermal calculations create an Environments object from inside and outside Environment objects. See [environmental_conditions_user_defined.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/environmental_conditions_user_defined.py)
 
 Environment fields:
 - air_temperature
@@ -342,6 +372,8 @@ There are several options for gases.  Gases can be created either from pre-defin
 ##### Predefined gases
 Gases can be created from a `PredefinedGasType`.  Current supported predefined gas types are: AIR, ARGON, KRYPTON, and XENON.
 
+As of version 3.0.0 the below is deprecated.  See See [gaps_and_gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/include_standards/examples/gaps_and_gases.py) for the new method of creating gases.
+
 A gap layer can be created from a predefined gas type like so:
 ```
 gap_1 = pywincalc.Gap(pywincalc.PredefinedGasType.AIR, .0127)  # .0127 is gap thickness in meters
@@ -359,10 +391,12 @@ A `CustomGasData` object can be created by providing the following information:
 - viscosity
    - Expressed as a GasCoefficients object with A, B, and C fields.
 
-See [gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gases.py) for more on creating custom gases.
+See [gaps_and_gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/include_standards/examples/gaps_and_gases.py) for more on creating custom gases.
 
 ##### Gas mixtures
-Gas mixtures can be created from custom and predefined gases by specifying the percentage of each in the mixtures.  E,g,
+Gas mixtures can be created from custom and predefined gases by specifying the percentage of each in the mixtures.
+
+As of version 3.0.0 the below is deprecated.  See See [gaps_and_gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/include_standards/examples/gaps_and_gases.py) for the new method of creating gases.
 
 ```
 # The following creates a gas that is 80% sulfur hexafluoride, 15% Argonm and 5% Air
@@ -371,8 +405,6 @@ gap_4_component_2 = pywincalc.PredefinedGasMixtureComponent(pywincalc.Predefined
 gap_4_component_3 = pywincalc.PredefinedGasMixtureComponent(pywincalc.PredefinedGasType.AIR, .05)
 gap_4 = pywincalc.Gap([gap_4_component_1, gap_4_component_2, gap_4_component_3], .025)  # 2.5mm thick gap
 ```
-
-See [gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gases.py) for more on creating gas mixtures.
 
 #### Pydoc Class Documentation
 Complete class documentation generated by pydoc can be found here: https://github.com/LBNL-ETA/pyWinCalc/blob/main/pywincalc_class_documentation.html
@@ -394,7 +426,7 @@ The CMA calculation process can be summarized with the following steps:
 2. Parse the thmx files using pywincalc.parse_thmx_file
 3. Get the effective conductivity for the spacer using pywincalc.get_spacer_keff
 4. Create a CMA window.  Currently three configurations are supported: pywincalc.get_cma_window_single_vision, pywincalc.get_cma_window_double_vision_vertical, and pywincalc.get_cma_window_double_vision_horizontal.
-5. Get CMA results by calling pywincalc.calc_cma with the CMA window from step 4, the glazing system U, SHGC, and visibile transmittance, and the spacer keff from step 3.  Note:  The glazing system values can be calculated using a pywincalc.GlazingSystem (see glazing system examples above) or from other sources.  However the dimensions of the glazing system used calculate those results should match the dimensions that will be used in the CMA window.  pywincalc.CMAWindow provides a glazing_system_dimensions function that will return the appropriate glazing system size.  See the cma_single_vision_igsdb_parametric.py example.
+5. Get CMA results by calling pywincalc.calc_cma with the CMA window from step 4, the glazing system U, SHGC, and visibile transmittance, and the spacer keff from step 3.  Note:  The glazing system values can be calculated using a pywincalc.GlazingSystem (see glazing system examples above) or from other sources.  However the dimensions of the glazing system used calculate those results should match the dimensions that will be used in the CMA window.  pywincalc.CMAWindow provides a glazing_system_dimensions function that will return the appropriate glazing system size.
 
 ### CMA Examples
 The examples folder has the following examples:
@@ -404,7 +436,15 @@ The examples folder has the following examples:
 - [cma_double_vision_horizontal.py](https://github.com/LBNL-ETA/pyWinCalc/blob/CMA/examples/cma_double_vision_horizontal.py): Perform a CMA calculation for a double vision horizontal using sample THERM frames and spacer thmx files and precalculated glazing system results.
 - [cma_single_vision_igsdb_parametric.py](https://github.com/LBNL-ETA/pyWinCalc/blob/CMA/examples/cma_double_vision_horizontal.py): An example of how a parametric calculation might be performed.  Makes all possible double layer glazing systems from IGSDB glazing records with the inner layer set to generic clear 3mm glass.  Runs CMA calculations on them using sample frames and spacers.  Reports the systems with the highest and lowest U, SHGC, and visible transmittance.
 
-## Migrating from version 1
+## Migrating from version plder versions
+
+# From version 2 to 3
+
+Most of the interface in version 2 should work in version 3 with the exception of user-defined shades.  Creating shades with user-defined data should hopefully be easier and clearer.  There are now factory methods for each non-BSDF shade type: `create_perforated_screen`, `create_venetian_blind` and `create_woven_shade`.  See [perforated_screen_user_defined_geometry_and_user_defined_nband_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/perforated_screen_user_defined_geometry_and_user_defined_nband_material.py), [perforated_screen_user_defined_geometry_igsdb_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/perforated_screen_user_defined_geometry_igsdb_material.py), [venetian_blind_user_defined_geometry_igsdb_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/venetian_blind_user_defined_geometry_igsdb_material.py), [venetian_blind_user_defined_geometry_user_defined_dual_band_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/venetian_blind_user_defined_geometry_user_defined_dual_band_material.py), [vertical_venetian_user_defined_geometry_igsdb_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/vertical_venetian_user_defined_geometry_igsdb_material.py), or [woven_shade_user_defined_geometry_igsdb_material.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/woven_shade_user_defined_geometry_igsdb_material.py)
+
+Creating gases and gaps has changed but the prior interface has been retained and flagged as deprecated.  If you run into any problems with existing code and cannot easily convert it following the examples in [gaps_and_gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/include_standards/examples/gaps_and_gases.py) contact us and hopefully we will be able to help.
+
+# From version 1
 
 There were several interface changes that resulted from the new functionality.  These changes are mostly contained in two places:  The GlazingSystem constructor and the results structures.  Each section will start with a guide on how to convert existing code and will follow with some rational and explination.  This conversion will convert the code in the v1 example.py file to code that will work in v2.
 
@@ -670,6 +710,15 @@ Please refer to the [generic_pv.json](https://github.com/LBNL-ETA/pyWinCalc/tree
 									 - A string that is convertible to a float.
 
 ## Changelog
+### v3.0.0
+- Included optical standards with package installed from pypi.
+- Added angular absorptance to layer optical results for glazing systems with a BSDF hemisphere.
+- Added the ability to model vacuum gaps.
+- Added the ability to integrate BSDF matrices.
+- Refactored the method of creating user-defined shade layers.
+- Fixes for issues creating user-defined Venetian blinds.
+- Simplified and expanded examples.  Changed the names of the examples to make finding functionality easier.  Simplified the code in the examples to try to make them easier to understand.
+
 ### v2.4.2
 
 - Changed the behavior of dual-band BSDF materials.  Now if there a system only has a single layer that is a dual band BSDF and the requested optical method is solar or photopic the layer is treated as a single band using the appropritate band values.  In all other cases the layer is created as a dual band layer as before.  This change is needed so that the single layer calculated solar and visible properties are derived from the values specified for those bands in the input data. 

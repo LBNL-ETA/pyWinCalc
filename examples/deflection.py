@@ -1,13 +1,5 @@
 import pywincalc
 
-# Path to the optical standard file.  All other files referenced by the standard file must be in the same directory
-# Note:  While all optical standards packaged with WINDOW should work with optical calculations care should be
-# taken to use NFRC standards if NFRC thermal results are desired.  This is because for thermal calculations currently
-# only ISO 15099 is supported.  While it is possible to use EN optical standards and create thermal results
-# those results will not be based on EN 673
-optical_standard_path = "standards/W5_NFRC_2003.std"
-optical_standard = pywincalc.load_standard(optical_standard_path)
-
 # Load solid layer measured values.  Solid layer information can come from either igsdb.lbl.gov or files generate
 # by the Optics program.  Since igsdb.lbl.gov requires registration some optics files are provided for example
 # purposes
@@ -22,18 +14,10 @@ clear_6 = pywincalc.parse_optics_file(clear_6_path)
 # that was just loaded and the middle is the same glass as the single clear example above
 solid_layers = [clear_6, clear_3, clear_6]
 
-# Solid layers must be separated by gap layers
-# Currently there are four pre-defined gases available: Air, Argon, Krypton, and Xenon
-# Vacuum gaps are not yet supported
-# To create a gap with 100% of a predefined gas create a Gap_Data object with the gas type
-# and thickness in meters
-gap_1 = pywincalc.Gap(pywincalc.PredefinedGasType.AIR, .0127)  # .0127 is gap thickness in meters
-
-# To create a mixture of predefined gases first create the components with the gas type and portion of the mixture
-# The following creates a gas that is 70% Krypton and 30% Xenon and 2cm thick
-gap_2_component_1 = pywincalc.PredefinedGasMixtureComponent(pywincalc.PredefinedGasType.KRYPTON, .7)
-gap_2_component_2 = pywincalc.PredefinedGasMixtureComponent(pywincalc.PredefinedGasType.XENON, .3)
-gap_2 = pywincalc.Gap([gap_2_component_1, gap_2_component_2], .02)  # .02 is gap thickness in meters
+# Solid layers must be separated by gap layers.  This example uses two air gaps
+# See gaps_and_gases.py in examples for more on creating gases
+gap_1 = pywincalc.Layers.gap(thickness=.0127)
+gap_2 = pywincalc.Layers.gap(thickness=.02)
 
 # Put all gaps into a list ordered from outside to inside
 # Note:  This is only specifying gaps between solid layers
@@ -45,14 +29,14 @@ width = 1.0  # width of the glazing system in meters
 height = 1.0  # height of the glazing system in meters
 tilt = 90  # glazing system tilt in degrees
 
-glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard, solid_layers=solid_layers, gap_layers=gaps,
-                                         width_meters=width, height_meters=height, tilt_degrees=tilt,
-                                         environment=pywincalc.nfrc_u_environments())
+glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, gap_layers=gaps,
+                                                 width_meters=width, height_meters=height, tilt_degrees=tilt)
+
 # Deflection calcs currently need to be specifically enabled
 glazing_system.enable_deflection(True)
 
 # Set initial temperature and pressure.  Values just chosen for example purposes
-glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=1013200)
+glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=101320)
 
 # Density can be calculated using either U or SHGC TARCOG system types.  Just using SHGC for this
 # example for simplicity.
@@ -64,13 +48,13 @@ print("\tpanes load: {val}".format(val=deflection_results.panes_load))
 print("\tU: {val}".format(val=glazing_system.u()))
 print("\tSHGC: {val}".format(val=glazing_system.shgc()))
 print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
-print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+print(
+    "\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
 visible_results = glazing_system.optical_method_results("PHOTOPIC")
 print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 
-
 # Change initial temperature and pressure.  Values just chosen for example purposes
-glazing_system.set_deflection_properties(temperature_initial=290, pressure_initial=1014500)
+glazing_system.set_deflection_properties(temperature_initial=290, pressure_initial=101450)
 print("")
 print("Changed initial temperature and pressure")
 print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
@@ -79,7 +63,8 @@ print("\tpanes load: {val}".format(val=deflection_results.panes_load))
 print("\tU: {val}".format(val=glazing_system.u()))
 print("\tSHGC: {val}".format(val=glazing_system.shgc()))
 print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
-print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+print(
+    "\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
 visible_results = glazing_system.optical_method_results("PHOTOPIC")
 print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 # Change tilt
@@ -94,7 +79,8 @@ print("\tpanes load: {val}".format(val=deflection_results.panes_load))
 print("\tU: {val}".format(val=glazing_system.u()))
 print("\tSHGC: {val}".format(val=glazing_system.shgc()))
 print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
-print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+print(
+    "\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
 visible_results = glazing_system.optical_method_results("PHOTOPIC")
 print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 
@@ -111,7 +97,8 @@ print("\tpanes load: {val}".format(val=deflection_results.panes_load))
 print("\tU: {val}".format(val=glazing_system.u()))
 print("\tSHGC: {val}".format(val=glazing_system.shgc()))
 print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
-print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+print(
+    "\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
 visible_results = glazing_system.optical_method_results("PHOTOPIC")
 print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 
@@ -160,17 +147,7 @@ custom_outside_env = pywincalc.Environment(air_temperature=air_temperature_outsi
 
 custom_env = pywincalc.Environments(outside=custom_outside_env, inside=custom_inside_env)
 
-# changing environmental conditions currently requires creating a new glazing system
-# note:  this resets any changes made such as if deflection is enabled or applied load is set.
-# if this is a problem or you think it would be better to be able to change environmental conditions
-# like tilt and load let us know.
-
-glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard, solid_layers=solid_layers, gap_layers=gaps,
-                                         width_meters=width, height_meters=height, tilt_degrees=tilt,
-                                         environment=custom_env)
-
-glazing_system.enable_deflection(True)
-glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=1013200)
+glazing_system.environments(custom_env)
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
@@ -181,7 +158,8 @@ print("\tpanes load: {val}".format(val=deflection_results.panes_load))
 print("\tU: {val}".format(val=glazing_system.u()))
 print("\tSHGC: {val}".format(val=glazing_system.shgc()))
 print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
-print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+print(
+    "\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
 visible_results = glazing_system.optical_method_results("PHOTOPIC")
 print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 
@@ -194,12 +172,9 @@ custom_env_2 = pywincalc.nfrc_shgc_environments()
 custom_env_2.outside.pressure += 500
 custom_env_2.inside.pressure -= 200
 
-glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard, solid_layers=solid_layers, gap_layers=gaps,
-                                         width_meters=width, height_meters=height, tilt_degrees=tilt,
-                                         environment=custom_env_2)
+glazing_system.environments(custom_env_2)
 
-glazing_system.enable_deflection(True)
-glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=1013200)
+glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=101320)
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
@@ -210,7 +185,8 @@ print("\tpanes load: {val}".format(val=deflection_results.panes_load))
 print("\tU: {val}".format(val=glazing_system.u()))
 print("\tSHGC: {val}".format(val=glazing_system.shgc()))
 print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
-print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+print(
+    "\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
 visible_results = glazing_system.optical_method_results("PHOTOPIC")
 print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 
@@ -224,22 +200,22 @@ clear_3.youngs_modulus = 7e10;
 
 solid_layers = [clear_6, clear_3, clear_6]
 
-glazing_system = pywincalc.GlazingSystem(optical_standard=optical_standard, solid_layers=solid_layers,
-                                         gap_layers=gaps, width_meters=width, height_meters=height, tilt_degrees=tilt,
-                                         environment=custom_env_2)
+glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, gap_layers=gaps, width_meters=width,
+                                                 height_meters=height, tilt_degrees=tilt, environment=custom_env_2)
 
 glazing_system.enable_deflection(True)
-glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=1013200)
+glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=101320)
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
-print("Set density and youngs modulus")
+print("Set density and Young's modulus")
 print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
 print("\tdeflection mean: {val}".format(val=deflection_results.deflection_mean))
 print("\tpanes load: {val}".format(val=deflection_results.panes_load))
 print("\tU: {val}".format(val=glazing_system.u()))
 print("\tSHGC: {val}".format(val=glazing_system.shgc()))
 print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
-print("\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+print(
+    "\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
 visible_results = glazing_system.optical_method_results("PHOTOPIC")
 print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
