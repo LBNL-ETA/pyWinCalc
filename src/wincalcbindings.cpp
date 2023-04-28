@@ -341,9 +341,12 @@ PYBIND11_MODULE(wincalcbindings, m) {
              std::shared_ptr<OpticsParser::ProductData>>(m, "ProductData")
       .def_readwrite("product_name", &OpticsParser::ProductData::productName)
       .def_readwrite("product_type", &OpticsParser::ProductData::productType)
+      .def_readwrite("product_subtype", &OpticsParser::ProductData::productSubtype)
       .def_readwrite("nfrc_id", &OpticsParser::ProductData::nfrcid)
       .def_readwrite("thickness", &OpticsParser::ProductData::thickness)
       .def_readwrite("conductivity", &OpticsParser::ProductData::conductivity)
+      .def_readwrite("coating_name", &OpticsParser::ProductData::coatingName)
+      .def_readwrite("coated_side", &OpticsParser::ProductData::coatedSide)
       .def_readwrite("ir_transmittance",
                      &OpticsParser::ProductData::IRTransmittance)
       .def_readwrite("emissivity_front",
