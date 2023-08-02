@@ -37,7 +37,7 @@ from wincalcbindings import AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDir
     OpticalResultLayer, OpticalResultSide, OpticalResultSideColor, OpticalResultSide_Layer, OpticalResultTransmission, \
     OpticalResultTransmissionColor, OpticalResults, OpticalResultsColor, OpticalStandard, OpticalStandardMethod, \
     PVPowerProperty, PVWavelengthData, ParsedPerforatedGeometry, ParsedVenetianGeometry, ParsedWovenGeometry, \
-    PerforatedGeometry, PredefinedGasConverter, PredefinedGasType, ProductComposistionData, ProductData, \
+    PerforatedGeometry, PredefinedGasType, ProductComposistionData, ProductData, \
     ProductDataOptical, ProductDataOpticalAndThermal, ProductDataOpticalDualBand, \
     ProductDataOpticalDualBandBSDF, ProductDataOpticalDualBandHemispheric, ProductDataOpticalNBand, \
     ProductDataOpticalPerforatedScreen, ProductDataOpticalVenetian, ProductDataOpticalWithMaterial, \
@@ -51,7 +51,9 @@ from wincalcbindings import AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDir
     create_best_worst_u_factor_option, create_gas, create_perforated_screen, create_venetian_blind, create_woven_shade, \
     get_cma_window_double_vision_horizontal, get_cma_window_double_vision_vertical, get_cma_window_single_vision, \
     get_spacer_keff, nfrc_shgc_environments, nfrc_u_environments, parse_bsdf_xml_file, parse_bsdf_xml_string, \
-    parse_json, parse_json_file, parse_optics_file, parse_thmx_file, parse_thmx_string
+    parse_json, parse_json_file, parse_optics_file, parse_thmx_file, parse_thmx_string, IGUVentilatedGapLayer, \
+	forced_ventilation_gap
+	
 
 
 @deprecation.deprecated(deprecated_in="3.0.0", removed_in="4.0.0",
