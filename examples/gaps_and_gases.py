@@ -73,11 +73,16 @@ gap_6 = pywincalc.Layers.gap(thickness=.001, pressure=0.1333)
 # Add circular pillars to the gap
 gap_6 = pywincalc.Layers.add_circular_pillar(gap_6, conductivity=999, spacing=0.03, radius=0.0002)
 
-gaps = [gap_1, gap_2, gap_3, gap_4, gap_5, gap_6]
+# Gaps can now have forced ventilation.  To create one first create a regular gap and then convert
+# to a forced ventilated gap.  The gap that will be converted can be any of the above.
+gap_7 = pywincalc.Layers.gap(thickness=.0127)  # .0127 is gap thickness in meters
+gap_7 = pywincalc.forced_ventilation_gap(gap=gap_7, forced_ventilation_air_speed=0.3, forced_ventilation_air_temperature=295)
+
+gaps = [gap_1, gap_2, gap_3, gap_4, gap_5, gap_6, gap_7]
 
 clear_3_path = "products/CLEAR_3.DAT"
 clear_3 = pywincalc.parse_optics_file(clear_3_path)
-solid_layers = [clear_3] * 7
+solid_layers = [clear_3] * 8
 
 # Create a glazing system.  This only shows an example of getting one result from a glazing system
 # created using default environmental conditions.
@@ -87,4 +92,4 @@ solid_layers = [clear_3] * 7
 # For more on environmental conditions see environmental_conditions_user_defined.py
 glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, gap_layers=gaps)
 u_value = glazing_system.u()
-print("U-value for six-layer system of various gases: {v}".format(v=u_value))
+print("U-value for seven-layer system of various gases: {v}".format(v=u_value))

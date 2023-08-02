@@ -36,7 +36,7 @@ glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, gap_layers=g
 glazing_system.enable_deflection(True)
 
 # Set initial temperature and pressure.  Values just chosen for example purposes
-glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=101320)
+glazing_system.set_deflection_properties(temperature_at_construction=273, pressure_at_construction=101320)
 
 # Density can be calculated using either U or SHGC TARCOG system types.  Just using SHGC for this
 # example for simplicity.
@@ -54,7 +54,7 @@ visible_results = glazing_system.optical_method_results("PHOTOPIC")
 print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
 
 # Change initial temperature and pressure.  Values just chosen for example purposes
-glazing_system.set_deflection_properties(temperature_initial=290, pressure_initial=101450)
+glazing_system.set_deflection_properties(temperature_at_construction=290, pressure_at_construction=101450)
 print("")
 print("Changed initial temperature and pressure")
 print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
@@ -174,7 +174,7 @@ custom_env_2.inside.pressure -= 200
 
 glazing_system.environments(custom_env_2)
 
-glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=101320)
+glazing_system.set_deflection_properties(temperature_at_construction=273, pressure_at_construction=101320)
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
@@ -204,11 +204,30 @@ glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, gap_layers=g
                                                  height_meters=height, tilt_degrees=tilt, environment=custom_env_2)
 
 glazing_system.enable_deflection(True)
-glazing_system.set_deflection_properties(temperature_initial=273, pressure_initial=101320)
+glazing_system.set_deflection_properties(temperature_at_construction=273, pressure_at_construction=101320)
 deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
 
 print("")
 print("Set density and Young's modulus")
+print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
+print("\tdeflection mean: {val}".format(val=deflection_results.deflection_mean))
+print("\tpanes load: {val}".format(val=deflection_results.panes_load))
+print("\tU: {val}".format(val=glazing_system.u()))
+print("\tSHGC: {val}".format(val=glazing_system.shgc()))
+print("\tLayer temperatures (U): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.U)))
+print(
+    "\tLayer temperatures (SHGC): {val}".format(val=glazing_system.layer_temperatures(pywincalc.TarcogSystemType.SHGC)))
+visible_results = glazing_system.optical_method_results("PHOTOPIC")
+print("\tVT: {val}".format(val=visible_results.system_results.front.transmittance.direct_hemispherical))
+
+
+# If the deflection of the solid layers has been measured it can be used instead of temperature and pressure
+# to calculate other properties
+glazing_system.set_deflection_properties(measured_deflected_gaps=[.01, .015])
+deflection_results = glazing_system.calc_deflection_properties(pywincalc.TarcogSystemType.SHGC)
+
+print("")
+print("Set measured gap widths")
 print("\tdeflection max: {val}".format(val=deflection_results.deflection_max))
 print("\tdeflection mean: {val}".format(val=deflection_results.deflection_mean))
 print("\tpanes load: {val}".format(val=deflection_results.panes_load))
