@@ -109,7 +109,6 @@ void declare_wce_optical_results_template<wincalc::Color_Result>(
                      "are not currently supported.");
 }
 
-
 class Py_Product_Data_Optical : public wincalc::Product_Data_Optical //_Base
 {
 public:
@@ -133,22 +132,6 @@ protected:
                            conductivityOfPillarArray, );
   }
 };
-
-#if 0
-template <class Product_Data_N_Band_Optical_Base =
-	wincalc::Product_Data_N_Band_Optical>
-	class Py_Product_Data_N_Band_Optical
-	: public Py_Product_Data_Optical<Product_Data_N_Band_Optical_Base> {
-	public:
-		using Py_Product_Data_Optical<Product_Data_N_Band_Optical_Base>::
-			Py_Product_Data_Optical; // Inherit constructors
-		// Override PyAnimal's pure virtual go() with a non-pure one:
-		std::vector<double> wavelengths() const override {
-			PYBIND11_OVERRIDE(std::vector<double>, Product_Data_N_Band_Optical_Base,
-				wavelengths, );
-		}
-};
-#endif
 
 PYBIND11_MODULE(wincalcbindings, m) {
   m.doc() = "Python bindings for WinCalc";
@@ -177,19 +160,21 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def("name", &Gases::CGasData::name);
 
   py::class_<Gases::CGas>(m, "Gas")
-      .def(py::init<std::vector<std::pair<double, Gases::CGasData>> const &>(),
-           py::arg("gases"))
-      .def(py::init<std::vector<std::pair<double, Gases::GasDef>> const &>(),
-           py::arg("gases"))
+      .def(py::init<std::vector<Gases::CGasItem> const &>(), py::arg("gases"))
       .def("get_simple_gas_properties", &Gases::CGas::getSimpleGasProperties)
       .def("get_gas_properties", &Gases::CGas::getGasProperties)
       .def("set_temperature_and_pressure",
            &Gases::CGas::setTemperatureAndPressure)
-      .def("gas_items", &Gases::CGas::gasItems);
-
-  py::class_<Gases::Gas>(m, "PredefinedGasConverter")
-	  .def_static("instance", &Gases::Gas::instance)
-	  .def("get", &Gases::Gas::get);
+      .def("gas_items", &Gases::CGas::gasItems)
+      .def("total_percent", &Gases::CGas::totalPercent)
+      .def("add_gas_items", &Gases::CGas::addGasItems)
+      .def("add_gas_item",
+           py::overload_cast<double, Gases::CGasData const &>(
+               &Gases::CGas::addGasItem),
+           py::arg("percent"), py::arg("gas_data"))
+      .def("add_gas_item",
+           py::overload_cast<double, Gases::GasDef>(&Gases::CGas::addGasItem),
+           py::arg("percent"), py::arg("predefined_gas"));
 
   py::class_<Tarcog::ISO15099::CIGUGapLayer,
              std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer>>(m, "IGUGapLayer")
@@ -206,8 +191,10 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("gap_layer"), py::arg("temperature_initial"),
            py::arg("pressure_initial"));
 
-  py::class_<Tarcog::ISO15099::CSupportPillar, Py_CSupportPillar, Tarcog::ISO15099::CIGUGapLayer,
-             std::shared_ptr<Tarcog::ISO15099::CSupportPillar>>(m, "SupportPillar")
+  py::class_<Tarcog::ISO15099::CSupportPillar, Py_CSupportPillar,
+             Tarcog::ISO15099::CIGUGapLayer,
+             std::shared_ptr<Tarcog::ISO15099::CSupportPillar>>(m,
+                                                                "SupportPillar")
       .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double>(),
            py::arg("gap_layer"), py::arg("conductivity"));
 
@@ -219,6 +206,52 @@ PYBIND11_MODULE(wincalcbindings, m) {
                     double>(),
            py::arg("gap_layer"), py::arg("conductivity"), py::arg("spacing"),
            py::arg("radius"));
+
+  py::class_<Tarcog::ISO15099::CIGUVentilatedGapLayer,
+             Tarcog::ISO15099::CIGUGapLayer,
+             std::shared_ptr<Tarcog::ISO15099::CIGUVentilatedGapLayer>>(
+      m, "IGUVentilatedGapLayer")
+      .def(py::init<std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer> const &>(),
+           py::arg("gap_layer"))
+      .def(py::init<std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer>, double,
+                    double>(),
+           py::arg("gap_layer"), py::arg("inlet_temperature"),
+           py::arg("inlet_speed"))
+      .def("inlet_temperature",
+           &Tarcog::ISO15099::CIGUVentilatedGapLayer::inletTemperature)
+      .def("outlet_temperature",
+           &Tarcog::ISO15099::CIGUVentilatedGapLayer::outletTemperature)
+      .def("layer_temperature",
+           &Tarcog::ISO15099::CIGUVentilatedGapLayer::layerTemperature)
+      .def("set_flow_geometry",
+           &Tarcog::ISO15099::CIGUVentilatedGapLayer::setFlowGeometry,
+           py::arg("a_in"), py::arg("a_out"))
+      .def("set_inlet_temperature",
+           &Tarcog::ISO15099::CIGUVentilatedGapLayer::setInletTemperature,
+           py::arg("inlet_temperature"))
+      .def("set_flow_temperatures",
+           &Tarcog::ISO15099::CIGUVentilatedGapLayer::setFlowTemperatures,
+           py::arg("inlet_temperature"), py::arg("outlet_temperature"))
+      .def("set_flow_speed",
+           &Tarcog::ISO15099::CIGUVentilatedGapLayer::setFlowSpeed,
+           py::arg("speed"))
+      .def("smooth_energy_gain",
+           &Tarcog::ISO15099::CIGUVentilatedGapLayer::smoothEnergyGain,
+           py::arg("qv1"), py::arg("qv2"))
+      .def(
+          "calculate_ventilated_airflow",
+          &Tarcog::ISO15099::CIGUVentilatedGapLayer::calculateVentilatedAirflow,
+          py::arg("inlet_temperature"))
+      .def("calculate_thermally_driven_airflow_with_adjacent_gap",
+           &Tarcog::ISO15099::CIGUVentilatedGapLayer::
+               calculateThermallyDrivenAirflowWithAdjacentGap,
+           py::arg("adjacent_gap"))
+      .def("clone", &Tarcog::ISO15099::CIGUVentilatedGapLayer::clone);
+
+  m.def("forced_ventilation_gap",
+        Tarcog::ISO15099::Layers::forcedVentilationGap, py::arg("gap"),
+        py::arg("forced_ventilation_air_speed"),
+        py::arg("forced_ventilation_air_temperature"));
 
   py::class_<OpticsParser::MeasurementComponent>(m,
                                                  "OpticalMeasurementComponent")
@@ -341,7 +374,8 @@ PYBIND11_MODULE(wincalcbindings, m) {
              std::shared_ptr<OpticsParser::ProductData>>(m, "ProductData")
       .def_readwrite("product_name", &OpticsParser::ProductData::productName)
       .def_readwrite("product_type", &OpticsParser::ProductData::productType)
-      .def_readwrite("product_subtype", &OpticsParser::ProductData::productSubtype)
+      .def_readwrite("product_subtype",
+                     &OpticsParser::ProductData::productSubtype)
       .def_readwrite("nfrc_id", &OpticsParser::ProductData::nfrcid)
       .def_readwrite("thickness", &OpticsParser::ProductData::thickness)
       .def_readwrite("conductivity", &OpticsParser::ProductData::conductivity)
@@ -994,8 +1028,14 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def("enable_deflection", &wincalc::Glazing_System::enable_deflection,
            py::arg("enable"))
       .def("set_deflection_properties",
-           &wincalc::Glazing_System::set_deflection_properties,
-           py::arg("temperature_initial"), py::arg("pressure_initial"))
+           py::overload_cast<double, double>(
+               &wincalc::Glazing_System::set_deflection_properties),
+           py::arg("temperature_at_construction"),
+           py::arg("pressure_at_construction"))
+      .def("set_deflection_properties",
+           py::overload_cast<std::vector<double> const &>(
+               &wincalc::Glazing_System::set_deflection_properties),
+           py::arg("measured_deflected_gaps"))
       .def("calc_deflection_properties",
            &wincalc::Glazing_System::calc_deflection_properties,
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
@@ -1045,7 +1085,8 @@ PYBIND11_MODULE(wincalcbindings, m) {
         "Parse THERM thmx format from a string");
 
   m.def("create_gas", &wincalc::create_gas, py::arg("components"),
-        "Create a gas mixture from components: a list of pairs where the first in each item is the percent of the total and the second is the gas.");
+        "Create a gas mixture from components: a list of pairs where the first "
+        "in each item is the percent of the total and the second is the gas.");
 
   m.def("create_venetian_blind",
         py::overload_cast<wincalc::Venetian_Geometry const &,
