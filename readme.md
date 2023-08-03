@@ -396,7 +396,7 @@ See [gaps_and_gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/include_stand
 ##### Gas mixtures
 Gas mixtures can be created from custom and predefined gases by specifying the percentage of each in the mixtures.
 
-As of version 3.0.0 the below is deprecated.  See See [gaps_and_gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/include_standards/examples/gaps_and_gases.py) for the new method of creating gases.
+As of version 3.0.0 the below is deprecated.  See [gaps_and_gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/include_standards/examples/gaps_and_gases.py) for the new method of creating gases.
 
 ```
 # The following creates a gas that is 80% sulfur hexafluoride, 15% Argonm and 5% Air
@@ -710,6 +710,11 @@ Please refer to the [generic_pv.json](https://github.com/LBNL-ETA/pyWinCalc/tree
 									 - A string that is convertible to a float.
 
 ## Changelog
+### v3.2.0
+- Added ability to model gaps with forced ventilation.  See gap #7 in [gaps_and_gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gaps_and_gases.py)
+- Added the ability to use measured gap deflection in deflection calculations.  See [deflection.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/deflection.py)
+  - Note:  This change involves a change to the argument names in set_deflection_properties when using temperature and pressure.  Arguments are now named temperature_at_construction and pressure_at_construction to better reflect usage.
+
 ### v3.0.0
 - Included optical standards with package installed from pypi.
 - Added angular absorptance to layer optical results for glazing systems with a BSDF hemisphere.
