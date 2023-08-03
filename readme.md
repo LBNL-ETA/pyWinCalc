@@ -710,7 +710,7 @@ Please refer to the [generic_pv.json](https://github.com/LBNL-ETA/pyWinCalc/tree
 									 - A string that is convertible to a float.
 
 ## Changelog
-### v3.1.0
+### v3.2.0
 - Added ability to model gaps with forced ventilation.  See gap #7 in [gaps_and_gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gaps_and_gases.py)
 - Added the ability to use measured gap deflection in deflection calculations.  See [deflection.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/deflection.py)
   - Note:  This change involves a change to the argument names in set_deflection_properties when using temperature and pressure.  Arguments are now named temperature_at_construction and pressure_at_construction to better reflect usage.
