@@ -912,9 +912,9 @@ PYBIND11_MODULE(wincalcbindings, m) {
   m.def("nfrc_shgc_environments", &wincalc::nfrc_shgc_environments);
 
   py::class_<wincalc::Deflection_Results>(m, "DeflectionResults")
-      .def_readwrite("deflection_max",
+      .def_readwrite("layer_deflection_max",
                      &wincalc::Deflection_Results::layer_deflection_max)
-      .def_readwrite("deflection_mean",
+      .def_readwrite("layer_deflection_mean",
                      &wincalc::Deflection_Results::layer_deflection_mean)
       .def_readwrite("panes_load", &wincalc::Deflection_Results::panes_load)
       .def_readwrite("gap_width_max",
