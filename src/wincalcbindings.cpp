@@ -183,14 +183,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def(py::init<double, double, Gases::CGas const &>(),
            py::arg("thickness"), py::arg("pressure"), py::arg("gas"));
 
-  py::class_<Tarcog::ISO15099::CIGUGapLayerDeflection,
-             Tarcog::ISO15099::CIGUGapLayer,
-             std::shared_ptr<Tarcog::ISO15099::CIGUGapLayerDeflection>>(
-      m, "IGUGapLayerDeflection")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double, double>(),
-           py::arg("gap_layer"), py::arg("temperature_initial"),
-           py::arg("pressure_initial"));
-
   py::class_<Tarcog::ISO15099::CSupportPillar, Py_CSupportPillar,
              Tarcog::ISO15099::CIGUGapLayer,
              std::shared_ptr<Tarcog::ISO15099::CSupportPillar>>(m,
@@ -920,11 +912,15 @@ PYBIND11_MODULE(wincalcbindings, m) {
   m.def("nfrc_shgc_environments", &wincalc::nfrc_shgc_environments);
 
   py::class_<wincalc::Deflection_Results>(m, "DeflectionResults")
-      .def_readwrite("deflection_max",
-                     &wincalc::Deflection_Results::deflection_max)
-      .def_readwrite("deflection_mean",
-                     &wincalc::Deflection_Results::deflection_mean)
-      .def_readwrite("panes_load", &wincalc::Deflection_Results::panes_load);
+      .def_readwrite("layer_deflection_max",
+                     &wincalc::Deflection_Results::layer_deflection_max)
+      .def_readwrite("layer_deflection_mean",
+                     &wincalc::Deflection_Results::layer_deflection_mean)
+      .def_readwrite("panes_load", &wincalc::Deflection_Results::panes_load)
+      .def_readwrite("gap_width_max",
+                     &wincalc::Deflection_Results::gap_width_max)
+      .def_readwrite("gap_width_mean",
+                     &wincalc::Deflection_Results::gap_width_mean);
 
   py::class_<wincalc::Glazing_System>(m, "GlazingSystem")
       .def(

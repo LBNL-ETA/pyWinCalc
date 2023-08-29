@@ -70,7 +70,7 @@ jobs:
           
   build_wheels_manylinux:
     name: Build manylinux wheels
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -79,7 +79,7 @@ jobs:
         # PyPi only accepts manylinux wheels, it does not accept wheels for specific versions/architectures
         # Note that at least manylinux2014 is needed to get support for C++17
       - name: Build manylinux Python wheels
-        uses: RalfG/python-wheels-manylinux-build@v0.4.2-manylinux2014_x86_64
+        uses: RalfG/python-wheels-manylinux-build@v0.7.1-manylinux2014_x86_64
 
       - name: upload wheels
         uses: actions/upload-artifact@v2

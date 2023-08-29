@@ -32,7 +32,7 @@ from wincalcbindings import AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDir
     CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, CircularPillar, CoatedSide, \
     ColorResult, DeflectionResults, DistributionMethodType, DualBandBSDF, EffectiveOpenness, Environment, Environments, \
     FlippableSolidLayer, Gas, GasCoefficients, GasData, GlazingSystem as _GlazingSystem, GlazingSystemDimensions, \
-    IGUGapLayer, IGUGapLayerDeflection, IntegrationRule, IntegrationRuleType, Lab, Layers, MaterialType, \
+    IGUGapLayer, IntegrationRule, IntegrationRuleType, Lab, Layers, MaterialType, \
     OpticalMeasurementComponent, OpticalResultAbsorptance, OpticalResultFluxType, OpticalResultFluxTypeColor, \
     OpticalResultLayer, OpticalResultSide, OpticalResultSideColor, OpticalResultSide_Layer, OpticalResultTransmission, \
     OpticalResultTransmissionColor, OpticalResults, OpticalResultsColor, OpticalStandard, OpticalStandardMethod, \
