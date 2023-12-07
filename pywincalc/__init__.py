@@ -29,7 +29,8 @@ import deprecation
 
 from wincalcbindings import AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDirection, BSDFDirections, BSDFHemisphere, \
     BSDFIntegrator, BoundaryConditionsCoefficientModelType, CMABestWorstUFactors, CMAResult, CMAWindow, \
-    CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, CircularPillar, CoatedSide, \
+    CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, CellSpacingType, pillar_cell_area, \
+    PillarData, CylindricalPillar, UniversalSupportPillar, CylindricalPillarLayer, CoatedSide, \
     ColorResult, DeflectionResults, DistributionMethodType, DualBandBSDF, EffectiveOpenness, Environment, Environments, \
     FlippableSolidLayer, Gas, GasCoefficients, GasData, GlazingSystem as _GlazingSystem, GlazingSystemDimensions, \
     IGUGapLayer, IntegrationRule, IntegrationRuleType, Lab, Layers, MaterialType, \
@@ -42,7 +43,7 @@ from wincalcbindings import AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDir
     ProductDataOpticalDualBandBSDF, ProductDataOpticalDualBandHemispheric, ProductDataOpticalNBand, \
     ProductDataOpticalPerforatedScreen, ProductDataOpticalVenetian, ProductDataOpticalWithMaterial, \
     ProductDataOpticalWovenShade, ProductDataThermal, ProductGeometry, PropertySimple, RGB, Side, \
-    SpectalDataWavelengthRangeMethodType, Spectrum, SpectrumType, SquareMatrix, SupportPillar, TarcogSystemType, \
+    SpectalDataWavelengthRangeMethodType, Spectrum, SpectrumType, SquareMatrix, TarcogSystemType, \
     ThermalIRResults, ThmxBoundaryCondition, ThmxBoundaryConditionPolygon, ThmxCMABestWorstOption, ThmxCMAOptions, \
     ThmxFileContents, ThmxMaterial, ThmxMeshParameters, ThmxPolygon, ThmxPolygonPoint, ThmxRGB, ThmxResult, \
     ThmxUFactorProjectionResult, ThmxUFactorResults, Trichromatic, VenetianGeometry, WavelengthBSDFs, \
@@ -53,7 +54,7 @@ from wincalcbindings import AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDir
     get_spacer_keff, nfrc_shgc_environments, nfrc_u_environments, parse_bsdf_xml_file, parse_bsdf_xml_string, \
     parse_json, parse_json_file, parse_optics_file, parse_thmx_file, parse_thmx_string, IGUVentilatedGapLayer, \
 	forced_ventilation_gap
-	
+
 
 
 @deprecation.deprecated(deprecated_in="3.0.0", removed_in="4.0.0",

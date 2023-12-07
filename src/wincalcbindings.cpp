@@ -113,25 +113,54 @@ class Py_Product_Data_Optical : public wincalc::Product_Data_Optical //_Base
 {
 public:
   using wincalc::Product_Data_Optical::Product_Data_Optical; // Inherit
-                                                             // constructors
+  // constructors
   std::vector<double> wavelengths() const override {
     PYBIND11_OVERRIDE_PURE(std::vector<double>, wincalc::Product_Data_Optical,
                            wavelengths, );
   }
 };
 
-class Py_CSupportPillar : public Tarcog::ISO15099::CSupportPillar //_Base
-{
+// struct PyCylindricalPillar : public Tarcog::ISO15099::CylindricalPillar {};
+//
+// struct PySphericalPillar : public Tarcog::ISO15099::SphericalPillar {};
+//
+// struct PyRectangularPillar : public Tarcog::ISO15099::RectangularPillar {};
+//
+// struct PyPolygonalPillar : public Tarcog::ISO15099::PolygonalPillar {};
+//
+// struct PyLinearBearingPillar : public Tarcog::ISO15099::LinearBearingPillar
+// {};
+//
+// struct PyTruncatedConePillar : public Tarcog::ISO15099::TruncatedConePillar
+// {};
+//
+// struct PyAnnulusCylinderPillar
+//     : public Tarcog::ISO15099::AnnulusCylinderPillar {};
+
+class Py_UniversalSupportPillar
+    : public Tarcog::ISO15099::UniversalSupportPillar {
 public:
-  using Tarcog::ISO15099::CSupportPillar::CSupportPillar; // Inherit
-                                                          // constructors
+  using Tarcog::ISO15099::UniversalSupportPillar::UniversalSupportPillar;
 
 protected:
-  double conductivityOfPillarArray() override {
-    PYBIND11_OVERRIDE_PURE(double, Tarcog::ISO15099::CSupportPillar,
-                           conductivityOfPillarArray, );
+  double areaOfContact() override {
+    PYBIND11_OVERRIDE_PURE(double, Tarcog::ISO15099::UniversalSupportPillar,
+                           areaOfContact, );
   }
 };
+
+// class Py_CSupportPillar : public Tarcog::ISO15099::CSupportPillar //_Base
+//{
+// public:
+//     using Tarcog::ISO15099::CSupportPillar::CSupportPillar; // Inherit
+//     // constructors
+//
+// protected:
+//     double conductivityOfPillarArray() override {
+//         PYBIND11_OVERRIDE_PURE(double, Tarcog::ISO15099::CSupportPillar,
+//                                conductivityOfPillarArray,);
+//     }
+// };
 
 PYBIND11_MODULE(wincalcbindings, m) {
   m.doc() = "Python bindings for WinCalc";
@@ -183,21 +212,61 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def(py::init<double, double, Gases::CGas const &>(),
            py::arg("thickness"), py::arg("pressure"), py::arg("gas"));
 
-  py::class_<Tarcog::ISO15099::CSupportPillar, Py_CSupportPillar,
-             Tarcog::ISO15099::CIGUGapLayer,
-             std::shared_ptr<Tarcog::ISO15099::CSupportPillar>>(m,
-                                                                "SupportPillar")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double>(),
-           py::arg("gap_layer"), py::arg("conductivity"));
+  py::enum_<Tarcog::ISO15099::CellSpacingType>(m, "CellSpacingType", py::arithmetic())
+      .value("SQUARE", Tarcog::ISO15099::CellSpacingType::Square)
+      .value("SHIFTEDSQUARE", Tarcog::ISO15099::CellSpacingType::ShiftedSquare)
+      .value("SHIFTEDROTATEDSQUARE", Tarcog::ISO15099::CellSpacingType::ShiftedRotatedSquare);
 
-  py::class_<Tarcog::ISO15099::CCircularPillar,
-             Tarcog::ISO15099::CSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::CCircularPillar>>(
-      m, "CircularPillar")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double, double,
-                    double>(),
-           py::arg("gap_layer"), py::arg("conductivity"), py::arg("spacing"),
-           py::arg("radius"));
+  m.def("pillar_cell_area", Tarcog::ISO15099::pillarCellArea, py::arg("cell_spacing_type"), py::arg("sp"));
+
+  py::class_<Tarcog::ISO15099::UniversalSupportPillar,
+             Py_UniversalSupportPillar, Tarcog::ISO15099::CIGUGapLayer,
+             std::shared_ptr<Tarcog::ISO15099::UniversalSupportPillar>>(
+      m, "UniversalSupportPillar")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double, double>(),
+           py::arg("gap_layer"), py::arg("material_conductivity"),
+           py::arg("cell_area"));
+
+  // py::class_<Tarcog::ISO15099::CSupportPillar, Py_CSupportPillar,
+  //         Tarcog::ISO15099::CIGUGapLayer,
+  //         std::shared_ptr<Tarcog::ISO15099::CSupportPillar>>(m,
+  //                                                            "SupportPillar")
+  //         .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double>(),
+  //              py::arg("gap_layer"), py::arg("conductivity"));
+
+  py::class_<Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::PillarData>>(m, "PillarData")
+      .def(py::init<double, double, double>(),
+           py::arg("height"), py::arg("material_conductivity"), py::arg("cell_area"))
+      .def_readwrite("height", &Tarcog::ISO15099::PillarData::height)
+      .def_readwrite("material_conductivity",
+                     &Tarcog::ISO15099::PillarData::materialConductivity)
+      .def_readwrite("cell_area", &Tarcog::ISO15099::PillarData::cellArea);
+
+  py::class_<Tarcog::ISO15099::CylindricalPillar, Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::CylindricalPillar>>(
+      m, "CylindricalPillar")
+      .def(py::init<double, double, double, double>(),
+           py::arg("height"), py::arg("material_conductivity"), py::arg("cell_area"), py::arg("radius"))
+      .def_readwrite("radius", &Tarcog::ISO15099::CylindricalPillar::radius);
+
+  py::class_<Tarcog::ISO15099::CylindricalPillarLayer,
+             Tarcog::ISO15099::UniversalSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::CylindricalPillarLayer>>(
+      m, "CylindricalPillarLayer")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                    Tarcog::ISO15099::CylindricalPillar const &>(),
+           py::arg("gap_layer"), py::arg("cylindrical_pillar"));
+
+  // py::class_<Tarcog::ISO15099::CCircularPillar,
+  //         Tarcog::ISO15099::CSupportPillar,
+  //         std::shared_ptr<Tarcog::ISO15099::CCircularPillar>>(
+  //         m, "CircularPillar")
+  //         .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double,
+  //         double,
+  //                      double>(),
+  //              py::arg("gap_layer"), py::arg("conductivity"),
+  //              py::arg("spacing"), py::arg("radius"));
 
   py::class_<Tarcog::ISO15099::CIGUVentilatedGapLayer,
              Tarcog::ISO15099::CIGUGapLayer,
@@ -209,12 +278,8 @@ PYBIND11_MODULE(wincalcbindings, m) {
                     double>(),
            py::arg("gap_layer"), py::arg("inlet_temperature"),
            py::arg("inlet_speed"))
-      .def("inlet_temperature",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::inletTemperature)
-      .def("outlet_temperature",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::outletTemperature)
       .def("layer_temperature",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::layerTemperature)
+           &Tarcog::ISO15099::CIGUVentilatedGapLayer::averageLayerTemperature)
       .def("set_flow_geometry",
            &Tarcog::ISO15099::CIGUVentilatedGapLayer::setFlowGeometry,
            py::arg("a_in"), py::arg("a_out"))
@@ -1585,9 +1650,10 @@ PYBIND11_MODULE(wincalcbindings, m) {
                   "Factory function to create a Tarcog gap from a gas",
                   py::arg("thickness"), py::arg("gas"),
                   py::arg("pressure") = 101325)
-      .def_static("add_circular_pillar",
-                  &Tarcog::ISO15099::Layers::addCircularPillar,
-                  "Static function to add a circular pillar to a Tarcog gap",
-                  py::arg("gap"), py::arg("conductivity"), py::arg("spacing"),
-                  py::arg("radius"));
+      .def_static(
+          "create_pillar",
+          py::overload_cast<Tarcog::ISO15099::CylindricalPillar const &,
+                            double>(&Tarcog::ISO15099::Layers::createPillar),
+          "Static function to add a cylindrical pillar to a Tarcog gap",
+          py::arg("pillar"), py::arg("pressure"));
 }
