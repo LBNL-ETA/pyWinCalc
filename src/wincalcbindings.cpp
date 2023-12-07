@@ -292,6 +292,57 @@ PYBIND11_MODULE(wincalcbindings, m) {
                          Tarcog::ISO15099::PolygonalPillar const &>(),
                  py::arg("gap_layer"), py::arg("polygon_pillar"));
 
+    py::class_<Tarcog::ISO15099::LinearBearingPillar, Tarcog::ISO15099::PillarData,
+            std::shared_ptr<Tarcog::ISO15099::LinearBearingPillar>>(
+            m, "LinearBearingPillar")
+            .def(py::init<double, double, double, double, double>(),
+                 py::arg("height"), py::arg("material_conductivity"), py::arg("cell_area"), py::arg("length"),
+                 py::arg("width"))
+            .def_readwrite("length", &Tarcog::ISO15099::LinearBearingPillar::length)
+            .def_readwrite("width", &Tarcog::ISO15099::LinearBearingPillar::width);
+
+    py::class_<Tarcog::ISO15099::LinearBearingPillarLayer,
+            Tarcog::ISO15099::UniversalSupportPillar,
+            std::shared_ptr<Tarcog::ISO15099::LinearBearingPillarLayer>>(
+            m, "LinearBearingPillarLayer")
+            .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                         Tarcog::ISO15099::LinearBearingPillar const &>(),
+                 py::arg("gap_layer"), py::arg("linear_bearing_pillar"));
+
+    py::class_<Tarcog::ISO15099::TruncatedConePillar, Tarcog::ISO15099::PillarData,
+            std::shared_ptr<Tarcog::ISO15099::TruncatedConePillar>>(
+            m, "TruncatedConePillar")
+            .def(py::init<double, double, double, double, double>(),
+                 py::arg("height"), py::arg("material_conductivity"), py::arg("cell_area"), py::arg("radius_1"),
+                 py::arg("radius_2"))
+            .def_readwrite("radius_1", &Tarcog::ISO15099::TruncatedConePillar::radius1)
+            .def_readwrite("radius_2", &Tarcog::ISO15099::TruncatedConePillar::radius2);
+
+    py::class_<Tarcog::ISO15099::TruncatedConePillarLayer,
+            Tarcog::ISO15099::UniversalSupportPillar,
+            std::shared_ptr<Tarcog::ISO15099::TruncatedConePillarLayer>>(
+            m, "TruncatedConePillarLayer")
+            .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                         Tarcog::ISO15099::TruncatedConePillar const &>(),
+                 py::arg("gap_layer"), py::arg("truncated_cone_pillar"));
+
+    py::class_<Tarcog::ISO15099::AnnulusCylinderPillar, Tarcog::ISO15099::PillarData,
+            std::shared_ptr<Tarcog::ISO15099::AnnulusCylinderPillar>>(
+            m, "AnnulusCylinderPillar")
+            .def(py::init<double, double, double, double, double>(),
+                 py::arg("height"), py::arg("material_conductivity"), py::arg("cell_area"), py::arg("inner_radius"),
+                 py::arg("outer_radius"))
+            .def_readwrite("inner_radius", &Tarcog::ISO15099::AnnulusCylinderPillar::innerRadius)
+            .def_readwrite("outer_radius", &Tarcog::ISO15099::AnnulusCylinderPillar::outerRadius);
+
+    py::class_<Tarcog::ISO15099::AnnulusCylinderPillarLayer,
+            Tarcog::ISO15099::UniversalSupportPillar,
+            std::shared_ptr<Tarcog::ISO15099::AnnulusCylinderPillarLayer>>(
+            m, "AnnulusCylinderPillarLayer")
+            .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                         Tarcog::ISO15099::AnnulusCylinderPillar const &>(),
+                 py::arg("gap_layer"), py::arg("annulus_cylinder_pillar"));
+
     // py::class_<Tarcog::ISO15099::CCircularPillar,
     //         Tarcog::ISO15099::CSupportPillar,
     //         std::shared_ptr<Tarcog::ISO15099::CCircularPillar>>(
@@ -1706,6 +1757,24 @@ PYBIND11_MODULE(wincalcbindings, m) {
                     "create_pillar",
                     py::overload_cast<Tarcog::ISO15099::PolygonalPillar const &,
                             double>(&Tarcog::ISO15099::Layers::createPillar),
-                    "Static function to add a rectangular pillar to a Tarcog gap",
+                    "Static function to add a polygonal pillar to a Tarcog gap",
+                    py::arg("pillar"), py::arg("pressure"))
+            .def_static(
+                    "create_pillar",
+                    py::overload_cast<Tarcog::ISO15099::LinearBearingPillar const &,
+                            double>(&Tarcog::ISO15099::Layers::createPillar),
+                    "Static function to add a linear bearing pillar to a Tarcog gap",
+                    py::arg("pillar"), py::arg("pressure"))
+            .def_static(
+                    "create_pillar",
+                    py::overload_cast<Tarcog::ISO15099::TruncatedConePillar const &,
+                            double>(&Tarcog::ISO15099::Layers::createPillar),
+                    "Static function to add a truncated cone pillar to a Tarcog gap",
+                    py::arg("pillar"), py::arg("pressure"))
+            .def_static(
+                    "create_pillar",
+                    py::overload_cast<Tarcog::ISO15099::AnnulusCylinderPillar const &,
+                            double>(&Tarcog::ISO15099::Layers::createPillar),
+                    "Static function to add a annulus cylinder pillar to a Tarcog gap",
                     py::arg("pillar"), py::arg("pressure"));
 }
