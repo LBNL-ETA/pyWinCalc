@@ -68,10 +68,10 @@ gap_5 = pywincalc.Layers.gap(thickness=.0025, gas=gas_5, pressure=101500)
 # (optionally) adding support pillars.  Currently only circular pillars
 # are supported.
 
-# This creates a gap with the default gas (Air) and a pressure of 0.1333 Pa
-gap_6 = pywincalc.Layers.gap(thickness=.001, pressure=0.1333)
-# Add circular pillars to the gap
-gap_6 = pywincalc.Layers.add_circular_pillar(gap_6, conductivity=999, spacing=0.03, radius=0.0002)
+pillar = pywincalc.CylindricalPillar(height=0.002, material_conductivity=20,
+                                     cell_area=pywincalc.pillar_cell_area(pywincalc.CellSpacingType.SQUARE, 0.03),
+                                     radius=0.25e-3)
+gap_6 = pywincalc.Layers.create_pillar(pillar=pillar, pressure=0.1333)
 
 # Gaps can now have forced ventilation.  To create one first create a regular gap and then convert
 # to a forced ventilated gap.  The gap that will be converted can be any of the above.
