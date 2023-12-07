@@ -29,8 +29,8 @@ import deprecation
 
 from wincalcbindings import AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDirection, BSDFDirections, BSDFHemisphere, \
     BSDFIntegrator, BoundaryConditionsCoefficientModelType, CMABestWorstUFactors, CMAResult, CMAWindow, \
-    CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, CellSpacingType, pillar_cell_area, \
-    PillarData, CylindricalPillar, UniversalSupportPillar, CylindricalPillarLayer, CoatedSide, \
+    CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, CellSpacingType, PolygonType, pillar_cell_area, \
+    PillarData, CylindricalPillar, SphericalPillar, RectangularPillar, PolygonalPillar, UniversalSupportPillar, CylindricalPillarLayer, SphericalPillarLayer, RectangularPillarLayer, TriangularPillarLayer, PentagonPillarLayer, HexagonPillarLayer, CoatedSide, \
     ColorResult, DeflectionResults, DistributionMethodType, DualBandBSDF, EffectiveOpenness, Environment, Environments, \
     FlippableSolidLayer, Gas, GasCoefficients, GasData, GlazingSystem as _GlazingSystem, GlazingSystemDimensions, \
     IGUGapLayer, IntegrationRule, IntegrationRuleType, Lab, Layers, MaterialType, \
