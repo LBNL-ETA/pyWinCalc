@@ -391,16 +391,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def(py::init<Tarcog::ISO15099::PillarMeasurement const &>(),
            py::arg("pillar"));
 
-  // py::class_<Tarcog::ISO15099::CCircularPillar,
-  //         Tarcog::ISO15099::CSupportPillar,
-  //         std::shared_ptr<Tarcog::ISO15099::CCircularPillar>>(
-  //         m, "CircularPillar")
-  //         .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double,
-  //         double,
-  //                      double>(),
-  //              py::arg("gap_layer"), py::arg("conductivity"),
-  //              py::arg("spacing"), py::arg("radius"));
-
   py::class_<Tarcog::ISO15099::CIGUVentilatedGapLayer,
              Tarcog::ISO15099::CIGUGapLayer,
              std::shared_ptr<Tarcog::ISO15099::CIGUVentilatedGapLayer>>(
