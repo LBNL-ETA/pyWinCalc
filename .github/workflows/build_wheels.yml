@@ -25,7 +25,9 @@ jobs:
           architecture: ${{ matrix.arch }}
 
       - name: Install packages
-        run: pip install wheel
+        run: |
+          pip install wheel
+          pip install setuptools
 
       - name: build
         run: python setup.py bdist_wheel
@@ -58,7 +60,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install packages
-        run: pip install wheel
+        run: |
+          pip install wheel
+          pip install setuptools
 
       - name: build
         run: python setup.py bdist_wheel
