@@ -761,7 +761,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("conductivity"), py::arg("thickness_meters"),
            py::arg("flipped") = false, py::arg("opening_top") = 0,
            py::arg("opening_bottom") = 0, py::arg("opening_left") = 0,
-           py::arg("opening_right") = 0, py::arg("opening_front") = 0)
+           py::arg("opening_right") = 0)
       .def_readwrite("conductivity",
                      &wincalc::Product_Data_Thermal::conductivity)
       .def_readwrite("opening_top", &wincalc::Product_Data_Thermal::opening_top)
@@ -771,8 +771,10 @@ PYBIND11_MODULE(wincalcbindings, m) {
                      &wincalc::Product_Data_Thermal::opening_left)
       .def_readwrite("opening_right",
                      &wincalc::Product_Data_Thermal::opening_right)
-      .def_readwrite("opening_front",
-                     &wincalc::Product_Data_Thermal::opening_front)
+      .def_readwrite("effective_openness",
+                     &wincalc::Product_Data_Thermal::effective_openness)
+	  .def_readwrite("effective_thickness",
+                     &wincalc::Product_Data_Thermal::effective_thickness)
       .def_readwrite("youngs_modulus",
                      &wincalc::Product_Data_Thermal::youngs_modulus)
       .def_readwrite("density", &wincalc::Product_Data_Thermal::density);
@@ -1728,7 +1730,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def(py::init<double, double, double, double, double, double>(),
            py::arg("ah"), py::arg("al"), py::arg("ar"), py::arg("atop"),
            py::arg("abot"), py::arg("front_porosity"))
-      .def("is_closed", &EffectiveLayers::EffectiveOpenness::isClosed)
       .def_readwrite("ah", &EffectiveLayers::EffectiveOpenness::Ah)
       .def_readwrite("al", &EffectiveLayers::EffectiveOpenness::Al)
       .def_readwrite("ar", &EffectiveLayers::EffectiveOpenness::Ar)
@@ -1736,6 +1737,8 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def_readwrite("abot", &EffectiveLayers::EffectiveOpenness::Abot)
       .def_readwrite("front_porosity",
                      &EffectiveLayers::EffectiveOpenness::FrontPorosity);
+	
+	m.def("is_closed", &EffectiveLayers::isClosed, py::arg("effective_openness"));
 
   py::class_<Tarcog::ISO15099::Layers>(m, "Layers")
       .def_static("solid", &Tarcog::ISO15099::Layers::solid,
