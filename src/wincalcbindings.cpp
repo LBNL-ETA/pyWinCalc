@@ -264,22 +264,12 @@ PYBIND11_MODULE(wincalcbindings, m) {
                     Tarcog::ISO15099::RectangularPillar const &>(),
            py::arg("gap_layer"), py::arg("rectangular_pillar"));
 
-  py::class_<Tarcog::ISO15099::PolygonalPillar, Tarcog::ISO15099::PillarData,
-             std::shared_ptr<Tarcog::ISO15099::PolygonalPillar>>(
-      m, "PolygonalPillar")
-      .def(py::init<double, double, double, double,
-                    Tarcog::ISO15099::PolygonType>(),
-           py::arg("height"), py::arg("material_conductivity"),
-           py::arg("cell_area"), py::arg("length"), py::arg("polygon_type"))
-      .def_readwrite("length", &Tarcog::ISO15099::PolygonalPillar::length)
-      .def_readwrite("polygon_type", &Tarcog::ISO15099::PolygonalPillar::type);
-
   py::class_<Tarcog::ISO15099::TriangularPillarLayer,
              Tarcog::ISO15099::UniversalSupportPillar,
              std::shared_ptr<Tarcog::ISO15099::TriangularPillarLayer>>(
       m, "TriangularPillarLayer")
       .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::PolygonalPillar const &>(),
+                    Tarcog::ISO15099::TriangularPillar const &>(),
            py::arg("gap_layer"), py::arg("polygon_pillar"));
 
   py::class_<Tarcog::ISO15099::PentagonPillarLayer,
@@ -287,7 +277,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
              std::shared_ptr<Tarcog::ISO15099::PentagonPillarLayer>>(
       m, "PentagonPillarLayer")
       .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::PolygonalPillar const &>(),
+                    Tarcog::ISO15099::PentagonPillar const &>(),
            py::arg("gap_layer"), py::arg("polygon_pillar"));
 
   py::class_<Tarcog::ISO15099::HexagonPillarLayer,
@@ -295,7 +285,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
              std::shared_ptr<Tarcog::ISO15099::HexagonPillarLayer>>(
       m, "HexagonPillarLayer")
       .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::PolygonalPillar const &>(),
+                    Tarcog::ISO15099::HexagonPillar const &>(),
            py::arg("gap_layer"), py::arg("polygon_pillar"));
 
   py::class_<Tarcog::ISO15099::LinearBearingPillar,
@@ -756,8 +746,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
   py::class_<wincalc::Product_Data_Thermal, wincalc::Flippable_Solid_Layer,
              std::shared_ptr<wincalc::Product_Data_Thermal>>(
       m, "ProductDataThermal")
-      .def(py::init<double, double, bool, double, double, double, double,
-                    double>(),
+      .def(py::init<double, double, bool, double, double, double, double>(),
            py::arg("conductivity"), py::arg("thickness_meters"),
            py::arg("flipped") = false, py::arg("opening_top") = 0,
            py::arg("opening_bottom") = 0, py::arg("opening_left") = 0,
