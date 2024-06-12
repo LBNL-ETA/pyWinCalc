@@ -1796,9 +1796,21 @@ PYBIND11_MODULE(wincalcbindings, m) {
           py::arg("pillar"), py::arg("pressure"))
       .def_static(
           "create_pillar",
-          py::overload_cast<Tarcog::ISO15099::PolygonalPillar const &, double>(
+          py::overload_cast<Tarcog::ISO15099::TriangularPillar const &, double>(
               &Tarcog::ISO15099::Layers::createPillar),
-          "Static function to add a polygonal pillar to a Tarcog gap",
+          "Static function to add a triangular pillar to a Tarcog gap",
+          py::arg("pillar"), py::arg("pressure"))
+	  .def_static(
+          "create_pillar",
+          py::overload_cast<Tarcog::ISO15099::PentagonPillar const &, double>(
+              &Tarcog::ISO15099::Layers::createPillar),
+          "Static function to add a pentagon pillar to a Tarcog gap",
+          py::arg("pillar"), py::arg("pressure"))
+	  .def_static(
+          "create_pillar",
+          py::overload_cast<Tarcog::ISO15099::HexagonPillar const &, double>(
+              &Tarcog::ISO15099::Layers::createPillar),
+          "Static function to add a hexagon pillar to a Tarcog gap",
           py::arg("pillar"), py::arg("pressure"))
       .def_static(
           "create_pillar",
