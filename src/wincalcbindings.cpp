@@ -1777,101 +1777,136 @@ PYBIND11_MODULE(wincalcbindings, m) {
                      &EffectiveLayers::EffectiveOpenness::FrontPorosity);
 	
 	m.def("is_closed", &EffectiveLayers::isClosed, py::arg("effective_openness"));
+	
+	py::module_ layers = m.def_submodule("layers", "Submodule for Tarcog Layers");
+ 
+    layers.def("solid", py::overload_cast<double, double>(&Tarcog::ISO15099::Layers::solid),
+			   "Factory method for creating a solid Tarcog layer with basic parameters",
+			   py::arg("thickness"), py::arg("conductivity"));
+				 
+	layers.def("solid", py::overload_cast<double, double, double, double, double, double>(&Tarcog::ISO15099::Layers::solid),
+               "Factory method for creating a solid Tarcog layer including IR parameters",
+               py::arg("thickness"), py::arg("conductivity"),
+               py::arg("frontEmissivity") = 0.84,
+               py::arg("frontIRTransmittance") = 0.0,
+               py::arg("backEmissivity") = 0.84,
+               py::arg("backIRTransmittance") = 0.0);
+				 
+    layers.def("update_material_data",
+               &Tarcog::ISO15099::Layers::updateMaterialData,
+               "Static method for updating the material information for a "
+               "solid Tarcog layer.",
+               py::arg("layer"),
+               py::arg("density") = Tarcog::MaterialConstants::GLASSDENSITY,
+               py::arg("youngs_modulus") = Tarcog::DeflectionConstants::YOUNGSMODULUS);
+		  
+    layers.def("shading", &Tarcog::ISO15099::Layers::shading,
+               "Factory function to create a Tarcog shading layer.",
+               py::arg("thickness"), py::arg("conductivity"),
+               py::arg("effective_openness") = EffectiveLayers::EffectiveOpenness(0, 0, 0, 0, 0, 0),
+               py::arg("front_emissivity") = 0.84,
+               py::arg("front_transmittance") = 0.0,
+               py::arg("back_emissivity") = 0.84,
+               py::arg("back_transmittance") = 0.0);
+		  
+    layers.def("sealedLayer", &Tarcog::ISO15099::Layers::sealedLayer,
+               "Factory function to create a Tarcog sealed layer.",
+               py::arg("thickness"), py::arg("conductivity"),
+               py::arg("front_emissivity") = 0.84,
+               py::arg("front_transmittance") = 0.0,
+               py::arg("back_emissivity") = 0.84,
+               py::arg("back_transmittance") = 0.0);
 
-  py::class_<Tarcog::ISO15099::Layers>(m, "Layers")
-      .def_static("solid", &Tarcog::ISO15099::Layers::solid,
-                  "Factory method for creating a solid Tarcog layer",
-                  py::arg("thickness"), py::arg("conductivity"),
-                  py::arg("frontEmissivity") = 0.84,
-                  py::arg("frontIRTransmittance") = 0.0,
-                  py::arg("backEmissivity") = 0.84,
-                  py::arg("backIRTransmittance") = 0.0)
-      .def_static("update_material_data",
-                  &Tarcog::ISO15099::Layers::updateMaterialData,
-                  "Static method for updating the material information for a "
-                  "solid Tarcog layer.",
-                  py::arg("layer"),
-                  py::arg("density") = Tarcog::MaterialConstants::GLASSDENSITY,
-                  py::arg("youngs_modulus") =
-                      Tarcog::DeflectionConstants::YOUNGSMODULUS)
-      .def_static("shading", &Tarcog::ISO15099::Layers::shading,
-                  "Factory function to create a Tarcog shading layer.",
-                  py::arg("thickness"), py::arg("conductivity"),
-                  py::arg("effective_openness") =
-                      EffectiveLayers::EffectiveOpenness(0, 0, 0, 0, 0, 0),
-                  py::arg("front_emissivity") = 0.84,
-                  py::arg("front_transmittance") = 0.0,
-                  py::arg("back_emissivity") = 0.84,
-                  py::arg("back_transmittance") = 0.0)
-      .def_static(
-          "gap",
-          py::overload_cast<double, double>(&Tarcog::ISO15099::Layers::gap),
-          "Factory function to create a Tarcog air gap", py::arg("thickness"),
-          py::arg("pressure") = 101325)
-      .def_static("gap",
-                  py::overload_cast<double, Gases::CGas const &, double>(
-                      &Tarcog::ISO15099::Layers::gap),
-                  "Factory function to create a Tarcog gap from a gas",
-                  py::arg("thickness"), py::arg("gas"),
-                  py::arg("pressure") = 101325)
-      .def_static(
-          "create_pillar",
-          py::overload_cast<Tarcog::ISO15099::CylindricalPillar const &,
-                            double>(&Tarcog::ISO15099::Layers::createPillar),
-          "Static function to add a cylindrical pillar to a Tarcog gap",
-          py::arg("pillar"), py::arg("pressure"))
-      .def_static(
-          "create_pillar",
-          py::overload_cast<Tarcog::ISO15099::SphericalPillar const &, double>(
-              &Tarcog::ISO15099::Layers::createPillar),
-          "Static function to add a spherical pillar to a Tarcog gap",
-          py::arg("pillar"), py::arg("pressure"))
-      .def_static(
-          "create_pillar",
-          py::overload_cast<Tarcog::ISO15099::RectangularPillar const &,
-                            double>(&Tarcog::ISO15099::Layers::createPillar),
-          "Static function to add a rectangular pillar to a Tarcog gap",
-          py::arg("pillar"), py::arg("pressure"))
-      .def_static(
-          "create_pillar",
-          py::overload_cast<Tarcog::ISO15099::TriangularPillar const &, double>(
-              &Tarcog::ISO15099::Layers::createPillar),
-          "Static function to add a triangular pillar to a Tarcog gap",
-          py::arg("pillar"), py::arg("pressure"))
-	  .def_static(
-          "create_pillar",
-          py::overload_cast<Tarcog::ISO15099::PentagonPillar const &, double>(
-              &Tarcog::ISO15099::Layers::createPillar),
-          "Static function to add a pentagon pillar to a Tarcog gap",
-          py::arg("pillar"), py::arg("pressure"))
-	  .def_static(
-          "create_pillar",
-          py::overload_cast<Tarcog::ISO15099::HexagonPillar const &, double>(
-              &Tarcog::ISO15099::Layers::createPillar),
-          "Static function to add a hexagon pillar to a Tarcog gap",
-          py::arg("pillar"), py::arg("pressure"))
-      .def_static(
-          "create_pillar",
-          py::overload_cast<Tarcog::ISO15099::LinearBearingPillar const &,
-                            double>(&Tarcog::ISO15099::Layers::createPillar),
-          "Static function to add a linear bearing pillar to a Tarcog gap",
-          py::arg("pillar"), py::arg("pressure"))
-      .def_static(
-          "create_pillar",
-          py::overload_cast<Tarcog::ISO15099::TruncatedConePillar const &,
-                            double>(&Tarcog::ISO15099::Layers::createPillar),
-          "Static function to add a truncated cone pillar to a Tarcog gap",
-          py::arg("pillar"), py::arg("pressure"))
-      .def_static(
-          "create_pillar",
-          py::overload_cast<Tarcog::ISO15099::AnnulusCylinderPillar const &,
-                            double>(&Tarcog::ISO15099::Layers::createPillar),
-          "Static function to add a annulus cylinder pillar to a Tarcog gap",
-          py::arg("pillar"), py::arg("pressure"))
-      .def_static(
-          "create_pillar",
-          py::overload_cast<Tarcog::ISO15099::PillarMeasurement const &>(
-              &Tarcog::ISO15099::Layers::createPillar),
-          "Static function to add a measured pillar to a Tarcog gap",
-          py::arg("pillar"));
+    layers.def("gap", py::overload_cast<double>(&Tarcog::ISO15099::Layers::gap),
+               "Factory function to create a Tarcog gap with basic parameters",
+               py::arg("thickness"));
+
+    layers.def("gap", py::overload_cast<double, double>(&Tarcog::ISO15099::Layers::gap),
+               "Factory function to create a Tarcog gap with thickness and pressure",
+               py::arg("thickness"), py::arg("pressure") = 101325);
+
+    layers.def("gap", py::overload_cast<double, const Gases::CGas &>(&Tarcog::ISO15099::Layers::gap),
+               "Factory function to create a Tarcog gap with thickness and gas",
+               py::arg("thickness"), py::arg("gas"));
+
+    layers.def("gap", py::overload_cast<double, double, const Gases::CGas &>(&Tarcog::ISO15099::Layers::gap),
+          "Factory function to create a Tarcog gap with thickness, pressure and gas",
+          py::arg("thickness"), py::arg("pressure"), py::arg("gas"));
+
+    layers.def("gap", py::overload_cast<double, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::gap),
+               "Factory function to create a Tarcog gap with all parameters",
+               py::arg("thickness"), py::arg("pressure"), py::arg("gas"), 
+               py::arg("accommodation1"), py::arg("accommodation2"));
+
+    layers.def("forced_ventilation_gap", &Tarcog::ISO15099::Layers::forcedVentilationGap,
+               "Function to create a forced ventilation Tarcog gap",
+               py::arg("gap"), py::arg("forcedVentilationAirSpeed"), 
+               py::arg("forcedVentilationAirTemperature"));
+
+    layers.def("default_vacuum_mixture", &Tarcog::ISO15099::Layers::defaultVacuumMixture,
+               "Function to get the default vacuum mixture");
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::CylindricalPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a cylindrical pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::SphericalPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a spherical pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::RectangularPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a rectangular pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::TriangularPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a triangular pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::PentagonPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a pentagon pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::HexagonPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a hexagon pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::LinearBearingPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a linear bearing pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::TruncatedConePillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a truncated cone pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::AnnulusCylinderPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add an annulus cylinder pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::CShapedCylinderPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a C-shaped cylinder pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::PillarMeasurement &>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a measured pillar to a Tarcog gap",
+               py::arg("pillar"));
 }
