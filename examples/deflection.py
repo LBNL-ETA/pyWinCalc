@@ -16,8 +16,8 @@ solid_layers = [clear_6, clear_3, clear_6]
 
 # Solid layers must be separated by gap layers.  This example uses two air gaps
 # See gaps_and_gases.py in examples for more on creating gases
-gap_1 = pywincalc.layers.gap(thickness=.0127)
-gap_2 = pywincalc.layers.gap(thickness=.02)
+gap_1 = pywincalc.Layers.gap(thickness=.0127)
+gap_2 = pywincalc.Layers.gap(thickness=.02)
 
 # Put all gaps into a list ordered from outside to inside
 # Note:  This is only specifying gaps between solid layers

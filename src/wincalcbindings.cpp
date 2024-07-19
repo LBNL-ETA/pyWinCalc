@@ -1778,7 +1778,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
 	
 	m.def("is_closed", &EffectiveLayers::isClosed, py::arg("effective_openness"));
 	
-	py::module_ layers = m.def_submodule("layers", "Submodule for Tarcog Layers");
+	py::module_ layers = m.def_submodule("Layers", "Submodule for Tarcog Layers");
  
     layers.def("solid", py::overload_cast<double, double>(&Tarcog::ISO15099::Layers::solid),
 			   "Factory method for creating a solid Tarcog layer with basic parameters",

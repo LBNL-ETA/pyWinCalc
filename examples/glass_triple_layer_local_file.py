@@ -16,7 +16,7 @@ solid_layers = [clear_6, clear_3, clear_6]
 
 # Define the gap between the layers.  In this case use a default air gap
 # that is 12.7mm thick.  For more on creating gases and gaps see the gaps_and_gases.py example
-gap = pywincalc.layers.gap(thickness=.0127)
+gap = pywincalc.Layers.gap(thickness=.0127)
 
 # Put all gaps into a list ordered from outside to inside
 # Note:  This is only specifying gaps between solid layers

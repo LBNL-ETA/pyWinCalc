@@ -4,7 +4,7 @@ import deprecation
 from wincalcbindings import (
     AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDirection, BSDFDirections, BSDFHemisphere,
     BSDFIntegrator, BoundaryConditionsCoefficientModelType, CMABestWorstUFactors, CMAResult, CMAWindow,
-    CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, layers, CellSpacingType, PolygonType, pillar_cell_area,
+    CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, Layers, CellSpacingType, PolygonType, pillar_cell_area,
     PillarData, CylindricalPillar, SphericalPillar, RectangularPillar, TriangularPillar, PentagonPillar, HexagonPillar, LinearBearingPillar, TruncatedConePillar, Glass, PillarMeasurement,
     AnnulusCylinderPillar, CShapedCylinderPillar, UniversalSupportPillar, CylindricalPillarLayer, SphericalPillarLayer, RectangularPillarLayer,
     TriangularPillarLayer, PentagonPillarLayer, HexagonPillarLayer, LinearBearingPillarLayer, TruncatedConePillarLayer,
@@ -36,7 +36,7 @@ from wincalcbindings import (
 
 @deprecation.deprecated(deprecated_in="3.0.0", removed_in="4.0.0",
                         current_version="3.0.0",
-                        details="Use pywincalc.layers.gap or pywincalc.create_gas instead")
+                        details="Use pywincalc.Layers.gap or pywincalc.create_gas instead")
 def Gap(gas, thickness):
     converted_gas = None
     if type(gas) is list:

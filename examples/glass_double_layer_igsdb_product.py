@@ -4,7 +4,7 @@ from igsdb_interaction import url_single_product, headers
 
 # Define the gap between the shade and the glazing.  In this case use a default air gap
 # that is 12.7mm thick.  For more on creating gases and gaps see the gaps_and_gases.py example
-gap_1 = pywincalc.layers.gap(thickness=.0127)
+gap_1 = pywincalc.Layers.gap(thickness=.0127)
 
 # Download some product data from the IGSDB.  This example gets a generic single clear 3mm glazing (NFRC 102),
 # and a generic single clear 6mm glazing (NFRC 103)

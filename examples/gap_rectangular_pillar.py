@@ -3,7 +3,7 @@ import pywincalc
 pillar = pywincalc.RectangularPillar(height=0.002, material_conductivity=20,
                                      cell_area=pywincalc.pillar_cell_area(pywincalc.CellSpacingType.SQUARE, 0.03),
                                      length=0.25e-3, width=0.05e-3)
-gap = pywincalc.layers.create_pillar(pillar=pillar, pressure=0.1333)
+gap = pywincalc.Layers.create_pillar(pillar=pillar, pressure=0.1333)
 
 gaps = [gap]
 

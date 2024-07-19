@@ -4,7 +4,7 @@ from igsdb_interaction import url_single_product, headers, url_single_product_da
 
 bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.FULL)
 
-bsdf_igsdb_id = 14710
+bsdf_igsdb_id = 17200
 
 bsdf_igsdb_response = requests.get(url_single_product_datafile.format(id=bsdf_igsdb_id), headers=headers)
 

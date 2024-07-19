@@ -4,7 +4,7 @@ import pywincalc
 
 # The default way to create a gap.  Creates a gap containing air with a given thickness
 # at a default pressure of 101325
-gap_1 = pywincalc.layers.gap(thickness=.0127)  # .0127 is gap thickness in meters
+gap_1 = pywincalc.Layers.gap(thickness=.0127)  # .0127 is gap thickness in meters
 
 # Currently there are four pre-defined gases available: Air, Argon, Krypton, and Xenon
 # A gas object is created from a list of pairs where the first item is the percentage
@@ -14,13 +14,13 @@ gap_1 = pywincalc.layers.gap(thickness=.0127)  # .0127 is gap thickness in meter
 gas_2 = pywincalc.create_gas([[1.0, pywincalc.PredefinedGasType.ARGON]])
 # Create a gap from this gas by passing it to the gap function.
 # In this case the gap is given a different pressure as well
-gap_2 = pywincalc.layers.gap(thickness=.0127, gas=gas_2, pressure=101300)
+gap_2 = pywincalc.Layers.gap(thickness=.0127, gas=gas_2, pressure=101300)
 
 # Gaps may also contain a mixture of gases.
 # Here is a gas that is 70% Krypton and 30% Xenon
 gas_3 = pywincalc.create_gas([[0.7, pywincalc.PredefinedGasType.KRYPTON], [0.3, pywincalc.PredefinedGasType.XENON]])
 # Create a gap from this gas the same as above.  Here the pressure is omitted so it uses the default 101325
-gap_3 = pywincalc.layers.gap(thickness=.0127, gas=gas_3)
+gap_3 = pywincalc.Layers.gap(thickness=.0127, gas=gas_3)
 
 # Custom gases can be created from properties.  The following creates sulfur hexafluoride as distributed with WINDOW 7
 sulfur_hexafluoride_conductivity_a = 0.013
@@ -53,7 +53,7 @@ sulfur_hexafluoride = pywincalc.GasData("sulfur_hexafluoride",
 
 # Once a custom gas is created it can either be used by itself
 gas_4 = pywincalc.create_gas([[1.0, sulfur_hexafluoride]])
-gap_4 = pywincalc.layers.gap(thickness=.003, gas=gas_4)  # 3mm thick gap filled with sulfur hexafluoride
+gap_4 = pywincalc.Layers.gap(thickness=.003, gas=gas_4)  # 3mm thick gap filled with sulfur hexafluoride
 
 # Or it can be mixed with either other predefined or custom gases
 # The following creates a gas that is 80% sulfur hexafluoride, 15% Argon, and 5% Air
@@ -62,7 +62,7 @@ gas_5 = pywincalc.create_gas(
      [0.15, pywincalc.PredefinedGasType.ARGON],
      [0.05, pywincalc.PredefinedGasType.AIR]])
 # And uses it it a 2.5mm thick gap at pressure = 101500
-gap_5 = pywincalc.layers.gap(thickness=.0025, gas=gas_5, pressure=101500)
+gap_5 = pywincalc.Layers.gap(thickness=.0025, gas=gas_5, pressure=101500)
 
 # Vacuum gaps are supported by setting a low pressure in the gap and
 # (optionally) adding support pillars.  Currently only circular pillars
@@ -71,11 +71,11 @@ gap_5 = pywincalc.layers.gap(thickness=.0025, gas=gas_5, pressure=101500)
 pillar = pywincalc.CylindricalPillar(height=0.002, material_conductivity=20,
                                      cell_area=pywincalc.pillar_cell_area(pywincalc.CellSpacingType.SQUARE, 0.03),
                                      radius=0.25e-3)
-gap_6 = pywincalc.layers.create_pillar(pillar=pillar, pressure=0.1333)
+gap_6 = pywincalc.Layers.create_pillar(pillar=pillar, pressure=0.1333)
 
 # Gaps can now have forced ventilation.  To create one first create a regular gap and then convert
 # to a forced ventilated gap.  The gap that will be converted can be any of the above.
-gap_7 = pywincalc.layers.gap(thickness=.0127)  # .0127 is gap thickness in meters
+gap_7 = pywincalc.Layers.gap(thickness=.0127)  # .0127 is gap thickness in meters
 gap_7 = pywincalc.forced_ventilation_gap(gap=gap_7, forced_ventilation_air_speed=0.3, forced_ventilation_air_temperature=295)
 
 gaps = [gap_1, gap_2, gap_3, gap_4, gap_5, gap_6, gap_7]

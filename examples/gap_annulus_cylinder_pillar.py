@@ -3,7 +3,7 @@ import pywincalc
 pillar = pywincalc.AnnulusCylinderPillar(height=0.002, material_conductivity=20,
                                          cell_area=pywincalc.pillar_cell_area(pywincalc.CellSpacingType.SQUARE, 0.03),
                                          inner_radius=0.01e-3, outer_radius=0.25e-3)
-gap = pywincalc.layers.create_pillar(pillar=pillar, pressure=0.1333)
+gap = pywincalc.Layers.create_pillar(pillar=pillar, pressure=0.1333)
 
 gaps = [gap]
 

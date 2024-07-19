@@ -5,7 +5,7 @@ glass_2 = pywincalc.Glass(thickness=0.05, conductivity=1, emissivity=0.8)
 measured_pillar = pywincalc.PillarMeasurement(total_thickness=0.12, conductivity=0.3, temperature_surface_1=295,
                                               temperature_surface_4=305, glass_1=glass_1, glass_2=glass_2)
 
-gap = pywincalc.layers.create_pillar(pillar=measured_pillar)
+gap = pywincalc.Layers.create_pillar(pillar=measured_pillar)
 
 gaps = [gap]
 
