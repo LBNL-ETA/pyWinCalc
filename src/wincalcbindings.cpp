@@ -797,11 +797,18 @@ PYBIND11_MODULE(wincalcbindings, m) {
   py::class_<wincalc::Product_Data_Thermal, wincalc::Flippable_Solid_Layer,
              std::shared_ptr<wincalc::Product_Data_Thermal>>(
       m, "ProductDataThermal")
-      .def(py::init<double, double, bool, double, double, double, double, double>(),
-           py::arg("conductivity"), py::arg("thickness_meters"),
-           py::arg("flipped") = false, py::arg("opening_top") = 0,
-           py::arg("opening_bottom") = 0, py::arg("opening_left") = 0,
-           py::arg("opening_right") = 0, py::arg("opening_front") = 0)
+      .def(py::init<std::optional<double>, double, bool, double, double, double, double, double, double, std::optional<double>, std::optional<double>>(),
+           py::arg("conductivity"), 
+		   py::arg("thickness_meters"),
+           py::arg("flipped"), 
+		   py::arg("opening_top"),
+           py::arg("opening_bottom"), 
+		   py::arg("opening_left"),
+           py::arg("opening_right"), 
+		   py::arg("opening_front"), 
+		   py::arg("permeability_factor"), 
+		   py::arg("youngs_modulus"), 
+		   py::arg("density"))
       .def_readwrite("conductivity",
                      &wincalc::Product_Data_Thermal::conductivity)
       .def_readwrite("opening_top", &wincalc::Product_Data_Thermal::opening_top)
@@ -811,6 +818,10 @@ PYBIND11_MODULE(wincalcbindings, m) {
                      &wincalc::Product_Data_Thermal::opening_left)
       .def_readwrite("opening_right",
                      &wincalc::Product_Data_Thermal::opening_right)
+	  .def_readwrite("opening_front",
+					 &wincalc::Product_Data_Thermal::opening_front)
+	  .def_readwrite("permeability_factor",
+					 &wincalc::Product_Data_Thermal::permeability_factor)
       .def_readwrite("youngs_modulus",
                      &wincalc::Product_Data_Thermal::youngs_modulus)
       .def_readwrite("density", &wincalc::Product_Data_Thermal::density);
@@ -819,27 +830,20 @@ PYBIND11_MODULE(wincalcbindings, m) {
              std::shared_ptr<wincalc::Product_Data_Optical>>(
       m, "ProductDataOptical")
       .def(py::init<double, std::optional<double>, std::optional<double>,
-                    std::optional<double>, std::optional<double>, double,
-                    bool>(),
+                    std::optional<double>, std::optional<double>, bool>(),
            py::arg("thickness_meters"),
            py::arg("ir_transmittance_front") = std::optional<double>(),
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
            py::arg("emissivity_back") = std::optional<double>(),
-           py::arg("permeability_factor") = 0.0, py::arg("flipped") = false)
+           py::arg("flipped") = false)
       .def("effective_thermal_values",
            &wincalc::Product_Data_Optical::effective_thermal_values)
       .def("wavelengths", &wincalc::Product_Data_Optical::wavelengths)
-      .def_readwrite("ir_transmittance_front",
-                     &wincalc::Product_Data_Optical::ir_transmittance_front)
-      .def_readwrite("ir_transmittance_back",
-                     &wincalc::Product_Data_Optical::ir_transmittance_back)
-      .def_readwrite("emissivity_front",
-                     &wincalc::Product_Data_Optical::emissivity_front)
-      .def_readwrite("emissivity_back",
-                     &wincalc::Product_Data_Optical::emissivity_back)
-      .def_readwrite("permeability_factor",
-                     &wincalc::Product_Data_Optical::permeability_factor);
+      .def_readwrite("ir_transmittance_front", &wincalc::Product_Data_Optical::ir_transmittance_front)
+      .def_readwrite("ir_transmittance_back", &wincalc::Product_Data_Optical::ir_transmittance_back)
+      .def_readwrite("emissivity_front", &wincalc::Product_Data_Optical::emissivity_front)
+      .def_readwrite("emissivity_back", &wincalc::Product_Data_Optical::emissivity_back);
 
   py::enum_<FenestrationCommon::MaterialType>(m, "MaterialType",
                                               py::arithmetic())
@@ -866,7 +870,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
                     std::vector<OpticsParser::WLData>,
                     std::optional<wincalc::CoatedSide>, std::optional<double>,
                     std::optional<double>, std::optional<double>,
-                    std::optional<double>, double, bool>(),
+                    std::optional<double>, bool>(),
            py::arg("material_type"), py::arg("thickness_meters"),
            py::arg("wavelength_data"),
            py::arg("coated_side") = std::optional<wincalc::CoatedSide>(),
@@ -874,7 +878,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
            py::arg("emissivity_back") = std::optional<double>(),
-           py::arg("permeability_factor") = 0, py::arg("flipped") = false)
+           py::arg("flipped") = false)
       .def("wavelengths", &wincalc::Product_Data_N_Band_Optical::wavelengths)
       .def_readwrite("material_type",
                      &wincalc::Product_Data_N_Band_Optical::material_type)
@@ -886,14 +890,14 @@ PYBIND11_MODULE(wincalcbindings, m) {
              std::shared_ptr<wincalc::Product_Data_Dual_Band_Optical>>(
       m, "ProductDataOpticalDualBand")
       .def(py::init<double, std::optional<double>, std::optional<double>,
-                    std::optional<double>, std::optional<double>, double,
+                    std::optional<double>, std::optional<double>,
                     bool>(),
            py::arg("thickness_meters"),
            py::arg("ir_transmittance_front") = std::optional<double>(),
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
            py::arg("emissivity_back") = std::optional<double>(),
-           py::arg("permeability_factor") = 0.0, py::arg("flipped") = false)
+           py::arg("flipped") = false)
       .def("wavelengths",
            &wincalc::Product_Data_Dual_Band_Optical::wavelengths);
 
@@ -905,7 +909,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def(py::init<double, double, double, double, double, double, double,
                     double, double, std::optional<double>,
                     std::optional<double>, std::optional<double>,
-                    std::optional<double>, double, bool>(),
+                    std::optional<double>, bool>(),
            py::arg("solar_transmittance_front"),
            py::arg("solar_transmittance_back"),
            py::arg("solar_reflectance_front"),
@@ -918,7 +922,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
            py::arg("emissivity_back") = std::optional<double>(),
-           py::arg("permeability_factor") = 0.0, py::arg("flipped") = false)
+           py::arg("flipped") = false)
       .def_readwrite(
           "solar_transmittance_front",
           &wincalc::Product_Data_Dual_Band_Optical_Hemispheric::tf_solar)
@@ -958,7 +962,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
                     std::vector<std::vector<double>> const &,
                     SingleLayerOptics::BSDFHemisphere const &, double,
                     std::optional<double>, std::optional<double>,
-                    std::optional<double>, std::optional<double>, double,
+                    std::optional<double>, std::optional<double>,
                     bool, bool>(),
            py::arg("solar_transmittance_front"),
            py::arg("solar_transmittance_back"),
@@ -973,7 +977,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
            py::arg("emissivity_back") = std::optional<double>(),
-           py::arg("permeability_factor") = 0.0, py::arg("flipped") = false, py::arg("user_defined_effective_values") = false)
+           py::arg("flipped") = false, py::arg("user_defined_effective_values") = false)
       .def_readwrite("solar_transmittance_front",
                      &wincalc::Product_Data_Dual_Band_Optical_BSDF::tf_solar)
       .def_readwrite("solar_transmittance_back",
@@ -1766,15 +1770,18 @@ PYBIND11_MODULE(wincalcbindings, m) {
 
   py::class_<EffectiveLayers::EffectiveOpenness>(m, "EffectiveOpenness")
       .def(py::init<double, double, double, double, double, double>(),
-           py::arg("ah"), py::arg("al"), py::arg("ar"), py::arg("atop"),
-           py::arg("abot"), py::arg("front_porosity"))
+           py::arg("ah"), 
+		   py::arg("al"), 
+		   py::arg("ar"), 
+		   py::arg("atop"),
+           py::arg("abot"), 
+		   py::arg("permeability_factor"))
       .def_readwrite("ah", &EffectiveLayers::EffectiveOpenness::Ah)
       .def_readwrite("al", &EffectiveLayers::EffectiveOpenness::Al)
       .def_readwrite("ar", &EffectiveLayers::EffectiveOpenness::Ar)
       .def_readwrite("atop", &EffectiveLayers::EffectiveOpenness::Atop)
       .def_readwrite("abot", &EffectiveLayers::EffectiveOpenness::Abot)
-      .def_readwrite("front_porosity",
-                     &EffectiveLayers::EffectiveOpenness::FrontPorosity);
+      .def_readwrite("permeability_factor", &EffectiveLayers::EffectiveOpenness::PermeabilityFactor);
 	
 	m.def("is_closed", &EffectiveLayers::isClosed, py::arg("effective_openness"));
 	
