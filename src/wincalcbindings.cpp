@@ -805,7 +805,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("opening_bottom"), 
 		   py::arg("opening_left"),
            py::arg("opening_right"), 
-		   py::arg("opening_front"), 
+		   py::arg("effective_front_thermal_openness_area"), 
 		   py::arg("permeability_factor"), 
 		   py::arg("youngs_modulus"), 
 		   py::arg("density"))
@@ -818,8 +818,8 @@ PYBIND11_MODULE(wincalcbindings, m) {
                      &wincalc::Product_Data_Thermal::opening_left)
       .def_readwrite("opening_right",
                      &wincalc::Product_Data_Thermal::opening_right)
-	  .def_readwrite("opening_front",
-					 &wincalc::Product_Data_Thermal::opening_front)
+	  .def_readwrite("effective_front_thermal_openness_area",
+					 &wincalc::Product_Data_Thermal::effective_front_thermal_openness_area)
 	  .def_readwrite("permeability_factor",
 					 &wincalc::Product_Data_Thermal::permeability_factor)
       .def_readwrite("youngs_modulus",
@@ -1770,13 +1770,13 @@ PYBIND11_MODULE(wincalcbindings, m) {
 
   py::class_<EffectiveLayers::EffectiveOpenness>(m, "EffectiveOpenness")
       .def(py::init<double, double, double, double, double, double>(),
-           py::arg("ah"), 
+           py::arg("effective_front_thermal_openness_area"), 
 		   py::arg("al"), 
 		   py::arg("ar"), 
 		   py::arg("atop"),
            py::arg("abot"), 
 		   py::arg("permeability_factor"))
-      .def_readwrite("ah", &EffectiveLayers::EffectiveOpenness::Ah)
+      .def_readwrite("effective_front_thermal_openness_area", &EffectiveLayers::EffectiveOpenness::EffectiveFrontThermalOpennessArea)
       .def_readwrite("al", &EffectiveLayers::EffectiveOpenness::Al)
       .def_readwrite("ar", &EffectiveLayers::EffectiveOpenness::Ar)
       .def_readwrite("atop", &EffectiveLayers::EffectiveOpenness::Atop)
