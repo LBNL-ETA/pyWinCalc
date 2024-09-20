@@ -4,7 +4,7 @@ import deprecation
 from wincalcbindings import (
     AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDirection, BSDFDirections, BSDFHemisphere,
     BSDFIntegrator, BoundaryConditionsCoefficientModelType, CMABestWorstUFactors, CMAResult, CMAWindow,
-    CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, layers, CellSpacingType, PolygonType, pillar_cell_area,
+    CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, Layers, CellSpacingType, PolygonType, pillar_cell_area,
     PillarData, CylindricalPillar, SphericalPillar, RectangularPillar, TriangularPillar, PentagonPillar, HexagonPillar, LinearBearingPillar, TruncatedConePillar, Glass, PillarMeasurement,
     AnnulusCylinderPillar, CShapedCylinderPillar, UniversalSupportPillar, CylindricalPillarLayer, SphericalPillarLayer, RectangularPillarLayer,
     TriangularPillarLayer, PentagonPillarLayer, HexagonPillarLayer, LinearBearingPillarLayer, TruncatedConePillarLayer,
