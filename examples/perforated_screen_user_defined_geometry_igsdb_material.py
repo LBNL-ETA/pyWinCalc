@@ -6,7 +6,7 @@ from igsdb_interaction import url_single_product, headers
 # igsdb.lbl.gov and user-defined perforated geometry.
 
 # This is the same material used in the venetian example but could be any material in the igsdb
-shade_material_igsdb_id = 17935
+shade_material_igsdb_id = 19179
 
 shade_material_igsdb_response = requests.get(
     url_single_product.format(id=shade_material_igsdb_id), headers=headers)

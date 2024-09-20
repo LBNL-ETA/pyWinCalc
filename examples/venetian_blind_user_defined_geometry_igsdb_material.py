@@ -7,7 +7,7 @@ from igsdb_interaction import url_single_product, headers
 
 # This is the same material used in the venetian in the igsdb_exterior_shade_on_cleara_glass.py example
 # but could be any material in the igsdb
-shade_material_igsdb_id = 17935
+shade_material_igsdb_id = 19179
 
 shade_material_igsdb_response = requests.get(url_single_product.format(id=shade_material_igsdb_id), headers=headers)
 
