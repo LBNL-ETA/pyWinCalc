@@ -17,7 +17,6 @@ shade_material_optical = pywincalc.ProductDataOpticalDualBandHemispheric(solar_t
                                                                          ir_transmittance_back=0,
                                                                          emissivity_front=0.8,
                                                                          emissivity_back=0.8,
-                                                                         permeability_factor=0,
                                                                          flipped=False)
 
 # Venetian blinds need a Venetian_Geometry.

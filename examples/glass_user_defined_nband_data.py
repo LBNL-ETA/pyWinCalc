@@ -276,7 +276,6 @@ glass_n_band_optical_data = pywincalc.ProductDataOpticalNBand(material_type=glas
                                                               ir_transmittance_back=glass_ir_transmittance_back,
                                                               emissivity_front=glass_emissivity_front,
                                                               emissivity_back=glass_emissivity_back,
-                                                              permeability_factor=glass_permeability_factor,
                                                               flipped=flipped)
 
 # Next create the thermal data for the glass layer
@@ -295,7 +294,8 @@ glass_thermal = pywincalc.ProductDataThermal(conductivity=glass_conductivity,
                                              opening_bottom=glass_opening_bottom,
                                              opening_left=glass_opening_left,
                                              opening_right=glass_opening_right,
-                                             opening_front=glass_opening_front)
+                                             effective_front_thermal_openness_area=glass_opening_front,
+                                             permeability_factor=glass_permeability_factor)
 
 # Create a glass layer from both the optical and thermal data
 glass_layer = pywincalc.ProductDataOpticalAndThermal(glass_n_band_optical_data,
