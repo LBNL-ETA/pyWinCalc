@@ -801,14 +801,14 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("conductivity"), 
 		   py::arg("thickness_meters"),
            py::arg("flipped"), 
-		   py::arg("opening_top"),
-           py::arg("opening_bottom"), 
-		   py::arg("opening_left"),
-           py::arg("opening_right"), 
-		   py::arg("effective_front_thermal_openness_area"), 
-		   py::arg("permeability_factor"), 
-		   py::arg("youngs_modulus"), 
-		   py::arg("density"))
+		   py::arg("opening_top") = 0,
+           py::arg("opening_bottom") = 0, 
+		   py::arg("opening_left") = 0,
+           py::arg("opening_right") = 0, 
+		   py::arg("effective_front_thermal_openness_area") = 0, 
+		   py::arg("permeability_factor") = 0, 
+		   py::arg("youngs_modulus") = Tarcog::DeflectionConstants::YOUNGSMODULUS, 
+		   py::arg("density") = Tarcog::MaterialConstants::GLASSDENSITY)
       .def_readwrite("conductivity",
                      &wincalc::Product_Data_Thermal::conductivity)
       .def_readwrite("opening_top", &wincalc::Product_Data_Thermal::opening_top)
