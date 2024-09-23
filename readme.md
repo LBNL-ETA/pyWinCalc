@@ -710,6 +710,12 @@ Please refer to the [generic_pv.json](https://github.com/LBNL-ETA/pyWinCalc/tree
 									 - A string that is convertible to a float.
 
 ## Changelog
+### v3.6.0
+- ProductDataOptical no longer has permability_factor (moved into ProductDataThermal)
+- ProductDataThermal now has two additional fields
+  - effective_front_thermal_openness_area: Describes effective thermal openness area of airflow porous layer (used in calculations between two gaps surrounding that layer)
+  - permeability_factor: Describes the layer porosity (used in calculation for effective layer thermal conductivity)
+- ProductDataThermal constructor now acceppts youngs_modulus and density (In the past, these two could only be assigned to the object once it is created)
 ### v3.2.0
 - Added ability to model gaps with forced ventilation.  See gap #7 in [gaps_and_gases.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/gaps_and_gases.py)
 - Added the ability to use measured gap deflection in deflection calculations.  See [deflection.py](https://github.com/LBNL-ETA/pyWinCalc/blob/main/examples/deflection.py)
