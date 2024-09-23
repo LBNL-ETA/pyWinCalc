@@ -939,7 +939,6 @@ shade_material_optical_data = pywincalc.ProductDataOpticalNBand(material_type=sh
                                                                 ir_transmittance_back=shade_ir_transmittance_back,
                                                                 emissivity_front=shade_emissivity_front,
                                                                 emissivity_back=shade_emissivity_back,
-                                                                permeability_factor=shade_permeability_factor,
                                                                 flipped=flipped)
 
 # Create perforated geometry 
@@ -965,7 +964,8 @@ shade_material_thermal = pywincalc.ProductDataThermal(conductivity=shade_conduct
                                                       opening_top=shade_opening_top,
                                                       opening_bottom=shade_opening_bottom,
                                                       opening_left=shade_opening_left,
-                                                      opening_right=shade_opening_right)
+                                                      opening_right=shade_opening_right,
+                                                      permeability_factor=shade_permeability_factor)
 
 # Create a perforated screen from the geometry and optical and thermal data
 perforated_layer = pywincalc.create_perforated_screen(geometry=geometry,

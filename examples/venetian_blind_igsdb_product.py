@@ -9,7 +9,7 @@ from igsdb_interaction import url_single_product, headers
 bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTER)
 
 # Download a venetian blind from the igsdb.lbl.gov.
-slim_white_pella_venetian_blind_igsdb_id = 14684
+slim_white_pella_venetian_blind_igsdb_id = 18420
 
 slim_white_pella_venetian_blind_igsdb_response = requests.get(
     url_single_product.format(id=slim_white_pella_venetian_blind_igsdb_id), headers=headers)

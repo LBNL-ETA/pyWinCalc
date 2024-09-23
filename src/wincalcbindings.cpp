@@ -113,23 +113,22 @@ class Py_Product_Data_Optical : public wincalc::Product_Data_Optical //_Base
 {
 public:
   using wincalc::Product_Data_Optical::Product_Data_Optical; // Inherit
-                                                             // constructors
+  // constructors
   std::vector<double> wavelengths() const override {
     PYBIND11_OVERRIDE_PURE(std::vector<double>, wincalc::Product_Data_Optical,
                            wavelengths, );
   }
 };
 
-class Py_CSupportPillar : public Tarcog::ISO15099::CSupportPillar //_Base
-{
+class Py_UniversalSupportPillar
+    : public Tarcog::ISO15099::UniversalSupportPillar {
 public:
-  using Tarcog::ISO15099::CSupportPillar::CSupportPillar; // Inherit
-                                                          // constructors
+  using Tarcog::ISO15099::UniversalSupportPillar::UniversalSupportPillar;
 
 protected:
-  double conductivityOfPillarArray() override {
-    PYBIND11_OVERRIDE_PURE(double, Tarcog::ISO15099::CSupportPillar,
-                           conductivityOfPillarArray, );
+  double areaOfContact() override {
+    PYBIND11_OVERRIDE_PURE(double, Tarcog::ISO15099::UniversalSupportPillar,
+                           areaOfContact, );
   }
 };
 
@@ -183,21 +182,255 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def(py::init<double, double, Gases::CGas const &>(),
            py::arg("thickness"), py::arg("pressure"), py::arg("gas"));
 
-  py::class_<Tarcog::ISO15099::CSupportPillar, Py_CSupportPillar,
-             Tarcog::ISO15099::CIGUGapLayer,
-             std::shared_ptr<Tarcog::ISO15099::CSupportPillar>>(m,
-                                                                "SupportPillar")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double>(),
-           py::arg("gap_layer"), py::arg("conductivity"));
+  py::enum_<Tarcog::ISO15099::CellSpacingType>(m, "CellSpacingType",
+                                               py::arithmetic())
+      .value("SQUARE", Tarcog::ISO15099::CellSpacingType::Square)
+      .value("SHIFTEDSQUARE", Tarcog::ISO15099::CellSpacingType::ShiftedSquare)
+      .value("SHIFTEDROTATEDSQUARE",
+             Tarcog::ISO15099::CellSpacingType::ShiftedRotatedSquare);
 
-  py::class_<Tarcog::ISO15099::CCircularPillar,
-             Tarcog::ISO15099::CSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::CCircularPillar>>(
-      m, "CircularPillar")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double, double,
-                    double>(),
-           py::arg("gap_layer"), py::arg("conductivity"), py::arg("spacing"),
-           py::arg("radius"));
+  m.def("pillar_cell_area", Tarcog::ISO15099::pillarCellArea,
+        py::arg("cell_spacing_type"), py::arg("sp"));
+
+  py::enum_<Tarcog::ISO15099::PolygonType>(m, "PolygonType", py::arithmetic())
+      .value("TRIANGLE", Tarcog::ISO15099::PolygonType::Triangle)
+      .value("PENTAGON", Tarcog::ISO15099::PolygonType::Pentagon)
+      .value("HEXAGON", Tarcog::ISO15099::PolygonType::Hexagon);
+
+  py::class_<Tarcog::ISO15099::UniversalSupportPillar,
+             Py_UniversalSupportPillar, Tarcog::ISO15099::CIGUGapLayer,
+             std::shared_ptr<Tarcog::ISO15099::UniversalSupportPillar>>(
+      m, "UniversalSupportPillar")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double, double>(),
+           py::arg("gap_layer"), py::arg("material_conductivity"),
+           py::arg("cell_area"));
+
+  py::class_<Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::PillarData>>(m, "PillarData")
+      .def(py::init<double, double, double>(), py::arg("height"),
+           py::arg("material_conductivity"), py::arg("cell_area"))
+      .def_readwrite("height", &Tarcog::ISO15099::PillarData::height)
+      .def_readwrite("material_conductivity",
+                     &Tarcog::ISO15099::PillarData::materialConductivity)
+      .def_readwrite("cell_area", &Tarcog::ISO15099::PillarData::cellArea);
+
+  py::class_<Tarcog::ISO15099::CylindricalPillar, Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::CylindricalPillar>>(
+      m, "CylindricalPillar")
+      .def(py::init<double, double, double, double>(), py::arg("height"),
+           py::arg("material_conductivity"), py::arg("cell_area"),
+           py::arg("radius"))
+      .def_readwrite("radius", &Tarcog::ISO15099::CylindricalPillar::radius);
+
+  py::class_<Tarcog::ISO15099::CylindricalPillarLayer,
+             Tarcog::ISO15099::UniversalSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::CylindricalPillarLayer>>(
+      m, "CylindricalPillarLayer")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                    Tarcog::ISO15099::CylindricalPillar const &>(),
+           py::arg("gap_layer"), py::arg("cylindrical_pillar"));
+
+  py::class_<Tarcog::ISO15099::SphericalPillar, Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::SphericalPillar>>(
+      m, "SphericalPillar")
+      .def(py::init<double, double, double, double>(), py::arg("height"),
+           py::arg("material_conductivity"), py::arg("cell_area"),
+           py::arg("radius_of_contact"))
+      .def_readwrite("radius_of_contact",
+                     &Tarcog::ISO15099::SphericalPillar::radiusOfContact);
+
+  py::class_<Tarcog::ISO15099::SphericalPillarLayer,
+             Tarcog::ISO15099::UniversalSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::SphericalPillarLayer>>(
+      m, "SphericalPillarLayer")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                    Tarcog::ISO15099::SphericalPillar const &>(),
+           py::arg("gap_layer"), py::arg("spherical_pillar"));
+
+  py::class_<Tarcog::ISO15099::RectangularPillar, Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::RectangularPillar>>(
+      m, "RectangularPillar")
+      .def(py::init<double, double, double, double, double>(),
+           py::arg("height"), py::arg("material_conductivity"),
+           py::arg("cell_area"), py::arg("length"), py::arg("width"))
+      .def_readwrite("length", &Tarcog::ISO15099::RectangularPillar::length)
+      .def_readwrite("width", &Tarcog::ISO15099::RectangularPillar::width);
+
+  py::class_<Tarcog::ISO15099::RectangularPillarLayer,
+             Tarcog::ISO15099::UniversalSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::RectangularPillarLayer>>(
+      m, "RectangularPillarLayer")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                    Tarcog::ISO15099::RectangularPillar const &>(),
+           py::arg("gap_layer"), py::arg("rectangular_pillar"));
+		   
+  py::class_<Tarcog::ISO15099::PolygonalPillar, 
+             Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::PolygonalPillar>>(m, "PolygonalPillar")
+      .def(py::init<double, double, double, double>(), py::arg("height"),
+           py::arg("material_conductivity"), py::arg("cell_area"), py::arg("length"))
+	  .def_readwrite("legnth", &Tarcog::ISO15099::PolygonalPillar::length);
+	  
+  py::class_<Tarcog::ISO15099::TriangularPillar,
+             Tarcog::ISO15099::PolygonalPillar, 
+             Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::TriangularPillar>>(m, "TriangularPillar")
+      .def(py::init<double, double, double, double>(), py::arg("height"),
+           py::arg("material_conductivity"), py::arg("cell_area"), py::arg("length"));
+
+  py::class_<Tarcog::ISO15099::TriangularPillarLayer,
+             Tarcog::ISO15099::UniversalSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::TriangularPillarLayer>>(
+      m, "TriangularPillarLayer")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                    Tarcog::ISO15099::TriangularPillar const &>(),
+           py::arg("gap_layer"), py::arg("polygon_pillar"));
+		   
+  py::class_<Tarcog::ISO15099::PentagonPillar,
+             Tarcog::ISO15099::PolygonalPillar, 
+             Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::PentagonPillar>>(m, "PentagonPillar")
+      .def(py::init<double, double, double, double>(), py::arg("height"),
+           py::arg("material_conductivity"), py::arg("cell_area"), py::arg("length"));		   
+
+  py::class_<Tarcog::ISO15099::PentagonPillarLayer,
+             Tarcog::ISO15099::UniversalSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::PentagonPillarLayer>>(
+      m, "PentagonPillarLayer")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                    Tarcog::ISO15099::PentagonPillar const &>(),
+           py::arg("gap_layer"), py::arg("polygon_pillar"));
+		   
+  py::class_<Tarcog::ISO15099::HexagonPillar,
+             Tarcog::ISO15099::PolygonalPillar, 
+             Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::HexagonPillar>>(m, "HexagonPillar")
+      .def(py::init<double, double, double, double>(), py::arg("height"),
+           py::arg("material_conductivity"), py::arg("cell_area"), py::arg("length"));
+
+  py::class_<Tarcog::ISO15099::HexagonPillarLayer,
+             Tarcog::ISO15099::UniversalSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::HexagonPillarLayer>>(
+      m, "HexagonPillarLayer")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                    Tarcog::ISO15099::HexagonPillar const &>(),
+           py::arg("gap_layer"), py::arg("polygon_pillar"));
+
+  py::class_<Tarcog::ISO15099::LinearBearingPillar,
+             Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::LinearBearingPillar>>(
+      m, "LinearBearingPillar")
+      .def(py::init<double, double, double, double, double>(),
+           py::arg("height"), py::arg("material_conductivity"),
+           py::arg("cell_area"), py::arg("length"), py::arg("width"))
+      .def_readwrite("length", &Tarcog::ISO15099::LinearBearingPillar::length)
+      .def_readwrite("width", &Tarcog::ISO15099::LinearBearingPillar::width);
+
+  py::class_<Tarcog::ISO15099::LinearBearingPillarLayer,
+             Tarcog::ISO15099::UniversalSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::LinearBearingPillarLayer>>(
+      m, "LinearBearingPillarLayer")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                    Tarcog::ISO15099::LinearBearingPillar const &>(),
+           py::arg("gap_layer"), py::arg("linear_bearing_pillar"));
+
+  py::class_<Tarcog::ISO15099::TruncatedConePillar,
+             Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::TruncatedConePillar>>(
+      m, "TruncatedConePillar")
+      .def(py::init<double, double, double, double, double>(),
+           py::arg("height"), py::arg("material_conductivity"),
+           py::arg("cell_area"), py::arg("radius_1"), py::arg("radius_2"))
+      .def_readwrite("radius_1",
+                     &Tarcog::ISO15099::TruncatedConePillar::radius1)
+      .def_readwrite("radius_2",
+                     &Tarcog::ISO15099::TruncatedConePillar::radius2);
+
+  py::class_<Tarcog::ISO15099::TruncatedConePillarLayer,
+             Tarcog::ISO15099::UniversalSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::TruncatedConePillarLayer>>(
+      m, "TruncatedConePillarLayer")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                    Tarcog::ISO15099::TruncatedConePillar const &>(),
+           py::arg("gap_layer"), py::arg("truncated_cone_pillar"));
+
+  py::class_<Tarcog::ISO15099::AnnulusCylinderPillar,
+             Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::AnnulusCylinderPillar>>(
+      m, "AnnulusCylinderPillar")
+      .def(py::init<double, double, double, double, double>(),
+           py::arg("height"), py::arg("material_conductivity"),
+           py::arg("cell_area"), py::arg("inner_radius"),
+           py::arg("outer_radius"))
+      .def_readwrite("inner_radius",
+                     &Tarcog::ISO15099::AnnulusCylinderPillar::innerRadius)
+      .def_readwrite("outer_radius",
+                     &Tarcog::ISO15099::AnnulusCylinderPillar::outerRadius);
+
+  py::class_<Tarcog::ISO15099::AnnulusCylinderPillarLayer,
+             Tarcog::ISO15099::UniversalSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::AnnulusCylinderPillarLayer>>(
+      m, "AnnulusCylinderPillarLayer")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                    Tarcog::ISO15099::AnnulusCylinderPillar const &>(),
+           py::arg("gap_layer"), py::arg("annulus_cylinder_pillar"));
+		   
+  py::class_<Tarcog::ISO15099::CShapedCylinderPillar,
+             Tarcog::ISO15099::PillarData,
+             std::shared_ptr<Tarcog::ISO15099::CShapedCylinderPillar>>(
+      m, "CShapedCylinderPillar")
+      .def(py::init<double, double, double, double, double, double>(),
+           py::arg("height"), py::arg("material_conductivity"),
+           py::arg("cell_area"), py::arg("inner_radius"),
+           py::arg("outer_radius"), py::arg("fraction_covered"))
+      .def_readwrite("inner_radius",
+                     &Tarcog::ISO15099::CShapedCylinderPillar::innerRadius)
+      .def_readwrite("outer_radius",
+                     &Tarcog::ISO15099::CShapedCylinderPillar::outerRadius)
+	  .def_readwrite("fraction_covered",
+                     &Tarcog::ISO15099::CShapedCylinderPillar::fractionCovered);
+					 
+  py::class_<Tarcog::ISO15099::CShapedCylinderPillarLayer,
+             Tarcog::ISO15099::UniversalSupportPillar,
+             std::shared_ptr<Tarcog::ISO15099::CShapedCylinderPillarLayer>>(
+      m, "CShapedCylinderPillarLayer")
+      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
+                    Tarcog::ISO15099::CShapedCylinderPillar const &>(),
+           py::arg("gap_layer"), py::arg("cshaped_cylinder_pillar"));
+
+  py::class_<Tarcog::ISO15099::Glass, std::shared_ptr<Tarcog::ISO15099::Glass>>(
+      m, "Glass")
+      .def(py::init<double, double, double>(), py::arg("thickness"),
+           py::arg("conductivity"), py::arg("emissivity"))
+      .def_readwrite("thickness", &Tarcog::ISO15099::Glass::thickness)
+      .def_readwrite("conductivity", &Tarcog::ISO15099::Glass::conductivity)
+      .def_readwrite("emissivity", &Tarcog::ISO15099::Glass::emissivity);
+
+  py::class_<Tarcog::ISO15099::PillarMeasurement,
+             std::shared_ptr<Tarcog::ISO15099::PillarMeasurement>>(
+      m, "PillarMeasurement")
+      .def(py::init<double, double, double, double, Tarcog::ISO15099::Glass,
+                    Tarcog::ISO15099::Glass>(),
+           py::arg("total_thickness"), py::arg("conductivity"),
+           py::arg("temperature_surface_1"), py::arg("temperature_surface_4"),
+           py::arg("glass_1"), py::arg("glass_2"))
+      .def_readwrite("total_thickness",
+                     &Tarcog::ISO15099::PillarMeasurement::totalThickness)
+      .def_readwrite("conductivity",
+                     &Tarcog::ISO15099::PillarMeasurement::conductivity)
+      .def_readwrite("temperature_surface_1",
+                     &Tarcog::ISO15099::PillarMeasurement::temperatureSurface1)
+      .def_readwrite("temperature_surface_4",
+                     &Tarcog::ISO15099::PillarMeasurement::temperatureSurface4)
+      .def_readwrite("glass_1", &Tarcog::ISO15099::PillarMeasurement::glass1)
+      .def_readwrite("glass_2", &Tarcog::ISO15099::PillarMeasurement::glass2);
+
+  py::class_<Tarcog::ISO15099::MeasuredPillarLayer,
+             Tarcog::ISO15099::CIGUGapLayer,
+             std::shared_ptr<Tarcog::ISO15099::MeasuredPillarLayer>>(
+      m, "MeasuredPillarLayer")
+      .def(py::init<Tarcog::ISO15099::PillarMeasurement const &>(),
+           py::arg("pillar"));
 
   py::class_<Tarcog::ISO15099::CIGUVentilatedGapLayer,
              Tarcog::ISO15099::CIGUGapLayer,
@@ -209,12 +442,8 @@ PYBIND11_MODULE(wincalcbindings, m) {
                     double>(),
            py::arg("gap_layer"), py::arg("inlet_temperature"),
            py::arg("inlet_speed"))
-      .def("inlet_temperature",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::inletTemperature)
-      .def("outlet_temperature",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::outletTemperature)
       .def("layer_temperature",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::layerTemperature)
+           &Tarcog::ISO15099::CIGUVentilatedGapLayer::averageLayerTemperature)
       .def("set_flow_geometry",
            &Tarcog::ISO15099::CIGUVentilatedGapLayer::setFlowGeometry,
            py::arg("a_in"), py::arg("a_out"))
@@ -568,12 +797,18 @@ PYBIND11_MODULE(wincalcbindings, m) {
   py::class_<wincalc::Product_Data_Thermal, wincalc::Flippable_Solid_Layer,
              std::shared_ptr<wincalc::Product_Data_Thermal>>(
       m, "ProductDataThermal")
-      .def(py::init<double, double, bool, double, double, double, double,
-                    double>(),
-           py::arg("conductivity"), py::arg("thickness_meters"),
-           py::arg("flipped") = false, py::arg("opening_top") = 0,
-           py::arg("opening_bottom") = 0, py::arg("opening_left") = 0,
-           py::arg("opening_right") = 0, py::arg("opening_front") = 0)
+      .def(py::init<std::optional<double>, double, bool, double, double, double, double, double, double, std::optional<double>, std::optional<double>>(),
+           py::arg("conductivity"), 
+		   py::arg("thickness_meters"),
+           py::arg("flipped"), 
+		   py::arg("opening_top") = 0,
+           py::arg("opening_bottom") = 0, 
+		   py::arg("opening_left") = 0,
+           py::arg("opening_right") = 0, 
+		   py::arg("effective_front_thermal_openness_area") = 0, 
+		   py::arg("permeability_factor") = 0, 
+		   py::arg("youngs_modulus") = Tarcog::DeflectionConstants::YOUNGSMODULUS, 
+		   py::arg("density") = Tarcog::MaterialConstants::GLASSDENSITY)
       .def_readwrite("conductivity",
                      &wincalc::Product_Data_Thermal::conductivity)
       .def_readwrite("opening_top", &wincalc::Product_Data_Thermal::opening_top)
@@ -583,8 +818,10 @@ PYBIND11_MODULE(wincalcbindings, m) {
                      &wincalc::Product_Data_Thermal::opening_left)
       .def_readwrite("opening_right",
                      &wincalc::Product_Data_Thermal::opening_right)
-      .def_readwrite("opening_front",
-                     &wincalc::Product_Data_Thermal::opening_front)
+	  .def_readwrite("effective_front_thermal_openness_area",
+					 &wincalc::Product_Data_Thermal::effective_front_thermal_openness_area)
+	  .def_readwrite("permeability_factor",
+					 &wincalc::Product_Data_Thermal::permeability_factor)
       .def_readwrite("youngs_modulus",
                      &wincalc::Product_Data_Thermal::youngs_modulus)
       .def_readwrite("density", &wincalc::Product_Data_Thermal::density);
@@ -593,27 +830,20 @@ PYBIND11_MODULE(wincalcbindings, m) {
              std::shared_ptr<wincalc::Product_Data_Optical>>(
       m, "ProductDataOptical")
       .def(py::init<double, std::optional<double>, std::optional<double>,
-                    std::optional<double>, std::optional<double>, double,
-                    bool>(),
+                    std::optional<double>, std::optional<double>, bool>(),
            py::arg("thickness_meters"),
            py::arg("ir_transmittance_front") = std::optional<double>(),
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
            py::arg("emissivity_back") = std::optional<double>(),
-           py::arg("permeability_factor") = 0.0, py::arg("flipped") = false)
+           py::arg("flipped") = false)
       .def("effective_thermal_values",
            &wincalc::Product_Data_Optical::effective_thermal_values)
       .def("wavelengths", &wincalc::Product_Data_Optical::wavelengths)
-      .def_readwrite("ir_transmittance_front",
-                     &wincalc::Product_Data_Optical::ir_transmittance_front)
-      .def_readwrite("ir_transmittance_back",
-                     &wincalc::Product_Data_Optical::ir_transmittance_back)
-      .def_readwrite("emissivity_front",
-                     &wincalc::Product_Data_Optical::emissivity_front)
-      .def_readwrite("emissivity_back",
-                     &wincalc::Product_Data_Optical::emissivity_back)
-      .def_readwrite("permeability_factor",
-                     &wincalc::Product_Data_Optical::permeability_factor);
+      .def_readwrite("ir_transmittance_front", &wincalc::Product_Data_Optical::ir_transmittance_front)
+      .def_readwrite("ir_transmittance_back", &wincalc::Product_Data_Optical::ir_transmittance_back)
+      .def_readwrite("emissivity_front", &wincalc::Product_Data_Optical::emissivity_front)
+      .def_readwrite("emissivity_back", &wincalc::Product_Data_Optical::emissivity_back);
 
   py::enum_<FenestrationCommon::MaterialType>(m, "MaterialType",
                                               py::arithmetic())
@@ -640,7 +870,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
                     std::vector<OpticsParser::WLData>,
                     std::optional<wincalc::CoatedSide>, std::optional<double>,
                     std::optional<double>, std::optional<double>,
-                    std::optional<double>, double, bool>(),
+                    std::optional<double>, bool>(),
            py::arg("material_type"), py::arg("thickness_meters"),
            py::arg("wavelength_data"),
            py::arg("coated_side") = std::optional<wincalc::CoatedSide>(),
@@ -648,7 +878,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
            py::arg("emissivity_back") = std::optional<double>(),
-           py::arg("permeability_factor") = 0, py::arg("flipped") = false)
+           py::arg("flipped") = false)
       .def("wavelengths", &wincalc::Product_Data_N_Band_Optical::wavelengths)
       .def_readwrite("material_type",
                      &wincalc::Product_Data_N_Band_Optical::material_type)
@@ -660,14 +890,14 @@ PYBIND11_MODULE(wincalcbindings, m) {
              std::shared_ptr<wincalc::Product_Data_Dual_Band_Optical>>(
       m, "ProductDataOpticalDualBand")
       .def(py::init<double, std::optional<double>, std::optional<double>,
-                    std::optional<double>, std::optional<double>, double,
+                    std::optional<double>, std::optional<double>,
                     bool>(),
            py::arg("thickness_meters"),
            py::arg("ir_transmittance_front") = std::optional<double>(),
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
            py::arg("emissivity_back") = std::optional<double>(),
-           py::arg("permeability_factor") = 0.0, py::arg("flipped") = false)
+           py::arg("flipped") = false)
       .def("wavelengths",
            &wincalc::Product_Data_Dual_Band_Optical::wavelengths);
 
@@ -679,7 +909,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def(py::init<double, double, double, double, double, double, double,
                     double, double, std::optional<double>,
                     std::optional<double>, std::optional<double>,
-                    std::optional<double>, double, bool>(),
+                    std::optional<double>, bool>(),
            py::arg("solar_transmittance_front"),
            py::arg("solar_transmittance_back"),
            py::arg("solar_reflectance_front"),
@@ -692,7 +922,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
            py::arg("emissivity_back") = std::optional<double>(),
-           py::arg("permeability_factor") = 0.0, py::arg("flipped") = false)
+           py::arg("flipped") = false)
       .def_readwrite(
           "solar_transmittance_front",
           &wincalc::Product_Data_Dual_Band_Optical_Hemispheric::tf_solar)
@@ -732,8 +962,8 @@ PYBIND11_MODULE(wincalcbindings, m) {
                     std::vector<std::vector<double>> const &,
                     SingleLayerOptics::BSDFHemisphere const &, double,
                     std::optional<double>, std::optional<double>,
-                    std::optional<double>, std::optional<double>, double,
-                    bool>(),
+                    std::optional<double>, std::optional<double>,
+                    bool, bool>(),
            py::arg("solar_transmittance_front"),
            py::arg("solar_transmittance_back"),
            py::arg("solar_reflectance_front"),
@@ -747,7 +977,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("ir_transmittance_back") = std::optional<double>(),
            py::arg("emissivity_front") = std::optional<double>(),
            py::arg("emissivity_back") = std::optional<double>(),
-           py::arg("permeability_factor") = 0.0, py::arg("flipped") = false)
+           py::arg("flipped") = false, py::arg("user_defined_effective_values") = false)
       .def_readwrite("solar_transmittance_front",
                      &wincalc::Product_Data_Dual_Band_Optical_BSDF::tf_solar)
       .def_readwrite("solar_transmittance_back",
@@ -764,6 +994,8 @@ PYBIND11_MODULE(wincalcbindings, m) {
                      &wincalc::Product_Data_Dual_Band_Optical_BSDF::rf_visible)
       .def_readwrite("visible_reflectance_back",
                      &wincalc::Product_Data_Dual_Band_Optical_BSDF::rb_visible)
+      .def_readwrite("user_defined_effective_values",	
+					 &wincalc::Product_Data_Dual_Band_Optical_BSDF::user_defined_effective_values)
       .def("effective_thermal_values",
            &wincalc::Product_Data_Dual_Band_Optical_BSDF::
                effective_thermal_values);
@@ -1538,56 +1770,150 @@ PYBIND11_MODULE(wincalcbindings, m) {
 
   py::class_<EffectiveLayers::EffectiveOpenness>(m, "EffectiveOpenness")
       .def(py::init<double, double, double, double, double, double>(),
-           py::arg("ah"), py::arg("al"), py::arg("ar"), py::arg("atop"),
-           py::arg("abot"), py::arg("front_porosity"))
-      .def("is_closed", &EffectiveLayers::EffectiveOpenness::isClosed)
-      .def_readwrite("ah", &EffectiveLayers::EffectiveOpenness::Ah)
+           py::arg("effective_front_thermal_openness_area"), 
+		   py::arg("al"), 
+		   py::arg("ar"), 
+		   py::arg("atop"),
+           py::arg("abot"), 
+		   py::arg("permeability_factor"))
+      .def_readwrite("effective_front_thermal_openness_area", &EffectiveLayers::EffectiveOpenness::EffectiveFrontThermalOpennessArea)
       .def_readwrite("al", &EffectiveLayers::EffectiveOpenness::Al)
       .def_readwrite("ar", &EffectiveLayers::EffectiveOpenness::Ar)
       .def_readwrite("atop", &EffectiveLayers::EffectiveOpenness::Atop)
       .def_readwrite("abot", &EffectiveLayers::EffectiveOpenness::Abot)
-      .def_readwrite("front_porosity",
-                     &EffectiveLayers::EffectiveOpenness::FrontPorosity);
+      .def_readwrite("permeability_factor", &EffectiveLayers::EffectiveOpenness::PermeabilityFactor);
+	
+	m.def("is_closed", &EffectiveLayers::isClosed, py::arg("effective_openness"));
+	
+	py::module_ layers = m.def_submodule("Layers", "Submodule for Tarcog Layers");
+ 
+    layers.def("solid", py::overload_cast<double, double>(&Tarcog::ISO15099::Layers::solid),
+			   "Factory method for creating a solid Tarcog layer with basic parameters",
+			   py::arg("thickness"), py::arg("conductivity"));
+				 
+	layers.def("solid", py::overload_cast<double, double, double, double, double, double>(&Tarcog::ISO15099::Layers::solid),
+               "Factory method for creating a solid Tarcog layer including IR parameters",
+               py::arg("thickness"), py::arg("conductivity"),
+               py::arg("frontEmissivity") = 0.84,
+               py::arg("frontIRTransmittance") = 0.0,
+               py::arg("backEmissivity") = 0.84,
+               py::arg("backIRTransmittance") = 0.0);
+				 
+    layers.def("update_material_data",
+               &Tarcog::ISO15099::Layers::updateMaterialData,
+               "Static method for updating the material information for a "
+               "solid Tarcog layer.",
+               py::arg("layer"),
+               py::arg("density") = Tarcog::MaterialConstants::GLASSDENSITY,
+               py::arg("youngs_modulus") = Tarcog::DeflectionConstants::YOUNGSMODULUS);
+		  
+    layers.def("shading", &Tarcog::ISO15099::Layers::shading,
+               "Factory function to create a Tarcog shading layer.",
+               py::arg("thickness"), py::arg("conductivity"),
+               py::arg("effective_openness") = EffectiveLayers::EffectiveOpenness(0, 0, 0, 0, 0, 0),
+               py::arg("front_emissivity") = 0.84,
+               py::arg("front_transmittance") = 0.0,
+               py::arg("back_emissivity") = 0.84,
+               py::arg("back_transmittance") = 0.0);
+		  
+    layers.def("sealedLayer", &Tarcog::ISO15099::Layers::sealedLayer,
+               "Factory function to create a Tarcog sealed layer.",
+               py::arg("thickness"), py::arg("conductivity"),
+               py::arg("front_emissivity") = 0.84,
+               py::arg("front_transmittance") = 0.0,
+               py::arg("back_emissivity") = 0.84,
+               py::arg("back_transmittance") = 0.0);
 
-  py::class_<Tarcog::ISO15099::Layers>(m, "Layers")
-      .def_static("solid", &Tarcog::ISO15099::Layers::solid,
-                  "Factory method for creating a solid Tarcog layer",
-                  py::arg("thickness"), py::arg("conductivity"),
-                  py::arg("frontEmissivity") = 0.84,
-                  py::arg("frontIRTransmittance") = 0.0,
-                  py::arg("backEmissivity") = 0.84,
-                  py::arg("backIRTransmittance") = 0.0)
-      .def_static("update_material_data",
-                  &Tarcog::ISO15099::Layers::updateMaterialData,
-                  "Static method for updating the material information for a "
-                  "solid Tarcog layer.",
-                  py::arg("layer"),
-                  py::arg("density") = Tarcog::MaterialConstants::GLASSDENSITY,
-                  py::arg("youngs_modulus") =
-                      Tarcog::DeflectionConstants::YOUNGSMODULUS)
-      .def_static("shading", &Tarcog::ISO15099::Layers::shading,
-                  "Factory function to create a Tarcog shading layer.",
-                  py::arg("thickness"), py::arg("conductivity"),
-                  py::arg("effective_openness") =
-                      EffectiveLayers::EffectiveOpenness(0, 0, 0, 0, 0, 0),
-                  py::arg("front_emissivity") = 0.84,
-                  py::arg("front_transmittance") = 0.0,
-                  py::arg("back_emissivity") = 0.84,
-                  py::arg("back_transmittance") = 0.0)
-      .def_static(
-          "gap",
-          py::overload_cast<double, double>(&Tarcog::ISO15099::Layers::gap),
-          "Factory function to create a Tarcog air gap", py::arg("thickness"),
-          py::arg("pressure") = 101325)
-      .def_static("gap",
-                  py::overload_cast<double, Gases::CGas const &, double>(
-                      &Tarcog::ISO15099::Layers::gap),
-                  "Factory function to create a Tarcog gap from a gas",
-                  py::arg("thickness"), py::arg("gas"),
-                  py::arg("pressure") = 101325)
-      .def_static("add_circular_pillar",
-                  &Tarcog::ISO15099::Layers::addCircularPillar,
-                  "Static function to add a circular pillar to a Tarcog gap",
-                  py::arg("gap"), py::arg("conductivity"), py::arg("spacing"),
-                  py::arg("radius"));
+    layers.def("gap", py::overload_cast<double>(&Tarcog::ISO15099::Layers::gap),
+               "Factory function to create a Tarcog gap with basic parameters",
+               py::arg("thickness"));
+
+    layers.def("gap", py::overload_cast<double, double>(&Tarcog::ISO15099::Layers::gap),
+               "Factory function to create a Tarcog gap with thickness and pressure",
+               py::arg("thickness"), py::arg("pressure") = 101325);
+
+    layers.def("gap", py::overload_cast<double, const Gases::CGas &>(&Tarcog::ISO15099::Layers::gap),
+               "Factory function to create a Tarcog gap with thickness and gas",
+               py::arg("thickness"), py::arg("gas"));
+
+    layers.def("gap", py::overload_cast<double, double, const Gases::CGas &>(&Tarcog::ISO15099::Layers::gap),
+          "Factory function to create a Tarcog gap with thickness, pressure and gas",
+          py::arg("thickness"), py::arg("pressure"), py::arg("gas"));
+
+    layers.def("gap", py::overload_cast<double, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::gap),
+               "Factory function to create a Tarcog gap with all parameters",
+               py::arg("thickness"), py::arg("pressure"), py::arg("gas"), 
+               py::arg("accommodation1"), py::arg("accommodation2"));
+
+    layers.def("forced_ventilation_gap", &Tarcog::ISO15099::Layers::forcedVentilationGap,
+               "Function to create a forced ventilation Tarcog gap",
+               py::arg("gap"), py::arg("forcedVentilationAirSpeed"), 
+               py::arg("forcedVentilationAirTemperature"));
+
+    layers.def("default_vacuum_mixture", &Tarcog::ISO15099::Layers::defaultVacuumMixture,
+               "Function to get the default vacuum mixture");
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::CylindricalPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a cylindrical pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::SphericalPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a spherical pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::RectangularPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a rectangular pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::TriangularPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a triangular pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::PentagonPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a pentagon pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::HexagonPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a hexagon pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::LinearBearingPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a linear bearing pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::TruncatedConePillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a truncated cone pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::AnnulusCylinderPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add an annulus cylinder pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::CShapedCylinderPillar &, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a C-shaped cylinder pillar to a Tarcog gap",
+               py::arg("pillar"), py::arg("pressure"), py::arg("gas") = Tarcog::ISO15099::Layers::defaultVacuumMixture(),
+               py::arg("accommodation1") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT,
+               py::arg("accommodation2") = ConstantsData::DEFAULT_SURFACE_ACCOMMODATION_COEFFICIENT);
+
+    layers.def("create_pillar", py::overload_cast<const Tarcog::ISO15099::PillarMeasurement &>(&Tarcog::ISO15099::Layers::createPillar),
+               "Static function to add a measured pillar to a Tarcog gap",
+               py::arg("pillar"));
 }
