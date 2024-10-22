@@ -1,3 +1,2 @@
 deprecation
 requests
-setuptools
