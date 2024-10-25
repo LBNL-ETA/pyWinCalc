@@ -17,14 +17,14 @@ jobs:
     steps:
       - name: Check LongPathsEnabled
         run: |
-          Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
+          (Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
           
       - name: Support longpaths
         run: git config --system core.longpaths true
         
       - name: Check LongPathsEnabled
         run: |
-          Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
+          (Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
       
       - name: Checkout repository
         uses: actions/checkout@v4
