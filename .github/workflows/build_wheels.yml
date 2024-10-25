@@ -87,7 +87,6 @@ jobs:
           
   build_wheels_manylinux:
     name: Build manylinux wheels
-    name: ${{ matrix.os }} ${{ matrix.python-version }} wheels
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
