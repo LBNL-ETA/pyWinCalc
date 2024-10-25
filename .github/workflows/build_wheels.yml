@@ -30,7 +30,7 @@ jobs:
           pip install setuptools
 
       - name: build
-        run: python setup.py bdist_wheel
+        run: python -m build
 
       - name: upload wheels
         uses: actions/upload-artifact@v3
@@ -65,7 +65,7 @@ jobs:
           pip install setuptools
 
       - name: build
-        run: python setup.py bdist_wheel
+        run: python -m build
 
       - name: upload wheels
         uses: actions/upload-artifact@v3
