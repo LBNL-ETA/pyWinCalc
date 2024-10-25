@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2019]
+        os: [windows-2022]
         arch: [x86, x64]
         python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
 
@@ -45,7 +45,7 @@ jobs:
         # Trying to use cibuildwheels to build mac wheels fails because the version of XCode is not high enough.
         # There is documentation here https://github.com/pypa/cibuildwheel/blob/main/docs/cpp_standards.md on how to
         # set it but I could not get it to work while using the standard images provided by github actions does work.
-        os: [macos-latest, macos-12, macos-13]
+        os: [macos-latest, macos-13]
         python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
     env:
       SYSTEM_VERSION_COMPAT: 0
