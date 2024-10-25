@@ -9,3 +9,4 @@ include CMakeLists-pybind11.txt
 include CMakeLists-pybind11.txt.in
 include CMakeLists-WinCalc.txt
 include CMakeLists-WinCalc.txt.in
+include src/wincalcbindings.cpp
