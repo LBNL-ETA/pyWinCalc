@@ -114,7 +114,7 @@ jobs:
           CIBW_BUILD: cp3?-*
           CIBW_ARCHS: x86_64 aarch64
           CIBW_ENVIRONMENT: CXXFLAGS="-std=c++17"  # Adjust as per your C++ requirements
-          CIBW_MANYLINUX_X86_64_IMAGE: "manylinux2014"
+          CIBW_MANYLINUX_X86_64_IMAGE: "manylinux_2_24"
 
       - name: upload wheels
         uses: actions/upload-artifact@v3
