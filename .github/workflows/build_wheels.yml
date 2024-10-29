@@ -85,12 +85,12 @@ jobs:
         with:
           path: ./dist/*.whl
           
-  build_wheels_manylinux:
+  build_wheels_manylinux_x86_64:
     name: Build manylinux wheels
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
         # Need to use the image specified below to build manylinux wheels
         # PyPi only accepts manylinux wheels, it does not accept wheels for specific versions/architectures
@@ -105,3 +105,29 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: ./dist/*-manylinux*.whl
+          
+  build_wheels_manylinux_arm64:
+    name: Build manylinux wheels (arm64)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Register QEMU for cross-architecture emulation
+      - name: Set up QEMU for cross-compilation
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: arm64
+
+      # Build manylinux Python wheels for arm64 architecture
+      - name: Build manylinux Python wheels (arm64)
+        uses: RalfG/python-wheels-manylinux-build@v0.7.1-manylinux2014_aarch64
+        with:
+          python-versions: 'cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310 cp311-cp311 cp312-cp312'
+          build-requirements: 'setuptools'
+
+      - name: Upload arm64 wheels
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./dist/*-manylinux*.whl
+          name: wheels-arm64
