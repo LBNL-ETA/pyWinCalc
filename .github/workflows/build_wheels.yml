@@ -23,9 +23,9 @@ jobs:
           
       - name: Setup variables for aarch64
         if: matrix.architecture == 'aarch64'
-        env:
-          CIBW_PLATFORM: "linux_aarch64"
-          CIBW_EMULATOR: "linux/aarch64"
+        run: |
+          echo "CIBW_PLATFORM=linux_aarch64" >> $GITHUB_ENV
+          echo "CIBW_EMULATOR=linux/aarch64" >> $GITHUB_ENV
 
       - name: Build wheels with cibuildwheel
         env:
@@ -63,6 +63,7 @@ jobs:
           pip install cibuildwheel
           
       - name: Set macOS Deployment Target 
+        run: |
           export MACOSX_DEPLOYMENT_TARGET=11.0
 
       - name: Build wheels with cibuildwheel
