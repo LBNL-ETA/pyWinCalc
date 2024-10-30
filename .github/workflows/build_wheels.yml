@@ -2,6 +2,8 @@ name: Build wheels
 
 on: [push, pull_request] 
     
+# Cannot use cibuildwheels because the current images used by cibuildwheels do not support C++17. 
+
 jobs:
   build_wheels_windows:
     name: ${{ matrix.os }} ${{ matrix.python-version }} ${{ matrix.arch }} wheels
@@ -82,47 +84,49 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: ./dist/*.whl
-                   
-  build_wheels_manylinux:
+          
+  build_wheels_manylinux_x86_64:
     name: Build manylinux wheels
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-24.04]
-
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        # Need to use the image specified below to build manylinux wheels
+        # PyPi only accepts manylinux wheels, it does not accept wheels for specific versions/architectures
+        # Note that at least manylinux2014 is needed to get support for C++17
+      - name: Build manylinux Python wheels
+        uses: RalfG/python-wheels-manylinux-build@v0.7.1-manylinux2014_x86_64
         with:
-          python-version: ${{ matrix.python-version }}
-          
-      - name: Install QEMU for aarch64 emulation
-        uses: docker/setup-qemu-action@v2
-        with:
-          platforms: all
-
-      - name: Install packages
-        run: |
-          pip install wheel
-          pip install setuptools
-          pip install build
-          pip install cibuildwheel
-
-      - name: build
-        run: cibuildwheel --platform linux
-        env:
-          CIBW_BUILD: cp3?-*
-          CIBW_ARCHS: x86_64 aarch64
-          CIBW_ENVIRONMENT: CXXFLAGS="-std=c++17"  
-          CIBW_MANYLINUX_X86_64_IMAGE: "manylinux2014"
-          CIBW_MANYLINUX_AARCH64_IMAGE: "manylinux2014"
-          CIBW_BEFORE_BUILD: |
-            yum install -y gcc gcc-c++
+          python-versions: 'cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310 cp311-cp311 cp312-cp312'
+          build-requirements: 'setuptools'
 
       - name: upload wheels
         uses: actions/upload-artifact@v3
         with:
-          path: wheelhouse/*.whl
+          path: ./dist/*-manylinux*.whl
+          
+  build_wheels_manylinux_arm64:
+    name: Build manylinux wheels (arm64)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Register QEMU for cross-architecture emulation
+      - name: Set up QEMU for cross-compilation
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: arm64
+
+      # Build manylinux Python wheels for arm64 architecture
+      - name: Build manylinux Python wheels (arm64)
+        uses: RalfG/python-wheels-manylinux-build@v0.7.1-manylinux2014_aarch64
+        with:
+          python-versions: 'cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310 cp311-cp311 cp312-cp312'
+          build-requirements: 'setuptools'
+
+      - name: Upload arm64 wheels
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./dist/*-manylinux*.whl
