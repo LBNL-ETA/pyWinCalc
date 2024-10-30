@@ -2,8 +2,6 @@ name: Build wheels
 
 on: [push, pull_request] 
     
-# Cannot use cibuildwheels because the current images used by cibuildwheels do not support C++17. 
-
 jobs:
   build_wheels_windows:
     name: ${{ matrix.os }} ${{ matrix.python-version }} ${{ matrix.arch }} wheels
@@ -85,7 +83,7 @@ jobs:
         with:
           path: ./dist/*.whl
                    
-   build_wheels_manylinux:
+  build_wheels_manylinux:
     name: Build manylinux wheels
     runs-on: ${{ matrix.os }}
     strategy:
