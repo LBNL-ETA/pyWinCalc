@@ -9,13 +9,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
+        architecture: []
         include:
           - os: ubuntu-latest
             architecture: [x86_64, aarch64]
           - os: macos-latest
             architecture: [x86_64, arm64]
           - os: windows-latest
-            architecture: [x86, AMD64, ARM64]
+            architecture: [x86_64, arm64]
 
     steps:
       - name: Checkout repository
