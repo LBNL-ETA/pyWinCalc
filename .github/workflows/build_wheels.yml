@@ -9,7 +9,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        architecture: [x86_64, arm64]
+        architecture: [x86_64]
+        include:
+          - os: ubuntu-latest
+            architecture: aarch64
+          - os: macos-latest
+            architecture: arm64
 
     steps:
       - name: Checkout repository
