@@ -66,12 +66,12 @@ jobs:
       - name: Set macOS Deployment Target 
         run: |
           export MACOSX_DEPLOYMENT_TARGET=11.0
+          echo "CIBW_PLATFORM=macos" >> $GITHUB_ENV
 
       - name: Build wheels with cibuildwheel
         env:
           CIBW_ARCHS_LINUX: ${{ matrix.architecture }}
           CIBW_ARCHS_MACOS: ${{ matrix.architecture }}
-          CIBW_NO_DOCKER: "1"
           CIBW_SKIP: "cp36-* cp37-*"
         run: |
           cibuildwheel --output-dir wheelhouse
