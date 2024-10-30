@@ -24,7 +24,8 @@ jobs:
       - name: Setup variables for aarch64
         if: matrix.architecture == 'aarch64'
         run: |
-          echo "CIBW_PLATFORM=linux_aarch64" >> $GITHUB_ENV
+          echo "CIBW_ARCHS_LINUX=aarch64" >> $GITHUB_ENV
+          echo "CIBW_PLATFORM=linux" >> $GITHUB_ENV
           echo "CIBW_EMULATOR=linux/aarch64" >> $GITHUB_ENV
 
       - name: Build wheels with cibuildwheel
