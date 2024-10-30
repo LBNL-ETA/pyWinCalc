@@ -71,6 +71,7 @@ jobs:
         env:
           CIBW_ARCHS_LINUX: ${{ matrix.architecture }}
           CIBW_ARCHS_MACOS: ${{ matrix.architecture }}
+          CIBW_NO_DOCKER: "1"
           CIBW_SKIP: "cp36-* cp37-*"
         run: |
           cibuildwheel --output-dir wheelhouse
