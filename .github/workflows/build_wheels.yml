@@ -110,7 +110,7 @@ jobs:
         with:
           path: wheelhouse/*.whl
           
-  build_wheels_manylinux_arm64_python_3.8:
+  build_wheels_manylinux_arm64_python_3_8:
     name: Build manylinux wheels python3.8 (arm64)
     runs-on: ubuntu-24.04
     steps:
@@ -141,7 +141,7 @@ jobs:
         with:
           path: wheelhouse/*.whl
           
-  build_wheels_manylinux_arm64_python_3.9:
+  build_wheels_manylinux_arm64_python_3_9:
     name: Build manylinux wheels python3.9 (arm64)
     runs-on: ubuntu-24.04
     steps:
@@ -172,7 +172,7 @@ jobs:
         with:
           path: wheelhouse/*.whl
           
-  build_wheels_manylinux_arm64_python_3.10:
+  build_wheels_manylinux_arm64_python_3_10:
     name: Build manylinux wheels python3.10 (arm64)
     runs-on: ubuntu-24.04
     steps:
@@ -203,7 +203,7 @@ jobs:
         with:
           path: wheelhouse/*.whl
           
-  build_wheels_manylinux_arm64_python_3.11:
+  build_wheels_manylinux_arm64_python_3_11:
     name: Build manylinux wheels python3.11 (arm64)
     runs-on: ubuntu-24.04
     steps:
@@ -234,7 +234,7 @@ jobs:
         with:
           path: wheelhouse/*.whl
           
-  build_wheels_manylinux_arm64_python_3.12:
+  build_wheels_manylinux_arm64_python_3_12:
     name: Build manylinux wheels python3.12 (arm64)
     runs-on: ubuntu-24.04
     steps:
