@@ -1720,9 +1720,8 @@ PYBIND11_MODULE(wincalcbindings, m) {
 
   py::class_<SingleLayerOptics::BSDFDirections>(m, "BSDFDirections")
       .def(py::init<>())
-      .def(py::init<std::vector<SingleLayerOptics::BSDFDefinition> const &,
-                    SingleLayerOptics::BSDFDirection>(),
-           py::arg("definitions"), py::arg("side"))
+      .def(py::init<std::vector<SingleLayerOptics::BSDFDefinition> const &>(),
+           py::arg("definitions"))
       .def("lambda_vector", &SingleLayerOptics::BSDFDirections::lambdaVector)
       .def("profile_angles", &SingleLayerOptics::BSDFDirections::profileAngles)
       .def("lambda_matrix", &SingleLayerOptics::BSDFDirections::lambdaMatrix)
