@@ -1131,6 +1131,10 @@ PYBIND11_MODULE(wincalcbindings, m) {
   py::enum_<Tarcog::ISO15099::System>(m, "TarcogSystemType", py::arithmetic())
       .value("U", Tarcog::ISO15099::System::Uvalue)
       .value("SHGC", Tarcog::ISO15099::System::SHGC);
+	  
+  py::enum_<Tarcog::ISO15099::Environment>(m, "TarcogEnvironmentType", py::arithmetic())
+      .value("Indoor", Tarcog::ISO15099::Environment::Indoor)
+      .value("Outdoor", Tarcog::ISO15099::Environment::Outdoor);
 
   py::enum_<wincalc::Spectal_Data_Wavelength_Range_Method>(
       m, "SpectalDataWavelengthRangeMethodType", py::arithmetic())
@@ -1246,6 +1250,15 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("relative_heat_gain", &wincalc::Glazing_System::relative_heat_gain,
            py::arg("theta") = 0, py::arg("phi") = 0)
+	  .def("heat_flow",
+           &wincalc::Glazing_System::heat_flow,
+           py::arg("system_type"), py::arg("environment_type"), py::arg("theta") = 0, py::arg("phi") = 0)
+	  .def("h",
+           &wincalc::Glazing_System::h,
+           py::arg("system_type"), py::arg("environment_type"), py::arg("theta") = 0, py::arg("phi") = 0)
+	  .def("radiosities",
+           &wincalc::Glazing_System::radiosities,
+           py::arg("system_type"), py::arg("theta") = 0, py::arg("phi") = 0)
       .def("environments",
            py::overload_cast<wincalc::Environments const &>(
                &wincalc::Glazing_System::environments),
