@@ -16,7 +16,7 @@ jobs:
       matrix:
         os: [windows-2022]
         arch: [x86, x64]
-        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
+        python-version: [3.8, 3.9, "3.10", "3.11", "3.12", "3.13"]
 
     steps:          
       - name: Support longpaths
@@ -58,7 +58,7 @@ jobs:
         # There is documentation here https://github.com/pypa/cibuildwheel/blob/main/docs/cpp_standards.md on how to
         # set it but I could not get it to work while using the standard images provided by github actions does work.
         os: [macos-latest, macos-13]
-        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
+        python-version: [3.8, 3.9, "3.10", "3.11", "3.12", "3.13"]
     env:
       SYSTEM_VERSION_COMPAT: 0
 
@@ -115,7 +115,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ["cp38-*", "cp39-*", "cp310-*", "cp311-*", "cp312-*"]
+        python-version: ["cp38-*", "cp39-*", "cp310-*", "cp311-*", "cp312-*", "cp313-*"]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
