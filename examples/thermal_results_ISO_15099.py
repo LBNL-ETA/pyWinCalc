@@ -45,13 +45,13 @@ glazing_system_shgc_environment = pywincalc.GlazingSystem(solid_layers=solid_lay
 u_value_NFRC_u_conditions = glazing_system_u_environment.u()
 u_value_NFRC_shgc_conditions = glazing_system_shgc_environment.u()
 print(
-    "U-Value.  Based on NFRC U-value environmental conditions: {u}.  Based on NFRC SHGC environmnetal conditions: {shgc}".format(
+    "U-Value:\n\tBased on NFRC U-value environmental conditions: {u}.\n\tBased on NFRC SHGC environmnetal conditions: {shgc}".format(
         u=u_value_NFRC_u_conditions, shgc=u_value_NFRC_shgc_conditions))
 
 shgc_NFRC_u_conditions = glazing_system_u_environment.shgc()
 shgc_NFRC_shgc_conditions = glazing_system_shgc_environment.shgc()
 print(
-    "SHGC.  Based on NFRC U-value environmental conditions: {u}.  Based on NFRC SHGC environmnetal conditions: {shgc}".format(
+    "SHGC:\n\tBased on NFRC U-value environmental conditions: {u}.\n\tBased on NFRC SHGC environmnetal conditions: {shgc}".format(
         u=shgc_NFRC_u_conditions, shgc=shgc_NFRC_shgc_conditions))
 
 # ----------------------------Other thermal results-----------------------------
@@ -103,3 +103,30 @@ print("System effective conductivity without solar radiation: {v}".format(
 relative_heat_gain = glazing_system_shgc_environment.relative_heat_gain()
 print("Relative heat gain: {v}".format(v=relative_heat_gain))
 
+#heat_flow and H take both a system type and an environment type.  Environment type can be indoor or outdoor.
+heat_flow_u_indoor = glazing_system_shgc_environment.heat_flow(pywincalc.TarcogSystemType.U, pywincalc.TarcogEnvironmentType.Indoor)
+print(f"Heat flow without solar radiation indoor: {heat_flow_u_indoor}")
+heat_flow_u_outdoor = glazing_system_shgc_environment.heat_flow(pywincalc.TarcogSystemType.U, pywincalc.TarcogEnvironmentType.Outdoor)
+print(f"Heat flow without solar radiation outdoor: {heat_flow_u_outdoor}")
+heat_flow_shgc_indoor = glazing_system_shgc_environment.heat_flow(pywincalc.TarcogSystemType.SHGC, pywincalc.TarcogEnvironmentType.Indoor)
+print(f"Heat flow with solar radiation indoor: {heat_flow_shgc_indoor}")
+heat_flow_shgc_outdoor = glazing_system_shgc_environment.heat_flow(pywincalc.TarcogSystemType.SHGC, pywincalc.TarcogEnvironmentType.Outdoor)
+print(f"Heat flow with solar radiation outdoor: {heat_flow_shgc_outdoor}")
+
+h_u_indoor = glazing_system_shgc_environment.h(pywincalc.TarcogSystemType.U, pywincalc.TarcogEnvironmentType.Indoor)
+print(f"H without solar radiation indoor: {h_u_indoor}")
+h_u_outdoor = glazing_system_shgc_environment.h(pywincalc.TarcogSystemType.U, pywincalc.TarcogEnvironmentType.Outdoor)
+print(f"H without solar radiation outdoor: {h_u_outdoor}")
+h_shgc_indoor = glazing_system_shgc_environment.h(pywincalc.TarcogSystemType.SHGC, pywincalc.TarcogEnvironmentType.Indoor)
+print(f"H with solar radiation indoor: {h_shgc_indoor}")
+h_shgc_outdoor = glazing_system_shgc_environment.h(pywincalc.TarcogSystemType.SHGC, pywincalc.TarcogEnvironmentType.Outdoor)
+print(f"H with solar radiation outdoor: {h_shgc_outdoor}")
+
+radiosities_with_solar_radiation = glazing_system_shgc_environment.radiosities(
+    pywincalc.TarcogSystemType.SHGC)
+print("radiosities with solar radiation: {v}".format(
+    v=radiosities_with_solar_radiation))
+radiosities_without_solar_radiation = glazing_system_shgc_environment.radiosities(
+    pywincalc.TarcogSystemType.U)
+print("radiosities without solar radiation: {v}".format(
+    v=radiosities_without_solar_radiation))
