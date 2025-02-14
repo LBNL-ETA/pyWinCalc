@@ -616,18 +616,8 @@ PYBIND11_MODULE(wincalcbindings, m) {
                      &OpticsParser::ProductData::youngsModulus)
       .def_readwrite("pv_power_properties",
                      &OpticsParser::ProductData::pvPowerProperties)
-      .def_readwrite("composition", &OpticsParser::ProductData::composition);
-
-  py::class_<OpticsParser::CompositionInformation,
-             std::shared_ptr<OpticsParser::CompositionInformation>>(
-      m, "ProductComposistionData")
-      .def(py::init<std::shared_ptr<OpticsParser::ProductData>,
-                    std::shared_ptr<OpticsParser::ProductGeometry>>(),
-           py::arg("solid_layers"), py::arg("product_geometry"))
-      .def_readwrite("material",
-                     &OpticsParser::CompositionInformation::material)
-      .def_readwrite("geometry",
-                     &OpticsParser::CompositionInformation::geometry);
+      .def_readwrite("material_definition", &OpticsParser::ProductData::materialDefinition)
+      .def_readwrite("geometry", &OpticsParser::ProductData::geometry);
 
   py::enum_<window_standards::Spectrum_Type>(m, "SpectrumType",
                                              py::arithmetic())
@@ -1836,26 +1826,26 @@ PYBIND11_MODULE(wincalcbindings, m) {
                py::arg("back_emissivity") = 0.84,
                py::arg("back_transmittance") = 0.0);
 
-    layers.def("gap", py::overload_cast<double>(&Tarcog::ISO15099::Layers::gap),
+    layers.def("gap", py::overload_cast<double, bool>(&Tarcog::ISO15099::Layers::gap),
                "Factory function to create a Tarcog gap with basic parameters",
-               py::arg("thickness"));
+               py::arg("thickness"), py::arg("is_dcenter") = false);
 
-    layers.def("gap", py::overload_cast<double, double>(&Tarcog::ISO15099::Layers::gap),
+    layers.def("gap", py::overload_cast<double, double, bool>(&Tarcog::ISO15099::Layers::gap),
                "Factory function to create a Tarcog gap with thickness and pressure",
-               py::arg("thickness"), py::arg("pressure") = 101325);
+               py::arg("thickness"), py::arg("pressure") = 101325, py::arg("is_dcenter") = false);
 
-    layers.def("gap", py::overload_cast<double, const Gases::CGas &>(&Tarcog::ISO15099::Layers::gap),
+    layers.def("gap", py::overload_cast<double, const Gases::CGas &, bool>(&Tarcog::ISO15099::Layers::gap),
                "Factory function to create a Tarcog gap with thickness and gas",
-               py::arg("thickness"), py::arg("gas"));
+               py::arg("thickness"), py::arg("gas"), py::arg("is_dcenter") = false);
 
-    layers.def("gap", py::overload_cast<double, double, const Gases::CGas &>(&Tarcog::ISO15099::Layers::gap),
+    layers.def("gap", py::overload_cast<double, double, const Gases::CGas &, bool>(&Tarcog::ISO15099::Layers::gap),
           "Factory function to create a Tarcog gap with thickness, pressure and gas",
-          py::arg("thickness"), py::arg("pressure"), py::arg("gas"));
+          py::arg("thickness"), py::arg("pressure"), py::arg("gas"), py::arg("is_dcenter") = false);
 
-    layers.def("gap", py::overload_cast<double, double, const Gases::CGas &, double, double>(&Tarcog::ISO15099::Layers::gap),
+    layers.def("gap", py::overload_cast<double, double, const Gases::CGas &, double, double, bool>(&Tarcog::ISO15099::Layers::gap),
                "Factory function to create a Tarcog gap with all parameters",
                py::arg("thickness"), py::arg("pressure"), py::arg("gas"), 
-               py::arg("accommodation1"), py::arg("accommodation2"));
+               py::arg("accommodation1"), py::arg("accommodation2"), py::arg("is_dcenter") = false);
 
     layers.def("forced_ventilation_gap", &Tarcog::ISO15099::Layers::forcedVentilationGap,
                "Function to create a forced ventilation Tarcog gap",
