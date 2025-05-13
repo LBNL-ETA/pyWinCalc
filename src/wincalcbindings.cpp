@@ -447,18 +447,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def("set_flow_geometry",
            &Tarcog::ISO15099::CIGUVentilatedGapLayer::setFlowGeometry,
            py::arg("a_in"), py::arg("a_out"))
-      .def("set_inlet_temperature",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::setInletTemperature,
-           py::arg("inlet_temperature"))
-      .def("set_flow_temperatures",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::setFlowTemperatures,
-           py::arg("inlet_temperature"), py::arg("outlet_temperature"))
-      .def("set_flow_speed",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::setFlowSpeed,
-           py::arg("speed"))
-      .def("smooth_energy_gain",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::smoothEnergyGain,
-           py::arg("qv1"), py::arg("qv2"))
       .def(
           "calculate_ventilated_airflow",
           &Tarcog::ISO15099::CIGUVentilatedGapLayer::calculateVentilatedAirflow,

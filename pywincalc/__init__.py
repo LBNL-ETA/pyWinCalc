@@ -16,7 +16,7 @@ from wincalcbindings import (
     OpticalResultLayer, OpticalResultSide, OpticalResultSideColor, OpticalResultSide_Layer, OpticalResultTransmission,
     OpticalResultTransmissionColor, OpticalResults, OpticalResultsColor, OpticalStandard, OpticalStandardMethod,
     PVPowerProperty, PVWavelengthData, ParsedPerforatedGeometry, ParsedVenetianGeometry, ParsedWovenGeometry,
-    PerforatedGeometry, PredefinedGasType, ProductComposistionData, ProductData,
+    PerforatedGeometry, PredefinedGasType, ProductData,
     ProductDataOptical, ProductDataOpticalAndThermal, ProductDataOpticalDualBand,
     ProductDataOpticalDualBandBSDF, ProductDataOpticalDualBandHemispheric, ProductDataOpticalNBand,
     ProductDataOpticalPerforatedScreen, ProductDataOpticalVenetian, ProductDataOpticalWithMaterial,
