@@ -2,7 +2,7 @@ from pathlib import Path
 import deprecation
 
 from wincalcbindings import (
-    AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDirection, BSDFDirections, BSDFHemisphere,
+    AirHorizontalDirection, BSDF, BSDFBasisType, BSDFDirection, BSDFDirections, BSDFDefinition, BSDFHemisphere,
     BSDFIntegrator, BoundaryConditionsCoefficientModelType, CMABestWorstUFactors, CMAResult, CMAWindow,
     CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, Layers, CellSpacingType, PolygonType, pillar_cell_area,
     PillarData, CylindricalPillar, SphericalPillar, RectangularPillar, TriangularPillar, PentagonPillar, HexagonPillar, LinearBearingPillar, TruncatedConePillar, Glass, PillarMeasurement,
