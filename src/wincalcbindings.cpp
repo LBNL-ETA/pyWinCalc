@@ -1543,10 +1543,12 @@ PYBIND11_MODULE(wincalcbindings, m) {
                CMA::CreateBestWorstUFactorOption(CMA::Option::Best),
            py::arg("worst_u_factor_options") =
                CMA::CreateBestWorstUFactorOption(CMA::Option::Worst))
-      .def("set_frame_top", &CMA::CMAWindowSingleVision::setFrameTop)
-      .def("set_frame_bottom", &CMA::CMAWindowSingleVision::setFrameBottom)
-      .def("set_frame_left", &CMA::CMAWindowSingleVision::setFrameLeft)
-      .def("set_frame_right", &CMA::CMAWindowSingleVision::setFrameRight)
+      .def("set_frame_data", py::overload_cast<Tarcog::ISO15099::SingleVisionFramePosition, CMA::CMAFrame &>(
+          &CMA::CMAWindowSingleVision::setFrameData),
+          py::arg("position"), py::arg("cma_frame_data"))
+      .def("set_frame_data", py::overload_cast<CMA::SingleVisionFrameMap const&>(
+          &CMA::CMAWindowSingleVision::setFrameData),
+          py::arg("frames"))
       .def("set_dividers", &CMA::CMAWindowSingleVision::setDividers);
 
   py::class_<CMA::CMAWindowDualVisionHorizontal, CMA::ICMAWindow,
@@ -1561,19 +1563,12 @@ PYBIND11_MODULE(wincalcbindings, m) {
                CMA::CreateBestWorstUFactorOption(CMA::Option::Best),
            py::arg("worst_u_factor_options") =
                CMA::CreateBestWorstUFactorOption(CMA::Option::Worst))
-      .def("set_frame_top_left",
-           &CMA::CMAWindowDualVisionHorizontal::setFrameTopLeft)
-      .def("set_frame_top_right",
-           &CMA::CMAWindowDualVisionHorizontal::setFrameTopRight)
-      .def("set_frame_bottom_left",
-           &CMA::CMAWindowDualVisionHorizontal::setFrameBottomLeft)
-      .def("set_frame_bottom_right",
-           &CMA::CMAWindowDualVisionHorizontal::setFrameBottomRight)
-      .def("set_frame_left", &CMA::CMAWindowDualVisionHorizontal::setFrameLeft)
-      .def("set_frame_right",
-           &CMA::CMAWindowDualVisionHorizontal::setFrameRight)
-      .def("set_frame_meeting_rail",
-           &CMA::CMAWindowDualVisionHorizontal::setFrameMeetingRail)
+      .def("set_frame_data", py::overload_cast<Tarcog::ISO15099::DualHorizontalFramePosition, CMA::CMAFrame&>(
+          &CMA::CMAWindowDualVisionHorizontal::setFrameData),
+          py::arg("position"), py::arg("cma_frame_data"))
+      .def("set_frame_data", py::overload_cast<CMA::DualHorizontalFrameMap const&>(
+          &CMA::CMAWindowDualVisionHorizontal::setFrameData),
+          py::arg("frames"))
       .def("set_dividers", &CMA::CMAWindowDualVisionHorizontal::setDividers);
 
   py::class_<CMA::CMAWindowDualVisionVertical, CMA::ICMAWindow,
@@ -1588,19 +1583,12 @@ PYBIND11_MODULE(wincalcbindings, m) {
                CMA::CreateBestWorstUFactorOption(CMA::Option::Best),
            py::arg("worst_u_factor_options") =
                CMA::CreateBestWorstUFactorOption(CMA::Option::Worst))
-      .def("set_frame_top", &CMA::CMAWindowDualVisionVertical::setFrameTop)
-      .def("set_frame_bottom",
-           &CMA::CMAWindowDualVisionVertical::setFrameBottom)
-      .def("set_frame_top_left",
-           &CMA::CMAWindowDualVisionVertical::setFrameTopLeft)
-      .def("set_frame_top_right",
-           &CMA::CMAWindowDualVisionVertical::setFrameTopRight)
-      .def("set_frame_bottom_left",
-           &CMA::CMAWindowDualVisionVertical::setFrameBottomLeft)
-      .def("set_frame_bottom_right",
-           &CMA::CMAWindowDualVisionVertical::setFrameBottomRight)
-      .def("set_frame_meeting_rail",
-           &CMA::CMAWindowDualVisionVertical::setFrameMeetingRail)
+      .def("set_frame_data", py::overload_cast<Tarcog::ISO15099::DualVerticalFramePosition, CMA::CMAFrame&>(
+          &CMA::CMAWindowDualVisionVertical::setFrameData),
+          py::arg("position"), py::arg("cma_frame_data"))
+      .def("set_frame_data", py::overload_cast<CMA::DualVerticalFrameMap const&>(
+          &CMA::CMAWindowDualVisionVertical::setFrameData),
+          py::arg("frames"))
       .def("set_dividers", &CMA::CMAWindowDualVisionVertical::setDividers);
 
   py::class_<wincalc::ThermalIRResults>(m, "ThermalIRResults")
