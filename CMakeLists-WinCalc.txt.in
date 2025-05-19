@@ -4,7 +4,7 @@ include(ExternalProject)
 
 ExternalProject_Add(wincalc
     GIT_REPOSITORY https://github.com/LBNL-ETA/WinCalc.git
-    GIT_TAG "2025MayFixes_1"
+    GIT_TAG "2025May_pywincalc_fixes"
     
     UPDATE_COMMAND ""
     PATCH_COMMAND ""
