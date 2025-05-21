@@ -90,7 +90,7 @@ jobs:
       - name: Build wheels with cibuildwheel
         env:
           CIBW_PLATFORM: "linux"
-          CIBW_SKIP: "cp36-* cp37-* cp38-*"
+          CIBW_SKIP: "cp36-* cp37-* cp38-* pp37-* pp38-*"
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_MANYLINUX_X86_64_IMAGE: "quay.io/pypa/manylinux_2_28_x86_64"
           CIBW_BUILD_VERBOSITY: 3  # Enable detailed logging
