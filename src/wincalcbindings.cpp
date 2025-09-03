@@ -1689,10 +1689,10 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .value("Front", FenestrationCommon::Side::Front)
       .value("Back", FenestrationCommon::Side::Back);
 
-  py::enum_<FenestrationCommon::PropertySimple>(m, "PropertySimple",
+  py::enum_<FenestrationCommon::PropertySurface>(m, "PropertySurface",
                                                 py::arithmetic())
-      .value("T", FenestrationCommon::PropertySimple::T)
-      .value("R", FenestrationCommon::PropertySimple::R);
+      .value("T", FenestrationCommon::PropertySurface::T)
+      .value("R", FenestrationCommon::PropertySurface::R);
 
   py::class_<FenestrationCommon::SquareMatrix>(m, "SquareMatrix")
       .def(py::init<std::vector<std::vector<double>> const &>(),
@@ -1726,20 +1726,20 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def(
           "direct_direct",
           py::overload_cast<FenestrationCommon::Side,
-                            FenestrationCommon::PropertySimple, double, double>(
+                            FenestrationCommon::PropertySurface, double, double>(
               &SingleLayerOptics::BSDFIntegrator::DirDir, py::const_))
       .def("direct_direct",
            py::overload_cast<FenestrationCommon::Side,
-                             FenestrationCommon::PropertySimple, size_t>(
+                             FenestrationCommon::PropertySurface, size_t>(
                &SingleLayerOptics::BSDFIntegrator::DirDir, py::const_))
       .def("direct_hemispheric",
            py::overload_cast<FenestrationCommon::Side,
-                             FenestrationCommon::PropertySimple>(
+                             FenestrationCommon::PropertySurface>(
                &SingleLayerOptics::BSDFIntegrator::DirHem))
       .def(
           "direct_hemispheric",
           py::overload_cast<FenestrationCommon::Side,
-                            FenestrationCommon::PropertySimple, double, double>(
+                            FenestrationCommon::PropertySurface, double, double>(
               &SingleLayerOptics::BSDFIntegrator::DirHem))
       .def("absorptance", py::overload_cast<FenestrationCommon::Side>(
                               &SingleLayerOptics::BSDFIntegrator::Abs))
