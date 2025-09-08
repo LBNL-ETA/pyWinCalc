@@ -20,7 +20,7 @@ from wincalcbindings import (
     ProductDataOptical, ProductDataOpticalAndThermal, ProductDataOpticalDualBand,
     ProductDataOpticalDualBandBSDF, ProductDataOpticalDualBandHemispheric, ProductDataOpticalNBand,
     ProductDataOpticalPerforatedScreen, ProductDataOpticalVenetian, ProductDataOpticalWithMaterial,
-    ProductDataOpticalWovenShade, ProductDataThermal, ProductGeometry, PropertySimple, RGB, Side,
+    ProductDataOpticalWovenShade, ProductDataThermal, ProductGeometry, PropertySurface, RGB, Side,
     SpectalDataWavelengthRangeMethodType, Spectrum, SpectrumType, SquareMatrix, TarcogSystemType, TarcogEnvironmentType,
     ThermalIRResults, ThmxBoundaryCondition, ThmxBoundaryConditionPolygon, ThmxCMABestWorstOption, ThmxCMAOptions,
     ThmxFileContents, ThmxMaterial, ThmxMeshParameters, ThmxPolygon, ThmxPolygonPoint, ThmxRGB, ThmxResult,
