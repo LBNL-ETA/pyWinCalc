@@ -8,13 +8,15 @@ product = pywincalc.parse_optics_file(product_path)
 
 solid_layers = [product]
 
-# Create a glazing system.  This only shows an example of getting one result from a glazing system
-# created using default environmental conditions.
-#
-# For more possible results see optical_results_NFRC.py
-#
-# For more on environmental conditions see environmental_conditions_user_defined.py
-glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers)
+bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.FULL)
 
-u_value = glazing_system.u()
-print("U-value for a single-layer system with a direct-diffuse layer: {v}".format(v=u_value))
+glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, bsdf_hemisphere=bsdf_hemisphere)
+
+solar_results = glazing_system.optical_method_results("SOLAR")
+
+print("System solar front transmittance direct-direct: {v}".format(
+    v=solar_results.system_results.front.transmittance.direct_direct))
+print("System solar front transmittance direct-diffuse: {v}".format(
+    v=solar_results.system_results.front.transmittance.direct_diffuse))
+print("System solar front transmittance direct-hemispherical: {v}".format(
+    v=solar_results.system_results.front.transmittance.direct_hemispherical))

@@ -306,11 +306,16 @@ glass_thermal = pywincalc.ProductDataThermal(conductivity=glass_conductivity,
 glass_layer = pywincalc.ProductDataOpticalAndThermal(glass_n_band_optical_data,
                                                      glass_thermal)
 
-# Create a glazing system using the NFRC U environment in order to get NFRC U results
-# U and SHGC can be caculated for any given environment but in order to get results
-# The NFRC U and SHGC environments are provided as already constructed environments and Glazing_System
-# defaults to using the NFRC U environments
-glazing_system = pywincalc.GlazingSystem(solid_layers=[glass_layer])
 
-u_value = glazing_system.u()
-print("U-value for a single layer made from a user-defined glass layer: {v}".format(v=u_value))
+bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.FULL)
+
+glazing_system = pywincalc.GlazingSystem(solid_layers=[glass_layer], bsdf_hemisphere=bsdf_hemisphere)
+
+solar_results = glazing_system.optical_method_results("SOLAR")
+
+print("System solar front transmittance direct-direct: {v}".format(
+    v=solar_results.system_results.front.transmittance.direct_direct))
+print("System solar front transmittance direct-diffuse: {v}".format(
+    v=solar_results.system_results.front.transmittance.direct_diffuse))
+print("System solar front transmittance direct-hemispherical: {v}".format(
+    v=solar_results.system_results.front.transmittance.direct_hemispherical))
