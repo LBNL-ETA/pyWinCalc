@@ -8,7 +8,7 @@ product = pywincalc.parse_optics_file(product_path)
 
 solid_layers = [product]
 
-bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.FULL)
+bsdf_hemisphere = pywincalc.BSDFHemisphere.create(pywincalc.BSDFBasisType.QUARTER)
 
 glazing_system = pywincalc.GlazingSystem(solid_layers=solid_layers, bsdf_hemisphere=bsdf_hemisphere)
 
@@ -20,3 +20,5 @@ print("System solar front transmittance direct-diffuse: {v}".format(
     v=solar_results.system_results.front.transmittance.direct_diffuse))
 print("System solar front transmittance direct-hemispherical: {v}".format(
     v=solar_results.system_results.front.transmittance.direct_hemispherical))
+print("System solar front transmittance diffuse-diffuse: {v}".format(
+    v=solar_results.system_results.front.transmittance.diffuse_diffuse))
