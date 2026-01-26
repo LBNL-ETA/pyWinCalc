@@ -1756,20 +1756,20 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def("get_nearest_beam_index",
            &SingleLayerOptics::BSDFIntegrator::getNearestBeamIndex);
 
-  py::class_<EffectiveLayers::EffectiveOpenness>(m, "EffectiveOpenness")
+  py::class_<EffectiveLayers::EffectiveMultipliers>(m, "EffectiveMultipliers")
       .def(py::init<double, double, double, double, double, double>(),
-           py::arg("effective_front_thermal_openness_area"), 
-		   py::arg("al"), 
-		   py::arg("ar"), 
-		   py::arg("atop"),
-           py::arg("abot"), 
-		   py::arg("permeability_factor"))
-      .def_readwrite("effective_front_thermal_openness_area", &EffectiveLayers::EffectiveOpenness::EffectiveFrontThermalOpennessArea)
-      .def_readwrite("al", &EffectiveLayers::EffectiveOpenness::Al)
-      .def_readwrite("ar", &EffectiveLayers::EffectiveOpenness::Ar)
-      .def_readwrite("atop", &EffectiveLayers::EffectiveOpenness::Atop)
-      .def_readwrite("abot", &EffectiveLayers::EffectiveOpenness::Abot)
-      .def_readwrite("permeability_factor", &EffectiveLayers::EffectiveOpenness::PermeabilityFactor);
+          py::arg("front"),
+          py::arg("left"),
+          py::arg("right"),
+          py::arg("top"),
+          py::arg("bot"),
+          py::arg("permeability_factor"))
+      .def_readwrite("front", &EffectiveLayers::EffectiveMultipliers::Mfront)
+      .def_readwrite("left", &EffectiveLayers::EffectiveMultipliers::Mleft)
+      .def_readwrite("right", &EffectiveLayers::EffectiveMultipliers::Mright)
+      .def_readwrite("top", &EffectiveLayers::EffectiveMultipliers::Mtop)
+      .def_readwrite("bot", &EffectiveLayers::EffectiveMultipliers::Mbot)
+      .def_readwrite("permeability_factor", &EffectiveLayers::EffectiveMultipliers::PermeabilityFactor);
 	
 	m.def("is_closed", &EffectiveLayers::isClosed, py::arg("effective_openness"));
 	
@@ -1798,7 +1798,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
     layers.def("shading", &Tarcog::ISO15099::Layers::shading,
                "Factory function to create a Tarcog shading layer.",
                py::arg("thickness"), py::arg("conductivity"),
-               py::arg("effective_openness") = EffectiveLayers::EffectiveOpenness(0, 0, 0, 0, 0, 0),
+               py::arg("effective_multipliers") = EffectiveLayers::EffectiveMultipliers(0, 0, 0, 0, 0, 0),
                py::arg("front_emissivity") = 0.84,
                py::arg("front_transmittance") = 0.0,
                py::arg("back_emissivity") = 0.84,
