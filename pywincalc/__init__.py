@@ -9,7 +9,7 @@ from wincalcbindings import (
     AnnulusCylinderPillar, CShapedCylinderPillar, UniversalSupportPillar, CylindricalPillarLayer, SphericalPillarLayer, RectangularPillarLayer,
     TriangularPillarLayer, PentagonPillarLayer, HexagonPillarLayer, LinearBearingPillarLayer, TruncatedConePillarLayer,
     AnnulusCylinderPillarLayer, CShapedCylinderPillarLayer, MeasuredPillarLayer, CoatedSide,
-    ColorResult, DeflectionResults, DistributionMethodType, DualBandBSDF, EffectiveOpenness, Environment, Environments,
+    ColorResult, DeflectionResults, DistributionMethodType, DualBandBSDF, EffectiveMultipliers, Environment, Environments,
     FlippableSolidLayer, Gas, GasCoefficients, GasData, GlazingSystem as _GlazingSystem, GlazingSystemDimensions,
     IGUGapLayer, IntegrationRule, IntegrationRuleType, Lab, MaterialType,
     OpticalMeasurementComponent, OpticalResultAbsorptance, OpticalResultFluxType, OpticalResultFluxTypeColor,
