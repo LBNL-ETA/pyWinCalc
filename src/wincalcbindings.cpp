@@ -701,10 +701,15 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def_readwrite("a", &wincalc::Lab::a)
       .def_readwrite("b", &wincalc::Lab::b);
 
+  py::class_<wincalc::DominantWavelengthPurity>(m, "DominantWavelengthPurity")
+      .def_readwrite("dominant_wavelength", &wincalc::DominantWavelengthPurity::dominant_wavelength)
+      .def_readwrite("purity", &wincalc::DominantWavelengthPurity::purity);
+
   py::class_<wincalc::Color_Result>(m, "ColorResult")
       .def_readwrite("trichromatic", &wincalc::Color_Result::trichromatic)
       .def_readwrite("rgb", &wincalc::Color_Result::rgb)
-      .def_readwrite("lab", &wincalc::Color_Result::lab);
+      .def_readwrite("lab", &wincalc::Color_Result::lab)
+      .def_readwrite("dominant_wavelength_purity", &wincalc::Color_Result::dominant_wavelength_purity);
 
   declare_wce_optical_results_template<double>(m, "");
   declare_wce_optical_results_template<wincalc::Color_Result>(m, "Color");
