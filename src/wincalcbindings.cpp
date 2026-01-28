@@ -1803,7 +1803,7 @@ PYBIND11_MODULE(wincalcbindings, m) {
     layers.def("shading", &Tarcog::ISO15099::Layers::shading,
                "Factory function to create a Tarcog shading layer.",
                py::arg("thickness"), py::arg("conductivity"),
-               py::arg("effective_multipliers") = EffectiveLayers::EffectiveMultipliers(0, 0, 0, 0, 0, 0),
+               py::arg("effective_multipliers") = EffectiveLayers::EffectiveMultipliers{0, 0, 0, 0, 0, 0},
                py::arg("front_emissivity") = 0.84,
                py::arg("front_transmittance") = 0.0,
                py::arg("back_emissivity") = 0.84,
