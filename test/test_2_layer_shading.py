@@ -98,6 +98,30 @@ class TestVenetianBlindUserGeometry:
             update_results=update_results
         )
 
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="2_layers/venetian_pella_white_venetian_blind_slat_user_geometry_air_nfrc_102/quarter_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="2_layers/venetian_pella_white_venetian_blind_slat_user_geometry_air_nfrc_102/quarter_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="2_layers/venetian_pella_white_venetian_blind_slat_user_geometry_air_nfrc_102/quarter_basis",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
 
 class TestWovenShadeUserGeometry:
     """Test suite for woven shade with user-defined geometry + clear glass."""
@@ -180,6 +204,30 @@ class TestWovenShadeUserGeometry:
         check_optical_results(
             test_name="2_layers/woven_pella_white_venetian_blind_slat_user_geometry_air_nfrc_102/quarter_basis",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="2_layers/woven_pella_white_venetian_blind_slat_user_geometry_air_nfrc_102/quarter_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="2_layers/woven_pella_white_venetian_blind_slat_user_geometry_air_nfrc_102/quarter_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="2_layers/woven_pella_white_venetian_blind_slat_user_geometry_air_nfrc_102/quarter_basis",
+            method_name="TUV",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )
@@ -268,6 +316,30 @@ class TestPerforatedScreenUserGeometry:
         check_optical_results(
             test_name="2_layers/perforated_screen_pella_white_venetian_blind_slat_user_geometry_air_nfrc_102/quarter_basis",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="2_layers/perforated_screen_pella_white_venetian_blind_slat_user_geometry_air_nfrc_102/quarter_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="2_layers/perforated_screen_pella_white_venetian_blind_slat_user_geometry_air_nfrc_102/quarter_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="2_layers/perforated_screen_pella_white_venetian_blind_slat_user_geometry_air_nfrc_102/quarter_basis",
+            method_name="TUV",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )

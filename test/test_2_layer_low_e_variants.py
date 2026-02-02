@@ -9,6 +9,7 @@ import pywincalc
 from util import (
     check_thermal_results,
     check_optical_results,
+    check_color_results,
 )
 
 
@@ -82,6 +83,37 @@ class TestLowENfrc9962WithClear:
             update_results=update_results
         )
 
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="2_layers/low_e_nfrc_9962_air_nfrc_102/default",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="2_layers/low_e_nfrc_9962_air_nfrc_102/default",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="2_layers/low_e_nfrc_9962_air_nfrc_102/default",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_color(self, update_results):
+        check_color_results(
+            test_name="2_layers/low_e_nfrc_9962_air_nfrc_102/default",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
 
 class TestLowENfrc11561WithClear:
     """Test suite for Low-E (nfrc_11561) + clear glass (CLEAR_3)."""
@@ -149,6 +181,37 @@ class TestLowENfrc11561WithClear:
         check_optical_results(
             test_name="2_layers/low_e_nfrc_11561_air_nfrc_102/default",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="2_layers/low_e_nfrc_11561_air_nfrc_102/default",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="2_layers/low_e_nfrc_11561_air_nfrc_102/default",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="2_layers/low_e_nfrc_11561_air_nfrc_102/default",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_color(self, update_results):
+        check_color_results(
+            test_name="2_layers/low_e_nfrc_11561_air_nfrc_102/default",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )

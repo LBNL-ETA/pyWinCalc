@@ -79,6 +79,30 @@ class TestLouveredShadeBsdfXml:
             update_results=update_results
         )
 
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/louvered_shade_bsdf_xml/full_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/louvered_shade_bsdf_xml/full_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/louvered_shade_bsdf_xml/full_basis",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
 
 class TestCellularShadeBsdf:
     """Test suite for cellular shade from BSDF XML (CS03_genBSDF.xml).
@@ -123,6 +147,30 @@ class TestCellularShadeBsdf:
             update_results=update_results
         )
 
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/cellular_shade_CS03_genBSDF/full_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/cellular_shade_CS03_genBSDF/full_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/cellular_shade_CS03_genBSDF/full_basis",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
 
 class TestRomanShadeBsdf:
     """Test suite for roman shade from BSDF XML (roman_shade_FlatFoldTHM-2_GenBSDF.xml).
@@ -163,6 +211,30 @@ class TestRomanShadeBsdf:
         check_optical_results(
             test_name="1_layer/roman_shade_genBSDF/full_basis",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/roman_shade_genBSDF/full_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/roman_shade_genBSDF/full_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/roman_shade_genBSDF/full_basis",
+            method_name="TUV",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )

@@ -9,6 +9,7 @@ import pywincalc
 from util import (
     check_thermal_results,
     check_optical_results,
+    check_color_results,
 )
 
 
@@ -74,6 +75,37 @@ class TestSingleLayerCoatedNfrc6046:
             update_results=update_results
         )
 
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_6046/default",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_6046/default",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_6046/default",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_color(self, update_results):
+        check_color_results(
+            test_name="1_layer/coated_nfrc_6046/default",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
 
 class TestSingleLayerCoatedNfrc6400:
     """Test suite for single layer coated glass (nfrc_6400)."""
@@ -133,6 +165,37 @@ class TestSingleLayerCoatedNfrc6400:
         check_optical_results(
             test_name="1_layer/coated_nfrc_6400/default",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_6400/default",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_6400/default",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_6400/default",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_color(self, update_results):
+        check_color_results(
+            test_name="1_layer/coated_nfrc_6400/default",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )

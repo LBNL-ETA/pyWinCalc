@@ -79,6 +79,30 @@ class TestRollerShadeCgdb14060:
             update_results=update_results
         )
 
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/roller_shade_bsdf_xml_cgdb_14060/full_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/roller_shade_bsdf_xml_cgdb_14060/full_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/roller_shade_bsdf_xml_cgdb_14060/full_basis",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
 
 class TestRollerShadeCgdb46016:
     """Test suite for roller shade from BSDF XML (cgdb_46016 SEATEX Midnight)."""
@@ -143,6 +167,30 @@ class TestRollerShadeCgdb46016:
         check_optical_results(
             test_name="1_layer/roller_shade_bsdf_xml_cgdb_46016/full_basis",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/roller_shade_bsdf_xml_cgdb_46016/full_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/roller_shade_bsdf_xml_cgdb_46016/full_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/roller_shade_bsdf_xml_cgdb_46016/full_basis",
+            method_name="TUV",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )

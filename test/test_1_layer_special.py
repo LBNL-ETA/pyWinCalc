@@ -9,6 +9,7 @@ import pywincalc
 from util import (
     check_thermal_results,
     check_optical_results,
+    check_color_results,
 )
 
 
@@ -70,6 +71,37 @@ class TestSingleLayerPvGeneric:
         check_optical_results(
             test_name="1_layer/pv_generic/default",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/pv_generic/default",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/pv_generic/default",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/pv_generic/default",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_color(self, update_results):
+        check_color_results(
+            test_name="1_layer/pv_generic/default",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )
@@ -138,6 +170,30 @@ class TestSingleLayerPerforatedScreen:
         check_optical_results(
             test_name="1_layer/perforated_screen_cgdb_18000/full_basis",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/perforated_screen_cgdb_18000/full_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/perforated_screen_cgdb_18000/full_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/perforated_screen_cgdb_18000/full_basis",
+            method_name="TUV",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )

@@ -9,6 +9,7 @@ import pywincalc
 from util import (
     check_thermal_results,
     check_optical_results,
+    check_color_results,
 )
 
 
@@ -91,6 +92,49 @@ class TestSingleLayerClearGlass:
             phi=0
         )
 
+    def test_optical_tdw(self, update_results):
+        """Test TDW (Transmittance Damage Weighted) optical results."""
+        check_optical_results(
+            test_name="1_layer/nfrc_102/default",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_optical_tkr(self, update_results):
+        """Test TKR (Krochmann) optical results."""
+        check_optical_results(
+            test_name="1_layer/nfrc_102/default",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_optical_tuv(self, update_results):
+        """Test TUV (UV transmittance) optical results."""
+        check_optical_results(
+            test_name="1_layer/nfrc_102/default",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_color(self, update_results):
+        """Test color results (RGB, Lab, Trichromatic)."""
+        check_color_results(
+            test_name="1_layer/nfrc_102/default",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
 
 class TestSingleLayerClearGlassAngled:
     """Test suite for single layer clear glass at oblique angles."""
@@ -134,6 +178,53 @@ class TestSingleLayerClearGlassAngled:
         check_optical_results(
             test_name="1_layer/nfrc_102/default",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=theta,
+            phi=phi
+        )
+
+    @pytest.mark.parametrize("theta,phi", [(15, 270)])
+    def test_optical_tdw_angled(self, update_results, theta, phi):
+        """Test TDW optical results at oblique angle."""
+        check_optical_results(
+            test_name="1_layer/nfrc_102/default",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=theta,
+            phi=phi
+        )
+
+    @pytest.mark.parametrize("theta,phi", [(15, 270)])
+    def test_optical_tkr_angled(self, update_results, theta, phi):
+        """Test TKR optical results at oblique angle."""
+        check_optical_results(
+            test_name="1_layer/nfrc_102/default",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=theta,
+            phi=phi
+        )
+
+    @pytest.mark.parametrize("theta,phi", [(15, 270)])
+    def test_optical_tuv_angled(self, update_results, theta, phi):
+        """Test TUV optical results at oblique angle."""
+        check_optical_results(
+            test_name="1_layer/nfrc_102/default",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=theta,
+            phi=phi
+        )
+
+    @pytest.mark.parametrize("theta,phi", [(15, 270)])
+    def test_color_angled(self, update_results, theta, phi):
+        """Test color results at oblique angle."""
+        check_color_results(
+            test_name="1_layer/nfrc_102/default",
             glazing_system=self.glazing_system_u,
             update_results=update_results,
             theta=theta,

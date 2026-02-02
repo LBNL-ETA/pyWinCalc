@@ -54,3 +54,27 @@ class TestPleatedShadeCgdb24040:
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/pleated_shade_genBSDF_cgdb_24040/full_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/pleated_shade_genBSDF_cgdb_24040/full_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/pleated_shade_genBSDF_cgdb_24040/full_basis",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )

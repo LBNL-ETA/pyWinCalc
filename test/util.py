@@ -466,6 +466,128 @@ def check_optical_results(
         raise AssertionError(f"Optical results mismatch for {method_name}:\n" + "\n".join(errors))
 
 
+def get_color_results(
+    glazing_system: pywincalc.GlazingSystem,
+    theta: float = 0,
+    phi: float = 0
+) -> Dict[str, Any]:
+    """
+    Extract color results from a glazing system.
+
+    Returns a dictionary with color metrics (RGB, Lab, Trichromatic, DominantWavelengthPurity).
+    """
+    color = glazing_system.color(theta, phi)
+
+    def extract_color_result(color_obj) -> Dict[str, Any]:
+        """Extract color data from a color result object."""
+        return {
+            "rgb": {
+                "R": color_obj.rgb.R,
+                "G": color_obj.rgb.G,
+                "B": color_obj.rgb.B,
+            },
+            "lab": {
+                "L": color_obj.lab.L,
+                "a": color_obj.lab.a,
+                "b": color_obj.lab.b,
+            },
+            "trichromatic": {
+                "X": color_obj.trichromatic.X,
+                "Y": color_obj.trichromatic.Y,
+                "Z": color_obj.trichromatic.Z,
+            },
+            "dominant_wavelength_purity": {
+                "dominant_wavelength": color_obj.dominant_wavelength_purity.dominant_wavelength,
+                "purity": color_obj.dominant_wavelength_purity.purity,
+            },
+        }
+
+    def extract_side_results(side) -> Dict[str, Any]:
+        """Extract transmittance and reflectance color results for one side."""
+        return {
+            "transmittance": {
+                "direct_direct": extract_color_result(side.transmittance.direct_direct),
+                "direct_diffuse": extract_color_result(side.transmittance.direct_diffuse),
+                "direct_hemispherical": extract_color_result(side.transmittance.direct_hemispherical),
+                "diffuse_diffuse": extract_color_result(side.transmittance.diffuse_diffuse),
+            },
+            "reflectance": {
+                "direct_direct": extract_color_result(side.reflectance.direct_direct),
+                "direct_diffuse": extract_color_result(side.reflectance.direct_diffuse),
+                "direct_hemispherical": extract_color_result(side.reflectance.direct_hemispherical),
+                "diffuse_diffuse": extract_color_result(side.reflectance.diffuse_diffuse),
+            },
+        }
+
+    return {
+        "system_results": {
+            "front": extract_side_results(color.system_results.front),
+            "back": extract_side_results(color.system_results.back),
+        }
+    }
+
+
+def compare_color_results(
+    actual: Dict[str, Any],
+    expected: Dict[str, Any],
+    tolerance: float = TEST_TOLERANCE
+) -> List[str]:
+    """
+    Compare color results dictionaries.
+
+    Returns a list of error messages (empty if all values match).
+    """
+    errors = []
+
+    # Compare system results
+    for side in ["front", "back"]:
+        for prop_type in ["transmittance", "reflectance"]:
+            for flux_type in ["direct_direct", "direct_diffuse", "direct_hemispherical", "diffuse_diffuse"]:
+                for color_space in ["rgb", "lab", "trichromatic", "dominant_wavelength_purity"]:
+                    actual_color = (actual.get("system_results", {}).get(side, {})
+                                    .get(prop_type, {}).get(flux_type, {}).get(color_space, {}))
+                    expected_color = (expected.get("system_results", {}).get(side, {})
+                                      .get(prop_type, {}).get(flux_type, {}).get(color_space, {}))
+                    for key in expected_color:
+                        key_path = f"system_results.{side}.{prop_type}.{flux_type}.{color_space}.{key}"
+                        errors.extend(compare_values(
+                            actual_color.get(key), expected_color.get(key), key_path, tolerance
+                        ))
+
+    return errors
+
+
+def check_color_results(
+    test_name: str,
+    glazing_system: pywincalc.GlazingSystem,
+    update_results: bool = False,
+    theta: float = 0,
+    phi: float = 0,
+    spectrum: str = "condensed_spectrum"
+) -> None:
+    """
+    Check color results against expected values.
+
+    If update_results is True, saves current results as expected values.
+    Otherwise, compares and raises AssertionError on mismatch.
+    """
+    actual = get_color_results(glazing_system, theta, phi)
+
+    if update_results:
+        save_expected_results(test_name, "color", actual, spectrum, theta, phi)
+        return
+
+    expected = load_expected_results(test_name, "color", spectrum, theta, phi)
+    if expected is None:
+        raise FileNotFoundError(
+            f"Expected results not found: {get_expected_results_path(test_name, 'color', spectrum, theta, phi)}"
+        )
+
+    errors = compare_color_results(actual, expected)
+    if errors:
+        raise AssertionError(f"Color results mismatch:\n" + "\n".join(errors))
+
+
 def get_deflection_results(
     glazing_system: pywincalc.GlazingSystem,
     system_type: str,

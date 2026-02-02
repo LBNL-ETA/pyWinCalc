@@ -9,6 +9,7 @@ import pywincalc
 from util import (
     check_thermal_results,
     check_optical_results,
+    check_color_results,
 )
 
 
@@ -70,6 +71,37 @@ class TestSingleLayerCoatedNfrc18100:
         check_optical_results(
             test_name="1_layer/coated_nfrc_18100/default",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_18100/default",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_18100/default",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_18100/default",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_color(self, update_results):
+        check_color_results(
+            test_name="1_layer/coated_nfrc_18100/default",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )
@@ -137,6 +169,37 @@ class TestSingleLayerCoatedNfrc21467:
             update_results=update_results
         )
 
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_21467/default",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_21467/default",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/coated_nfrc_21467/default",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_color(self, update_results):
+        check_color_results(
+            test_name="1_layer/coated_nfrc_21467/default",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
 
 class TestSingleLayerAppliedFilmNfrc9223:
     """Test suite for single layer applied film (nfrc_9223)."""
@@ -196,6 +259,37 @@ class TestSingleLayerAppliedFilmNfrc9223:
         check_optical_results(
             test_name="1_layer/applied_film_nfrc_9223/default",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/applied_film_nfrc_9223/default",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/applied_film_nfrc_9223/default",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/applied_film_nfrc_9223/default",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_color(self, update_results):
+        check_color_results(
+            test_name="1_layer/applied_film_nfrc_9223/default",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )

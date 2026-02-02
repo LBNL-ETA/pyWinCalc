@@ -79,6 +79,30 @@ class TestVenetianCgdb24000Open:
             update_results=update_results
         )
 
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/venetian_cgdb_24000/full_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/venetian_cgdb_24000/full_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/venetian_cgdb_24000/full_basis",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
 
 class TestVenetianCgdb24001Closed:
     """Test suite for venetian blind from CGDB (24001) - Closed position (+70 degrees)."""
@@ -147,6 +171,30 @@ class TestVenetianCgdb24001Closed:
             update_results=update_results
         )
 
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/venetian_cgdb_24001/full_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/venetian_cgdb_24001/full_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/venetian_cgdb_24001/full_basis",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
 
 class TestVenetianCgdb24002Angled:
     """Test suite for venetian blind from CGDB (24002) - +45 degree position."""
@@ -211,6 +259,30 @@ class TestVenetianCgdb24002Angled:
         check_optical_results(
             test_name="1_layer/venetian_cgdb_24002/full_basis",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="1_layer/venetian_cgdb_24002/full_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="1_layer/venetian_cgdb_24002/full_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="1_layer/venetian_cgdb_24002/full_basis",
+            method_name="TUV",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )

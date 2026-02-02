@@ -9,6 +9,7 @@ import pywincalc
 from util import (
     check_thermal_results,
     check_optical_results,
+    check_color_results,
 )
 
 
@@ -83,6 +84,37 @@ class TestDoubleGlassForcedVentilation:
         check_optical_results(
             test_name="2_layers/nfrc_102_air_nfrc_102/forced_ventilation",
             method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_air_nfrc_102/forced_ventilation",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_air_nfrc_102/forced_ventilation",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_air_nfrc_102/forced_ventilation",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_color(self, update_results):
+        check_color_results(
+            test_name="2_layers/nfrc_102_air_nfrc_102/forced_ventilation",
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )

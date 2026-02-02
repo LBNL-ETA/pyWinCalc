@@ -88,3 +88,27 @@ class TestVenetianCgdb3001WithGlass:
             glazing_system=self.glazing_system_u,
             update_results=update_results
         )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="2_layers/venetian_cgdb_3001_air_nfrc_102/full_basis",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="2_layers/venetian_cgdb_3001_air_nfrc_102/full_basis",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="2_layers/venetian_cgdb_3001_air_nfrc_102/full_basis",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results
+        )

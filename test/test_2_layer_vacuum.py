@@ -9,6 +9,7 @@ import pywincalc
 from util import (
     check_thermal_results,
     check_optical_results,
+    check_color_results,
 )
 
 
@@ -84,6 +85,65 @@ class TestDoubleVacuumGlassCylindrical:
             phi=0
         )
 
+    def test_optical_solar(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/cylindrical",
+            method_name="SOLAR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_optical_photopic(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/cylindrical",
+            method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/cylindrical",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/cylindrical",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/cylindrical",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_color(self, update_results):
+        check_color_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/cylindrical",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
 
 class TestDoubleVacuumGlassSpherical:
     """Test suite for double layer vacuum glazing with spherical pillars."""
@@ -152,6 +212,65 @@ class TestDoubleVacuumGlassSpherical:
             test_name="2_layers/nfrc_102_vacuum_nfrc_102/spherical",
             results_name="thermal_SHGC_Environment",
             glazing_system=self.glazing_system_shgc,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_optical_solar(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/spherical",
+            method_name="SOLAR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_optical_photopic(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/spherical",
+            method_name="PHOTOPIC",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_optical_tdw(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/spherical",
+            method_name="TDW",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_optical_tkr(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/spherical",
+            method_name="TKR",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_optical_tuv(self, update_results):
+        check_optical_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/spherical",
+            method_name="TUV",
+            glazing_system=self.glazing_system_u,
+            update_results=update_results,
+            theta=0,
+            phi=0
+        )
+
+    def test_color(self, update_results):
+        check_color_results(
+            test_name="2_layers/nfrc_102_vacuum_nfrc_102/spherical",
+            glazing_system=self.glazing_system_u,
             update_results=update_results,
             theta=0,
             phi=0
