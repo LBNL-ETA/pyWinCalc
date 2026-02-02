@@ -1,0 +1,58 @@
+{
+    "system_results": {
+        "front": {
+            "transmittance": {
+                "direct_direct": NaN,
+                "direct_diffuse": 0.0,
+                "direct_hemispherical": NaN,
+                "diffuse_diffuse": NaN
+            },
+            "reflectance": {
+                "direct_direct": NaN,
+                "direct_diffuse": 0.0,
+                "direct_hemispherical": NaN,
+                "diffuse_diffuse": NaN
+            }
+        },
+        "back": {
+            "transmittance": {
+                "direct_direct": NaN,
+                "direct_diffuse": 0.0,
+                "direct_hemispherical": NaN,
+                "diffuse_diffuse": NaN
+            },
+            "reflectance": {
+                "direct_direct": NaN,
+                "direct_diffuse": 0.0,
+                "direct_hemispherical": NaN,
+                "diffuse_diffuse": NaN
+            }
+        }
+    },
+    "layer_results": {
+        "layer 0": {
+            "front": {
+                "absorptance": {
+                    "total_direct": NaN,
+                    "total_diffuse": NaN,
+                    "heat_direct": NaN,
+                    "heat_diffuse": NaN,
+                    "electricity_direct": NaN,
+                    "electricity_diffuse": NaN
+                }
+            },
+            "back": {
+                "absorptance": {
+                    "total_direct": NaN,
+                    "total_diffuse": NaN,
+                    "heat_direct": NaN,
+                    "heat_diffuse": NaN,
+                    "electricity_direct": NaN,
+                    "electricity_diffuse": NaN
+                }
+            }
+        },
+        "noncoplanar_attachment_exterior": {},
+        "noncoplanar_attachment_interior": {}
+    }
+}
