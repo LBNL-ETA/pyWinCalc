@@ -1,0 +1,25 @@
+{
+    "layer_deflection_max": [
+        0.0,
+        0.0,
+        0.0
+    ],
+    "layer_deflection_mean": [
+        0.0,
+        0.0,
+        0.0
+    ],
+    "gap_width_max": [
+        0.006,
+        0.025
+    ],
+    "gap_width_mean": [
+        0.006,
+        0.025
+    ],
+    "panes_load": [
+        0.0,
+        0.0,
+        0.0
+    ]
+}

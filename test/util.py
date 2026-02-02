@@ -464,3 +464,105 @@ def check_optical_results(
     errors = compare_optical_results(actual, expected)
     if errors:
         raise AssertionError(f"Optical results mismatch for {method_name}:\n" + "\n".join(errors))
+
+
+def get_deflection_results(
+    glazing_system: pywincalc.GlazingSystem,
+    system_type: str,
+    theta: float = 0,
+    phi: float = 0
+) -> Dict[str, Any]:
+    """
+    Extract deflection results from a glazing system.
+
+    Args:
+        glazing_system: The glazing system to test
+        system_type: "U" or "SHGC"
+        theta: Incidence angle theta
+        phi: Incidence angle phi
+
+    Returns a dictionary with deflection metrics.
+    """
+    if system_type == "U":
+        tarcog_type = pywincalc.TarcogSystemType.U
+    else:
+        tarcog_type = pywincalc.TarcogSystemType.SHGC
+
+    results = {}
+
+    # Get deflection properties
+    deflection_props = glazing_system.calc_deflection_properties(tarcog_type, theta, phi)
+
+    # Extract deflection results
+    results["layer_deflection_max"] = list(deflection_props.layer_deflection_max)
+    results["layer_deflection_mean"] = list(deflection_props.layer_deflection_mean)
+    results["gap_width_max"] = list(deflection_props.gap_width_max)
+    results["gap_width_mean"] = list(deflection_props.gap_width_mean)
+    results["panes_load"] = list(deflection_props.panes_load)
+
+    return results
+
+
+def compare_deflection_results(
+    actual: Dict[str, Any],
+    expected: Dict[str, Any],
+    tolerance: float = TEST_TOLERANCE
+) -> List[str]:
+    """
+    Compare deflection results dictionaries.
+
+    Returns a list of error messages (empty if all values match).
+    """
+    errors = []
+
+    # Compare list values
+    list_keys = [
+        "layer_deflection_max", "layer_deflection_mean",
+        "gap_width_max", "gap_width_mean", "panes_load"
+    ]
+
+    for key in list_keys:
+        if key in expected:
+            errors.extend(compare_lists(actual.get(key, []), expected.get(key, []), key, tolerance))
+
+    return errors
+
+
+def check_deflection_results(
+    test_name: str,
+    results_name: str,
+    glazing_system: pywincalc.GlazingSystem,
+    system_type: str,
+    update_results: bool = False,
+    theta: float = 0,
+    phi: float = 0,
+    spectrum: str = "condensed_spectrum"
+) -> None:
+    """
+    Check deflection results against expected values.
+
+    Args:
+        test_name: Test case name
+        results_name: Result file name without extension
+        glazing_system: The glazing system to test
+        system_type: "U" or "SHGC"
+        update_results: If True, saves current results as expected values
+        theta: Incidence angle theta
+        phi: Incidence angle phi
+        spectrum: Spectrum type
+    """
+    actual = get_deflection_results(glazing_system, system_type, theta, phi)
+
+    if update_results:
+        save_expected_results(test_name, results_name, actual, spectrum, theta, phi)
+        return
+
+    expected = load_expected_results(test_name, results_name, spectrum, theta, phi)
+    if expected is None:
+        raise FileNotFoundError(
+            f"Expected results not found: {get_expected_results_path(test_name, results_name, spectrum, theta, phi)}"
+        )
+
+    errors = compare_deflection_results(actual, expected)
+    if errors:
+        raise AssertionError(f"Deflection results mismatch:\n" + "\n".join(errors))
