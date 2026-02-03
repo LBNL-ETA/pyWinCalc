@@ -11,3 +11,4 @@ include CMakeLists-WinCalc.txt
 include CMakeLists-WinCalc.txt.in
 include src/wincalcbindings.cpp
 include src/bindings/*.cpp
+include src/bindings/*.h
