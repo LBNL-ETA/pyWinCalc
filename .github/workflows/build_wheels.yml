@@ -162,6 +162,17 @@ jobs:
       - name: Show downloaded files (debug)
         run: find all_wheels
 
+      - name: Diagnose wheel presence & collisions
+        run: |
+          echo "=== ALL WHEELS (full paths) ==="
+          find all_wheels -name '*.whl' -print | sort
+      
+          echo "=== WHEEL BASENAMES (duplicates indicate overwrite risk) ==="
+          find all_wheels -name '*.whl' -printf '%f\n' | sort | uniq -c | sort -nr | head -50
+      
+          echo "=== UNIVERSAL2 WHEELS FOUND ==="
+          find all_wheels -name '*universal2*.whl' -print | sort || true
+
       - name: Combine wheels
         run: |
           mkdir combined
