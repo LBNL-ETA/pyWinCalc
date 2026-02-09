@@ -3,16 +3,47 @@ name: Build wheels
 on: [push, pull_request]
 
 jobs:
-  build_wheels_mac:
+  build_wheels_mac_arm64:
     name: macOS wheels (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-14, macos-15, macos-26]
+        os: [macos-14, macos-26]
   
     env:
       SYSTEM_VERSION_COMPAT: 0
-      CIBW_ARCHS_MACOS: "x86_64 arm64"
+      CIBW_ARCHS_MACOS: "arm64"
+      CIBW_BUILD: "cp310-* cp311-* cp312-* cp313-* cp314-*"
+      CIBW_BUILD_VERBOSITY: 1
+      CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=10.15
+  
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v6
+
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==3.3.1
+
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+ 
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.os }}-${{ github.run_id }}
+          path: wheelhouse/*.whl
+          
+  build_wheels_mac_x86_64:
+    name: macOS wheels (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-15-intel]
+  
+    env:
+      SYSTEM_VERSION_COMPAT: 0
+      CIBW_ARCHS_MACOS: "x86_64"
       CIBW_BUILD: "cp310-* cp311-* cp312-* cp313-* cp314-*"
       CIBW_BUILD_VERBOSITY: 1
       CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=10.15
@@ -37,7 +68,7 @@ jobs:
   combine_wheels:
     name: Combine all wheels into one zip
     runs-on: ubuntu-24.04
-    needs: [build_wheels_mac]
+    needs: [build_wheels_mac_arm64, build_wheels_mac_x86_64]
     steps:
       - name: Download all wheel artifacts
         uses: actions/download-artifact@v4
