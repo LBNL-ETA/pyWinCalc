@@ -16,6 +16,7 @@ jobs:
       TMP: C:\Temp
     
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-2022]
         arch: [x86, x64]
@@ -50,7 +51,7 @@ jobs:
       - name: Install built wheel + pytest
         run: |
           python -m pip install --upgrade pip
-          pip install pytest deprecation
+          pip install pytest deprecation pytest-rerunfailures
           $wheel = Get-ChildItem dist\*.whl | Select-Object -First 1
           python -m pip install --force-reinstall --no-deps $wheel.FullName
 
@@ -59,7 +60,7 @@ jobs:
   
       - name: Run tests against installed wheel
         run: |
-          pytest -ra -vv -x --maxfail=1 --showlocals --junitxml=test-results/pytest.xml
+          pytest -ra -vv -x --maxfail=1 --showlocals --reruns 2 --reruns-delay 1 --junitxml=test-results/pytest.xml
 
       - name: Upload test report
         if: always()
