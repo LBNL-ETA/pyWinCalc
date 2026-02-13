@@ -43,9 +43,12 @@ jobs:
           $wheel = Get-ChildItem dist\*.whl | Select-Object -First 1
           python -m pip install --force-reinstall --no-deps $wheel.FullName
 
+      - name: Ensure test-results directory exists
+        run: mkdir test-results
+  
       - name: Run tests against installed wheel
         run: |
-          pytest -ra -vv
+          pytest -ra -vv -x --maxfail=1 --showlocals --junitxml=test-results/pytest.xml
 
       - name: Upload test report
         if: always()
