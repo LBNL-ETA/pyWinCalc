@@ -12,7 +12,9 @@ jobs:
       MKL_NUM_THREADS: "1"
       VECLIB_MAXIMUM_THREADS: "1"
       NUMEXPR_NUM_THREADS: "1"
-
+      TEMP: C:\Temp
+      TMP: C:\Temp
+    
     strategy:
       matrix:
         os: [windows-2022]
@@ -43,11 +45,7 @@ jobs:
           pip install wheel setuptools build
 
       - name: build
-        shell: pwsh
-        run: |
-          $env:TEMP = $env:RUNNER_TEMP
-          $env:TMP  = $env:RUNNER_TEMP
-          python -m build -v
+        run: python -m build -vv
           
       - name: Install built wheel + pytest
         run: |
