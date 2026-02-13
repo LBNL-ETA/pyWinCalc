@@ -45,7 +45,7 @@ jobs:
 
       - name: Run tests against installed wheel
         run: |
-          pytest -q
+          pytest -ra -vv
           
       - name: upload wheels
         uses: actions/upload-artifact@v4
