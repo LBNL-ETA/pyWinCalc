@@ -4,11 +4,16 @@ on: [push, pull_request]
 
 jobs:
   build_wheels_windows:
-    name: ${{ matrix.os }} ${{ matrix.python-version }} ${{ matrix.arch }} wheels
+    name: ${{ matrix.os }} ${{ matrix.python-version }}    ${{ matrix.arch }} wheels
     runs-on: ${{ matrix.os }}
     env:
-      TEMP: C:\Temp
-      TMP: C:\Temp
+      TEMP: ${{ runner.temp }}
+      TMP: ${{ runner.temp }}
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      VECLIB_MAXIMUM_THREADS: "1"
+      NUMEXPR_NUM_THREADS: "1"
 
     strategy:
       matrix:
