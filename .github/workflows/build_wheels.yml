@@ -7,8 +7,6 @@ jobs:
     name: ${{ matrix.os }} ${{ matrix.python-version }}    ${{ matrix.arch }} wheels
     runs-on: ${{ matrix.os }}
     env:
-      TEMP: ${{ runner.temp }}
-      TMP: ${{ runner.temp }}
       OMP_NUM_THREADS: "1"
       OPENBLAS_NUM_THREADS: "1"
       MKL_NUM_THREADS: "1"
@@ -22,6 +20,12 @@ jobs:
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
+      - name: Set temp dirs
+        shell: pwsh
+        run: |
+          "TEMP=$env:RUNNER_TEMP" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "TMP=$env:RUNNER_TEMP"  | Out-File -FilePath $env:GITHUB_ENV -Append
+          
       - name: Support longpaths
         run: git config --system core.longpaths true
 
