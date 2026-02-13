@@ -46,6 +46,13 @@ jobs:
       - name: Run tests against installed wheel
         run: |
           pytest -ra -vv
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.arch }}-${{ github.run_id }}
+          path: test-results/pytest.xml
           
       - name: upload wheels
         uses: actions/upload-artifact@v4
@@ -67,7 +74,7 @@ jobs:
       CIBW_BUILD_VERBOSITY: 1
       CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=11
       CIBW_TEST_REQUIRES: pytest
-      CIBW_TEST_COMMAND: "pytest -ra -vv {project}/test"
+      CIBW_TEST_COMMAND: "pytest -ra -vv {project}/test --junitxml={project}/test-results/junit.xml"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -80,6 +87,20 @@ jobs:
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}-${{ github.run_id }}
+          path: test-results/junit.xml
+
+      - name: Publish test report
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: test-results/junit.xml
+          fail_on_failure: true
  
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -101,7 +122,7 @@ jobs:
       CIBW_BUILD_VERBOSITY: 1
       CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=10.15
       CIBW_TEST_REQUIRES: pytest
-      CIBW_TEST_COMMAND: "pytest -ra -vv {project}/test"    
+      CIBW_TEST_COMMAND: "pytest -ra -vv {project}/test --junitxml={project}/test-results/junit.xml"
     steps:
       - uses: actions/checkout@v4
 
@@ -112,6 +133,20 @@ jobs:
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}-${{ github.run_id }}
+          path: test-results/junit.xml
+
+      - name: Publish test report
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: test-results/junit.xml
+          fail_on_failure: true
  
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -139,9 +174,23 @@ jobs:
           CIBW_MANYLINUX_X86_64_IMAGE: "quay.io/pypa/manylinux_2_28_x86_64"
           CIBW_BUILD_VERBOSITY: 3  # Enable detailed logging
           CIBW_TEST_REQUIRES: pytest
-          CIBW_TEST_COMMAND: "pytest -ra -vv {project}/test"
+          CIBW_TEST_COMMAND: "pytest -ra -vv {project}/test --junitxml={project}/test-results/junit.xml"
         run: |
           cibuildwheel --output-dir wheelhouse
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}-${{ github.run_id }}
+          path: test-results/junit.xml
+
+      - name: Publish test report
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: test-results/junit.xml
+          fail_on_failure: true
 
       - name: upload wheels
         uses: actions/upload-artifact@v4
@@ -187,9 +236,23 @@ jobs:
           CIBW_ENVIRONMENT: "CXXFLAGS='-g -O2 -fno-omit-frame-pointer'"
           CIBW_BUILD_VERBOSITY: 3
           CIBW_TEST_REQUIRES: pytest
-          CIBW_TEST_COMMAND: "pytest -ra -vv {project}/test"          
+          CIBW_TEST_COMMAND: "pytest -ra -vv {project}/test --junitxml={project}/test-results/junit.xml"
         run: |
           cibuildwheel --output-dir wheelhouse
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}-${{ github.run_id }}
+          path: test-results/junit.xml
+
+      - name: Publish test report
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: test-results/junit.xml
+          fail_on_failure: true
   
       - name: upload wheels
         uses: actions/upload-artifact@v4
