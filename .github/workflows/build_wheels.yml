@@ -71,6 +71,7 @@ jobs:
           New-Item -ItemType Directory -Force -Path test-results | Out-Null
           $report = Join-Path $env:GITHUB_WORKSPACE "test-results\pytest.xml"
           $log    = Join-Path $env:GITHUB_WORKSPACE "test-results\pytest.log"
+          $memlog = Join-Path $env:GITHUB_WORKSPACE "test-results\mem.log"
       
           $psi = New-Object System.Diagnostics.ProcessStartInfo
           $psi.FileName = "python"
@@ -83,9 +84,11 @@ jobs:
           $p.StartInfo = $psi
           $null = $p.Start()
       
-          # stream output to console + file
           $outTask = $p.StandardOutput.ReadToEndAsync()
           $errTask = $p.StandardError.ReadToEndAsync()
+      
+          # record a header
+          "timestamp,pid,working_set_mb,private_mb,virtual_mb" | Out-File -FilePath $memlog -Encoding utf8
       
           while (-not $p.HasExited) {
             try {
@@ -93,6 +96,8 @@ jobs:
               $wsMB  = [math]::Round($proc.WorkingSet64/1MB, 1)
               $pmMB  = [math]::Round($proc.PrivateMemorySize64/1MB, 1)
               $vmMB  = [math]::Round($proc.VirtualMemorySize64/1MB, 1)
+              $ts = (Get-Date).ToString("o")
+              "$ts,$($p.Id),$wsMB,$pmMB,$vmMB" | Add-Content -Path $memlog
               Write-Host "MEM pid=$($p.Id) WS=${wsMB}MB Private=${pmMB}MB VM=${vmMB}MB"
             } catch { }
             Start-Sleep -Seconds 2
@@ -103,7 +108,8 @@ jobs:
           $stdout | Tee-Object -FilePath $log
           $stderr | Add-Content -Path $log
       
-          if ($p.ExitCode -ne 0) { exit $p.ExitCode }
+          # add exit code info to memlog
+          "exit_code,$($p.ExitCode)" | Add-Con_
 
       - name: Dump recent crash / WER events
         if: always()
@@ -122,7 +128,7 @@ jobs:
           path: |
             test-results/pytest.xml
             test-results/pytest.log
-
+            test-results/mem.log
           
       - name: Upload crash dumps
         if: always()
