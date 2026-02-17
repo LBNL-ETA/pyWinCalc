@@ -113,14 +113,15 @@ jobs:
             Where-Object { $_.ProviderName -match 'Application Error|Windows Error Reporting' } |
             Select-Object TimeCreated, ProviderName, Id, LevelDisplayName, Message |
             Format-List
-            - name: Upload test artifacts
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                name: test-artifacts-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.arch }}-${{ github.run_id }}
-                path: |
-                  test-results/pytest.xml
-                  test-results/pytest.log
+            
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.arch }}-${{ github.run_id }}
+          path: |
+            test-results/pytest.xml
+            test-results/pytest.log
 
           
       - name: Upload crash dumps
