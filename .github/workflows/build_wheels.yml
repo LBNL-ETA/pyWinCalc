@@ -65,32 +65,62 @@ jobs:
         run: |
           python -c "import pywincalc,sys; print('pywincalc:', pywincalc.__file__); print('exe:', sys.executable)"
   
-      - name: Run tests against installed wheel (clean dir + log)
+      - name: Run tests (monitor memory)
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path test-results | Out-Null
-          New-Item -ItemType Directory -Force -Path _wheeltest | Out-Null
-          Copy-Item -Recurse -Force test _wheeltest\test
-          Push-Location _wheeltest
-      
-          # Write output to a log file so we still get something if pytest dies
           $report = Join-Path $env:GITHUB_WORKSPACE "test-results\pytest.xml"
           $log    = Join-Path $env:GITHUB_WORKSPACE "test-results\pytest.log"
       
-          python -X faulthandler -m pytest -vv -rA -s --full-trace --tb=long --showlocals `
-            --reruns 2 --reruns-delay 1 `
-            --junitxml="$report" test 2>&1 | Tee-Object -FilePath $log
+          $psi = New-Object System.Diagnostics.ProcessStartInfo
+          $psi.FileName = "python"
+          $psi.Arguments = "-X faulthandler -m pytest -vv -rA -s --full-trace --tb=long --showlocals --reruns 2 --reruns-delay 1 --junitxml `"$report`" test"
+          $psi.RedirectStandardOutput = $true
+          $psi.RedirectStandardError  = $true
+          $psi.UseShellExecute = $false
       
-          Pop-Location
+          $p = New-Object System.Diagnostics.Process
+          $p.StartInfo = $psi
+          $null = $p.Start()
+      
+          # stream output to console + file
+          $outTask = $p.StandardOutput.ReadToEndAsync()
+          $errTask = $p.StandardError.ReadToEndAsync()
+      
+          while (-not $p.HasExited) {
+            try {
+              $proc = Get-Process -Id $p.Id -ErrorAction Stop
+              $wsMB  = [math]::Round($proc.WorkingSet64/1MB, 1)
+              $pmMB  = [math]::Round($proc.PrivateMemorySize64/1MB, 1)
+              $vmMB  = [math]::Round($proc.VirtualMemorySize64/1MB, 1)
+              Write-Host "MEM pid=$($p.Id) WS=${wsMB}MB Private=${pmMB}MB VM=${vmMB}MB"
+            } catch { }
+            Start-Sleep -Seconds 2
+          }
+      
+          $stdout = $outTask.Result
+          $stderr = $errTask.Result
+          $stdout | Tee-Object -FilePath $log
+          $stderr | Add-Content -Path $log
+      
+          if ($p.ExitCode -ne 0) { exit $p.ExitCode }
 
-      - name: Upload test artifacts
+      - name: Dump recent crash / WER events
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-artifacts-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.arch }}-${{ github.run_id }}
-          path: |
-            test-results/pytest.xml
-            test-results/pytest.log
+        shell: pwsh
+        run: |
+          Get-WinEvent -LogName Application -MaxEvents 50 |
+            Where-Object { $_.ProviderName -match 'Application Error|Windows Error Reporting' } |
+            Select-Object TimeCreated, ProviderName, Id, LevelDisplayName, Message |
+            Format-List
+            - name: Upload test artifacts
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                name: test-artifacts-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.arch }}-${{ github.run_id }}
+                path: |
+                  test-results/pytest.xml
+                  test-results/pytest.log
 
           
       - name: Upload crash dumps
