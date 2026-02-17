@@ -59,11 +59,40 @@ jobs:
           reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpFolder /t REG_EXPAND_SZ /d "$env:GITHUB_WORKSPACE\dumps" /f
           reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpType /t REG_DWORD /d 2 /f
           New-Item -ItemType Directory -Force dumps | Out-Null
-  
-      - name: Run tests against installed wheel
-        run: |
-          python -X faulthandler -m pytest -vv -rA -s --full-trace --tb=long --showlocals --reruns 2 --reruns-delay 1 --junitxml=test-results/pytest.xml
 
+      - name: Show where pywincalc is imported from
+        shell: pwsh
+        run: |
+          python -c "import pywincalc,sys; print('pywincalc:', pywincalc.__file__); print('exe:', sys.executable)"
+  
+      - name: Run tests against installed wheel (clean dir + log)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path test-results | Out-Null
+          New-Item -ItemType Directory -Force -Path _wheeltest | Out-Null
+          Copy-Item -Recurse -Force test _wheeltest\test
+          Push-Location _wheeltest
+      
+          # Write output to a log file so we still get something if pytest dies
+          $report = Join-Path $env:GITHUB_WORKSPACE "test-results\pytest.xml"
+          $log    = Join-Path $env:GITHUB_WORKSPACE "test-results\pytest.log"
+      
+          python -X faulthandler -m pytest -vv -rA -s --full-trace --tb=long --showlocals `
+            --reruns 2 --reruns-delay 1 `
+            --junitxml="$report" test 2>&1 | Tee-Object -FilePath $log
+      
+          Pop-Location
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.arch }}-${{ github.run_id }}
+          path: |
+            test-results/pytest.xml
+            test-results/pytest.log
+
+          
       - name: Upload crash dumps
         if: always()
         uses: actions/upload-artifact@v4
