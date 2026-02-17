@@ -12,6 +12,7 @@ jobs:
       MKL_NUM_THREADS: "1"
       VECLIB_MAXIMUM_THREADS: "1"
       NUMEXPR_NUM_THREADS: "1"
+      PYTHONFAULTHANDLER: "1"
       TEMP: C:\Temp
       TMP: C:\Temp
     
@@ -51,11 +52,31 @@ jobs:
 
       - name: Ensure test-results directory exists
         run: mkdir test-results
+
+      - name: Enable crash dumps (Windows)
+        shell: pwsh
+        run: |
+          reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpFolder /t REG_EXPAND_SZ /d "$env:GITHUB_WORKSPACE\dumps" /f
+          reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps" /v DumpType /t REG_DWORD /d 2 /f
+          New-Item -ItemType Directory -Force dumps | Out-Null
   
       - name: Run tests against installed wheel
         run: |
-          python -X faulthandler -m pytest -vv -rA -s --full-trace --tb=long --maxfail=1 --showlocals --reruns 2 --reruns-delay 1 --junitxml=test-results/pytest.xml
+          python -X faulthandler -m pytest -vv -rA -s --full-trace --tb=long --showlocals --reruns 2 --reruns-delay 1 --junitxml=test-results/pytest.xml
 
+      - name: Upload crash dumps
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dumps-${{ matrix.python-version }}-${{ matrix.arch }}-${{ github.run_id }}
+          path: dumps/*
+
+      - name: List test-results
+        if: always()
+        shell: pwsh
+        run: |
+          Get-ChildItem -Recurse test-results | Format-List FullName,Length
+    
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4
