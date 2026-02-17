@@ -54,7 +54,7 @@ jobs:
   
       - name: Run tests against installed wheel
         run: |
-          pytest -ra -vv -x --maxfail=1 --showlocals --reruns 2 --reruns-delay 1 --junitxml=test-results/pytest.xml
+          python -X faulthandler -m pytest -vv -rA -s --full-trace --tb=long --maxfail=1 --showlocals --reruns 2 --reruns-delay 1 --junitxml=test-results/pytest.xml
 
       - name: Upload test report
         if: always()
