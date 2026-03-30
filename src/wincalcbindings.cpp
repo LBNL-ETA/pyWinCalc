@@ -17,7 +17,8 @@ void declare_wce_optical_result_simple(py::module &m, std::string typestr) {
       .def_readwrite("direct_diffuse", &Class::direct_diffuse)
       .def_readwrite("diffuse_diffuse", &Class::diffuse_diffuse)
       .def_readwrite("direct_hemispherical", &Class::direct_hemispherical)
-      .def_readwrite("matrix", &Class::matrix);
+      .def_readwrite("matrix", &Class::matrix)
+      .def_readwrite("wavelength_matrices", &Class::wavelength_matrices);
 }
 
 template <typename T>
@@ -47,7 +48,9 @@ void declare_wce_optical_result_layer(py::module &m, std::string typestr) {
   std::string pyclass_name = std::string("OpticalResultLayer") + typestr;
   py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(),
                     py::dynamic_attr())
-      .def_readwrite("absorptance", &Class::absorptance);
+      .def_readwrite("absorptance", &Class::absorptance)
+      .def_readwrite("transmittance_wavelength_matrices", &Class::transmittance_wavelength_matrices)
+      .def_readwrite("reflectance_wavelength_matrices", &Class::reflectance_wavelength_matrices);
 }
 
 template <typename T>
@@ -120,18 +123,6 @@ public:
   }
 };
 
-class Py_UniversalSupportPillar
-    : public Tarcog::ISO15099::UniversalSupportPillar {
-public:
-  using Tarcog::ISO15099::UniversalSupportPillar::UniversalSupportPillar;
-
-protected:
-  double areaOfContact() override {
-    PYBIND11_OVERRIDE_PURE(double, Tarcog::ISO15099::UniversalSupportPillar,
-                           areaOfContact, );
-  }
-};
-
 PYBIND11_MODULE(wincalcbindings, m) {
   m.doc() = "Python bindings for WinCalc";
 
@@ -197,14 +188,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .value("PENTAGON", Tarcog::ISO15099::PolygonType::Pentagon)
       .value("HEXAGON", Tarcog::ISO15099::PolygonType::Hexagon);
 
-  py::class_<Tarcog::ISO15099::UniversalSupportPillar,
-             Py_UniversalSupportPillar, Tarcog::ISO15099::CIGUGapLayer,
-             std::shared_ptr<Tarcog::ISO15099::UniversalSupportPillar>>(
-      m, "UniversalSupportPillar")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &, double, double>(),
-           py::arg("gap_layer"), py::arg("material_conductivity"),
-           py::arg("cell_area"));
-
   py::class_<Tarcog::ISO15099::PillarData,
              std::shared_ptr<Tarcog::ISO15099::PillarData>>(m, "PillarData")
       .def(py::init<double, double, double>(), py::arg("height"),
@@ -222,14 +205,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("radius"))
       .def_readwrite("radius", &Tarcog::ISO15099::CylindricalPillar::radius);
 
-  py::class_<Tarcog::ISO15099::CylindricalPillarLayer,
-             Tarcog::ISO15099::UniversalSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::CylindricalPillarLayer>>(
-      m, "CylindricalPillarLayer")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::CylindricalPillar const &>(),
-           py::arg("gap_layer"), py::arg("cylindrical_pillar"));
-
   py::class_<Tarcog::ISO15099::SphericalPillar, Tarcog::ISO15099::PillarData,
              std::shared_ptr<Tarcog::ISO15099::SphericalPillar>>(
       m, "SphericalPillar")
@@ -238,14 +213,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("radius_of_contact"))
       .def_readwrite("radius_of_contact",
                      &Tarcog::ISO15099::SphericalPillar::radiusOfContact);
-
-  py::class_<Tarcog::ISO15099::SphericalPillarLayer,
-             Tarcog::ISO15099::UniversalSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::SphericalPillarLayer>>(
-      m, "SphericalPillarLayer")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::SphericalPillar const &>(),
-           py::arg("gap_layer"), py::arg("spherical_pillar"));
 
   py::class_<Tarcog::ISO15099::RectangularPillar, Tarcog::ISO15099::PillarData,
              std::shared_ptr<Tarcog::ISO15099::RectangularPillar>>(
@@ -256,14 +223,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def_readwrite("length", &Tarcog::ISO15099::RectangularPillar::length)
       .def_readwrite("width", &Tarcog::ISO15099::RectangularPillar::width);
 
-  py::class_<Tarcog::ISO15099::RectangularPillarLayer,
-             Tarcog::ISO15099::UniversalSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::RectangularPillarLayer>>(
-      m, "RectangularPillarLayer")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::RectangularPillar const &>(),
-           py::arg("gap_layer"), py::arg("rectangular_pillar"));
-		   
   py::class_<Tarcog::ISO15099::PolygonalPillar, 
              Tarcog::ISO15099::PillarData,
              std::shared_ptr<Tarcog::ISO15099::PolygonalPillar>>(m, "PolygonalPillar")
@@ -278,14 +237,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def(py::init<double, double, double, double>(), py::arg("height"),
            py::arg("material_conductivity"), py::arg("cell_area"), py::arg("length"));
 
-  py::class_<Tarcog::ISO15099::TriangularPillarLayer,
-             Tarcog::ISO15099::UniversalSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::TriangularPillarLayer>>(
-      m, "TriangularPillarLayer")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::TriangularPillar const &>(),
-           py::arg("gap_layer"), py::arg("polygon_pillar"));
-		   
   py::class_<Tarcog::ISO15099::PentagonPillar,
              Tarcog::ISO15099::PolygonalPillar, 
              Tarcog::ISO15099::PillarData,
@@ -293,28 +244,12 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def(py::init<double, double, double, double>(), py::arg("height"),
            py::arg("material_conductivity"), py::arg("cell_area"), py::arg("length"));		   
 
-  py::class_<Tarcog::ISO15099::PentagonPillarLayer,
-             Tarcog::ISO15099::UniversalSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::PentagonPillarLayer>>(
-      m, "PentagonPillarLayer")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::PentagonPillar const &>(),
-           py::arg("gap_layer"), py::arg("polygon_pillar"));
-		   
   py::class_<Tarcog::ISO15099::HexagonPillar,
              Tarcog::ISO15099::PolygonalPillar, 
              Tarcog::ISO15099::PillarData,
              std::shared_ptr<Tarcog::ISO15099::HexagonPillar>>(m, "HexagonPillar")
       .def(py::init<double, double, double, double>(), py::arg("height"),
            py::arg("material_conductivity"), py::arg("cell_area"), py::arg("length"));
-
-  py::class_<Tarcog::ISO15099::HexagonPillarLayer,
-             Tarcog::ISO15099::UniversalSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::HexagonPillarLayer>>(
-      m, "HexagonPillarLayer")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::HexagonPillar const &>(),
-           py::arg("gap_layer"), py::arg("polygon_pillar"));
 
   py::class_<Tarcog::ISO15099::LinearBearingPillar,
              Tarcog::ISO15099::PillarData,
@@ -325,14 +260,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
            py::arg("cell_area"), py::arg("length"), py::arg("width"))
       .def_readwrite("length", &Tarcog::ISO15099::LinearBearingPillar::length)
       .def_readwrite("width", &Tarcog::ISO15099::LinearBearingPillar::width);
-
-  py::class_<Tarcog::ISO15099::LinearBearingPillarLayer,
-             Tarcog::ISO15099::UniversalSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::LinearBearingPillarLayer>>(
-      m, "LinearBearingPillarLayer")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::LinearBearingPillar const &>(),
-           py::arg("gap_layer"), py::arg("linear_bearing_pillar"));
 
   py::class_<Tarcog::ISO15099::TruncatedConePillar,
              Tarcog::ISO15099::PillarData,
@@ -345,14 +272,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
                      &Tarcog::ISO15099::TruncatedConePillar::radius1)
       .def_readwrite("radius_2",
                      &Tarcog::ISO15099::TruncatedConePillar::radius2);
-
-  py::class_<Tarcog::ISO15099::TruncatedConePillarLayer,
-             Tarcog::ISO15099::UniversalSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::TruncatedConePillarLayer>>(
-      m, "TruncatedConePillarLayer")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::TruncatedConePillar const &>(),
-           py::arg("gap_layer"), py::arg("truncated_cone_pillar"));
 
   py::class_<Tarcog::ISO15099::AnnulusCylinderPillar,
              Tarcog::ISO15099::PillarData,
@@ -367,14 +286,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def_readwrite("outer_radius",
                      &Tarcog::ISO15099::AnnulusCylinderPillar::outerRadius);
 
-  py::class_<Tarcog::ISO15099::AnnulusCylinderPillarLayer,
-             Tarcog::ISO15099::UniversalSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::AnnulusCylinderPillarLayer>>(
-      m, "AnnulusCylinderPillarLayer")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::AnnulusCylinderPillar const &>(),
-           py::arg("gap_layer"), py::arg("annulus_cylinder_pillar"));
-		   
   py::class_<Tarcog::ISO15099::CShapedCylinderPillar,
              Tarcog::ISO15099::PillarData,
              std::shared_ptr<Tarcog::ISO15099::CShapedCylinderPillar>>(
@@ -390,14 +301,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
 	  .def_readwrite("fraction_covered",
                      &Tarcog::ISO15099::CShapedCylinderPillar::fractionCovered);
 					 
-  py::class_<Tarcog::ISO15099::CShapedCylinderPillarLayer,
-             Tarcog::ISO15099::UniversalSupportPillar,
-             std::shared_ptr<Tarcog::ISO15099::CShapedCylinderPillarLayer>>(
-      m, "CShapedCylinderPillarLayer")
-      .def(py::init<Tarcog::ISO15099::CIGUGapLayer const &,
-                    Tarcog::ISO15099::CShapedCylinderPillar const &>(),
-           py::arg("gap_layer"), py::arg("cshaped_cylinder_pillar"));
-
   py::class_<Tarcog::ISO15099::Glass, std::shared_ptr<Tarcog::ISO15099::Glass>>(
       m, "Glass")
       .def(py::init<double, double, double>(), py::arg("thickness"),
@@ -425,37 +328,6 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def_readwrite("glass_1", &Tarcog::ISO15099::PillarMeasurement::glass1)
       .def_readwrite("glass_2", &Tarcog::ISO15099::PillarMeasurement::glass2);
 
-  py::class_<Tarcog::ISO15099::MeasuredPillarLayer,
-             Tarcog::ISO15099::CIGUGapLayer,
-             std::shared_ptr<Tarcog::ISO15099::MeasuredPillarLayer>>(
-      m, "MeasuredPillarLayer")
-      .def(py::init<Tarcog::ISO15099::PillarMeasurement const &>(),
-           py::arg("pillar"));
-
-  py::class_<Tarcog::ISO15099::CIGUVentilatedGapLayer,
-             Tarcog::ISO15099::CIGUGapLayer,
-             std::shared_ptr<Tarcog::ISO15099::CIGUVentilatedGapLayer>>(
-      m, "IGUVentilatedGapLayer")
-      .def(py::init<std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer> const &>(),
-           py::arg("gap_layer"))
-      .def(py::init<std::shared_ptr<Tarcog::ISO15099::CIGUGapLayer>, double,
-                    double>(),
-           py::arg("gap_layer"), py::arg("inlet_temperature"),
-           py::arg("inlet_speed"))
-      .def("layer_temperature",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::averageLayerTemperature)
-      .def("set_flow_geometry",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::setFlowGeometry,
-           py::arg("a_in"), py::arg("a_out"))
-      .def(
-          "calculate_ventilated_airflow",
-          &Tarcog::ISO15099::CIGUVentilatedGapLayer::calculateVentilatedAirflow,
-          py::arg("inlet_temperature"))
-      .def("calculate_thermally_driven_airflow_with_adjacent_gap",
-           &Tarcog::ISO15099::CIGUVentilatedGapLayer::
-               calculateThermallyDrivenAirflowWithAdjacentGap,
-           py::arg("adjacent_gap"))
-      .def("clone", &Tarcog::ISO15099::CIGUVentilatedGapLayer::clone);
 
   m.def("forced_ventilation_gap",
         Tarcog::ISO15099::Layers::forcedVentilationGap, py::arg("gap"),
@@ -1227,6 +1099,10 @@ PYBIND11_MODULE(wincalcbindings, m) {
       .def("optical_method_results",
            &wincalc::Glazing_System::optical_method_results,
            py::arg("method_name"), py::arg("theta") = 0, py::arg("phi") = 0)
+      .def("populate_layer_wavelength_matrices",
+           &wincalc::Glazing_System::populate_layer_wavelength_matrices,
+           "Compute per-layer wavelength matrices on demand (expensive).",
+           py::arg("results"), py::arg("method_name"))
       .def("color", &wincalc::Glazing_System::color, py::arg("theta") = 0,
            py::arg("phi") = 0,
            py::arg("tristimulus_x_method") = "COLOR_TRISTIMX",
@@ -1698,6 +1574,10 @@ PYBIND11_MODULE(wincalcbindings, m) {
                                                 py::arithmetic())
       .value("T", FenestrationCommon::PropertySurface::T)
       .value("R", FenestrationCommon::PropertySurface::R);
+
+  py::class_<FenestrationCommon::MatrixAtWavelength>(m, "MatrixAtWavelength")
+      .def_readwrite("wavelength", &FenestrationCommon::MatrixAtWavelength::x)
+      .def_readwrite("matrix", &FenestrationCommon::MatrixAtWavelength::matrix);
 
   py::class_<FenestrationCommon::SquareMatrix>(m, "SquareMatrix")
       .def(py::init<std::vector<std::vector<double>> const &>(),

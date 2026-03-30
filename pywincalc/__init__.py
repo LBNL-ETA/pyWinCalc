@@ -6,9 +6,7 @@ from wincalcbindings import (
     BSDFIntegrator, BoundaryConditionsCoefficientModelType, CMABestWorstUFactors, CMAResult, CMAWindow,
     CMAWindowDualVisionHorizontal, CMAWindowDualVisionVertical, CMAWindowSingleVision, Layers, CellSpacingType, PolygonType, pillar_cell_area,
     PillarData, CylindricalPillar, SphericalPillar, RectangularPillar, TriangularPillar, PentagonPillar, HexagonPillar, LinearBearingPillar, TruncatedConePillar, Glass, PillarMeasurement,
-    AnnulusCylinderPillar, CShapedCylinderPillar, UniversalSupportPillar, CylindricalPillarLayer, SphericalPillarLayer, RectangularPillarLayer,
-    TriangularPillarLayer, PentagonPillarLayer, HexagonPillarLayer, LinearBearingPillarLayer, TruncatedConePillarLayer,
-    AnnulusCylinderPillarLayer, CShapedCylinderPillarLayer, MeasuredPillarLayer, CoatedSide,
+    AnnulusCylinderPillar, CShapedCylinderPillar, CoatedSide,
     ColorResult, DeflectionResults, DistributionMethodType, DualBandBSDF, EffectiveMultipliers, Environment, Environments,
     FlippableSolidLayer, Gas, GasCoefficients, GasData, GlazingSystem as _GlazingSystem, GlazingSystemDimensions,
     IGUGapLayer, IntegrationRule, IntegrationRuleType, Lab, MaterialType,
@@ -30,7 +28,7 @@ from wincalcbindings import (
     create_best_worst_u_factor_option, create_gas, create_perforated_screen, create_venetian_blind, create_woven_shade,
     get_cma_window_double_vision_horizontal, get_cma_window_double_vision_vertical, get_cma_window_single_vision,
     get_spacer_keff, nfrc_shgc_environments, nfrc_u_environments, parse_bsdf_xml_file, parse_bsdf_xml_string,
-    parse_json, parse_json_file, parse_optics_file, parse_thmx_file, parse_thmx_string, IGUVentilatedGapLayer,
+    parse_json, parse_json_file, parse_optics_file, parse_thmx_file, parse_thmx_string,
     forced_ventilation_gap
 )
 

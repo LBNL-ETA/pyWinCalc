@@ -15,6 +15,18 @@ Version 2 has substantially more features but the interface has also changed as 
 
 Version 3 has additional features but should maintain compatability with code written for version 2 with the exception of cases creating user-defined shades.  Some methods of creating gases and gaps have been deprecated.  If you experience any problems updating code that creates user-defined shades to match the updated examples or problems with gaps or gases please let us know.
 
+## Migrating from version 3.8 to 3.9
+
+Version 3.9 removes direct construction of pillar layer and ventilated gap layer classes. Use the factory functions instead:
+
+**Removed classes:** `CylindricalPillarLayer`, `SphericalPillarLayer`, `RectangularPillarLayer`, `TriangularPillarLayer`, `PentagonPillarLayer`, `HexagonPillarLayer`, `LinearBearingPillarLayer`, `TruncatedConePillarLayer`, `AnnulusCylinderPillarLayer`, `CShapedCylinderPillarLayer`, `MeasuredPillarLayer`, `UniversalSupportPillar`, `IGUVentilatedGapLayer`.
+
+**Migration:**
+- Replace `CylindricalPillarLayer(gap, pillar)` with `pywincalc.Layers.create_pillar(pillar, pressure)`
+- Replace `IGUVentilatedGapLayer(gap, temperature, speed)` with `pywincalc.Layers.forced_ventilation_gap(gap, speed, temperature)`
+
+All pillar data structs (`CylindricalPillar`, `SphericalPillar`, `PillarData`, `PillarMeasurement`, etc.) and factory functions are unchanged.
+
 # Table of contents
 1. [Requirements](#Requirements)
 	1. [Windows](#Windows)
