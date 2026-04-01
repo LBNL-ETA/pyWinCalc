@@ -1,0 +1,352 @@
+{
+    "system_results": {
+        "front": {
+            "transmittance": {
+                "direct_direct": {
+                    "rgb": {
+                        "R": 255,
+                        "G": 255,
+                        "B": 255
+                    },
+                    "lab": {
+                        "L": 95.95803959575737,
+                        "a": -0.9694677745413216,
+                        "b": 0.17481918433934762
+                    },
+                    "trichromatic": {
+                        "X": 84.78737909527392,
+                        "Y": 89.90666499117422,
+                        "Z": 96.48742637808509
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.497685368144961,
+                        "purity": 0.323737631784005
+                    }
+                },
+                "direct_diffuse": {
+                    "rgb": {
+                        "R": 0,
+                        "G": 0,
+                        "B": 0
+                    },
+                    "lab": {
+                        "L": 0.0,
+                        "a": 0.0,
+                        "b": 0.0
+                    },
+                    "trichromatic": {
+                        "X": 0.0,
+                        "Y": 0.0,
+                        "Z": 0.0
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.0,
+                        "purity": 0.0
+                    }
+                },
+                "direct_hemispherical": {
+                    "rgb": {
+                        "R": 255,
+                        "G": 255,
+                        "B": 255
+                    },
+                    "lab": {
+                        "L": 95.95803959575737,
+                        "a": -0.9694677745413216,
+                        "b": 0.17481918433934762
+                    },
+                    "trichromatic": {
+                        "X": 84.78737909527392,
+                        "Y": 89.90666499117422,
+                        "Z": 96.48742637808509
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.497685368144961,
+                        "purity": 0.323737631784005
+                    }
+                },
+                "diffuse_diffuse": {
+                    "rgb": {
+                        "R": 255,
+                        "G": 255,
+                        "B": 255
+                    },
+                    "lab": {
+                        "L": 92.66508649769598,
+                        "a": -1.0766653468817777,
+                        "b": 0.1710099303579904
+                    },
+                    "trichromatic": {
+                        "X": 77.4563675601445,
+                        "Y": 82.20460037682095,
+                        "Z": 88.2197212747632
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.49670868011949554,
+                        "purity": 0.3842984064510579
+                    }
+                }
+            },
+            "reflectance": {
+                "direct_direct": {
+                    "rgb": {
+                        "R": 88,
+                        "G": 90,
+                        "B": 90
+                    },
+                    "lab": {
+                        "L": 34.56031217404738,
+                        "a": -0.5777909214922383,
+                        "b": -0.7554259519700346
+                    },
+                    "trichromatic": {
+                        "X": 7.793917312716345,
+                        "Y": 8.280475424055815,
+                        "Z": 9.144427636224526
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.4790037210338078,
+                        "purity": 1.947638991475117
+                    }
+                },
+                "direct_diffuse": {
+                    "rgb": {
+                        "R": 0,
+                        "G": 0,
+                        "B": 0
+                    },
+                    "lab": {
+                        "L": 0.0,
+                        "a": 0.0,
+                        "b": 0.0
+                    },
+                    "trichromatic": {
+                        "X": 0.0,
+                        "Y": 0.0,
+                        "Z": 0.0
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.0,
+                        "purity": 0.0
+                    }
+                },
+                "direct_hemispherical": {
+                    "rgb": {
+                        "R": 88,
+                        "G": 90,
+                        "B": 90
+                    },
+                    "lab": {
+                        "L": 34.56031217404738,
+                        "a": -0.5777909214922383,
+                        "b": -0.7554259519700346
+                    },
+                    "trichromatic": {
+                        "X": 7.793917312716345,
+                        "Y": 8.280475424055815,
+                        "Z": 9.144427636224526
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.4790037210338078,
+                        "purity": 1.947638991475117
+                    }
+                },
+                "diffuse_diffuse": {
+                    "rgb": {
+                        "R": 117,
+                        "G": 119,
+                        "B": 119
+                    },
+                    "lab": {
+                        "L": 45.321271194493114,
+                        "a": -0.6127962886920413,
+                        "b": -0.47217579518799013
+                    },
+                    "trichromatic": {
+                        "X": 13.918572649583393,
+                        "Y": 14.772686449462755,
+                        "Z": 16.11107638763304
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.4815055495583207,
+                        "purity": 1.1989702687329837
+                    }
+                }
+            }
+        },
+        "back": {
+            "transmittance": {
+                "direct_direct": {
+                    "rgb": {
+                        "R": 255,
+                        "G": 255,
+                        "B": 255
+                    },
+                    "lab": {
+                        "L": 95.95803959575737,
+                        "a": -0.9694677745413216,
+                        "b": 0.17481918433934762
+                    },
+                    "trichromatic": {
+                        "X": 84.78737909527392,
+                        "Y": 89.90666499117422,
+                        "Z": 96.48742637808509
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.497685368144961,
+                        "purity": 0.323737631784005
+                    }
+                },
+                "direct_diffuse": {
+                    "rgb": {
+                        "R": 0,
+                        "G": 0,
+                        "B": 0
+                    },
+                    "lab": {
+                        "L": 0.0,
+                        "a": 0.0,
+                        "b": 0.0
+                    },
+                    "trichromatic": {
+                        "X": 0.0,
+                        "Y": 0.0,
+                        "Z": 0.0
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.0,
+                        "purity": 0.0
+                    }
+                },
+                "direct_hemispherical": {
+                    "rgb": {
+                        "R": 255,
+                        "G": 255,
+                        "B": 255
+                    },
+                    "lab": {
+                        "L": 95.95803959575737,
+                        "a": -0.9694677745413216,
+                        "b": 0.17481918433934762
+                    },
+                    "trichromatic": {
+                        "X": 84.78737909527392,
+                        "Y": 89.90666499117422,
+                        "Z": 96.48742637808509
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.497685368144961,
+                        "purity": 0.323737631784005
+                    }
+                },
+                "diffuse_diffuse": {
+                    "rgb": {
+                        "R": 255,
+                        "G": 255,
+                        "B": 255
+                    },
+                    "lab": {
+                        "L": 92.66508649769598,
+                        "a": -1.0766653468817777,
+                        "b": 0.1710099303579904
+                    },
+                    "trichromatic": {
+                        "X": 77.4563675601445,
+                        "Y": 82.20460037682095,
+                        "Z": 88.2197212747632
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.49670868011949554,
+                        "purity": 0.3842984064510579
+                    }
+                }
+            },
+            "reflectance": {
+                "direct_direct": {
+                    "rgb": {
+                        "R": 88,
+                        "G": 90,
+                        "B": 90
+                    },
+                    "lab": {
+                        "L": 34.56036726351449,
+                        "a": -0.5773465360149055,
+                        "b": -0.7553581321970038
+                    },
+                    "trichromatic": {
+                        "X": 7.793990661365739,
+                        "Y": 8.280502490787962,
+                        "Z": 9.14443611067738
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.47900020880659444,
+                        "purity": 1.9471057377261272
+                    }
+                },
+                "direct_diffuse": {
+                    "rgb": {
+                        "R": 0,
+                        "G": 0,
+                        "B": 0
+                    },
+                    "lab": {
+                        "L": 0.0,
+                        "a": 0.0,
+                        "b": 0.0
+                    },
+                    "trichromatic": {
+                        "X": 0.0,
+                        "Y": 0.0,
+                        "Z": 0.0
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.0,
+                        "purity": 0.0
+                    }
+                },
+                "direct_hemispherical": {
+                    "rgb": {
+                        "R": 88,
+                        "G": 90,
+                        "B": 90
+                    },
+                    "lab": {
+                        "L": 34.56036726351449,
+                        "a": -0.5773465360149055,
+                        "b": -0.7553581321970038
+                    },
+                    "trichromatic": {
+                        "X": 7.793990661365739,
+                        "Y": 8.280502490787962,
+                        "Z": 9.14443611067738
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.47900020880659444,
+                        "purity": 1.9471057377261272
+                    }
+                },
+                "diffuse_diffuse": {
+                    "rgb": {
+                        "R": 117,
+                        "G": 119,
+                        "B": 119
+                    },
+                    "lab": {
+                        "L": 45.32130903454859,
+                        "a": -0.6124912180971442,
+                        "b": -0.4721295318484309
+                    },
+                    "trichromatic": {
+                        "X": 13.918646782171669,
+                        "Y": 14.772713797213811,
+                        "Z": 16.11108502499312
+                    },
+                    "dominant_wavelength_purity": {
+                        "dominant_wavelength": 0.481503752926897,
+                        "purity": 1.1986603995699372
+                    }
+                }
+            }
+        }
+    }
+}

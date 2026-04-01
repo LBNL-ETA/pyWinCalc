@@ -1,0 +1,58 @@
+{
+    "system_results": {
+        "front": {
+            "transmittance": {
+                "direct_direct": 0.0017001960009707133,
+                "direct_diffuse": 0.21458492799550863,
+                "direct_hemispherical": 0.21628512399647934,
+                "diffuse_diffuse": 0.2170259295253041
+            },
+            "reflectance": {
+                "direct_direct": 0.0047296649958229135,
+                "direct_diffuse": 0.62750050104783,
+                "direct_hemispherical": 0.6322301660436529,
+                "diffuse_diffuse": 0.6324799367934613
+            }
+        },
+        "back": {
+            "transmittance": {
+                "direct_direct": 0.0015637479988638734,
+                "direct_diffuse": 0.21646504999486935,
+                "direct_hemispherical": 0.21802879799373323,
+                "diffuse_diffuse": 0.21706659242210324
+            },
+            "reflectance": {
+                "direct_direct": 0.004878470008352809,
+                "direct_diffuse": 0.6271115720123137,
+                "direct_hemispherical": 0.6319900420206666,
+                "diffuse_diffuse": 0.6325117638430522
+            }
+        }
+    },
+    "layer_results": {
+        "layer 0": {
+            "front": {
+                "absorptance": {
+                    "total_direct": 0.15148470995986765,
+                    "total_diffuse": 0.150494133681236,
+                    "heat_direct": 0.15148470995986765,
+                    "heat_diffuse": 0.150494133681236,
+                    "electricity_direct": 0.0,
+                    "electricity_diffuse": 0.0
+                }
+            },
+            "back": {
+                "absorptance": {
+                    "total_direct": 0.14998115998560033,
+                    "total_diffuse": 0.15042164373484068,
+                    "heat_direct": 0.14998115998560033,
+                    "heat_diffuse": 0.15042164373484068,
+                    "electricity_direct": 0.0,
+                    "electricity_diffuse": 0.0
+                }
+            }
+        },
+        "noncoplanar_attachment_exterior": {},
+        "noncoplanar_attachment_interior": {}
+    }
+}

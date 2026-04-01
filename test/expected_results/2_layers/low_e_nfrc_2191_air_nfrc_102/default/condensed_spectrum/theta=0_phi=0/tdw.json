@@ -1,0 +1,80 @@
+{
+    "system_results": {
+        "front": {
+            "transmittance": {
+                "direct_direct": 0.6223881411604673,
+                "direct_diffuse": 0.0,
+                "direct_hemispherical": 0.6223881411604673,
+                "diffuse_diffuse": 0.535536572130052
+            },
+            "reflectance": {
+                "direct_direct": 0.18616744010462993,
+                "direct_diffuse": 0.0,
+                "direct_hemispherical": 0.18616744010462993,
+                "diffuse_diffuse": 0.2538784578657528
+            }
+        },
+        "back": {
+            "transmittance": {
+                "direct_direct": 0.6223881411604673,
+                "direct_diffuse": 0.0,
+                "direct_hemispherical": 0.6223881411604673,
+                "diffuse_diffuse": 0.535536572130052
+            },
+            "reflectance": {
+                "direct_direct": 0.1867584684356504,
+                "direct_diffuse": 0.0,
+                "direct_hemispherical": 0.1867584684356504,
+                "diffuse_diffuse": 0.2601067282149612
+            }
+        }
+    },
+    "layer_results": {
+        "layer 0": {
+            "front": {
+                "absorptance": {
+                    "total_direct": 0.16907591114911913,
+                    "total_diffuse": 0.1779502371045455,
+                    "heat_direct": 0.16907591114911913,
+                    "heat_diffuse": 0.1779502371045455,
+                    "electricity_direct": 0.0,
+                    "electricity_diffuse": 0.0
+                }
+            },
+            "back": {
+                "absorptance": {
+                    "total_direct": 0.08443435370210008,
+                    "total_diffuse": 0.08909127082702362,
+                    "heat_direct": 0.08443435370210008,
+                    "heat_diffuse": 0.08909127082702362,
+                    "electricity_direct": 0.0,
+                    "electricity_diffuse": 0.0
+                }
+            }
+        },
+        "layer 1": {
+            "front": {
+                "absorptance": {
+                    "total_direct": 0.022368507585783924,
+                    "total_diffuse": 0.022460138507891483,
+                    "heat_direct": 0.022368507585783924,
+                    "heat_diffuse": 0.022460138507891483,
+                    "electricity_direct": 0.0,
+                    "electricity_diffuse": 0.0
+                }
+            },
+            "back": {
+                "absorptance": {
+                    "total_direct": 0.10641903670178257,
+                    "total_diffuse": 0.10509083443620497,
+                    "heat_direct": 0.10641903670178257,
+                    "heat_diffuse": 0.10509083443620497,
+                    "electricity_direct": 0.0,
+                    "electricity_diffuse": 0.0
+                }
+            }
+        },
+        "noncoplanar_attachment_exterior": {},
+        "noncoplanar_attachment_interior": {}
+    }
+}
