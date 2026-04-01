@@ -1,6 +1,7 @@
 """
 Pytest configuration and fixtures for pywincalc tests.
 """
+import gc
 import os
 import pytest
 from pathlib import Path
@@ -56,3 +57,20 @@ def update_results(request):
 def standard_path(standards_dir):
     """Return the path to the NFRC standard file."""
     return standards_dir / "W5_NFRC_2003.std"
+
+
+def pytest_runtest_teardown(item, nextitem):
+    """Clear test instance attributes after each test to free C++ objects.
+
+    Pytest keeps test class instances alive for the entire session.
+    Without this, every GlazingSystem created in setup fixtures stays
+    in memory until the session ends.
+    """
+    instance = getattr(item, "instance", None)
+    if instance is not None:
+        for attr in list(vars(instance)):
+            try:
+                delattr(instance, attr)
+            except (AttributeError, TypeError):
+                pass
+    gc.collect()
