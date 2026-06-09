@@ -1,7 +1,7 @@
 {
     "U": 2.8152489024342757,
-    "SHGC": 0.27298776301259947,
-    "relative_heat_gain": 219.86583150082558,
+    "SHGC": 0.27312066137427427,
+    "relative_heat_gain": 219.96220572654332,
     "layer_temperatures_u": [
         304.0466963749868,
         303.82973860206033,
@@ -9,10 +9,10 @@
         300.36106011115817
     ],
     "layer_temperatures_shgc": [
-        314.392369535161,
-        315.01324329574334,
-        306.19981776880417,
-        306.00071101197426
+        314.39395487364413,
+        315.0149624559226,
+        306.200863209251,
+        306.00173481029873
     ],
     "solid_layer_effective_conductivities_u": [
         0.736000001430511,
@@ -20,24 +20,24 @@
     ],
     "solid_layer_effective_conductivities_shgc": [
         0.736000001430511,
-        0.9999999999999999
+        1.0
     ],
     "gap_layer_effective_conductivities_u": [
         0.08412548292595676
     ],
     "gap_layer_effective_conductivities_shgc": [
-        0.08986995466466198
+        0.08987091366950842
     ],
     "system_effective_conductivity_u": 0.13955724447189946,
-    "system_effective_conductivity_shgc": 0.1858258682765528,
+    "system_effective_conductivity_shgc": 0.1858372943807303,
     "heat_flow_u_indoor": -22.521991219676515,
     "heat_flow_u_outdoor": -22.52199121967601,
-    "heat_flow_shgc_indoor": -68.28037543964669,
-    "heat_flow_shgc_outdoor": 191.27064695918403,
+    "heat_flow_shgc_indoor": -68.28914324183324,
+    "heat_flow_shgc_outdoor": 191.3038635972369,
     "H_u_indoor": 7.0138802887133505,
     "H_u_outdoor": 20.41323050980887,
-    "H_shgc_indoor": 7.714676860114329,
-    "H_shgc_outdoor": 20.694979380722906,
+    "H_shgc_indoor": 7.714775092718715,
+    "H_shgc_outdoor": 20.695023527501963,
     "radiosities_u": [
         485.62949052856766,
         480.30234126938836,
@@ -45,9 +45,9 @@
         458.3535100537665
     ],
     "radiosities_shgc": [
-        544.2370313048323,
-        550.2905018750033,
-        506.70417605040365,
-        488.29645995263786
+        544.2464678656322,
+        550.3019693753693,
+        506.71172847551225,
+        488.30204829807224
     ]
 }

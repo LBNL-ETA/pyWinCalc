@@ -1,6 +1,68 @@
 # Running pywincalc Tests Locally
 
-These instructions assume you have already built pywincalc locally.
+## Quick start (clean PyCharm, from scratch)
+
+1. Open the project in PyCharm.
+2. Let PyCharm create the venv interpreter: **Settings -> Project -> Python
+   Interpreter -> Add Local Interpreter -> Virtualenv Environment -> New**
+   (base = Python 3.14). PyCharm creates `.venv` and uses it for the project.
+3. Open a **new** terminal (Alt+F12). Its prompt must show `(.venv)` -- PyCharm
+   auto-activates the project venv in new terminals. Then run:
+
+```powershell
+pip install .                                      # build + install (compiles C++, clones WinCalc; ~minutes)
+pip install pytest deprecation pytest-rerunfailures
+python -m pytest test\ -v                           # run all tests
+```
+
+- **Rebuild after any C++ change:** re-run `pip install .` (recompiles the `.pyd`).
+- **Update golden results** after an intentional calc/engine change:
+  `python -m pytest test\ --update-results`  (then commit `test/expected_results/`).
+- **If the prompt does NOT show `(.venv)`** (just `PS D:\...>`), you are in the
+  global Python and `pip install .` will install there. Open a new terminal after
+  the interpreter is set, or create/activate the venv manually (next section).
+
+## Build from scratch (manual venv, terminal only)
+
+Use this if you are not using PyCharm to manage the venv. Run every command from
+the repo root (`D:\Programming\GitHub\pyWinCalc`).
+
+### Windows (PowerShell)
+
+```powershell
+# 1. (optional) clean previous artifacts for a true from-scratch build
+Remove-Item -Recurse -Force .venv, build, dist, pywincalc.egg-info -ErrorAction SilentlyContinue
+
+# 2. create an isolated venv on Python 3.14
+#    (or: py -3.14 -m venv .venv)
+& "C:\Users\svidanovic\AppData\Local\Programs\Python\Python314\python.exe" -m venv .venv
+
+# 3. ACTIVATE it -- your prompt MUST then show the "(.venv)" prefix
+.\.venv\Scripts\Activate.ps1
+#    if blocked by execution policy: Set-ExecutionPolicy -Scope Process -Bypass  then re-run
+
+# 4. CONFIRM you are inside the venv -- must print ...\pyWinCalc\.venv (NOT ...\Python314)
+python -c "import sys; print(sys.prefix)"
+
+# 5. build + install pywincalc
+#    compiles the C++ extension and clones WinCalc per CMakeLists-WinCalc.txt.in (a few minutes)
+python -m pip install --upgrade pip
+pip install .
+
+# 6. install test dependencies
+pip install pytest deprecation pytest-rerunfailures
+
+# 7. run the suite
+python -m pytest test\ -v
+```
+
+**Rebuild after any C++ change:** re-run step 5 (`pip install .`) -- this recompiles the
+wheel/`.pyd`. PyCharm then picks up the new binary automatically.
+
+**Common mistake:** if your prompt does NOT show `(.venv)`, you are in the global Python and
+`pip install .` installs there instead of the venv. Always confirm step 4 first.
+
+> Linux/macOS: replace step 2-3 with `python3 -m venv .venv && source .venv/bin/activate`.
 
 ## PyCharm Setup
 

@@ -2,9 +2,9 @@
     "system_results": {
         "front": {
             "transmittance": {
-                "direct_direct": 0.038274061881184096,
-                "direct_diffuse": 0.18051025788364689,
-                "direct_hemispherical": 0.21878431976483098,
+                "direct_direct": 0.03827406188118409,
+                "direct_diffuse": 0.18051025788364686,
+                "direct_hemispherical": 0.21878431976483095,
                 "diffuse_diffuse": 0.15794868153614497
             },
             "reflectance": {
@@ -16,9 +16,9 @@
         },
         "back": {
             "transmittance": {
-                "direct_direct": 0.038274061881184096,
-                "direct_diffuse": 0.18051025788364689,
-                "direct_hemispherical": 0.21878431976483098,
+                "direct_direct": 0.03827406188118409,
+                "direct_diffuse": 0.18051025788364686,
+                "direct_hemispherical": 0.21878431976483095,
                 "diffuse_diffuse": 0.15794868153614497
             },
             "reflectance": {
@@ -33,9 +33,9 @@
         "layer 0": {
             "front": {
                 "absorptance": {
-                    "total_direct": 0.4267984617674093,
+                    "total_direct": 0.42679846176740927,
                     "total_diffuse": 0.4350484161702875,
-                    "heat_direct": 0.4267984617674093,
+                    "heat_direct": 0.42679846176740927,
                     "heat_diffuse": 0.4350484161702875,
                     "electricity_direct": 0.0,
                     "electricity_diffuse": 0.0
@@ -43,9 +43,9 @@
             },
             "back": {
                 "absorptance": {
-                    "total_direct": 0.4267984617674093,
+                    "total_direct": 0.42679846176740927,
                     "total_diffuse": 0.4350484161702875,
-                    "heat_direct": 0.4267984617674093,
+                    "heat_direct": 0.42679846176740927,
                     "heat_diffuse": 0.4350484161702875,
                     "electricity_direct": 0.0,
                     "electricity_diffuse": 0.0

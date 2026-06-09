@@ -1,7 +1,7 @@
 {
     "U": 1.6561587284986872,
-    "SHGC": 0.6436217642221836,
-    "relative_heat_gain": 479.6216632385389,
+    "SHGC": 0.6439151604210647,
+    "relative_heat_gain": 479.83442606828766,
     "layer_temperatures_u": [
         304.50137065418113,
         304.4616228446969,
@@ -9,10 +9,10 @@
         299.1105182534318
     ],
     "layer_temperatures_shgc": [
-        310.268489633651,
-        310.4054076171984,
-        304.8981936746731,
-        304.7883512096946
+        310.26641204758096,
+        310.4032785573923,
+        304.8994663536387,
+        304.78962097049566
     ],
     "solid_layer_effective_conductivities_u": [
         1.0,
@@ -20,24 +20,24 @@
     ],
     "solid_layer_effective_conductivities_shgc": [
         1.0,
-        0.9999999999999999
+        1.0
     ],
     "gap_layer_effective_conductivities_u": [
         0.031684159770470975
     ],
     "gap_layer_effective_conductivities_shgc": [
-        0.03245139059836795
+        0.03245128782840307
     ],
     "system_effective_conductivity_u": 0.04607755760297023,
-    "system_effective_conductivity_shgc": 0.1984327186091645,
+    "system_effective_conductivity_shgc": 0.19859046035651579,
     "heat_flow_u_indoor": -13.249269828029671,
     "heat_flow_u_outdoor": -13.249269828016452,
-    "heat_flow_shgc_indoor": -58.00292085438349,
-    "heat_flow_shgc_outdoor": 105.35084079733491,
+    "heat_flow_shgc_indoor": -58.01357241476086,
+    "heat_flow_shgc_outdoor": 105.30778821890789,
     "H_u_indoor": 6.758044616424234,
     "H_u_outdoor": 20.426565516093717,
-    "H_shgc_indoor": 7.593644133666482,
-    "H_shgc_outdoor": 20.582407768243336,
+    "H_shgc_indoor": 7.593776267020395,
+    "H_shgc_outdoor": 20.58235092083728,
     "radiosities_u": [
         488.0820977323224,
         456.73421147356436,
@@ -45,9 +45,9 @@
         451.9382351397931
     ],
     "radiosities_shgc": [
-        520.1754236656325,
-        492.9094132877635,
-        490.44977920740746,
-        481.71811944479794
+        520.1635348782635,
+        492.9157731031478,
+        490.4576688149541,
+        481.7249683170795
     ]
 }

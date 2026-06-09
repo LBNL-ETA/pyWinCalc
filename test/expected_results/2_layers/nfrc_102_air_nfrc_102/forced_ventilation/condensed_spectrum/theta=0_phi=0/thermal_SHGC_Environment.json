@@ -1,7 +1,7 @@
 {
     "U": 0.6107751012400032,
-    "SHGC": 0.7427994925807976,
-    "relative_heat_gain": 543.4095312841641,
+    "SHGC": 0.7428074162410031,
+    "relative_heat_gain": 543.4152773039556,
     "layer_temperatures_u": [
         302.08691777585005,
         301.8970920877102,
@@ -9,35 +9,35 @@
         297.91700220061045
     ],
     "layer_temperatures_shgc": [
-        305.25362801039387,
-        305.1449257871518,
-        302.0972782416161,
-        302.07431524881844
+        305.25325550650354,
+        305.14454309110715,
+        302.0967255796956,
+        302.0737635894369
     ],
     "solid_layer_effective_conductivities_u": [
         1.0,
         1.0
     ],
     "solid_layer_effective_conductivities_shgc": [
-        1.0,
+        0.9999999999999999,
         1.0
     ],
     "gap_layer_effective_conductivities_u": [
         0.10756024817356113
     ],
     "gap_layer_effective_conductivities_shgc": [
-        0.10977247436447915
+        0.10977219213524717
     ],
     "system_effective_conductivity_u": 0.022024674040730653,
-    "system_effective_conductivity_shgc": 0.21179895357445652,
+    "system_effective_conductivity_shgc": 0.21176113349515058,
     "heat_flow_u_indoor": -4.886200807412198,
     "heat_flow_u_outdoor": -62.27876708753564,
-    "heat_flow_shgc_indoor": -35.82544738346918,
-    "heat_flow_shgc_outdoor": 2.115646240336389,
+    "heat_flow_shgc_indoor": -35.82106859596537,
+    "heat_flow_shgc_outdoor": 2.1080402604847563,
     "H_u_indoor": 6.37051732692842,
     "H_u_outdoor": 20.33205853746781,
-    "H_shgc_indoor": 7.275214029430076,
-    "H_shgc_outdoor": 20.415775930943873,
+    "H_shgc_indoor": 7.275139828585289,
+    "H_shgc_outdoor": 20.415766014757573,
     "radiosities_u": [
         475.26939364855104,
         467.62652214854984,
@@ -45,9 +45,9 @@
         445.89008715104495
     ],
     "radiosities_shgc": [
-        492.1631534575213,
-        488.9008128360599,
-        474.89162750639434,
-        467.2735399454999
+        492.1611350360123,
+        488.8982103513267,
+        474.8883084356387,
+        467.27064319852116
     ]
 }

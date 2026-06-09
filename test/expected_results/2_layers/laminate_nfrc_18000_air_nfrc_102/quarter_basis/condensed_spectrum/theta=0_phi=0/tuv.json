@@ -2,9 +2,9 @@
     "system_results": {
         "front": {
             "transmittance": {
-                "direct_direct": 0.0006235413438046331,
+                "direct_direct": 0.0006235413438046333,
                 "direct_diffuse": 0.0,
-                "direct_hemispherical": 0.0006235413438046331,
+                "direct_hemispherical": 0.0006235413438046333,
                 "diffuse_diffuse": 0.0005058985202916703
             },
             "reflectance": {

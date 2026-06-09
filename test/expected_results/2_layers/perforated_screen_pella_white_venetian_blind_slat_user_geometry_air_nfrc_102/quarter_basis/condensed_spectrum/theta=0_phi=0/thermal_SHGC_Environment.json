@@ -1,7 +1,7 @@
 {
     "U": 3.056029088742845,
-    "SHGC": 0.15706977580180628,
-    "relative_heat_gain": 137.67857476356326,
+    "SHGC": 0.15707236478627282,
+    "relative_heat_gain": 137.6804522212329,
     "layer_temperatures_u": [
         304.0901423408246,
         304.09012861318854,
@@ -9,35 +9,35 @@
         300.61425160543894
     ],
     "layer_temperatures_shgc": [
-        313.304241145103,
-        313.3042772696347,
-        305.40378361580326,
-        305.23003736662616
+        313.30473453905046,
+        313.3047706660441,
+        305.4039335844016,
+        305.2301819617849
     ],
     "solid_layer_effective_conductivities_u": [
         176.82013065462468,
         1.0
     ],
     "solid_layer_effective_conductivities_shgc": [
-        157.7884262896659,
+        157.7886581446264,
         1.0
     ],
     "gap_layer_effective_conductivities_u": [
         0.09095813430481035
     ],
     "gap_layer_effective_conductivities_shgc": [
-        0.08430606465661328
+        0.0843061324969547
     ],
     "system_effective_conductivity_u": 0.11146944016360874,
-    "system_effective_conductivity_shgc": 0.12114857909306508,
+    "system_effective_conductivity_shgc": 0.121145744995718,
     "heat_flow_u_indoor": -24.44823270929916,
     "heat_flow_u_outdoor": -24.27322403135338,
-    "heat_flow_shgc_indoor": -61.72250814235686,
-    "heat_flow_shgc_outdoor": 166.60771126761728,
+    "heat_flow_shgc_indoor": -61.72373054246858,
+    "heat_flow_shgc_outdoor": 166.6179883414302,
     "H_u_indoor": 7.057291297555636,
     "H_u_outdoor": 22.902343330374897,
-    "H_shgc_indoor": 7.638888949013699,
-    "H_shgc_outdoor": 20.432031416199592,
+    "H_shgc_indoor": 7.638903532496252,
+    "H_shgc_outdoor": 20.432055454978325,
     "radiosities_u": [
         483.2265682699183,
         484.04192035373234,
@@ -45,9 +45,9 @@
         459.66217490906376
     ],
     "radiosities_shgc": [
-        535.8960214430033,
-        535.6198053499869,
-        500.0202389528204,
-        484.105667664983
+        535.898897610078,
+        535.6226399181182,
+        500.0215063029493,
+        484.1064509863373
     ]
 }

@@ -19,7 +19,7 @@
                 "direct_direct": 0.15123140549535455,
                 "direct_diffuse": 0.0,
                 "direct_hemispherical": 0.15123140549535455,
-                "diffuse_diffuse": 0.12451284803082259
+                "diffuse_diffuse": 0.12451284803082256
             },
             "reflectance": {
                 "direct_direct": 0.14603965002389646,

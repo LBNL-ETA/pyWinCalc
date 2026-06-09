@@ -2,15 +2,15 @@
     "system_results": {
         "front": {
             "transmittance": {
-                "direct_direct": 0.004056867379911351,
+                "direct_direct": 0.00405686737991135,
                 "direct_diffuse": 0.5245667619292919,
                 "direct_hemispherical": 0.5286236293092033,
-                "diffuse_diffuse": 0.5188332093814565
+                "diffuse_diffuse": 0.5188332093814563
             },
             "reflectance": {
                 "direct_direct": 0.0033123128960687973,
-                "direct_diffuse": 0.43631046104036003,
-                "direct_hemispherical": 0.43962277393642885,
+                "direct_diffuse": 0.43631046104036,
+                "direct_hemispherical": 0.4396227739364288,
                 "diffuse_diffuse": 0.44903061062600097
             }
         },
