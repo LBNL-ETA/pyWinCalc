@@ -11,8 +11,8 @@ front_reflectance_matrix = pywincalc.SquareMatrix(bsdf_shade.measurements.solar.
 integrator = pywincalc.BSDFIntegrator(bsdf_hemisphere.get_directions(pywincalc.BSDFDirection.Incoming))
 integrator.set_matrices(front_transmittance_matrix, front_reflectance_matrix, pywincalc.Side.Front)
 
-front_hemispheric_transmittances = integrator.direct_hemispheric(pywincalc.Side.Front, pywincalc.PropertySimple.T)
-front_hemispheric_reflectances = integrator.direct_hemispheric(pywincalc.Side.Front, pywincalc.PropertySimple.R)
+front_hemispheric_transmittances = integrator.direct_hemispheric(pywincalc.Side.Front, pywincalc.PropertySurface.T)
+front_hemispheric_reflectances = integrator.direct_hemispheric(pywincalc.Side.Front, pywincalc.PropertySurface.R)
 
 print("Front hemipsheric transmittances for each incoming angle: {v}".format(v=front_hemispheric_transmittances))
 print("Front hemipsheric reflectances for each incoming angle: {v}".format(v=front_hemispheric_reflectances))
