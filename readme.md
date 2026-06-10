@@ -106,14 +106,11 @@ Once the requirements have been installed this project can be built from source 
 Building Python packages from source on Windows is more complicated than Mac/Linux.  First the correct C++ compiler first needs to be installed as well as CMake.  See https://wiki.python.org/moin/WindowsCompilers for more information about C++ compilers for Python packages on Windows.  Once that has been installed pyWinCalc can be built following the build from source steps.
 
 ### Optional dependencies (extras)
-The base install pulls only what is needed to *use* the library.  Two optional extras add tooling for specific tasks:
+The base install includes everything needed to *use* the library **and run the examples** (the IGSDB examples use `requests`, which is a default dependency).
 
-- **examples** — the IGSDB examples fetch products over HTTP, which requires `requests`:
-  - from PyPi: ` pip install "pywincalc[examples]" `
-  - from a source checkout: ` pip install ".[examples]" `
-- **test** — to run the test suite (`pytest`, `pytest-rerunfailures`) from a source checkout: ` pip install ".[test]" `
+One optional extra is available for development:
 
-Extras can be combined, e.g. ` pip install ".[test,examples]" `.  (On PowerShell, quote the argument so `[ ]` is not treated as a glob.)
+- **test** — to run the test suite (`pytest`, `pytest-rerunfailures`) from a source checkout: ` pip install ".[test]" `  (On PowerShell, quote the argument so `[ ]` is not treated as a glob.)
 
 ## Use
 
