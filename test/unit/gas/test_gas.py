@@ -68,26 +68,53 @@ class TestGasItems:
         )
         items = gas.gas_items()
         assert len(items) == 2
-        # fractions reflect the requested mixture and sum to the whole
-        assert math.isclose(sum(item.fraction() for item in items), 1.0, abs_tol=TOL)
-        assert all(isinstance(item.name(), str) for item in items)
-        # each item exposes its underlying GasData
-        assert all(item.gas_data().get_molecular_weight() > 0 for item in items)
+        # exact fractions and molecular weights, keyed by component name
+        by_name = {
+            item.name(): (item.fraction(), item.gas_data().get_molecular_weight())
+            for item in items
+        }
+        assert math.isclose(by_name["Argon"][0], 0.9, abs_tol=TOL)
+        assert math.isclose(by_name["Argon"][1], 39.948, rel_tol=1e-9)  # argon MW
+        assert math.isclose(by_name["Air"][0], 0.1, abs_tol=TOL)
+        assert math.isclose(by_name["Air"][1], 28.97, rel_tol=1e-9)     # dry-air MW
 
 
 class TestGasProperties:
-    def test_get_simple_gas_properties_are_physical(self):
+    # Reference values for air at 273.15 K, 101325 Pa (ISO 15099 gas model).
+    # These are physically correct, not just current model output:
+    #   - molecular_weight = 28.97 g/mol (standard dry air)
+    #   - density = P*M/(R*T) = 101325*0.02897/(8.31446*273.15) = 1.29250 kg/m3
+    #   - k ~ 0.0241 W/mK, mu ~ 1.72e-5 Pa.s, cp ~ 1006 J/kgK, Pr ~ 0.72 (textbook air at 0 C)
+    AIR_STP = dict(
+        thermal_conductivity=0.02406974,
+        viscosity=1.721691e-05,
+        specific_heat=1006.1033006,
+        density=1.2924975866,
+        molecular_weight=28.97,
+        prandl_number=0.7196583751,
+    )
+
+    def _assert_air_stp(self, props):
+        assert math.isclose(props.thermal_conductivity,
+                            self.AIR_STP["thermal_conductivity"], rel_tol=1e-5)
+        assert math.isclose(props.viscosity, self.AIR_STP["viscosity"], rel_tol=1e-5)
+        assert math.isclose(props.specific_heat, self.AIR_STP["specific_heat"], rel_tol=1e-5)
+        assert math.isclose(props.density, self.AIR_STP["density"], rel_tol=1e-5)
+        assert math.isclose(props.molecular_weight, self.AIR_STP["molecular_weight"], rel_tol=1e-9)
+        assert math.isclose(props.prandl_number, self.AIR_STP["prandl_number"], rel_tol=1e-5)
+
+    def test_simple_gas_properties_air_stp(self):
+        gas = pywincalc.create_gas([[1.0, pywincalc.PredefinedGasType.AIR]])
+        self._assert_air_stp(gas.get_simple_gas_properties(273.15, 101325.0))
+
+    def test_full_gas_properties_air_stp(self):
+        # for a single-component gas the full model equals the simple model
+        gas = pywincalc.create_gas([[1.0, pywincalc.PredefinedGasType.AIR]])
+        self._assert_air_stp(gas.get_gas_properties(273.15, 101325.0))
+
+    def test_density_obeys_ideal_gas_law(self):
+        # independent cross-check: rho = P*M/(R*T) with M in kg/mol
         gas = pywincalc.create_gas([[1.0, pywincalc.PredefinedGasType.AIR]])
         props = gas.get_simple_gas_properties(273.15, 101325.0)
-        # all transport properties of air at STP are finite and positive
-        assert props.thermal_conductivity > 0
-        assert props.viscosity > 0
-        assert props.specific_heat > 0
-        assert props.density > 0
-        assert props.molecular_weight > 0
-
-    def test_get_gas_properties_returns_properties(self):
-        gas = pywincalc.create_gas([[1.0, pywincalc.PredefinedGasType.AIR]])
-        props = gas.get_gas_properties(273.15, 101325.0)
-        assert props.thermal_conductivity > 0
-        assert props.molecular_weight > 0
+        expected = 101325.0 * (props.molecular_weight / 1000.0) / (8.314462618 * 273.15)
+        assert math.isclose(props.density, expected, rel_tol=1e-5)
