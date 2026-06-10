@@ -4,6 +4,7 @@
 
 void register_glazing_system_bindings(py::module &mod) {
   py::enum_<SingleLayerOptics::BSDFBasis>(mod, "BSDFBasisType", py::arithmetic())
+      .value("NANO", SingleLayerOptics::BSDFBasis::Nano)
       .value("SMALL", SingleLayerOptics::BSDFBasis::Small)
       .value("QUARTER", SingleLayerOptics::BSDFBasis::Quarter)
       .value("HALF", SingleLayerOptics::BSDFBasis::Half)
