@@ -88,7 +88,7 @@ All pillar data structs (`CylindricalPillar`, `SphericalPillar`, `PillarData`, `
 Windows requires a version of the Microsoft C++ redistributable >= the version of Visual Studio used to build the library.  Currently the wheels on pypi are generated using Visual Studio 16 2019.  However in general installing the latest version of the C++ runtime for your architecture should always be sufficient.  Installation packages are available from Microsoft here: https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist
 
 #### Linux/Mac
-The pre-built wheels provided at pypi should work on any x86/x64 version of Linux or Mac that supports at least C++17.
+The pre-built wheels provided at pypi should work on any x86/x64 version of Linux or Mac with a C++20-capable runtime (the library is built to the C++20 standard).
 
 For M2 Macs pre-built wheels are not currently available.  From our limited testing building from source (see below) should work.  If you have experience problems building from source on a Mac using the M2 architecture please let us know.
 
