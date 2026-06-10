@@ -13,15 +13,16 @@ import pywincalc
 class TestParsers:
     def test_parse_json_file(self, products_dir):
         product = pywincalc.parse_json_file(str(products_dir / "CLEAR_3.json"))
-        # CLEAR_3 is NFRC 102 glazing
+        # CLEAR_3 is NFRC 102 glazing with 111 wavelength measurements
         assert product.nfrc_id == 102
         assert product.product_type == "glazing"
-        assert len(product.measurements) > 0
+        assert len(product.measurements) == 111
 
     def test_parse_optics_file(self, products_dir):
         product = pywincalc.parse_optics_file(str(products_dir / "CLEAR_3.DAT"))
         assert product.product_type == "glazing"
-        assert len(product.measurements) > 0
+        # same CLEAR_3 spectral data as the JSON -> identical measurement count
+        assert len(product.measurements) == 111
 
     def test_parse_bsdf_xml_file(self, products_dir):
         product = pywincalc.parse_bsdf_xml_file(str(products_dir / "2011-SA1.XML"))

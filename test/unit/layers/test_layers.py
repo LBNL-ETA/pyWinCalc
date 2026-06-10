@@ -28,12 +28,15 @@ class TestEffectiveMultipliers:
 
 
 class TestIsClosed:
-    def test_reexported_and_returns_bool(self):
-        # is_closed is exposed on the public package and takes an
-        # EffectiveMultipliers, returning bool.
+    def test_reexported(self):
         assert hasattr(pywincalc, "is_closed")
-        em = pywincalc.EffectiveMultipliers(0.1, 0.2, 0.3, 0.4, 0.5, 0.6)
-        assert isinstance(pywincalc.is_closed(em), bool)
+
+    def test_semantics(self):
+        # zero openness in every direction -> closed; any opening -> not closed
+        closed = pywincalc.EffectiveMultipliers(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        opened = pywincalc.EffectiveMultipliers(0.1, 0.2, 0.3, 0.4, 0.5, 0.6)
+        assert pywincalc.is_closed(closed) is True
+        assert pywincalc.is_closed(opened) is False
 
 
 class TestLayersSubmodule:

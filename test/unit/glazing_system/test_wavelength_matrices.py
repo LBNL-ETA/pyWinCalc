@@ -21,6 +21,10 @@ import pywincalc
 
 VENETIAN_PRODUCT = "cgdb_24000_Alabaster Venetian Blind Open (Intigral)_Alabaster_0_12.5.json"
 METHOD = "SOLAR"
+# SMALL BSDF basis has 7 incoming/outgoing directions -> 7x7 matrices.
+SMALL_BASIS_DIRECTIONS = 7
+# the SOLAR method spectrum (W5_NFRC_2003) yields 121 wavelengths.
+SOLAR_WAVELENGTHS = 121
 
 
 class TestBSDFBasisType:
@@ -60,7 +64,7 @@ class TestWavelengthMatricesBsdf:
             for matrices in (side.transmittance_wavelength_matrices,
                              side.reflectance_wavelength_matrices):
                 assert matrices is not None
-                assert len(matrices) > 0
+                assert len(matrices) == SOLAR_WAVELENGTHS
 
     def test_matrix_and_wavelength_invariants(self):
         results = self.glazing_system.optical_method_results(METHOD)
@@ -68,7 +72,7 @@ class TestWavelengthMatricesBsdf:
         matrices = results.layer_results[0].front.transmittance_wavelength_matrices
 
         dimension = matrices[0].matrix.size()
-        assert dimension > 0
+        assert dimension == SMALL_BASIS_DIRECTIONS
         # every entry is a square matrix of the same (basis) dimension
         assert all(entry.matrix.size() == dimension for entry in matrices)
 

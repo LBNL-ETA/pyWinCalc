@@ -31,8 +31,7 @@ class TestLoadStandard:
         for method in ("SOLAR", "PHOTOPIC"):
             assert method in standard.methods
 
-    def test_standard_metadata_accessible(self, standard_path):
+    def test_standard_metadata(self, standard_path):
         standard = pywincalc.load_standard(str(standard_path))
-        # metadata attributes exist and are readable (non-None)
-        assert standard.name is not None
-        assert standard.description is not None
+        assert standard.name == "W5_NFRC_2003.std"
+        assert standard.description == "Consistent with NFRC 300-2003 - default for WINDOW5"
