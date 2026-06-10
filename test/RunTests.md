@@ -157,14 +157,20 @@ python -m pytest test/ -v
 ## Running Specific Tests
 
 ```bash
+# All integration tests (golden-result comparisons)
+python -m pytest test/integration -v
+
+# All unit tests (binding-level, no golden data)
+python -m pytest test/unit -v
+
 # Single test file
-python -m pytest test/test_1_layer_clear_glass.py -v
+python -m pytest test/integration/test_1_layer_clear_glass.py -v
 
 # Single test class
-python -m pytest test/test_1_layer_clear_glass.py::TestSingleLayerClearGlass -v
+python -m pytest test/integration/test_1_layer_clear_glass.py::TestSingleLayerClearGlass -v
 
 # Single test method
-python -m pytest test/test_1_layer_clear_glass.py::TestSingleLayerClearGlass::test_thermal_u_environment -v
+python -m pytest test/integration/test_1_layer_clear_glass.py::TestSingleLayerClearGlass::test_thermal_u_environment -v
 ```
 
 ## Updating Expected Results
@@ -181,14 +187,29 @@ python -m pytest test/ -v --update-results
 
 ```
 test/
-├── conftest.py                    # Pytest configuration and fixtures
-├── util.py                        # Helper functions for result comparison
-├── test_1_layer_clear_glass.py    # Tests for CLEAR_3 (nfrc_102)
-├── test_1_layer_coated_glass.py   # Tests for nfrc_6046 coated glass
-├── products/                      # Product JSON files
+├── conftest.py                    # Pytest fixtures + options (shared by all tests)
+├── products/                      # Product JSON files (test data)
 ├── standards/                     # Optical standard files (.std, .ssp, .dsp)
-└── expected_results/              # Golden reference JSON results
+├── expected_results/              # Golden reference JSON results (integration only)
+├── integration/                   # End-to-end tests: full GlazingSystem vs golden results
+│   ├── util.py                    #   golden-comparison helpers (integration only)
+│   ├── test_1_layer_clear_glass.py
+│   ├── test_2_layer_low_e.py
+│   └── ...                        #   (one file per glazing configuration)
+└── unit/                          # Binding-level tests, no golden data; mirrors src/bindings/*
+    ├── glazing_system/            #   GlazingSystem, BSDFBasisType, wavelength matrices
+    ├── bsdf/                      #   SquareMatrix, MatrixAtWavelength, PropertySurface
+    ├── gas/                       #   gas mixtures, molecular weight, ...
+    └── ...                        #   (one folder per binding group)
 ```
+
+**Integration vs unit:**
+- `integration/` tests build a real `GlazingSystem` from `products/` + `standards/`,
+  run the full pipeline, and compare against `expected_results/` (use `--update-results`
+  to regenerate). `util.py` lives here and is imported as `from util import ...`.
+- `unit/` tests exercise individual bindings and assert invariants/contracts (shapes,
+  opt-in behavior, math identities) — **no golden files**. Folders mirror the
+  `src/bindings/*.cpp` groups so each test traces back to the binding it covers.
 
 ## Troubleshooting
 
