@@ -10,3 +10,7 @@ build-backend = "setuptools.build_meta"
 archs = ["auto"]
 
 manylinux-x86_64-image = "manylinux2014"
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+addopts = "-ra"
