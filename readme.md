@@ -27,6 +27,13 @@ Version 3.9 removes direct construction of pillar layer and ventilated gap layer
 
 All pillar data structs (`CylindricalPillar`, `SphericalPillar`, `PillarData`, `PillarMeasurement`, etc.) and factory functions are unchanged.
 
+**Added in 3.9:**
+- **Per-layer wavelength matrices (BSDF systems).** `glazing_system.populate_layer_wavelength_matrices(results, method_name)` fills, for each layer, `front`/`back` `transmittance_wavelength_matrices` and `reflectance_wavelength_matrices` - lists of `MatrixAtWavelength` (each with a `.wavelength` and a square BSDF `.matrix`). It is **opt-in** because it is expensive (~5x slower); the standard `optical_method_results(...)` leaves those fields `None`, and the call is a no-op for non-BSDF (specular) systems.
+- **`BSDFBasisType.NANO`** - a new, smallest BSDF basis (alongside `SMALL`, `QUARTER`, `HALF`, `FULL`).
+- **`GasProperties` and `GasItem`** are now usable types: `Gas.get_gas_properties(temperature, pressure)` and `Gas.get_simple_gas_properties(temperature, pressure)` return a `GasProperties` (`.thermal_conductivity`, `.viscosity`, `.specific_heat`, `.density`, `.molecular_weight`, `.prandl_number`), and `Gas.gas_items()` returns a list of `GasItem` (`.fraction()`, `.name()`, `.gas_data()`).
+- **`IGUSolidLayer`** is returned by `pywincalc.Layers.solid(thickness, conductivity)`.
+- **`is_closed(effective_multipliers)`** is exposed on the package (returns whether a shading layer's effective openness is fully closed).
+
 # Table of contents
 1. [Requirements](#Requirements)
 	1. [Windows](#Windows)
