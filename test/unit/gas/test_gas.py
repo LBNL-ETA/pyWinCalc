@@ -1,16 +1,13 @@
 """
 Unit tests for the gas bindings (src/bindings/gas_bindings.cpp).
 
-Covers the working surface (PredefinedGasType, create_gas, GasData,
-GasCoefficients) with contract/invariant checks. Two methods currently return
-C++ types that are NOT registered with pybind11 (Gases::GasProperties,
-Gases::CGasItem), so they raise on return conversion - those are tracked here
-as strict xfail and should flip to failures (prompting marker removal) once the
-return types are bound.
+Covers PredefinedGasType, create_gas, GasData, GasCoefficients, GasItem
+(formerly Gases::CGasItem) and GasProperties (formerly Gases::GasProperties)
+with contract/invariant checks. GasProperties and GasItem are now registered
+(they previously raised on return conversion).
 """
 import math
 
-import pytest
 import pywincalc
 
 
@@ -61,33 +58,36 @@ class TestGasData:
         assert math.isclose(gd.get_specific_heat_ratio(), 1.67, abs_tol=TOL)
 
 
-class TestKnownBindingGaps:
-    """Methods whose C++ return types are not registered with pybind11.
+class TestGasItems:
+    def test_gas_items_returns_components(self):
+        gas = pywincalc.create_gas(
+            [
+                [0.9, pywincalc.PredefinedGasType.ARGON],
+                [0.1, pywincalc.PredefinedGasType.AIR],
+            ]
+        )
+        items = gas.gas_items()
+        assert len(items) == 2
+        # fractions reflect the requested mixture and sum to the whole
+        assert math.isclose(sum(item.fraction() for item in items), 1.0, abs_tol=TOL)
+        assert all(isinstance(item.name(), str) for item in items)
+        # each item exposes its underlying GasData
+        assert all(item.gas_data().get_molecular_weight() > 0 for item in items)
 
-    These raise TypeError on return-value conversion. Marked strict xfail so the
-    day the return types get bound, the test xpasses -> fails -> marker removed.
-    """
 
-    @pytest.mark.xfail(
-        reason="Gases::CGasItem not registered in bindings",
-        raises=TypeError, strict=True,
-    )
-    def test_gas_items_converts(self):
+class TestGasProperties:
+    def test_get_simple_gas_properties_are_physical(self):
         gas = pywincalc.create_gas([[1.0, pywincalc.PredefinedGasType.AIR]])
-        gas.gas_items()
+        props = gas.get_simple_gas_properties(273.15, 101325.0)
+        # all transport properties of air at STP are finite and positive
+        assert props.thermal_conductivity > 0
+        assert props.viscosity > 0
+        assert props.specific_heat > 0
+        assert props.density > 0
+        assert props.molecular_weight > 0
 
-    @pytest.mark.xfail(
-        reason="Gases::GasProperties not registered in bindings",
-        raises=TypeError, strict=True,
-    )
-    def test_get_simple_gas_properties_converts(self):
+    def test_get_gas_properties_returns_properties(self):
         gas = pywincalc.create_gas([[1.0, pywincalc.PredefinedGasType.AIR]])
-        gas.get_simple_gas_properties(273.15, 101325.0)
-
-    @pytest.mark.xfail(
-        reason="Gases::GasProperties not registered in bindings",
-        raises=TypeError, strict=True,
-    )
-    def test_get_gas_properties_converts(self):
-        gas = pywincalc.create_gas([[1.0, pywincalc.PredefinedGasType.AIR]])
-        gas.get_gas_properties(273.15, 101325.0)
+        props = gas.get_gas_properties(273.15, 101325.0)
+        assert props.thermal_conductivity > 0
+        assert props.molecular_weight > 0

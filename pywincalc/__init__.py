@@ -8,8 +8,8 @@ from wincalcbindings import (
     PillarData, CylindricalPillar, SphericalPillar, RectangularPillar, TriangularPillar, PentagonPillar, HexagonPillar, LinearBearingPillar, TruncatedConePillar, Glass, PillarMeasurement,
     AnnulusCylinderPillar, CShapedCylinderPillar, CoatedSide,
     ColorResult, DeflectionResults, DistributionMethodType, DualBandBSDF, EffectiveMultipliers, Environment, Environments,
-    FlippableSolidLayer, Gas, GasCoefficients, GasData, GlazingSystem as _GlazingSystem, GlazingSystemDimensions,
-    IGUGapLayer, IntegrationRule, IntegrationRuleType, Lab, MaterialType,
+    FlippableSolidLayer, Gas, GasCoefficients, GasData, GasItem, GasProperties, GlazingSystem as _GlazingSystem, GlazingSystemDimensions,
+    IGUGapLayer, IGUSolidLayer, IntegrationRule, IntegrationRuleType, Lab, MaterialType,
     OpticalMeasurementComponent, OpticalResultAbsorptance, OpticalResultFluxType, OpticalResultFluxTypeColor,
     OpticalResultLayer, OpticalResultSide, OpticalResultSideColor, OpticalResultSide_Layer, OpticalResultTransmission,
     OpticalResultTransmissionColor, OpticalResults, OpticalResultsColor, OpticalStandard, OpticalStandardMethod,
@@ -29,7 +29,7 @@ from wincalcbindings import (
     get_cma_window_double_vision_horizontal, get_cma_window_double_vision_vertical, get_cma_window_single_vision,
     get_spacer_keff, nfrc_shgc_environments, nfrc_u_environments, parse_bsdf_xml_file, parse_bsdf_xml_string,
     parse_json, parse_json_file, parse_optics_file, parse_thmx_file, parse_thmx_string,
-    forced_ventilation_gap
+    forced_ventilation_gap, is_closed
 )
 
 @deprecation.deprecated(deprecated_in="3.0.0", removed_in="4.0.0",

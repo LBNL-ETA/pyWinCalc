@@ -26,6 +26,27 @@ void register_gas_bindings(py::module &mod) {
       .def("get_specific_heat_ratio", &Gases::CGasData::getSpecificHeatRatio)
       .def("name", &Gases::CGasData::name);
 
+  py::class_<Gases::GasProperties>(mod, "GasProperties")
+      .def_readwrite("thermal_conductivity",
+                     &Gases::GasProperties::m_ThermalConductivity)
+      .def_readwrite("viscosity", &Gases::GasProperties::m_Viscosity)
+      .def_readwrite("specific_heat", &Gases::GasProperties::m_SpecificHeat)
+      .def_readwrite("density", &Gases::GasProperties::m_Density)
+      .def_readwrite("molecular_weight",
+                     &Gases::GasProperties::m_MolecularWeight)
+      .def_readwrite("prandl_number", &Gases::GasProperties::m_PrandlNumber)
+      .def_readwrite("properties_calculated",
+                     &Gases::GasProperties::m_PropertiesCalculated);
+
+  py::class_<Gases::CGasItem>(mod, "GasItem")
+      .def(py::init<double, Gases::CGasData const &>(), py::arg("fraction"),
+           py::arg("gas_data"))
+      .def(py::init<double, Gases::GasDef>(), py::arg("fraction"),
+           py::arg("predefined_gas"))
+      .def("fraction", &Gases::CGasItem::fraction)
+      .def("name", &Gases::CGasItem::name)
+      .def("gas_data", &Gases::CGasItem::gasData);
+
   py::class_<Gases::CGas>(mod, "Gas")
       .def(py::init<std::vector<Gases::CGasItem> const &>(), py::arg("gases"))
       .def("get_simple_gas_properties", &Gases::CGas::getSimpleGasProperties)

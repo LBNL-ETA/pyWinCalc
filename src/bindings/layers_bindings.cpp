@@ -20,6 +20,12 @@ void register_layers_bindings(py::module &mod) {
 
   mod.def("is_closed", &EffectiveLayers::isClosed, py::arg("effective_openness"));
 
+  // Registered so Layers.solid() (which returns CIGUSolidLayer by value) can
+  // hand the result back to Python (mirrors the IGUGapLayer registration).
+  py::class_<Tarcog::ISO15099::CIGUSolidLayer,
+             std::shared_ptr<Tarcog::ISO15099::CIGUSolidLayer>>(mod,
+                                                                "IGUSolidLayer");
+
   py::module_ layers = mod.def_submodule("Layers", "Submodule for Tarcog Layers");
 
   layers.def("solid", py::overload_cast<double, double>(&Tarcog::ISO15099::Layers::solid),
