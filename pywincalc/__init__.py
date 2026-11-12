@@ -29,7 +29,9 @@ from wincalcbindings import (
     get_cma_window_double_vision_horizontal, get_cma_window_double_vision_vertical, get_cma_window_single_vision,
     get_spacer_keff, nfrc_shgc_environments, nfrc_u_environments, parse_bsdf_xml_file, parse_bsdf_xml_string,
     parse_json, parse_json_file, parse_optics_file, parse_thmx_file, parse_thmx_string,
-    forced_ventilation_gap, is_closed
+    forced_ventilation_gap, is_closed,
+    ThermalReport, ThermalReportEnvironment, ThermalReportGap, ThermalReportSolidLayer, ThermalReportSurface,
+    save_thermal_report, thermal_report, thermal_report_to_json, thermal_report_to_xml
 )
 
 @deprecation.deprecated(deprecated_in="3.0.0", removed_in="4.0.0",

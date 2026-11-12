@@ -14,6 +14,7 @@
 #include "bindings/cma_bindings.h"
 #include "bindings/bsdf_bindings.h"
 #include "bindings/layers_bindings.h"
+#include "bindings/report_bindings.h"
 
 namespace py = pybind11;
 
@@ -32,4 +33,5 @@ PYBIND11_MODULE(wincalcbindings, mod) {
   register_cma_bindings(mod);
   register_bsdf_bindings(mod);
   register_layers_bindings(mod);
+  register_report_bindings(mod);
 }

@@ -24,6 +24,7 @@ pybind11_add_module(${target_name}
     src/bindings/cma_bindings.cpp
     src/bindings/bsdf_bindings.cpp
     src/bindings/layers_bindings.cpp
+    src/bindings/report_bindings.cpp
 )
 
 target_compile_features(${target_name} PUBLIC cxx_std_17)
